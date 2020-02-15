@@ -1,0 +1,22 @@
+{
+     "name": "rotacloud",
+     "version": "0.1.0",
+     "description": "Coming soon...",
+     "main": "index.js",
+     "scripts": {
+          "test": "echo \"Error: no test specified\" && exit 1"
+     },
+     "repository": {
+          "type": "git",
+          "url": "git+https://github.com/rotacloud/rotacloud-node.git"
+     },
+     "keywords": [],
+     "author": {
+		"name": "David Brandon"
+	},
+     "license": "ISC",
+     "bugs": {
+          "url": "https://github.com/rotacloud/rotacloud-node/issues"
+     },
+     "homepage": "https://github.com/rotacloud/rotacloud-node#readme"
+}
