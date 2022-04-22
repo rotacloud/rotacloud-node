@@ -1,22 +1,44 @@
 {
-     "name": "rotacloud",
-     "version": "1.0.0",
-     "description": "Coming soon...",
-     "main": "index.js",
-     "scripts": {
-          "test": "echo \"Error: no test specified\" && exit 1"
-     },
-     "repository": {
-          "type": "git",
-          "url": "git+https://github.com/rotacloud/rotacloud-node.git"
-     },
-     "keywords": [],
-     "author": {
-		"name": "David Brandon"
-	},
-     "license": "ISC",
-     "bugs": {
-          "url": "https://github.com/rotacloud/rotacloud-node/issues"
-     },
-     "homepage": "https://github.com/rotacloud/rotacloud-node#readme"
+  "name": "rotacloud",
+  "version": "1.0.1",
+  "description": "",
+  "engines": {
+    "node": ">=14.17.0"
+  },
+  "main": "dist/rotacloud.js",
+  "type": "module",
+  "scripts": {
+    "version:output": "echo 'export const Version = { version: \"'$npm_package_version'\" }' > ./src/version.ts",
+    "build": "rm -rf ./dist && tsc",
+    "watch": "rm -rf ./dist && tsc --watch",
+    "lint": "eslint src --ext .ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rotacloud/rotacloud-node.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rotacloud/rotacloud-node-temp/issues"
+  },
+  "homepage": "https://github.com/rotacloud/rotacloud-node-temp#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.4.0",
+    "@typescript-eslint/parser": "^5.4.0",
+    "eslint": "^8.2.0",
+    "eslint-config-airbnb": "^19.0.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-airbnb-typescript": "^16.0.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "2.4.1",
+    "typescript": "^4.4.4"
+  },
+  "dependencies": {
+    "@types/node": "^16.11.6",
+    "axios": "^0.23.0"
+  }
 }
