@@ -16,7 +16,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/rotacloud/rotacloud-node-temp.git"
+    "url": "git+https://github.com/rotacloud/rotacloud-node.git"
   },
   "author": "",
   "license": "ISC",
