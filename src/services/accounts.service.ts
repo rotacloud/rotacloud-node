@@ -1,5 +1,5 @@
 import { Account } from '../models/account.model.js';
-import { Service, Options, RequirementsOf } from './index.js';
+import { Service, Options } from './index.js';
 
 import { ApiAccount } from '../interfaces/index.js';
 import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
