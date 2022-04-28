@@ -54,7 +54,7 @@ export abstract class Service<ApiResponse = any> {
   public async fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?): Promise<AxiosResponse<T>> {
     const headers: AxiosRequestHeaders = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
-      // 'SDK-Version': Version.version,
+      'SDK-Version': Version.version,
     };
     if (RotaCloud.config.accountId) {
       headers.Account = String(RotaCloud.config.accountId);
