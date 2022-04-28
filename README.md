@@ -5,7 +5,7 @@
 Configuration is simple, just import the core rotacloud.js SDK and supply your API key as necessary.
 
 ```typescript
-import { Rotacloud } from 'rotacloud';
+import { RotaCloud } from 'rotacloud';
 
 const rc = new Rotacloud({
   apiKey: 'YOUR_API_KEY',
