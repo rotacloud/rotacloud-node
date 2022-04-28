@@ -12,7 +12,7 @@ import {
 import { SDKConfig } from './interfaces/index.js';
 import { DaysOffService } from './services/days-off.service.js';
 
-export class Rotacloud {
+export class RotaCloud {
   public static config: SDKConfig;
 
   public defaultAPIURI = 'https://api.rotacloud.com/v1';
@@ -35,10 +35,10 @@ export class Rotacloud {
   }
 
   get config() {
-    return Rotacloud.config;
+    return RotaCloud.config;
   }
 
   set config(configVal: SDKConfig) {
-    Rotacloud.config = configVal;
+    RotaCloud.config = configVal;
   }
 }

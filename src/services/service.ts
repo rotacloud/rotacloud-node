@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
-import { Rotacloud } from '../rotacloud.js';
+import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
@@ -53,11 +53,11 @@ export abstract class Service<ApiResponse = any> {
 
   public async fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?): Promise<AxiosResponse<T>> {
     const headers: AxiosRequestHeaders = {
-      Authorization: `Bearer ${Rotacloud.config.apiKey}`,
+      Authorization: `Bearer ${RotaCloud.config.apiKey}`,
       'SDK-Version': Version.version,
     };
-    if (Rotacloud.config.accountId) {
-      headers.Account = String(Rotacloud.config.accountId);
+    if (RotaCloud.config.accountId) {
+      headers.Account = String(RotaCloud.config.accountId);
     } else {
       // need to convert user field in payload to a header for creating leave_requests when using an API key
       this.isLeaveRequest(httpOptions.url) ? (headers.User = `${httpOptions.data.user}`) : undefined;
@@ -65,7 +65,7 @@ export abstract class Service<ApiResponse = any> {
 
     const reqObject: AxiosRequestConfig<T> = {
       ...httpOptions,
-      baseURL: Rotacloud.config.baseUri,
+      baseURL: RotaCloud.config.baseUri,
       headers,
       params: options?.params,
       paramsSerializer: (params) => {
