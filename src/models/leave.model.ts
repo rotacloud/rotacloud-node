@@ -10,8 +10,8 @@ export class Leave {
   public paid: boolean;
   public status: string;
   public requested: boolean;
-  public admin_message: string;
-  public user_message: string;
+  public admin_message: string | null;
+  public user_message: string | null;
 
   constructor(leave: ApiLeave) {
     this.id = leave.id;
