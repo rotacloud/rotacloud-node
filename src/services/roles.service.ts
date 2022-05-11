@@ -12,10 +12,6 @@ type RequiredProps = 'name';
 class RolesService extends Service {
   private apiPath = '/roles';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiRole, RequiredProps>): Promise<Role>;
   create(
     data: RequirementsOf<ApiRole, RequiredProps>,
