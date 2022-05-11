@@ -12,10 +12,6 @@ type RequiredProps = 'name';
 class LocationsService extends Service {
   private apiPath = '/locations';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiLocation, RequiredProps>): Promise<Location>;
   create(
     data: RequirementsOf<ApiLocation, RequiredProps>,

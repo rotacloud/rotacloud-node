@@ -12,10 +12,6 @@ type RequiredProps = 'start_date' | 'end_date' | 'users';
 class LeaveEmbargoesService extends Service {
   private apiPath = '/leave_embargoes';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>): Promise<LeaveEmbargo>;
   create(
     data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>,

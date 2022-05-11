@@ -7,10 +7,6 @@ import { InternalQueryParams } from '../interfaces/query-params/internal-query-p
 class AccountsService extends Service {
   private apiPath = '/accounts';
 
-  constructor() {
-    super();
-  }
-
   async *list(options?: Options<InternalQueryParams>) {
     for await (const res of super.iterator<ApiAccount>({ url: this.apiPath }, options)) {
       yield new Account(res);
