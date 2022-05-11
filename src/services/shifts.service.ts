@@ -12,10 +12,6 @@ type RequiredProps = 'end_time' | 'start_time' | 'location';
 class ShiftsService extends Service {
   private apiPath = '/shifts';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiShift, RequiredProps>): Promise<Shift>;
   create(
     data: RequirementsOf<ApiShift, RequiredProps>,

@@ -12,10 +12,6 @@ type RequiredProps = 'user' | 'in_time';
 class AttendanceService extends Service {
   private apiPath = '/attendance';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiAttendance, RequiredProps>): Promise<Attendance>;
   create(
     data: RequirementsOf<ApiAttendance, RequiredProps>,

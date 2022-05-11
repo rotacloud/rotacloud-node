@@ -12,10 +12,6 @@ type RequiredProps = 'first_name' | 'last_name';
 class UsersService extends Service {
   private apiPath = '/users';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiUser, RequiredProps>): Promise<User>;
   create(
     data: RequirementsOf<ApiUser, RequiredProps>,
