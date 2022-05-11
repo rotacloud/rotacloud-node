@@ -1,6 +1,8 @@
 import {
   AccountsService,
   AttendanceService,
+  DaysOffService,
+  GroupsService,
   LeaveEmbargoesService,
   LeaveRequestService,
   LeaveService,
@@ -10,7 +12,6 @@ import {
   UsersService,
 } from './services/index.js';
 import { SDKConfig } from './interfaces/index.js';
-import { DaysOffService } from './services/days-off.service.js';
 
 export class RotaCloud {
   public static config: SDKConfig;
@@ -19,6 +20,7 @@ export class RotaCloud {
   public accounts = new AccountsService();
   public attendance = new AttendanceService();
   public daysOff = new DaysOffService();
+  public groups = new GroupsService();
   public leaveEmbargoes = new LeaveEmbargoesService();
   public leaveRequests = new LeaveRequestService();
   public leave = new LeaveService();
