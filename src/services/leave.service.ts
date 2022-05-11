@@ -13,10 +13,6 @@ type RequiredProps = 'users' | 'type' | 'start_date' | 'end_date';
 class LeaveService extends Service {
   private apiPath = '/leave';
 
-  constructor() {
-    super();
-  }
-
   create(data: RequirementsOf<ApiLeave, RequiredProps>): Promise<Leave[]>;
   create(
     data: RequirementsOf<ApiLeave, RequiredProps>,
