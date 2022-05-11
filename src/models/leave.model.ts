@@ -26,6 +26,7 @@ export class Leave {
 
   constructor(leave: ApiLeave) {
     this.id = leave.id;
+    this.type = leave.type;
     this.dates = leave.dates;
     this.user = leave.user;
     this.start_date = leave.start_date;
@@ -35,6 +36,7 @@ export class Leave {
     this.requested = leave.requested;
     this.admin_message = leave.admin_message;
     this.user_message = leave.user_message;
+    this.deleted = leave.deleted;
     this.deleted_at = leave.deleted_at;
     this.deleted_by = leave.deleted_by;
     this.admin = leave.admin;
