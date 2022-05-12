@@ -2,6 +2,7 @@ import {
   AccountsService,
   AttendanceService,
   DaysOffService,
+  GroupsService,
   LeaveEmbargoesService,
   LeaveRequestService,
   LeaveService,
@@ -19,6 +20,7 @@ export class RotaCloud {
   public accounts = new AccountsService();
   public attendance = new AttendanceService();
   public daysOff = new DaysOffService();
+  public group = new GroupsService();
   public leaveEmbargoes = new LeaveEmbargoesService();
   public leaveRequests = new LeaveRequestService();
   public leave = new LeaveService();
