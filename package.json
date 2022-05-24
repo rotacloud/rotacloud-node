@@ -1,15 +1,21 @@
 {
   "name": "rotacloud",
-  "version": "1.0.6",
+  "version": "1.0.10",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "engines": {
     "node": ">=14.17.0"
   },
-  "main": "dist/rotacloud.js",
-  "type": "module",
+  "main": "dist/cjs/rotacloud.js",
+  "module": "dist/mjs/rotacloud.js",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/rotacloud.js",
+      "import": "./dist/mjs/rotacloud.js"
+    }
+  },
   "scripts": {
     "version:output": "echo 'export const Version = { version: \"'$npm_package_version'\" }' > ./src/version.ts",
-    "build": "rm -rf ./dist && tsc",
+    "build": "rm -rf dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
     "watch": "rm -rf ./dist && tsc --watch",
     "lint": "eslint src --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
