@@ -3,7 +3,7 @@ export interface ApiAvailabilityPeriod {
   end_time: string;
 }
 
-export interface ApiAvailabilityDates {
+export interface ApiAvailabilityDate {
   date: string;
   available: ApiAvailabilityPeriod[];
   unavailable: ApiAvailabilityPeriod[];
@@ -11,5 +11,5 @@ export interface ApiAvailabilityDates {
 
 export interface ApiAvailability {
   user: number;
-  dates: ApiAvailabilityDates[];
+  dates: ApiAvailabilityDate[];
 }

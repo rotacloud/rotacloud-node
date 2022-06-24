@@ -1,6 +1,7 @@
 import {
   AccountsService,
   AttendanceService,
+  AvailabilityService,
   DaysOffService,
   GroupsService,
   LeaveEmbargoesService,
@@ -19,6 +20,7 @@ export class RotaCloud {
   public defaultAPIURI = 'https://api.rotacloud.com/v1';
   public accounts = new AccountsService();
   public attendance = new AttendanceService();
+  public availability = new AvailabilityService();
   public daysOff = new DaysOffService();
   public group = new GroupsService();
   public leaveEmbargoes = new LeaveEmbargoesService();

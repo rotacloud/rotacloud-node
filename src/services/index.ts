@@ -1,6 +1,7 @@
 export * from './service.js';
 export * from './accounts.service.js';
 export * from './attendance.service.js';
+export * from './availability.service.js';
 export * from './days-off.service.js';
 export * from './groups.service.js';
 export * from './leave-request.service.js';
