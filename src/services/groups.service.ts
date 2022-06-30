@@ -41,6 +41,19 @@ class GroupsService extends Service {
     }
   }
 
+  listAll(): Promise<Group[]>;
+  async listAll() {
+    try {
+      const groups = [] as Group[];
+      for await (const group of this.list()) {
+        groups.push(group);
+      }
+      return groups;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<GroupsQueryParams & InternalQueryParams>) {
     return super.iterator<ApiGroup>({ url: this.apiPath }, options).byPage();
   }

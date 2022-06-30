@@ -42,6 +42,19 @@ class LeaveService extends Service {
     }
   }
 
+  listAll(): Promise<Leave[]>;
+  async listAll() {
+    try {
+      const leave = [] as Leave[];
+      for await (const leaveRecord of this.list()) {
+        leave.push(leaveRecord);
+      }
+      return leave;
+    } catch (err) {
+      return err;
+    }
+  }
+
   async *listLeaveTypes(options?: Options<InternalQueryParams>) {
     for await (const res of super.iterator<ApiLeaveType>({ url: this.apiPath }, options)) {
       yield new LeaveType(res);

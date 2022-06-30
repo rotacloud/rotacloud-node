@@ -41,6 +41,19 @@ class RolesService extends Service {
     }
   }
 
+  listAll(): Promise<Role[]>;
+  async listAll() {
+    try {
+      const roles = [] as Role[];
+      for await (const role of this.list()) {
+        roles.push(role);
+      }
+      return roles;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<RolesQueryParams & InternalQueryParams>) {
     return super.iterator<ApiRole>({ url: this.apiPath }, options).byPage();
   }

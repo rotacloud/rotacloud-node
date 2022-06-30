@@ -39,6 +39,19 @@ class DaysOffService extends Service<ApiDaysOff> {
     }
   }
 
+  listAll(): Promise<DaysOff[]>;
+  async listAll() {
+    try {
+      const daysOff = [] as DaysOff[];
+      for await (const dayOff of this.list()) {
+        daysOff.push(dayOff);
+      }
+      return daysOff;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<DaysOffQueryParams & InternalQueryParams>) {
     return super.iterator({ url: this.apiPath }, options).byPage();
   }

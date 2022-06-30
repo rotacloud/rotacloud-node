@@ -41,6 +41,19 @@ class ShiftsService extends Service {
     }
   }
 
+  listAll(): Promise<Shift[]>;
+  async listAll() {
+    try {
+      const shifts = [] as Shift[];
+      for await (const shift of this.list()) {
+        shifts.push(shift);
+      }
+      return shifts;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<ShiftsQueryParams & InternalQueryParams>) {
     return super.iterator<ApiShift>({ url: this.apiPath }, options).byPage();
   }
