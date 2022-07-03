@@ -1,5 +1,10 @@
 # RotaCloud Node SDK
 
+## Contributing
+
+Please ensure you perform the ```npm run version:all``` command before commiting and pushing your changes to the remote branch.
+
+
 ## Configuration
 
 Configuration is simple, just import the core rotacloud.js SDK and supply your API key as necessary.
