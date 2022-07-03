@@ -14,7 +14,7 @@
     }
   },
   "scripts": {
-    "version:output": "echo 'export const Version = { version: \"'$npm_package_version'\" }' > ./src/version.ts",
+    "version:bump": "npm version patch --force && cross-var echo export const Version = { version: \"'$npm_package_version'\" } > ./src/version.ts",
     "build": "rm -rf dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
     "watch": "rm -rf ./dist && tsc --watch",
     "lint": "eslint src --ext .ts",
