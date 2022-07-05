@@ -13,6 +13,19 @@ class AccountsService extends Service {
     }
   }
 
+  listAll(): Promise<Account[]>;
+  async listAll() {
+    try {
+      const accounts = [] as Account[];
+      for await (const account of this.list()) {
+        accounts.push(account);
+      }
+      return accounts;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<InternalQueryParams>) {
     return super.iterator<ApiAccount>({ url: this.apiPath }, options).byPage();
   }

@@ -41,6 +41,19 @@ class UsersService extends Service {
     }
   }
 
+  listAll(): Promise<User[]>;
+  async listAll() {
+    try {
+      const users = [] as User[];
+      for await (const user of this.list()) {
+        users.push(user);
+      }
+      return users;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<UsersQueryParams & InternalQueryParams>) {
     return super.iterator<ApiUser>({ url: this.apiPath }, options).byPage();
   }

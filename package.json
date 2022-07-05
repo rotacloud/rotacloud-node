@@ -1,6 +1,6 @@
 {
   "name": "rotacloud",
-  "version": "1.0.10",
+  "version": "1.0.17",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "engines": {
     "node": ">=14.17.0"
@@ -14,9 +14,10 @@
     }
   },
   "scripts": {
-    "version:output": "echo 'export const Version = { version: \"'$npm_package_version'\" }' > ./src/version.ts",
+    "version:bump": "npm --no-git-tag-version version patch",
+    "version:copy": "cross-var echo export const Version = { version: \"'$npm_package_version'\" } > ./src/version.ts",
+    "version:all": "npm run version:bump && npm run version:copy",
     "build": "rm -rf dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
-    "watch": "rm -rf ./dist && tsc --watch",
     "lint": "eslint src --ext .ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -45,6 +46,7 @@
   },
   "dependencies": {
     "@types/node": "^16.11.6",
-    "axios": "^0.23.0"
+    "axios": "^0.23.0",
+    "cross-var": "^1.1.0"
   }
 }

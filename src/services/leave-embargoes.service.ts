@@ -47,6 +47,19 @@ class LeaveEmbargoesService extends Service {
     }
   }
 
+  listAll(): Promise<LeaveEmbargo[]>;
+  async listAll() {
+    try {
+      const leave = [] as LeaveEmbargo[];
+      for await (const leaveEmbargoRecord of this.list()) {
+        leave.push(leaveEmbargoRecord);
+      }
+      return leave;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<UsersQueryParams & InternalQueryParams>) {
     return super.iterator<ApiLeaveEmbargo>({ url: this.apiPath }, options).byPage();
   }

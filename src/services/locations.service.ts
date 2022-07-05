@@ -44,6 +44,19 @@ class LocationsService extends Service {
     }
   }
 
+  listAll(): Promise<Location[]>;
+  async listAll() {
+    try {
+      const locations = [] as Location[];
+      for await (const location of this.list()) {
+        locations.push(location);
+      }
+      return locations;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<LocationsQueryParams & InternalQueryParams>) {
     return super.iterator<ApiLocation>({ url: this.apiPath }, options).byPage();
   }

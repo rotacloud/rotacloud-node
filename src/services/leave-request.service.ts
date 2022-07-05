@@ -47,6 +47,19 @@ class LeaveRequestService extends Service {
     }
   }
 
+  listAll(): Promise<LeaveRequest[]>;
+  async listAll() {
+    try {
+      const leave = [] as LeaveRequest[];
+      for await (const leaveRequestRecord of this.list()) {
+        leave.push(leaveRequestRecord);
+      }
+      return leave;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<LeaveQueryParams & InternalQueryParams>) {
     return super.iterator<ApiLeaveRequest>({ url: `${this.apiPath}` }, options).byPage();
   }

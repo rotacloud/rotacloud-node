@@ -47,6 +47,19 @@ class AttendanceService extends Service {
     }
   }
 
+  listAll(): Promise<Attendance[]>;
+  async listAll() {
+    try {
+      const attendance = [] as Attendance[];
+      for await (const atten of this.list()) {
+        attendance.push(atten);
+      }
+      return attendance;
+    } catch (err) {
+      return err;
+    }
+  }
+
   listByPage(options?: Options<AttendanceQueryParams & InternalQueryParams>) {
     return super.iterator<ApiAttendance>({ url: this.apiPath }, options).byPage();
   }
