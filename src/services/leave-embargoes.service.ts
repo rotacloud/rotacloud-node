@@ -5,7 +5,7 @@ import { Service, Options, RequirementsOf } from './index.js';
 import { LeaveEmbargo } from '../models/leave-embargo.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { UsersQueryParams } from '../interfaces/query-params/users-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 type RequiredProps = 'start_date' | 'end_date' | 'users';
 

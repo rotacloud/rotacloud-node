@@ -5,7 +5,7 @@ import { Service, Options, RequirementsOf } from './index.js';
 import { Attendance } from '../models/attendance.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { AttendanceQueryParams } from '../interfaces/query-params/attendance-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 type RequiredProps = 'user' | 'in_time';
 

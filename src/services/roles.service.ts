@@ -5,7 +5,7 @@ import { Service, Options, RequirementsOf } from './index.js';
 import { Role } from '../models/role.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { RolesQueryParams } from '../interfaces/query-params/roles-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 type RequiredProps = 'name';
 

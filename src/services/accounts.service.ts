@@ -2,7 +2,7 @@ import { Account } from '../models/account.model.js';
 import { Service, Options } from './index.js';
 
 import { ApiAccount } from '../interfaces/index.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 class AccountsService extends Service {
   private apiPath = '/accounts';
