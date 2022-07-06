@@ -1,11 +1,11 @@
+import { AxiosResponse } from 'axios';
 import { Service, Options, RequirementsOf } from './index.js';
 
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 import { AvailabilityQueryParams } from '../interfaces/query-params/availability-query-params.interface.js';
 import { Availability } from '../models/availability.model.js';
 import { ApiAvailability } from '../interfaces/availability.interface.js';
 import { ErrorResponse } from '../models/error-response.model.js';
-import { AxiosResponse } from 'axios';
 
 type RequiredProps = 'start' | 'end';
 type RequiredOptions<T> = RequirementsOf<Options<T>, 'params'>;
