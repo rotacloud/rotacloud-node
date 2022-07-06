@@ -46,3 +46,6 @@ export class RotaCloud {
     RotaCloud.config = configVal;
   }
 }
+
+export * from './interfaces/index.js';
+export * from './interfaces/query-params/index.js';
