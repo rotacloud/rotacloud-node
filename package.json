@@ -1,10 +1,11 @@
 {
   "name": "rotacloud",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "engines": {
     "node": ">=14.17.0"
   },
+  "types": "dist/mjs/rotacloud.d.ts",
   "main": "dist/cjs/rotacloud.js",
   "module": "dist/mjs/rotacloud.js",
   "exports": {
