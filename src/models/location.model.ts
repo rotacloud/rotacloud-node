@@ -18,16 +18,16 @@ export class Location {
   public metadata: object;
   public clock_in_ips: string[];
 
-  constructor(locaiton: ApiLocation) {
-    this.id = locaiton.id;
-    this.name = locaiton.name;
-    this.deleted = locaiton.deleted;
-    this.address = locaiton.address;
-    this.location = locaiton.location;
-    this.timezone = locaiton.timezone;
-    this.users = locaiton.users;
-    this.managers = locaiton.managers;
-    this.metadata = locaiton.metadata;
-    this.clock_in_ips = locaiton.clock_in_ips;
+  constructor(location: ApiLocation) {
+    this.id = location.id;
+    this.name = location.name;
+    this.deleted = location.deleted;
+    this.address = location.address;
+    this.location = location.location;
+    this.timezone = location.timezone;
+    this.users = location.users;
+    this.managers = location.managers;
+    this.metadata = location.metadata;
+    this.clock_in_ips = location.clock_in_ips;
   }
 }
