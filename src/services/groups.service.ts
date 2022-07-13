@@ -3,7 +3,7 @@ import { ApiGroup } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { ErrorResponse } from '../models/error-response.model.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 import { Group } from '../models/group.model.js';
 import { GroupsQueryParams } from '../interfaces/query-params/groups-query-params.interface.js';
 

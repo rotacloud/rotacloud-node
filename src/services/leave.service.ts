@@ -5,7 +5,7 @@ import { Service, Options, RequirementsOf } from './index.js';
 import { Leave } from '../models/leave.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { LeaveQueryParams } from '../interfaces/query-params/leave-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 import { LeaveType } from '../models/leave-type.model.js';
 
 type RequiredProps = 'users' | 'type' | 'start_date' | 'end_date';

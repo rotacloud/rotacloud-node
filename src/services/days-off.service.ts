@@ -3,7 +3,7 @@ import { ApiDaysOff } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
 import { ErrorResponse } from '../models/error-response.model.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 import { DaysOff } from '../models/days-off.model.js';
 import { DaysOffQueryParams } from '../interfaces/query-params/days-off-query-params.interface.js';
 

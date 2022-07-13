@@ -5,7 +5,7 @@ import { Service, Options, RequirementsOf } from './index.js';
 import { Shift } from '../models/shift.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { ShiftsQueryParams } from '../interfaces/query-params/shifts-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 type RequiredProps = 'end_time' | 'start_time' | 'location';
 

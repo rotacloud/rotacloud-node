@@ -5,7 +5,7 @@ import { Service, Options, RequirementsOf } from './index.js';
 import { Location } from '../models/location.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { LocationsQueryParams } from '../interfaces/query-params/locations-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.inteface.js';
+import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 type RequiredProps = 'name';
 
