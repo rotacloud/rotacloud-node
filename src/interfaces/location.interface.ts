@@ -7,8 +7,8 @@ export interface ApiLocation {
   address: string;
   location: ApiLocationCoordinate;
   timezone: number;
-  users: [];
-  managers: [];
-  metadata: null;
-  clock_in_ips: null;
+  users: number[];
+  managers: number[];
+  metadata: object;
+  clock_in_ips: string[];
 }
