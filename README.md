@@ -2,8 +2,7 @@
 
 ## Contributing
 
-Please ensure you perform the ```npm run version:all``` command before commiting and pushing your changes to the remote branch.
-
+Please ensure you perform the `npm run version:bump` command before commiting and pushing your changes to the remote branch.
 
 ## Configuration
 
