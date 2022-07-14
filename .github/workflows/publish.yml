@@ -30,6 +30,7 @@ jobs:
           version="$(npm show . version)"
           echo "Version is $version"
           echo "export const Version = { version: '$version' };" > ./src/version.ts
+          exit 1
       - name: Run CI
         run: npm ci
       - name: Lint
