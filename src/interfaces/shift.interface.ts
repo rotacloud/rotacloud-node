@@ -12,8 +12,8 @@ export interface ApiShift {
   location: number;
   role: number | null;
   notes: string | null;
-  created_by: number;
   created_at: number;
+  created_by: number;
   updated_at: number | null;
   updated_by: number | null;
   claimed: boolean;
