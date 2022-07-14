@@ -27,7 +27,7 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - name: Add version number to package
         run: |
-          version="$(npm show . version)"
+          version="$(node -pe \"require('./package.json').version\")"
           echo "Version is $version"
           echo "export const Version = { version: '$version' };" > ./src/version.ts
       - name: Run CI
