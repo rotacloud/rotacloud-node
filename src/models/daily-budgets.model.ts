@@ -9,5 +9,7 @@ export class DailyBudgets {
   constructor(dailyBudgets: ApiDailyBudgets) {
     this.date = dailyBudgets.date;
     this.location = dailyBudgets.location;
+    this.hours_budget = dailyBudgets.hours_budget;
+    this.salary_budget = dailyBudgets.salary_budget;
   }
 }
