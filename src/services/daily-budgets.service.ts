@@ -5,22 +5,21 @@ import { Service, Options } from './index.js';
 import { DailyBudgets } from '../models/daily-budgets.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { DailyBudgetsQueryParams } from '../interfaces/query-params/daily-budgets-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
-class DailyBudgetsService extends Service {
+export class DailyBudgetsService extends Service {
   private apiPath = '/daily_budgets';
 
-  async *list(options?: Options<DailyBudgetsQueryParams & InternalQueryParams>) {
-    for await (const res of super.iterator<ApiDailyBudgets>({ url: this.apiPath }, options)) {
+  async *list(query: DailyBudgetsQueryParams, options?: Options) {
+    for await (const res of super.iterator<ApiDailyBudgets>({ url: this.apiPath, params: query }, options)) {
       yield new DailyBudgets(res);
     }
   }
 
-  listAll(): Promise<DailyBudgets[]>;
-  async listAll() {
+  listAll(query: DailyBudgetsQueryParams): Promise<DailyBudgets[]>;
+  async listAll(query: DailyBudgetsQueryParams) {
     try {
       const attendance = [] as DailyBudgets[];
-      for await (const atten of this.list()) {
+      for await (const atten of this.list(query)) {
         attendance.push(atten);
       }
       return attendance;
@@ -29,18 +28,18 @@ class DailyBudgetsService extends Service {
     }
   }
 
-  listByPage(options?: Options<DailyBudgetsQueryParams & InternalQueryParams>) {
-    return super.iterator<ApiDailyBudgets>({ url: this.apiPath }, options).byPage();
+  listByPage(query: DailyBudgetsQueryParams, options?: Options) {
+    return super.iterator<ApiDailyBudgets>({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<ApiDailyBudgets>): Promise<DailyBudgets>;
   update(
     id: number,
     data: Partial<ApiDailyBudgets>,
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiDailyBudgets, any>>;
-  update(id: number, data: Partial<ApiDailyBudgets>, options: Options<InternalQueryParams>): Promise<ApiDailyBudgets>;
-  update(id: number, data: Partial<ApiDailyBudgets>, options?: Options<InternalQueryParams>) {
+  update(id: number, data: Partial<ApiDailyBudgets>, options: Options): Promise<DailyBudgets>;
+  update(id: number, data: Partial<ApiDailyBudgets>, options?: Options) {
     return super
       .fetch<ApiDailyBudgets>({
         url: `${this.apiPath}/${id}`,
@@ -53,5 +52,3 @@ class DailyBudgetsService extends Service {
       );
   }
 }
-
-export { DailyBudgetsService };
