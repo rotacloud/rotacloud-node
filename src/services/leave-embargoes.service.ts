@@ -6,7 +6,6 @@ import { LeaveEmbargo } from '../models/leave-embargo.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 import { LeaveEmbargoesQueryParams } from '../rotacloud.js';
 
-
 type RequiredProps = 'start_date' | 'end_date' | 'users';
 
 export class LeaveEmbargoesService extends Service {
@@ -15,12 +14,9 @@ export class LeaveEmbargoesService extends Service {
   create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>): Promise<LeaveEmbargo>;
   create(
     data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>,
-    options: { rawResponse: true;  } & Options
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
-  create(
-    data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>,
-    options: Options
-  ): Promise<LeaveEmbargo>;
+  create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options: Options): Promise<LeaveEmbargo>;
   create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options?: Options) {
     return super.fetch<ApiLeaveEmbargo>({ url: this.apiPath, data, method: 'POST' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
@@ -29,11 +25,8 @@ export class LeaveEmbargoesService extends Service {
   }
 
   get(id: number): Promise<LeaveEmbargo>;
-  get(
-    id: number,
-    options: { rawResponse: true;  }
-  ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
-  get(id: number, options: Options): Promise<LeaveEmbargo>
+  get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
+  get(id: number, options: Options): Promise<LeaveEmbargo>;
   get(id: number, options?: Options) {
     return super.fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}` }, options).then(
       (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
@@ -41,17 +34,17 @@ export class LeaveEmbargoesService extends Service {
     );
   }
 
-  async *list(query:LeaveEmbargoesQueryParams, options?: Options) {
+  async *list(query: LeaveEmbargoesQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiLeaveEmbargo>({ url: this.apiPath, params: query }, options)) {
       yield new LeaveEmbargo(res);
     }
   }
 
-  listAll(query:LeaveEmbargoesQueryParams,): Promise<LeaveEmbargo[]>;
-  async listAll(query:LeaveEmbargoesQueryParams,) {
+  listAll(query: LeaveEmbargoesQueryParams): Promise<LeaveEmbargo[]>;
+  async listAll(query: LeaveEmbargoesQueryParams) {
     try {
       const leave = [] as LeaveEmbargo[];
-      for await (const leaveEmbargoRecord of this.list(query:LeaveEmbargoesQueryParams,)) {
+      for await (const leaveEmbargoRecord of this.list(query)) {
         leave.push(leaveEmbargoRecord);
       }
       return leave;
@@ -60,7 +53,7 @@ export class LeaveEmbargoesService extends Service {
     }
   }
 
-  listByPage(query:LeaveEmbargoesQueryParams,options?: Options) {
+  listByPage(query: LeaveEmbargoesQueryParams, options?: Options) {
     return super.iterator<ApiLeaveEmbargo>({ url: this.apiPath, params: query }, options).byPage();
   }
 
@@ -68,9 +61,9 @@ export class LeaveEmbargoesService extends Service {
   update(
     id: number,
     data: Partial<ApiLeaveEmbargo>,
-    options: { rawResponse: true;  } & Options
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
-  update(id: number, data: Partial<ApiLeaveEmbargo>, options: Options): Promise< LeaveEmbargo>
+  update(id: number, data: Partial<ApiLeaveEmbargo>, options: Options): Promise<LeaveEmbargo>;
   update(id: number, data: Partial<ApiLeaveEmbargo>, options?: Options) {
     return super
       .fetch<ApiLeaveEmbargo>({
@@ -85,8 +78,8 @@ export class LeaveEmbargoesService extends Service {
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true;  } & Options): Promise<AxiosResponse<any, any>>;
-  delete(id: number, options: Options): Promise<number>
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super.fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : res.status),
@@ -94,4 +87,3 @@ export class LeaveEmbargoesService extends Service {
     );
   }
 }
-
