@@ -32,22 +32,21 @@ export class DailyRevenueService extends Service {
     return super.iterator<ApiDailyRevenue>({ url: this.apiPath, params: query }, options).byPage();
   }
 
-  update(id: number, data: Partial<ApiDailyRevenue>): Promise<DailyRevenue>;
+  update(data: Partial<ApiDailyRevenue>[]): Promise<number>;
   update(
-    id: number,
-    data: Partial<ApiDailyRevenue>,
+    data: Partial<ApiDailyRevenue>[],
     options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiDailyRevenue, any>>;
-  update(id: number, data: Partial<ApiDailyRevenue>, options: Options): Promise<DailyRevenue>;
-  update(id: number, data: Partial<ApiDailyRevenue>, options?: Options) {
+  update(data: Partial<ApiDailyRevenue>[], options: Options): Promise<number>;
+  update(data: Partial<ApiDailyRevenue>[], options?: Options) {
     return super
       .fetch<ApiDailyRevenue>({
-        url: `${this.apiPath}/${id}`,
+        url: `${this.apiPath}`,
         data,
         method: 'POST',
       })
       .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new DailyRevenue(res.data)),
+        (res) => Promise.resolve(options?.rawResponse ? res : res.status),
         (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
       );
   }
