@@ -15,11 +15,11 @@ export class DailyBudgetsService extends Service {
     }
   }
 
-  listAll(query: DailyBudgetsQueryParams): Promise<DailyBudgets[]>;
-  async listAll(query: DailyBudgetsQueryParams) {
+  listAll(query: DailyBudgetsQueryParams, options?: Options): Promise<DailyBudgets[]>;
+  async listAll(query: DailyBudgetsQueryParams, options?: Options) {
     try {
       const attendance = [] as DailyBudgets[];
-      for await (const atten of this.list(query)) {
+      for await (const atten of this.list(query, options)) {
         attendance.push(atten);
       }
       return attendance;

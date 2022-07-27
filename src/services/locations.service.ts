@@ -40,11 +40,11 @@ export class LocationsService extends Service {
     }
   }
 
-  listAll(query: LocationsQueryParams): Promise<Location[]>;
-  async listAll(query: LocationsQueryParams) {
+  listAll(query: LocationsQueryParams, options?: Options): Promise<Location[]>;
+  async listAll(query: LocationsQueryParams, options?: Options) {
     try {
       const locations = [] as Location[];
-      for await (const location of this.list(query)) {
+      for await (const location of this.list(query, options)) {
         locations.push(location);
       }
       return locations;
