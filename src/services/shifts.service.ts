@@ -40,11 +40,11 @@ export class ShiftsService extends Service {
     }
   }
 
-  listAll(query: ShiftsQueryParams): Promise<Shift[]>;
-  async listAll(query: ShiftsQueryParams) {
+  listAll(query: ShiftsQueryParams, options?: Options): Promise<Shift[]>;
+  async listAll(query: ShiftsQueryParams, options?: Options) {
     try {
       const shifts = [] as Shift[];
-      for await (const shift of this.list(query)) {
+      for await (const shift of this.list(query, options)) {
         shifts.push(shift);
       }
       return shifts;

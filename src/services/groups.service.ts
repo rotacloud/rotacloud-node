@@ -41,11 +41,11 @@ export class GroupsService extends Service {
     }
   }
 
-  listAll(query: GroupsQueryParams): Promise<Group[]>;
-  async listAll(query: GroupsQueryParams) {
+  listAll(query: GroupsQueryParams, options?: Options): Promise<Group[]>;
+  async listAll(query: GroupsQueryParams, options?: Options) {
     try {
       const groups = [] as Group[];
-      for await (const group of this.list(query)) {
+      for await (const group of this.list(query, options)) {
         groups.push(group);
       }
       return groups;

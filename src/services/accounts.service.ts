@@ -12,11 +12,11 @@ class AccountsService extends Service {
     }
   }
 
-  listAll(): Promise<Account[]>;
-  async listAll() {
+  listAll(options?: Options): Promise<Account[]>;
+  async listAll(options?: Options) {
     try {
       const accounts = [] as Account[];
-      for await (const account of this.list()) {
+      for await (const account of this.list(options)) {
         accounts.push(account);
       }
       return accounts;
