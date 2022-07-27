@@ -4,24 +4,20 @@ import { Service, Options, RequirementsOf } from './index.js';
 
 import { LeaveEmbargo } from '../models/leave-embargo.model.js';
 import { ErrorResponse } from '../models/error-response.model.js';
-import { UsersQueryParams } from '../interfaces/query-params/users-query-params.interface.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
+import { LeaveEmbargoesQueryParams } from '../rotacloud.js';
 
 type RequiredProps = 'start_date' | 'end_date' | 'users';
 
-class LeaveEmbargoesService extends Service {
+export class LeaveEmbargoesService extends Service {
   private apiPath = '/leave_embargoes';
 
   create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>): Promise<LeaveEmbargo>;
   create(
     data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>,
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
-  create(
-    data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>,
-    options: Options<InternalQueryParams>
-  ): Promise<LeaveEmbargo>;
-  create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options?: Options<InternalQueryParams>) {
+  create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options: Options): Promise<LeaveEmbargo>;
+  create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options?: Options) {
     return super.fetch<ApiLeaveEmbargo>({ url: this.apiPath, data, method: 'POST' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
@@ -29,29 +25,26 @@ class LeaveEmbargoesService extends Service {
   }
 
   get(id: number): Promise<LeaveEmbargo>;
-  get(
-    id: number,
-    options: { rawResponse: true; params?: InternalQueryParams }
-  ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
-  get(id: number, options: Options<InternalQueryParams>): Promise<LeaveEmbargo>;
-  get(id: number, options?: Options<InternalQueryParams>) {
+  get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
+  get(id: number, options: Options): Promise<LeaveEmbargo>;
+  get(id: number, options?: Options) {
     return super.fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}` }, options).then(
       (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
     );
   }
 
-  async *list(options?: Options<UsersQueryParams & InternalQueryParams>) {
-    for await (const res of super.iterator<ApiLeaveEmbargo>({ url: this.apiPath }, options)) {
+  async *list(query: LeaveEmbargoesQueryParams, options?: Options) {
+    for await (const res of super.iterator<ApiLeaveEmbargo>({ url: this.apiPath, params: query }, options)) {
       yield new LeaveEmbargo(res);
     }
   }
 
-  listAll(): Promise<LeaveEmbargo[]>;
-  async listAll() {
+  listAll(query: LeaveEmbargoesQueryParams): Promise<LeaveEmbargo[]>;
+  async listAll(query: LeaveEmbargoesQueryParams) {
     try {
       const leave = [] as LeaveEmbargo[];
-      for await (const leaveEmbargoRecord of this.list()) {
+      for await (const leaveEmbargoRecord of this.list(query)) {
         leave.push(leaveEmbargoRecord);
       }
       return leave;
@@ -60,18 +53,18 @@ class LeaveEmbargoesService extends Service {
     }
   }
 
-  listByPage(options?: Options<UsersQueryParams & InternalQueryParams>) {
-    return super.iterator<ApiLeaveEmbargo>({ url: this.apiPath }, options).byPage();
+  listByPage(query: LeaveEmbargoesQueryParams, options?: Options) {
+    return super.iterator<ApiLeaveEmbargo>({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<ApiLeaveEmbargo>): Promise<LeaveEmbargo>;
   update(
     id: number,
     data: Partial<ApiLeaveEmbargo>,
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
-  update(id: number, data: Partial<ApiLeaveEmbargo>, options: Options<InternalQueryParams>): Promise<LeaveEmbargo>;
-  update(id: number, data: Partial<ApiLeaveEmbargo>, options?: Options<InternalQueryParams>) {
+  update(id: number, data: Partial<ApiLeaveEmbargo>, options: Options): Promise<LeaveEmbargo>;
+  update(id: number, data: Partial<ApiLeaveEmbargo>, options?: Options) {
     return super
       .fetch<ApiLeaveEmbargo>({
         url: `${this.apiPath}/${id}`,
@@ -85,14 +78,12 @@ class LeaveEmbargoesService extends Service {
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true; params?: InternalQueryParams }): Promise<AxiosResponse<any, any>>;
-  delete(id: number, options: Options<InternalQueryParams>): Promise<number>;
-  delete(id: number, options?: Options<InternalQueryParams>) {
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: Options): Promise<number>;
+  delete(id: number, options?: Options) {
     return super.fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : res.status),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
     );
   }
 }
-
-export { LeaveEmbargoesService };

@@ -3,21 +3,21 @@ import { ApiDaysOff } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
 import { ErrorResponse } from '../models/error-response.model.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
+
 import { DaysOff } from '../models/days-off.model.js';
 import { DaysOffQueryParams } from '../interfaces/query-params/days-off-query-params.interface.js';
 
-class DaysOffService extends Service<ApiDaysOff> {
+export class DaysOffService extends Service<ApiDaysOff> {
   private apiPath = '/days_off';
 
   create(dates: string[], users: number[]): Promise<number>;
   create(
     dates: string[],
     users: number[],
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiDaysOff, any>>;
-  create(dates: string[], users: number[], options: Options<InternalQueryParams>): Promise<number>;
-  create(dates: string[], users: number[], options?: Options<InternalQueryParams>) {
+  create(dates: string[], users: number[], options: Options): Promise<number>;
+  create(dates: string[], users: number[], options?: Options) {
     return super
       .fetch({
         url: this.apiPath,
@@ -33,17 +33,17 @@ class DaysOffService extends Service<ApiDaysOff> {
       );
   }
 
-  async *list(options?: Options<DaysOffQueryParams & InternalQueryParams>) {
-    for await (const res of super.iterator({ url: this.apiPath }, options)) {
+  async *list(query: DaysOffQueryParams, options?: Options) {
+    for await (const res of super.iterator({ url: this.apiPath, params: query }, options)) {
       yield new DaysOff(res);
     }
   }
 
-  listAll(): Promise<DaysOff[]>;
-  async listAll() {
+  listAll(query: DaysOffQueryParams): Promise<DaysOff[]>;
+  async listAll(query: DaysOffQueryParams) {
     try {
       const daysOff = [] as DaysOff[];
-      for await (const dayOff of this.list()) {
+      for await (const dayOff of this.list(query)) {
         daysOff.push(dayOff);
       }
       return daysOff;
@@ -52,18 +52,14 @@ class DaysOffService extends Service<ApiDaysOff> {
     }
   }
 
-  listByPage(options?: Options<DaysOffQueryParams & InternalQueryParams>) {
-    return super.iterator({ url: this.apiPath }, options).byPage();
+  listByPage(query: DaysOffQueryParams, options?: Options) {
+    return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 
   delete(dates: string[], users: number[]): Promise<number>;
-  delete(
-    dates: string[],
-    users: number[],
-    options: { rawResponse: true; params?: InternalQueryParams }
-  ): Promise<AxiosResponse<any, any>>;
-  delete(dates: string[], users: number[], options: Options<InternalQueryParams>): Promise<number>;
-  delete(dates: string[], users: number[], options?: Options<InternalQueryParams>) {
+  delete(dates: string[], users: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(dates: string[], users: number[], options: Options): Promise<number>;
+  delete(dates: string[], users: number[], options?: Options) {
     return super
       .fetch({
         url: this.apiPath,
@@ -79,5 +75,3 @@ class DaysOffService extends Service<ApiDaysOff> {
       );
   }
 }
-
-export { DaysOffService };

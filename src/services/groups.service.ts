@@ -3,22 +3,22 @@ import { ApiGroup } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { ErrorResponse } from '../models/error-response.model.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
+
 import { Group } from '../models/group.model.js';
 import { GroupsQueryParams } from '../interfaces/query-params/groups-query-params.interface.js';
 
 type RequiredProps = 'name';
 
-class GroupsService extends Service {
+export class GroupsService extends Service {
   private apiPath = '/groups';
 
   create(data: RequirementsOf<ApiGroup, RequiredProps>): Promise<Group>;
   create(
     data: RequirementsOf<ApiGroup, RequiredProps>,
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiGroup, any>>;
-  create(data: RequirementsOf<ApiGroup, RequiredProps>, options: Options<InternalQueryParams>): Promise<Group>;
-  create(data: RequirementsOf<ApiGroup, RequiredProps>, options?: Options<InternalQueryParams>) {
+  create(data: RequirementsOf<ApiGroup, RequiredProps>, options: Options): Promise<Group>;
+  create(data: RequirementsOf<ApiGroup, RequiredProps>, options?: Options) {
     return super.fetch<ApiGroup>({ url: this.apiPath, data, method: 'POST' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
@@ -26,26 +26,26 @@ class GroupsService extends Service {
   }
 
   get(id: number): Promise<Group>;
-  get(id: number, options: { rawResponse: true; params?: InternalQueryParams }): Promise<AxiosResponse<ApiGroup, any>>;
-  get(id: number, options: Options<InternalQueryParams>): Promise<Group>;
-  get(id: number, options?: Options<InternalQueryParams>) {
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiGroup, any>>;
+  get(id: number, options: Options): Promise<Group>;
+  get(id: number, options?: Options) {
     return super.fetch<ApiGroup>({ url: `${this.apiPath}/${id}` }, options).then(
       (res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
     );
   }
 
-  async *list(options?: Options<GroupsQueryParams & InternalQueryParams>) {
-    for await (const res of super.iterator<ApiGroup>({ url: this.apiPath }, options)) {
+  async *list(query: GroupsQueryParams, options?: Options) {
+    for await (const res of super.iterator<ApiGroup>({ url: this.apiPath, params: query }, options)) {
       yield new Group(res);
     }
   }
 
-  listAll(): Promise<Group[]>;
-  async listAll() {
+  listAll(query: GroupsQueryParams): Promise<Group[]>;
+  async listAll(query: GroupsQueryParams) {
     try {
       const groups = [] as Group[];
-      for await (const group of this.list()) {
+      for await (const group of this.list(query)) {
         groups.push(group);
       }
       return groups;
@@ -54,18 +54,18 @@ class GroupsService extends Service {
     }
   }
 
-  listByPage(options?: Options<GroupsQueryParams & InternalQueryParams>) {
-    return super.iterator<ApiGroup>({ url: this.apiPath }, options).byPage();
+  listByPage(query: GroupsQueryParams, options?: Options) {
+    return super.iterator<ApiGroup>({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<ApiGroup>): Promise<Group>;
   update(
     id: number,
     data: Partial<ApiGroup>,
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiGroup, any>>;
-  update(id: number, data: Partial<ApiGroup>, options: Options<InternalQueryParams>): Promise<Group>;
-  update(id: number, data: Partial<ApiGroup>, options?: Options<InternalQueryParams>) {
+  update(id: number, data: Partial<ApiGroup>, options: Options): Promise<Group>;
+  update(id: number, data: Partial<ApiGroup>, options?: Options) {
     return super
       .fetch<ApiGroup>({
         url: `${this.apiPath}/${id}`,
@@ -79,14 +79,12 @@ class GroupsService extends Service {
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true; params?: InternalQueryParams }): Promise<AxiosResponse<any, any>>;
-  delete(id: number, options: Options<InternalQueryParams>): Promise<number>;
-  delete(id: number, options?: Options<InternalQueryParams>) {
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: Options): Promise<number>;
+  delete(id: number, options?: Options) {
     return super.fetch<ApiGroup>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : res.status),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
     );
   }
 }
-
-export { GroupsService };
