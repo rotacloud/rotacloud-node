@@ -1,6 +1,7 @@
 import {
   AccountsService,
   AttendanceService,
+  AuthService,
   AvailabilityService,
   DailyBudgetsService,
   DailyRevenueService,
@@ -22,6 +23,7 @@ export class RotaCloud {
   public defaultAPIURI = 'https://api.rotacloud.com/v1';
   public accounts = new AccountsService();
   public attendance = new AttendanceService();
+  public auth = new AuthService();
   public availability = new AvailabilityService();
   public dailyBudgets = new DailyBudgetsService();
   public dailyRevenue = new DailyRevenueService();

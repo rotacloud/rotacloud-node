@@ -2,6 +2,7 @@ export * from './account-service.interface.js';
 export * from './account-services.interface.js';
 export * from './account.interface.js';
 export * from './attendance.interface.js';
+export * from './auth.interface.js';
 export * from './availability-pattern.interface.js';
 export * from './availability.interface.js';
 export * from './daily-budgets.interface.js';
