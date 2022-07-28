@@ -1,6 +1,7 @@
 export * from './service.js';
 export * from './accounts.service.js';
 export * from './attendance.service.js';
+export * from './auth.service.js';
 export * from './availability.service.js';
 export * from './daily-budgets.service.js';
 export * from './daily-revenue.service.js';
