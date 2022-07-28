@@ -4,9 +4,11 @@ import { Version } from '../version.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
-export interface Options<T> {
+export interface Options {
   rawResponse?: boolean;
-  params?: T;
+  expand?: string[];
+  fields?: string[];
+  limit?: number;
 }
 
 interface PagingObject {
@@ -51,7 +53,7 @@ export abstract class Service<ApiResponse = any> {
     return keyVal;
   }
 
-  public async fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?): Promise<AxiosResponse<T>> {
+  public async fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: AxiosRequestHeaders = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
       'SDK-Version': Version.version,
@@ -67,7 +69,12 @@ export abstract class Service<ApiResponse = any> {
       ...httpOptions,
       baseURL: RotaCloud.config.baseUri,
       headers,
-      params: options?.params,
+      params: {
+        expand: options?.expand,
+        fields: options?.fields,
+        limit: options?.limit,
+        ...httpOptions?.params,
+      },
       paramsSerializer: (params) => {
         return params ? this.buildQueryStr(params) : '';
       },
@@ -77,7 +84,10 @@ export abstract class Service<ApiResponse = any> {
     return response;
   }
 
-  private async *listFetch<T = ApiResponse>(reqObject, options?): AsyncGenerator<AxiosResponse<T[], any>> {
+  private async *listFetch<T = ApiResponse>(
+    reqObject: AxiosRequestConfig<T[]>,
+    options?: Options
+  ): AsyncGenerator<AxiosResponse<T[], any>> {
     let running = true;
     do {
       const res = await this.fetch<T[]>(reqObject, options);
@@ -91,17 +101,17 @@ export abstract class Service<ApiResponse = any> {
       } else {
         running = false;
       }
-      yield await res;
+      yield res;
     } while (running);
   }
 
-  private async *listResponses<T = ApiResponse>(reqObject, options?) {
+  private async *listResponses<T = ApiResponse>(reqObject, options?: Options) {
     for await (const res of this.listFetch<T>(reqObject, options)) {
       yield* res.data;
     }
   }
 
-  public iterator<T = ApiResponse>(reqObject, options?) {
+  public iterator<T = ApiResponse>(reqObject, options?: Options) {
     const iterator = this.listResponses<T>(reqObject, options);
     return {
       [Symbol.asyncIterator]() {

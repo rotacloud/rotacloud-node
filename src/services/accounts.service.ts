@@ -2,22 +2,21 @@ import { Account } from '../models/account.model.js';
 import { Service, Options } from './index.js';
 
 import { ApiAccount } from '../interfaces/index.js';
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 
 class AccountsService extends Service {
   private apiPath = '/accounts';
 
-  async *list(options?: Options<InternalQueryParams>) {
+  async *list(options?: Options) {
     for await (const res of super.iterator<ApiAccount>({ url: this.apiPath }, options)) {
       yield new Account(res);
     }
   }
 
-  listAll(): Promise<Account[]>;
-  async listAll() {
+  listAll(options?: Options): Promise<Account[]>;
+  async listAll(options?: Options) {
     try {
       const accounts = [] as Account[];
-      for await (const account of this.list()) {
+      for await (const account of this.list(options)) {
         accounts.push(account);
       }
       return accounts;
@@ -26,7 +25,7 @@ class AccountsService extends Service {
     }
   }
 
-  listByPage(options?: Options<InternalQueryParams>) {
+  listByPage(options?: Options) {
     return super.iterator<ApiAccount>({ url: this.apiPath }, options).byPage();
   }
 }

@@ -1,28 +1,18 @@
 import { AxiosResponse } from 'axios';
-import { Service, Options, RequirementsOf } from './index.js';
+import { Service, Options } from './index.js';
 
-import { InternalQueryParams } from '../interfaces/query-params/internal-query-params.interface.js';
 import { AvailabilityQueryParams } from '../interfaces/query-params/availability-query-params.interface.js';
 import { Availability } from '../models/availability.model.js';
 import { ApiAvailability } from '../interfaces/availability.interface.js';
 import { ErrorResponse } from '../models/error-response.model.js';
 
-type RequiredProps = 'start' | 'end';
-type RequiredOptions<T> = RequirementsOf<Options<T>, 'params'>;
-
 export class AvailabilityService extends Service {
   private apiPath = '/availability';
 
   update(data: ApiAvailability): Promise<Availability>;
-  update(
-    data: ApiAvailability,
-    options: { rawResponse: true; params?: InternalQueryParams }
-  ): Promise<AxiosResponse<ApiAvailability>>;
-  update(
-    data: ApiAvailability,
-    options?: Options<InternalQueryParams>
-  ): Promise<Availability | AxiosResponse<ApiAvailability>>;
-  update(data: ApiAvailability, options?: Options<InternalQueryParams>) {
+  update(data: ApiAvailability, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiAvailability>>;
+  update(data: ApiAvailability, options?: Options): Promise<Availability | AxiosResponse<ApiAvailability>>;
+  update(data: ApiAvailability, options?: Options) {
     return super
       .fetch<ApiAvailability>({
         url: this.apiPath,
@@ -37,15 +27,9 @@ export class AvailabilityService extends Service {
 
   /** Alias of {@link AvailabilityService["update"]} */
   create(data: ApiAvailability): Promise<Availability>;
-  create(
-    data: ApiAvailability,
-    options: { rawResponse: true; params?: InternalQueryParams }
-  ): Promise<AxiosResponse<ApiAvailability>>;
-  create(
-    data: ApiAvailability,
-    options?: Options<InternalQueryParams>
-  ): Promise<Availability | AxiosResponse<ApiAvailability>>;
-  create(data: ApiAvailability, options?: Options<InternalQueryParams>) {
+  create(data: ApiAvailability, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiAvailability>>;
+  create(data: ApiAvailability, options?: Options): Promise<Availability | AxiosResponse<ApiAvailability>>;
+  create(data: ApiAvailability, options?: Options) {
     return this.update(data, options);
   }
 
@@ -53,14 +37,10 @@ export class AvailabilityService extends Service {
   delete(
     user: number,
     dates: string[],
-    options: { rawResponse: true; params?: InternalQueryParams }
+    options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiAvailability>>;
-  delete(
-    user: number,
-    dates: string[],
-    options?: Options<InternalQueryParams>
-  ): Promise<Availability | AxiosResponse<ApiAvailability>>;
-  delete(user: number, dates: string[], options?: Options<InternalQueryParams>) {
+  delete(user: number, dates: string[], options?: Options): Promise<Availability | AxiosResponse<ApiAvailability>>;
+  delete(user: number, dates: string[], options?: Options) {
     return this.update(
       {
         user,
@@ -76,13 +56,13 @@ export class AvailabilityService extends Service {
     );
   }
 
-  async *list(options: RequiredOptions<RequirementsOf<AvailabilityQueryParams, RequiredProps> & InternalQueryParams>) {
-    for await (const res of super.iterator<ApiAvailability>({ url: this.apiPath }, options)) {
+  async *list(query: AvailabilityQueryParams, options?: Options) {
+    for await (const res of super.iterator<ApiAvailability>({ url: this.apiPath, params: query }, options)) {
       yield new Availability(res);
     }
   }
 
-  listByPage(options: RequiredOptions<RequirementsOf<AvailabilityQueryParams, RequiredProps> & InternalQueryParams>) {
-    return super.iterator<ApiAvailability>({ url: this.apiPath }, options).byPage();
+  listByPage(query: AvailabilityQueryParams, options?: Options) {
+    return super.iterator<ApiAvailability>({ url: this.apiPath, params: query }, options).byPage();
   }
 }
