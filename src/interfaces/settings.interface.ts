@@ -1,0 +1,63 @@
+export interface PayCodes {
+  [pay_code_id: string]: string | { [leave_type_id: string]: string };
+}
+
+export interface ApiSettings {
+  attendance_record_breaks: string;
+  automatically_clock_in_to_consecutive_shifts: boolean;
+  availability_employees_can_edit: boolean;
+  availability_managers_can_edit: boolean;
+  breaks_paid: boolean;
+  clock_in_out_reminders_minutes: number;
+  clock_in_without_shift_allowed: string;
+  currency_symbol: string;
+  dashboard_show_unpublished_shifts: boolean;
+  early_clock_ins_paid_from: string;
+  early_clock_in_minutes: number;
+  employee_shift_note_visibility: string;
+  employees_can_edit_timesheets: boolean;
+  employees_can_only_see_self: boolean;
+  employees_can_see_all_locations: boolean;
+  employees_can_see_everyones_leave: boolean;
+  flag_in_out_discrepancies_minutes: number;
+  holiday_accrual_rate: number;
+  late_clock_outs_paid_until: string;
+  lateness_added_after_minutes: number;
+  leave_can_request_over_allowance: boolean;
+  leave_prorate_allowances: boolean;
+  leave_requests_enabled: boolean;
+  leave_requests_notice_days: number;
+  leave_year_start_day: number;
+  leave_year_start_month: number;
+  metadata_enabled: boolean;
+  mobile_clocking_enabled: boolean;
+  no_show_notifications_minutes: number;
+  open_shift_claiming_enabled: boolean;
+  public_holiday_affects_allowance: boolean;
+  reminders_enabled: boolean;
+  rota_grouping: string;
+  rota_salaried_cost_method: string;
+  rota_show_employee_photos: boolean;
+  round_breaks: string;
+  round_breaks_direction: string;
+  round_currency: string;
+  round_currency_direction: string;
+  round_hours: string;
+  round_hours_direction: string;
+  shift_acknowledgement_enabled: boolean;
+  shift_swaps_across_locations_enabled: boolean;
+  shift_swaps_enabled: boolean;
+  shift_swaps_notice_hours: number;
+  shift_swaps_require_approval: boolean;
+  shift_swaps_shift_range_days: number;
+  show_open_shifts_from_other_locations: boolean;
+  show_shifts_from_other_locations: boolean;
+  time_format: string;
+  unavailability_notice_hours: number;
+  unavailability_requests_enabled: boolean;
+  unpaid_leave_types_included_in_accrual: number[];
+  paid_leave_types_included_in_accrual: number[];
+  week_starts: string;
+  pay_codes: PayCodes;
+  webhook_signing_secret: string;
+}

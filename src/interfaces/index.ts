@@ -26,5 +26,6 @@ export * from './pay-period.interface.js';
 export * from './role-rate.interface.js';
 export * from './role.interface.js';
 export * from './sdk-config.interface.js';
-export * from './user.interface.js';
+export * from './settings.interface.js';
 export * from './shift.interface.js';
+export * from './user.interface.js';
