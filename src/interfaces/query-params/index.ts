@@ -17,6 +17,7 @@ export * from './locations-query-params.interface.js';
 export * from './logbook-events-query-params.interface.js';
 export * from './pay-periods-query-params.interface.js';
 export * from './roles-query-params.interface.js';
+export * from './settings-query-params.interface.js';
 export * from './shifts-query-params.interface.js';
 export * from './swap-requests-query-params.interface.js';
 export * from './terminals-query-params.interface.js';

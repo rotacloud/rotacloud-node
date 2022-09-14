@@ -1,8 +1,45 @@
-import axios, { AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
+
+export enum RetryStrategy {
+  Exponential = 'expo',
+  Static = 'static',
+}
+
+export type RetryOptions =
+  | {
+      /** Use exponential back-off */
+      exponential?: false;
+      /** The maximum number of retries before erroring */
+      maxRetries: number;
+      /** Delay in milliseconds between retry attempts - not used in exponential back-off */
+      delay: number;
+    }
+  | {
+      /** Use exponential back-off */
+      exponential: true;
+      /** The maximum number of retries before erroring */
+      maxRetries: number;
+    };
+
+const DEFAULT_RETRIES = 3;
+const DEFAULT_RETRY_DELAY = 2000;
+
+const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
+  [RetryStrategy.Exponential]: {
+    exponential: true,
+    maxRetries: DEFAULT_RETRIES,
+  },
+  [RetryStrategy.Static]: {
+    exponential: false,
+    maxRetries: DEFAULT_RETRIES,
+    delay: DEFAULT_RETRY_DELAY,
+  },
+};
 
 export interface Options {
   rawResponse?: boolean;
@@ -22,7 +59,7 @@ type ParameterPrimitive = string | boolean | number | null;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
-  // rate limit tracking could be implemented here statically
+  protected client: AxiosInstance = axios.create();
 
   public isLeaveRequest(endpoint?: string): boolean {
     return endpoint === '/leave_requests';
@@ -80,7 +117,24 @@ export abstract class Service<ApiResponse = any> {
       },
     };
 
-    const response = await axios.request<T>(reqObject);
+    if (RotaCloud.config.retry) {
+      const retryConfig =
+        typeof RotaCloud.config.retry === 'string'
+          ? DEFAULT_RETRY_STRATEGY_OPTIONS[RotaCloud.config.retry]
+          : RotaCloud.config.retry;
+
+      axiosRetry(this.client, {
+        retries: retryConfig.maxRetries,
+        retryDelay: (retryCount) => {
+          if (retryConfig.exponential) {
+            return axiosRetry.exponentialDelay(retryCount);
+          }
+          return retryConfig.delay;
+        },
+      });
+    }
+
+    const response = await this.client.request<T>(reqObject);
     return response;
   }
 
