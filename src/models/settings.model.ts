@@ -1,6 +1,4 @@
-interface PayCodes {
-  [pay_code_id: string]: string | { [leave_type_id: string]: string };
-}
+import { ApiSettings, PayCodes } from '../interfaces';
 
 export class Settings {
   public attendance_record_breaks: string;
@@ -60,4 +58,8 @@ export class Settings {
   public week_starts: string;
   public pay_codes: PayCodes;
   public webhook_signing_secret: string;
+
+  constructor(settings: ApiSettings) {
+    this.attendance_record_breaks = settings.attendance_record_breaks;
+  }
 }

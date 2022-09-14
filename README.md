@@ -6,7 +6,7 @@ Please ensure you perform the `npm run version:bump` command before commiting an
 
 ## Configuration
 
-Configuration is simple, just import the core rotacloud.js SDK and supply your API key as necessary.
+Configuration is simple, just import the core RotaCloud SDK and supply your API key as necessary.
 
 ```typescript
 import { RotaCloud } from 'rotacloud';
@@ -28,4 +28,30 @@ try {
 } catch (e) {
   console.log(e);
 }
+```
+
+## Retry Policies
+
+Our SDK supports both basic and customisable retry polices. Both can be easily configured in the SDKConfig object at time of instantiation. Both exponential and static value based back offs are supported.
+
+Only idempotent requests will be retried.
+
+```typescript
+import { RotaCloud } from 'rotacloud';
+
+const rc = new RotaCloud({
+  apiKey: 'YOUR_API_KEY',
+  retry: 'expo' | 'static',
+});
+```
+
+If more granular control is required of the internal retry policy values, an object can be passed through the `retry` field.
+
+```typescript
+import { RotaCloud } from 'rotacloud';
+
+const rc = new RotaCloud({
+  apiKey: 'YOUR_API_KEY',
+  retry: { delay: 2000, exponential: false, maxRetries: 10 },
+});
 ```

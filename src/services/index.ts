@@ -12,5 +12,6 @@ export * from './leave-embargoes.service.js';
 export * from './leave.service.js';
 export * from './locations.service.js';
 export * from './roles.service.js';
+export * from './settings.service.js';
 export * from './shifts.service.js';
 export * from './users.service.js';
