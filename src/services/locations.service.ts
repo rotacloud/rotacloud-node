@@ -34,13 +34,13 @@ export class LocationsService extends Service {
     );
   }
 
-  async *list(query: LocationsQueryParams, options?: Options) {
+  async *list(query?: LocationsQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiLocation>({ url: this.apiPath, params: query }, options)) {
       yield new Location(res);
     }
   }
 
-  listAll(query: LocationsQueryParams, options?: Options): Promise<Location[]>;
+  listAll(query?: LocationsQueryParams, options?: Options): Promise<Location[]>;
   async listAll(query: LocationsQueryParams, options?: Options) {
     try {
       const locations = [] as Location[];
@@ -53,7 +53,7 @@ export class LocationsService extends Service {
     }
   }
 
-  listByPage(query: LocationsQueryParams, options?: Options) {
+  listByPage(query?: LocationsQueryParams, options?: Options) {
     return super.iterator<ApiLocation>({ url: this.apiPath, params: query }, options).byPage();
   }
 
