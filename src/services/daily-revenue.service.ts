@@ -17,15 +17,11 @@ export class DailyRevenueService extends Service {
 
   listAll(query: DailyRevenueQueryParams, options?: Options): Promise<DailyRevenue[]>;
   async listAll(query: DailyRevenueQueryParams, options?: Options) {
-    try {
-      const attendance = [] as DailyRevenue[];
-      for await (const atten of this.list(query, options)) {
-        attendance.push(atten);
-      }
-      return attendance;
-    } catch (err) {
-      return err;
+    const attendance = [] as DailyRevenue[];
+    for await (const atten of this.list(query, options)) {
+      attendance.push(atten);
     }
+    return attendance;
   }
 
   listByPage(query: DailyRevenueQueryParams, options?: Options) {

@@ -26,15 +26,11 @@ class AccountsService extends Service {
 
   listAll(options?: Options): Promise<Account[]>;
   async listAll(options?: Options) {
-    try {
-      const accounts = [] as Account[];
-      for await (const account of this.list(options)) {
-        accounts.push(account);
-      }
-      return accounts;
-    } catch (err) {
-      return err;
+    const accounts = [] as Account[];
+    for await (const account of this.list(options)) {
+      accounts.push(account);
     }
+    return accounts;
   }
 
   listByPage(options?: Options) {

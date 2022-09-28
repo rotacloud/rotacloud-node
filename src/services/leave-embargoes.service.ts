@@ -42,15 +42,11 @@ export class LeaveEmbargoesService extends Service {
 
   listAll(query: LeaveEmbargoesQueryParams, options?: Options): Promise<LeaveEmbargo[]>;
   async listAll(query: LeaveEmbargoesQueryParams, options?: Options) {
-    try {
-      const leave = [] as LeaveEmbargo[];
-      for await (const leaveEmbargoRecord of this.list(query, options)) {
-        leave.push(leaveEmbargoRecord);
-      }
-      return leave;
-    } catch (err) {
-      return err;
+    const leave = [] as LeaveEmbargo[];
+    for await (const leaveEmbargoRecord of this.list(query, options)) {
+      leave.push(leaveEmbargoRecord);
     }
+    return leave;
   }
 
   listByPage(query: LeaveEmbargoesQueryParams, options?: Options) {

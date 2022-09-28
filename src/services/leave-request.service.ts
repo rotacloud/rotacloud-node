@@ -43,15 +43,11 @@ export class LeaveRequestService extends Service {
 
   listAll(query?: LeaveQueryParams, options?: Options): Promise<LeaveRequest[]>;
   async listAll(query: LeaveQueryParams, options?: Options) {
-    try {
-      const leave = [] as LeaveRequest[];
-      for await (const leaveRequestRecord of this.list(query, options)) {
-        leave.push(leaveRequestRecord);
-      }
-      return leave;
-    } catch (err) {
-      return err;
+    const leave = [] as LeaveRequest[];
+    for await (const leaveRequestRecord of this.list(query, options)) {
+      leave.push(leaveRequestRecord);
     }
+    return leave;
   }
 
   listByPage(query?: LeaveQueryParams, options?: Options) {

@@ -42,15 +42,11 @@ export class RolesService extends Service {
 
   listAll(query?: RolesQueryParams, options?: Options): Promise<Role[]>;
   async listAll(query: RolesQueryParams, options?: Options) {
-    try {
-      const roles = [] as Role[];
-      for await (const role of this.list(query, options)) {
-        roles.push(role);
-      }
-      return roles;
-    } catch (err) {
-      return err;
+    const roles = [] as Role[];
+    for await (const role of this.list(query, options)) {
+      roles.push(role);
     }
+    return roles;
   }
 
   listByPage(query?: RolesQueryParams, options?: Options) {

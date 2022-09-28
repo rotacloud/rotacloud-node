@@ -42,15 +42,11 @@ class UsersService extends Service {
 
   listAll(query: UsersQueryParams, options?: Options): Promise<User[]>;
   async listAll(query: UsersQueryParams, options?: Options) {
-    try {
-      const users = [] as User[];
-      for await (const user of this.list(query, options)) {
-        users.push(user);
-      }
-      return users;
-    } catch (err) {
-      return err;
+    const users = [] as User[];
+    for await (const user of this.list(query, options)) {
+      users.push(user);
     }
+    return users;
   }
 
   listByPage(query: UsersQueryParams, options?: Options) {
