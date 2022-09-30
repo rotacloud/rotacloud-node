@@ -35,27 +35,23 @@ export class LeaveRequestService extends Service {
     );
   }
 
-  async *list(query: LeaveQueryParams, options?: Options) {
+  async *list(query?: LeaveQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiLeaveRequest>({ url: this.apiPath, params: query }, options)) {
       yield new LeaveRequest(res);
     }
   }
 
-  listAll(query: LeaveQueryParams, options?: Options): Promise<LeaveRequest[]>;
+  listAll(query?: LeaveQueryParams, options?: Options): Promise<LeaveRequest[]>;
   async listAll(query: LeaveQueryParams, options?: Options) {
-    try {
-      const leave = [] as LeaveRequest[];
-      for await (const leaveRequestRecord of this.list(query, options)) {
-        leave.push(leaveRequestRecord);
-      }
-      return leave;
-    } catch (err) {
-      return err;
+    const leave = [] as LeaveRequest[];
+    for await (const leaveRequestRecord of this.list(query, options)) {
+      leave.push(leaveRequestRecord);
     }
+    return leave;
   }
 
-  listByPage(options?: Options) {
-    return super.iterator<ApiLeaveRequest>({ url: `${this.apiPath}` }, options).byPage();
+  listByPage(query?: LeaveQueryParams, options?: Options) {
+    return super.iterator<ApiLeaveRequest>({ url: `${this.apiPath}`, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<ApiLeaveRequest>): Promise<LeaveRequest>;

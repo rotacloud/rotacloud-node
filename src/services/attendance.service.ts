@@ -42,15 +42,11 @@ export class AttendanceService extends Service {
 
   listAll(query: AttendanceQueryParams, options?: Options): Promise<Attendance[]>;
   async listAll(query: AttendanceQueryParams, options?: Options) {
-    try {
-      const attendance = [] as Attendance[];
-      for await (const atten of this.list(query, options)) {
-        attendance.push(atten);
-      }
-      return attendance;
-    } catch (err) {
-      return err;
+    const attendance = [] as Attendance[];
+    for await (const atten of this.list(query, options)) {
+      attendance.push(atten);
     }
+    return attendance;
   }
 
   listByPage(query: AttendanceQueryParams, options?: Options) {

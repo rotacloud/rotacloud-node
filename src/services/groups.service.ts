@@ -35,26 +35,22 @@ export class GroupsService extends Service {
     );
   }
 
-  async *list(query: GroupsQueryParams, options?: Options) {
+  async *list(query?: GroupsQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiGroup>({ url: this.apiPath, params: query }, options)) {
       yield new Group(res);
     }
   }
 
-  listAll(query: GroupsQueryParams, options?: Options): Promise<Group[]>;
+  listAll(query?: GroupsQueryParams, options?: Options): Promise<Group[]>;
   async listAll(query: GroupsQueryParams, options?: Options) {
-    try {
-      const groups = [] as Group[];
-      for await (const group of this.list(query, options)) {
-        groups.push(group);
-      }
-      return groups;
-    } catch (err) {
-      return err;
+    const groups = [] as Group[];
+    for await (const group of this.list(query, options)) {
+      groups.push(group);
     }
+    return groups;
   }
 
-  listByPage(query: GroupsQueryParams, options?: Options) {
+  listByPage(query?: GroupsQueryParams, options?: Options) {
     return super.iterator<ApiGroup>({ url: this.apiPath, params: query }, options).byPage();
   }
 

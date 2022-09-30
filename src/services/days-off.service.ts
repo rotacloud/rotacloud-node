@@ -41,15 +41,11 @@ export class DaysOffService extends Service<ApiDaysOff> {
 
   listAll(query: DaysOffQueryParams, options?: Options): Promise<DaysOff[]>;
   async listAll(query: DaysOffQueryParams, options?: Options) {
-    try {
-      const daysOff = [] as DaysOff[];
-      for await (const dayOff of this.list(query, options)) {
-        daysOff.push(dayOff);
-      }
-      return daysOff;
-    } catch (err) {
-      return err;
+    const daysOff = [] as DaysOff[];
+    for await (const dayOff of this.list(query, options)) {
+      daysOff.push(dayOff);
     }
+    return daysOff;
   }
 
   listByPage(query: DaysOffQueryParams, options?: Options) {
