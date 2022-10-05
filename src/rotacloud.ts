@@ -18,6 +18,7 @@ import {
   UsersService,
 } from './services/index.js';
 import { SDKConfig } from './interfaces/index.js';
+import { DayNotesService } from './services/day-notes.service.js';
 
 const DEFAULT_CONFIG: Partial<SDKConfig> = {
   baseUri: 'https://api.rotacloud.com/v1',
@@ -34,6 +35,7 @@ export class RotaCloud {
   public availability = new AvailabilityService();
   public dailyBudgets = new DailyBudgetsService();
   public dailyRevenue = new DailyRevenueService();
+  public dayNotes = new DayNotesService();
   public daysOff = new DaysOffService();
   public group = new GroupsService();
   public leaveEmbargoes = new LeaveEmbargoesService();

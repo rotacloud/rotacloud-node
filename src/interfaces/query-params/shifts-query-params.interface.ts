@@ -1,6 +1,6 @@
 export interface ShiftsQueryParams {
-  start?: number;
-  end?: number;
+  start: number;
+  end: number;
   ids?: number[];
   users?: number[];
   locations?: number[];

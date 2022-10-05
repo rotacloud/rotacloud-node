@@ -34,26 +34,22 @@ export class RolesService extends Service {
     );
   }
 
-  async *list(query: RolesQueryParams, options?: Options) {
+  async *list(query?: RolesQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiRole>({ url: this.apiPath, params: query }, options)) {
       yield new Role(res);
     }
   }
 
-  listAll(query: RolesQueryParams, options?: Options): Promise<Role[]>;
+  listAll(query?: RolesQueryParams, options?: Options): Promise<Role[]>;
   async listAll(query: RolesQueryParams, options?: Options) {
-    try {
-      const roles = [] as Role[];
-      for await (const role of this.list(query, options)) {
-        roles.push(role);
-      }
-      return roles;
-    } catch (err) {
-      return err;
+    const roles = [] as Role[];
+    for await (const role of this.list(query, options)) {
+      roles.push(role);
     }
+    return roles;
   }
 
-  listByPage(query: RolesQueryParams, options?: Options) {
+  listByPage(query?: RolesQueryParams, options?: Options) {
     return super.iterator<ApiRole>({ url: this.apiPath, params: query }, options).byPage();
   }
   update(id: number, data: Partial<ApiRole>): Promise<Role>;
