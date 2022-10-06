@@ -1,6 +1,6 @@
 {
   "name": "rotacloud",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "engines": {
     "node": ">=14.17.0"
