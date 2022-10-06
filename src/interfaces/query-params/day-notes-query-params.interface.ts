@@ -1,5 +1,5 @@
 export interface DayNotesQueryParams {
-	start: string;
-	end: string;
-	location?: number;
+  start: string;
+  end: string;
+  location?: number;
 }
