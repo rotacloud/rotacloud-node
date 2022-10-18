@@ -8,7 +8,6 @@ export interface UsersQueryParams {
   search?: string;
   order?: string;
   period?: string;
-  location?: number;
   start_time?: number;
   end_time?: number;
   start_date?: string;
