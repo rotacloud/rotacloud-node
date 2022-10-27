@@ -138,6 +138,7 @@ export abstract class Service<ApiResponse = any> {
     options?: Options
   ): AsyncGenerator<AxiosResponse<T[], any>> {
     let pageRequestObject = reqObject;
+    let currentPageUrl = pageRequestObject.url;
 
     let pageRemaining = true;
     while (pageRemaining) {
@@ -147,6 +148,12 @@ export abstract class Service<ApiResponse = any> {
       // NOTE: query params including paging options are included in the "next" link
       pageRequestObject = { url: pageLinkMap.next };
       yield res;
+
+      // Failsafe incase the page does not change
+      if (currentPageUrl === pageRequestObject.url) {
+        throw new Error('Next page link did not change');
+      }
+      currentPageUrl = pageRequestObject.url;
     }
   }
 
