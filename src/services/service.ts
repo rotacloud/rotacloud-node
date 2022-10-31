@@ -65,7 +65,8 @@ export abstract class Service<ApiResponse = any> {
     return endpoint === '/leave_requests';
   }
 
-  private buildQueryStr(queryParams: Record<string, ParameterValue>) {
+  private buildQueryStr(queryParams: Record<string, ParameterValue> | undefined) {
+    if (!queryParams) return '';
     const reducedParams = Object.entries(queryParams).reduce((params, [key, val]) => {
       if (val !== undefined && val !== '') {
         if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));
@@ -77,20 +78,17 @@ export abstract class Service<ApiResponse = any> {
     return new URLSearchParams(reducedParams).toString();
   }
 
-  private getPagingObject(res): Partial<PagingObject> {
-    const links = res.headers.link.split(',');
-    const keyVal = {};
+  private parsePageLinkHeader(linkHeader: string): Partial<PagingObject> {
+    const pageData = {};
+    for (const link of linkHeader.split(',')) {
+      const { rel, url } = link.match(/<(?<url>.*)>; rel="(?<rel>\w*)"/)?.groups ?? {};
+      pageData[rel] = url;
+    }
 
-    links.forEach((link) => {
-      const exp = link.split(';');
-      const key = exp[1].replace(' rel="', '').replace('"', '').trim();
-      const value = exp[0].replace('<', '').replace('>', '').trim();
-      keyVal[key] = value;
-    });
-    return keyVal;
+    return pageData;
   }
 
-  public async fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
+  public fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: AxiosRequestHeaders = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
       'SDK-Version': Version.version,
@@ -112,9 +110,7 @@ export abstract class Service<ApiResponse = any> {
         limit: options?.limit,
         ...httpOptions?.params,
       },
-      paramsSerializer: (params) => {
-        return params ? this.buildQueryStr(params) : '';
-      },
+      paramsSerializer: this.buildQueryStr,
     };
 
     if (RotaCloud.config.retry) {
@@ -134,38 +130,40 @@ export abstract class Service<ApiResponse = any> {
       });
     }
 
-    const response = await this.client.request<T>(reqObject);
-    return response;
+    return this.client.request<T>(reqObject);
   }
 
   private async *listFetch<T = ApiResponse>(
     reqObject: AxiosRequestConfig<T[]>,
     options?: Options
   ): AsyncGenerator<AxiosResponse<T[], any>> {
-    let running = true;
-    do {
-      const res = await this.fetch<T[]>(reqObject, options);
-      if (res.headers.link) {
-        const pagingObject = this.getPagingObject(res);
-        if (pagingObject.last) {
-          reqObject.url = pagingObject.next;
-        } else {
-          running = false;
-        }
-      } else {
-        running = false;
-      }
+    let pageRequestObject = reqObject;
+    let currentPageUrl = pageRequestObject.url;
+
+    let pageRemaining = true;
+    while (pageRemaining) {
+      const res = await this.fetch<T[]>(pageRequestObject, options);
+      const pageLinkMap = this.parsePageLinkHeader(res.headers.link ?? '');
+      pageRemaining = Boolean(pageLinkMap.next);
+      // NOTE: query params including paging options are included in the "next" link
+      pageRequestObject = { url: pageLinkMap.next };
       yield res;
-    } while (running);
+
+      // Failsafe incase the page does not change
+      if (currentPageUrl === pageRequestObject.url) {
+        throw new Error('Next page link did not change');
+      }
+      currentPageUrl = pageRequestObject.url;
+    }
   }
 
-  private async *listResponses<T = ApiResponse>(reqObject, options?: Options) {
+  private async *listResponses<T = ApiResponse>(reqObject: AxiosRequestConfig<T[]>, options?: Options) {
     for await (const res of this.listFetch<T>(reqObject, options)) {
       yield* res.data;
     }
   }
 
-  public iterator<T = ApiResponse>(reqObject, options?: Options) {
+  public iterator<T = ApiResponse>(reqObject: AxiosRequestConfig<T[]>, options?: Options) {
     const iterator = this.listResponses<T>(reqObject, options);
     return {
       [Symbol.asyncIterator]() {
