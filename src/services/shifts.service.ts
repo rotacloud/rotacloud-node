@@ -97,7 +97,7 @@ export class ShiftsService extends Service {
   publish(data: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   publish(data: number[], options: Options): Promise<number>;
   publish(data: number[], options?: Options) {
-    return super.fetch<ApiShift>({ url: '/shifts_published', data, method: 'POST' }).then(
+    return super.fetch<ApiShift>({ url: '/shifts_published', data: { shifts: data }, method: 'POST' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : res.status),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
     );
@@ -107,7 +107,7 @@ export class ShiftsService extends Service {
   unpublish(data: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   unpublish(data: number[], options: Options): Promise<number>;
   unpublish(data: number[], options?: Options) {
-    return super.fetch<ApiShift>({ url: '/shifts_published', data, method: 'DELETE' }).then(
+    return super.fetch<ApiShift>({ url: '/shifts_published', data: { shifts: data }, method: 'DELETE' }).then(
       (res) => Promise.resolve(options?.rawResponse ? res : res.status),
       (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
     );
