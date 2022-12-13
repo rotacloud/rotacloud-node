@@ -7,8 +7,8 @@ export interface ApiLeaveRequest {
   user: number;
   user_message: string | null;
   start_date: string;
-  start_am_pm: null;
+  start_am_pm: string;
   end_date: string;
-  end_am_pm: null;
+  end_am_pm: string;
   dates: ApiLeaveDate[];
 }
