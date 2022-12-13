@@ -7,6 +7,7 @@ export class DayNote {
   public locations: number[];
   public title: string;
   public message: string;
+  public visible_employees: boolean;
 
   constructor(dayNote: ApiDayNote) {
     this.id = dayNote.id;
@@ -15,5 +16,6 @@ export class DayNote {
     this.locations = dayNote.locations;
     this.title = dayNote.title;
     this.message = dayNote.message;
+    this.visible_employees = dayNote.visible_employees;
   }
 }
