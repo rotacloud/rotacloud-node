@@ -6,4 +6,5 @@ export interface SDKConfig {
   accountId?: number;
   userId?: number;
   retry?: false | `${RetryStrategy}` | RetryOptions;
+  [key: string]: unknown;
 }
