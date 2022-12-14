@@ -5,4 +5,5 @@ export interface ApiDayNote {
   locations: number[];
   title: string;
   message: string;
+  visible_employees: boolean;
 }
