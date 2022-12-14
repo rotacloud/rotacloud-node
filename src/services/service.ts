@@ -93,6 +93,16 @@ export abstract class Service<ApiResponse = any> {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
       'SDK-Version': Version.version,
     };
+
+    const extraHeaders = RotaCloud.config.headers;
+    if (extraHeaders && typeof extraHeaders === 'object') {
+      for (const [key, val] of Object.entries(extraHeaders)) {
+        if (typeof key === 'string' && typeof val === 'string') {
+          headers[key] = val;
+        }
+      }
+    }
+
     if (RotaCloud.config.accountId) {
       headers.Account = String(RotaCloud.config.accountId);
     } else {
