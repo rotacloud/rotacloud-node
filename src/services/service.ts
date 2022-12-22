@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
-import { Version } from '../version.js';
+import { version as packageVersion } from '../../package.json';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
@@ -91,7 +91,7 @@ export abstract class Service<ApiResponse = any> {
   public fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: AxiosRequestHeaders = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
-      'SDK-Version': Version.version,
+      'SDK-Version': packageVersion,
     };
 
     const extraHeaders = RotaCloud.config.headers;
