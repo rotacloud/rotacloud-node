@@ -1,5 +1,4 @@
 export interface LeaveRequestsQueryParams {
-  users?: number[];
-  status?: string;
+  status?: 'requested' | 'approved' | 'denied' | 'expired';
   include_deleted?: boolean;
 }
