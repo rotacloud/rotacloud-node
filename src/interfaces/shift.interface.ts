@@ -8,7 +8,7 @@ export interface ApiShift {
   start_time: number;
   end_time: number;
   minutes_break: number;
-  user: number;
+  user: number | null;
   location: number;
   role: number | null;
   notes: string | null;
