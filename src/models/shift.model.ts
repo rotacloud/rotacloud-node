@@ -10,7 +10,7 @@ export class Shift {
   public start_time: number;
   public end_time: number;
   public minutes_break: number;
-  public user: number;
+  public user: number | null;
   public location: number;
   public role: number | null;
   public notes: string | null;
