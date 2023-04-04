@@ -3,7 +3,7 @@ import { ApiLeaveRequest } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { ErrorResponse } from '../models/error-response.model.js';
-import { LeaveQueryParams } from '../interfaces/query-params/leave-query-params.interface.js';
+import { LeaveRequestsQueryParams } from '../interfaces/query-params/leave-requests-query-params.interface.js';
 
 import { LeaveRequest } from '../models/leave-request.model.js';
 
@@ -35,14 +35,14 @@ export class LeaveRequestService extends Service {
     );
   }
 
-  async *list(query?: LeaveQueryParams, options?: Options) {
+  async *list(query?: LeaveRequestsQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiLeaveRequest>({ url: this.apiPath, params: query }, options)) {
       yield new LeaveRequest(res);
     }
   }
 
-  listAll(query?: LeaveQueryParams, options?: Options): Promise<LeaveRequest[]>;
-  async listAll(query: LeaveQueryParams, options?: Options) {
+  listAll(query?: LeaveRequestsQueryParams, options?: Options): Promise<LeaveRequest[]>;
+  async listAll(query: LeaveRequestsQueryParams, options?: Options) {
     const leave = [] as LeaveRequest[];
     for await (const leaveRequestRecord of this.list(query, options)) {
       leave.push(leaveRequestRecord);
@@ -50,7 +50,7 @@ export class LeaveRequestService extends Service {
     return leave;
   }
 
-  listByPage(query?: LeaveQueryParams, options?: Options) {
+  listByPage(query?: LeaveRequestsQueryParams, options?: Options) {
     return super.iterator<ApiLeaveRequest>({ url: `${this.apiPath}`, params: query }, options).byPage();
   }
 
