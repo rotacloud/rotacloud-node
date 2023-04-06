@@ -1,8 +1,4 @@
-export class LatLngObject {
-  public lat: number;
-  public lng: number;
-  public radius: number;
-}
+import { ApiLocationCoordinate } from '../interfaces/index.js';
 
 export class Terminal {
   public id: number;
@@ -13,7 +9,7 @@ export class Terminal {
   public device: string;
   public version: string;
   public ip: string;
-  public location: LatLngObject;
+  public location: ApiLocationCoordinate;
   public timezone: number;
   public require_photo: boolean;
   public require_photo_breaks: boolean;

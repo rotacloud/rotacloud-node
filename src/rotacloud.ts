@@ -66,3 +66,4 @@ export class RotaCloud {
 export { RetryStrategy, RetryOptions } from './services/service.js';
 export * from './interfaces/index.js';
 export * from './interfaces/query-params/index.js';
+export * from './models/index.js';
