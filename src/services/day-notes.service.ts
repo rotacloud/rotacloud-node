@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiDayNote } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
-import { ErrorResponse } from '../models/error-response.model.js';
-
 import { DayNote } from '../models/day-note.model.js';
 import { DayNotesQueryParams } from '../interfaces/query-params/day-notes-query-params.interface';
 
@@ -14,20 +12,18 @@ export class DayNotesService extends Service {
   create(data: ApiDayNote, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiDayNote, any>>;
   create(data: ApiDayNote, options: Options): Promise<DayNote>;
   create(data: ApiDayNote, options?: Options) {
-    return super.fetch<ApiDayNote>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiDayNote>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)));
   }
 
   get(id: number): Promise<DayNote>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiDayNote, any>>;
   get(id: number, options: Options): Promise<DayNote>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiDayNote>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiDayNote>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)));
   }
 
   async *list(query: DayNotesQueryParams, options?: Options) {
@@ -63,19 +59,15 @@ export class DayNotesService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiDayNote>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiDayNote>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

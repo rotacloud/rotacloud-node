@@ -4,7 +4,6 @@ import { Service, Options } from './index.js';
 import { AvailabilityQueryParams } from '../interfaces/query-params/availability-query-params.interface.js';
 import { Availability } from '../models/availability.model.js';
 import { ApiAvailability } from '../interfaces/availability.interface.js';
-import { ErrorResponse } from '../models/error-response.model.js';
 
 export class AvailabilityService extends Service {
   private apiPath = '/availability';
@@ -15,14 +14,11 @@ export class AvailabilityService extends Service {
   update(data: ApiAvailability, options?: Options) {
     return super
       .fetch<ApiAvailability>({
-        url: this.apiPath,
+        url: '/availability',
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new Availability(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Availability(res.data)));
   }
 
   /** Alias of {@link AvailabilityService["update"]} */

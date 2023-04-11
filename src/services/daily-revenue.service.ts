@@ -3,7 +3,6 @@ import { ApiDailyRevenue } from '../interfaces/daily-revenue.interface.js';
 import { Service, Options } from './index.js';
 
 import { DailyRevenue } from '../models/daily-revenue.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
 import { DailyRevenueQueryParams } from '../interfaces/query-params/daily-revenue-query-params.interface.js';
 
 export class DailyRevenueService extends Service {
@@ -41,9 +40,6 @@ export class DailyRevenueService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

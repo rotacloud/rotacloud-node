@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosRes
 import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
+import { SDKErrorParams, SDKError } from '../models/SDKError.model.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
@@ -59,7 +60,28 @@ type ParameterPrimitive = string | boolean | number | null;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
-  protected client: AxiosInstance = axios.create();
+  protected client: AxiosInstance = this.initialiseAxios();
+
+  private initialiseAxios(): AxiosInstance {
+    const client = axios.create();
+    client.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        let newError = error;
+        if (error.isAxiosError) {
+          const axiosResponse = error.response;
+          const sdkErrorParams: SDKErrorParams = {
+            code: axiosResponse.status,
+            message: axiosResponse.data?.error,
+            data: axiosResponse.data,
+          };
+          newError = new SDKError(sdkErrorParams);
+        }
+        return Promise.reject(newError);
+      }
+    );
+    return client;
+  }
 
   public isLeaveRequest(endpoint?: string): boolean {
     return endpoint === '/leave_requests';
@@ -153,6 +175,7 @@ export abstract class Service<ApiResponse = any> {
     let pageRemaining = true;
     while (pageRemaining) {
       const res = await this.fetch<T[]>(pageRequestObject, options);
+      console.log('this shouldnt happen', currentPageUrl);
       const pageLinkMap = this.parsePageLinkHeader(res.headers.link ?? '');
       pageRemaining = Boolean(pageLinkMap.next);
       // NOTE: query params including paging options are included in the "next" link

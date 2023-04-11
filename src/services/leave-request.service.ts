@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiLeaveRequest } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
-import { ErrorResponse } from '../models/error-response.model.js';
 import { LeaveRequestsQueryParams } from '../interfaces/query-params/leave-requests-query-params.interface.js';
 
 import { LeaveRequest } from '../models/leave-request.model.js';
@@ -19,20 +18,18 @@ export class LeaveRequestService extends Service {
   ): Promise<AxiosResponse<ApiLeaveRequest, any>>;
   create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options: Options): Promise<LeaveRequest>;
   create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options?: Options) {
-    return super.fetch<ApiLeaveRequest>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeaveRequest>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
   }
 
   get(id: number): Promise<LeaveRequest>;
   get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<ApiLeaveRequest, any>>;
   get(id: number, options: Options): Promise<LeaveRequest>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiLeaveRequest>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeaveRequest>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
   }
 
   async *list(query?: LeaveRequestsQueryParams, options?: Options) {
@@ -68,19 +65,15 @@ export class LeaveRequestService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiLeaveRequest, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiLeaveRequest>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeaveRequest>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

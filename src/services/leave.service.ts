@@ -3,7 +3,7 @@ import { ApiLeave, ApiLeaveType } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { Leave } from '../models/leave.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
+
 import { LeaveQueryParams } from '../interfaces/query-params/leave-query-params.interface.js';
 
 import { LeaveType } from '../models/leave-type.model.js';
@@ -20,20 +20,18 @@ export class LeaveService extends Service {
   ): Promise<AxiosResponse<ApiLeave[], any>>;
   create(data: RequirementsOf<ApiLeave, RequiredProps>, options: Options): Promise<Leave[]>;
   create(data: RequirementsOf<ApiLeave, RequiredProps>, options?: Options) {
-    return super.fetch<ApiLeave[]>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => new Leave(leave))]),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeave[]>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => new Leave(leave))]));
   }
 
   get(id: number): Promise<Leave>;
   get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<ApiLeave, any>>;
   get(id: number, options: Options): Promise<Leave>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiLeave>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Leave(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeave>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Leave(res.data)));
   }
 
   async *list(query: LeaveQueryParams, options?: Options) {
@@ -75,19 +73,15 @@ export class LeaveService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new Leave(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Leave(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiLeave, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiLeave>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeave>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

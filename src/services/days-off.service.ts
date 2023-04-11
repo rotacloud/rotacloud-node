@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiDaysOff } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
-import { ErrorResponse } from '../models/error-response.model.js';
-
 import { DaysOff } from '../models/days-off.model.js';
 import { DaysOffQueryParams } from '../interfaces/query-params/days-off-query-params.interface.js';
 
@@ -27,10 +25,7 @@ export class DaysOffService extends Service<ApiDaysOff> {
         },
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 
   async *list(query: DaysOffQueryParams, options?: Options) {
@@ -65,9 +60,6 @@ export class DaysOffService extends Service<ApiDaysOff> {
           users,
         },
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

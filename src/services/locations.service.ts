@@ -3,7 +3,7 @@ import { ApiLocation } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { Location } from '../models/location.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
+
 import { LocationsQueryParams } from '../interfaces/query-params/locations-query-params.interface.js';
 
 type RequiredProps = 'name';
@@ -18,20 +18,18 @@ export class LocationsService extends Service {
   ): Promise<AxiosResponse<ApiLocation, any>>;
   create(data: RequirementsOf<ApiLocation, RequiredProps>, options: Options): Promise<Location>;
   create(data: RequirementsOf<ApiLocation, RequiredProps>, options?: Options) {
-    return super.fetch<ApiLocation>({ url: `${this.apiPath}`, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Location(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLocation>({ url: `${this.apiPath}`, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Location(res.data)));
   }
 
   get(id: number): Promise<Location>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiLocation, any>>;
   get(id: number, options: Options): Promise<Location>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiLocation>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Location(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLocation>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Location(res.data)));
   }
 
   async *list(query?: LocationsQueryParams, options?: Options) {
@@ -67,19 +65,15 @@ export class LocationsService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new Location(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Location(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiLocation>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLocation>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

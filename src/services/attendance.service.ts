@@ -3,7 +3,6 @@ import { ApiAttendance } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { Attendance } from '../models/attendance.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
 import { AttendanceQueryParams } from '../interfaces/query-params/attendance-query-params.interface.js';
 
 type RequiredProps = 'user' | 'in_time';
@@ -18,20 +17,18 @@ export class AttendanceService extends Service {
   ): Promise<AxiosResponse<ApiAttendance, any>>;
   create(data: RequirementsOf<ApiAttendance, RequiredProps>, options: Options): Promise<ApiAttendance>;
   create(data: RequirementsOf<ApiAttendance, RequiredProps>, options?: Options) {
-    return super.fetch<ApiAttendance>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Attendance(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiAttendance>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Attendance(res.data)));
   }
 
   get(id: number): Promise<Attendance>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiAttendance, any>>;
   get(id: number, options: Options): Promise<Attendance>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiAttendance>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Attendance(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super.fetch<ApiAttendance>({ url: `${this.apiPath}/${id}` }, options).then((res) => {
+      return Promise.resolve(options?.rawResponse ? res : new Attendance(res.data));
+    });
   }
 
   async *list(query: AttendanceQueryParams, options?: Options) {
@@ -67,19 +64,15 @@ export class AttendanceService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new Attendance(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Attendance(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiAttendance, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiAttendance>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiAttendance>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
