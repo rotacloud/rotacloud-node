@@ -1,17 +1,11 @@
-import { ApiLocation } from '../interfaces/index.js';
-
-export class LatLngObject {
-  public lat: number;
-  public lng: number;
-  public radius: number;
-}
+import { ApiLocation, ApiLocationCoordinate } from '../interfaces/index.js';
 
 export class Location {
   public id: number;
   public name: string;
   public deleted: boolean;
   public address: string;
-  public location: LatLngObject;
+  public location: ApiLocationCoordinate;
   public timezone: number;
   public users: number[];
   public managers: number[];
