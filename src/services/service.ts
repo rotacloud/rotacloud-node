@@ -67,20 +67,26 @@ export abstract class Service<ApiResponse = any> {
     client.interceptors.response.use(
       (response) => response,
       (error) => {
-        let newError = error;
-        if (error.isAxiosError) {
-          const axiosResponse = error.response;
-          const sdkErrorParams: SDKErrorParams = {
-            code: axiosResponse.status,
-            message: axiosResponse.data?.error,
-            data: axiosResponse.data,
-          };
-          newError = new SDKError(sdkErrorParams);
-        }
-        return Promise.reject(newError);
+        const parsedError = this.parseClientError(error);
+
+        return Promise.reject(parsedError);
       }
     );
     return client;
+  }
+
+  private parseClientError(error: any): any {
+    if (!error.isAxiosError) return error;
+
+    const errorLocation = error.response || error.request;
+    const apiErrorMessage = errorLocation.data?.error;
+    const sdkErrorParams: SDKErrorParams = {
+      code: errorLocation.status,
+      message: apiErrorMessage || error.message,
+      data: errorLocation.data,
+    };
+
+    return new SDKError(sdkErrorParams);
   }
 
   public isLeaveRequest(endpoint?: string): boolean {

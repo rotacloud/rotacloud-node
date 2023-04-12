@@ -6,12 +6,11 @@ export interface SDKErrorParams {
 export class SDKError extends Error {
   readonly code?: number;
   readonly data?: unknown;
-  readonly originalError: Error;
+  override name = this.constructor.name;
 
   constructor(params: SDKErrorParams) {
     super(params.message);
 
-    this.name = 'SDKError';
     Error.captureStackTrace?.(this, SDKError);
     this.data = params.data;
     this.code = params.code;
