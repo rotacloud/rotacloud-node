@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
@@ -75,15 +75,14 @@ export abstract class Service<ApiResponse = any> {
     return client;
   }
 
-  private parseClientError(error: any): SDKError | Error {
-    if (!error.isAxiosError) return error;
-
-    const errorLocation = error.response || error.request;
-    const apiErrorMessage = errorLocation.data?.error;
+  private parseClientError(error: unknown | AxiosError): SDKError | unknown {
+    if (!axios.isAxiosError(error)) return error;
+    const axiosErrorLocation = error.response || error.request;
+    const apiErrorMessage = axiosErrorLocation.data?.error;
     const sdkErrorParams: SDKErrorConfig = {
-      code: errorLocation.status,
+      code: axiosErrorLocation.status,
       message: apiErrorMessage || error.message,
-      data: errorLocation.data,
+      data: axiosErrorLocation.data,
     };
 
     return new SDKError(sdkErrorParams);
