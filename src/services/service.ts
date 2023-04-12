@@ -75,7 +75,7 @@ export abstract class Service<ApiResponse = any> {
     return client;
   }
 
-  private parseClientError(error: any): any {
+  private parseClientError(error: any): SDKError | Error {
     if (!error.isAxiosError) return error;
 
     const errorLocation = error.response || error.request;
