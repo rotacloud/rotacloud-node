@@ -14,7 +14,7 @@ export class AvailabilityService extends Service {
   update(data: ApiAvailability, options?: Options) {
     return super
       .fetch<ApiAvailability>({
-        url: '/availability',
+        url: this.apiPath,
         data,
         method: 'POST',
       })
