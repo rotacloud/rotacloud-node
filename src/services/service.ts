@@ -175,7 +175,6 @@ export abstract class Service<ApiResponse = any> {
     let pageRemaining = true;
     while (pageRemaining) {
       const res = await this.fetch<T[]>(pageRequestObject, options);
-      console.log('this shouldnt happen', currentPageUrl);
       const pageLinkMap = this.parsePageLinkHeader(res.headers.link ?? '');
       pageRemaining = Boolean(pageLinkMap.next);
       // NOTE: query params including paging options are included in the "next" link
