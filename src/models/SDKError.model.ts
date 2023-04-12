@@ -1,4 +1,4 @@
-export interface SDKErrorParams {
+export interface SDKErrorConfig {
   message?: string;
   code?: number;
   data?: unknown;
@@ -8,11 +8,12 @@ export class SDKError extends Error {
   readonly data?: unknown;
   override name = this.constructor.name;
 
-  constructor(params: SDKErrorParams) {
-    super(params.message);
+  constructor(errorConfig: SDKErrorConfig) {
+    super(errorConfig.message);
 
-    Error.captureStackTrace?.(this, SDKError);
-    this.data = params.data;
-    this.code = params.code;
+    Error.captureStackTrace(this, SDKError);
+
+    this.data = errorConfig.data;
+    this.code = errorConfig.code;
   }
 }

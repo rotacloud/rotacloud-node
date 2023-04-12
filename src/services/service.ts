@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosRes
 import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
-import { SDKErrorParams, SDKError } from '../models/SDKError.model.js';
+import { SDKErrorConfig, SDKError } from '../models/SDKError.model.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
@@ -80,7 +80,7 @@ export abstract class Service<ApiResponse = any> {
 
     const errorLocation = error.response || error.request;
     const apiErrorMessage = errorLocation.data?.error;
-    const sdkErrorParams: SDKErrorParams = {
+    const sdkErrorParams: SDKErrorConfig = {
       code: errorLocation.status,
       message: apiErrorMessage || error.message,
       data: errorLocation.data,
