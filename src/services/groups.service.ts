@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiGroup } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
-import { ErrorResponse } from '../models/error-response.model.js';
-
 import { Group } from '../models/group.model.js';
 import { GroupsQueryParams } from '../interfaces/query-params/groups-query-params.interface.js';
 
@@ -19,20 +17,18 @@ export class GroupsService extends Service {
   ): Promise<AxiosResponse<ApiGroup, any>>;
   create(data: RequirementsOf<ApiGroup, RequiredProps>, options: Options): Promise<Group>;
   create(data: RequirementsOf<ApiGroup, RequiredProps>, options?: Options) {
-    return super.fetch<ApiGroup>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiGroup>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)));
   }
 
   get(id: number): Promise<Group>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiGroup, any>>;
   get(id: number, options: Options): Promise<Group>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiGroup>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiGroup>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)));
   }
 
   async *list(query?: GroupsQueryParams, options?: Options) {
@@ -68,19 +64,15 @@ export class GroupsService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Group(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiGroup>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiGroup>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

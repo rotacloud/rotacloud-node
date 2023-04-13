@@ -3,7 +3,7 @@ import { ApiRole } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { Role } from '../models/role.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
+
 import { RolesQueryParams } from '../interfaces/query-params/roles-query-params.interface.js';
 
 type RequiredProps = 'name';
@@ -18,20 +18,18 @@ export class RolesService extends Service {
   ): Promise<AxiosResponse<ApiRole, any>>;
   create(data: RequirementsOf<ApiRole, RequiredProps>, options: Options): Promise<Role>;
   create(data: RequirementsOf<ApiRole, RequiredProps>, options?: Options) {
-    return super.fetch<ApiRole>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Role(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiRole>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Role(res.data)));
   }
 
   get(id: number): Promise<Role>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiRole, any>>;
   get(id: number, options: Options): Promise<Role>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiRole>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new Role(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiRole>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Role(res.data)));
   }
 
   async *list(query?: RolesQueryParams, options?: Options) {
@@ -66,19 +64,15 @@ export class RolesService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new Role(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new Role(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiRole>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiRole>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

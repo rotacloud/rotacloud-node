@@ -3,7 +3,6 @@ import { ApiDailyBudgets } from '../interfaces/daily-budgets.interface.js';
 import { Service, Options } from './index.js';
 
 import { DailyBudgets } from '../models/daily-budgets.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
 import { DailyBudgetsQueryParams } from '../interfaces/query-params/daily-budgets-query-params.interface.js';
 
 export class DailyBudgetsService extends Service {
@@ -41,9 +40,6 @@ export class DailyBudgetsService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

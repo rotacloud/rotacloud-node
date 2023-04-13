@@ -3,7 +3,6 @@ import { ApiLeaveEmbargo } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { LeaveEmbargo } from '../models/leave-embargo.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
 import { LeaveEmbargoesQueryParams } from '../rotacloud.js';
 
 type RequiredProps = 'start_date' | 'end_date' | 'users';
@@ -18,20 +17,18 @@ export class LeaveEmbargoesService extends Service {
   ): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
   create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options: Options): Promise<LeaveEmbargo>;
   create(data: RequirementsOf<ApiLeaveEmbargo, RequiredProps>, options?: Options) {
-    return super.fetch<ApiLeaveEmbargo>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeaveEmbargo>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)));
   }
 
   get(id: number): Promise<LeaveEmbargo>;
   get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<ApiLeaveEmbargo, any>>;
   get(id: number, options: Options): Promise<LeaveEmbargo>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)));
   }
 
   async *list(query: LeaveEmbargoesQueryParams, options?: Options) {
@@ -67,19 +64,15 @@ export class LeaveEmbargoesService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveEmbargo(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiLeaveEmbargo>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
