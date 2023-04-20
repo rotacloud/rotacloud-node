@@ -77,6 +77,15 @@ export class ShiftsService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 
+  batchDelete(data: { ids: number[] }): Promise<number>;
+  batchDelete(data: { ids: number[] }, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  batchDelete(data: { ids: number[] }, options: Options): Promise<number>;
+  batchDelete(data: { ids: number[] }, options?: Options) {
+    return super
+      .fetch<ApiShift>({ url: this.apiPath, data, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+  }
+
   acknowledge(data: number[]): Promise<number>;
   acknowledge(data: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   acknowledge(data: number[], options: Options): Promise<number>;
