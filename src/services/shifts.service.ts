@@ -68,14 +68,14 @@ export class ShiftsService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : new Shift(res.data)));
   }
 
-  delete(data: number | number[]): Promise<number>;
-  delete(data: number | number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
-  delete(data: number | number[], options: Options): Promise<number>;
-  delete(data: number | number[], options?: Options) {
+  delete(ids: number | number[]): Promise<number>;
+  delete(ids: number | number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(ids: number | number[], options: Options): Promise<number>;
+  delete(ids: number | number[], options?: Options) {
     const params: AxiosRequestConfig =
-      typeof data !== 'number'
-        ? { url: this.apiPath, data, method: 'DELETE' }
-        : { url: `${this.apiPath}/${data}`, method: 'DELETE' };
+      typeof ids !== 'number'
+        ? { url: this.apiPath, data: ids, method: 'DELETE' }
+        : { url: `${this.apiPath}/${ids}`, method: 'DELETE' };
 
     return super.fetch<ApiShift>(params).then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
