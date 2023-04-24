@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiShift } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
@@ -68,13 +68,16 @@ export class ShiftsService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : new Shift(res.data)));
   }
 
-  delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
-  delete(id: number, options: Options): Promise<number>;
-  delete(id: number, options?: Options) {
-    return super
-      .fetch<ApiShift>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+  delete(ids: number | number[]): Promise<number>;
+  delete(ids: number | number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(ids: number | number[], options: Options): Promise<number>;
+  delete(ids: number | number[], options?: Options) {
+    const params: AxiosRequestConfig =
+      typeof ids !== 'number'
+        ? { url: this.apiPath, data: ids, method: 'DELETE' }
+        : { url: `${this.apiPath}/${ids}`, method: 'DELETE' };
+
+    return super.fetch<ApiShift>(params).then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 
   acknowledge(data: number[]): Promise<number>;
