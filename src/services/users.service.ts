@@ -3,7 +3,7 @@ import { ApiUser } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { User } from '../models/user.model.js';
-import { ErrorResponse } from '../models/error-response.model.js';
+
 import { UsersQueryParams } from '../interfaces/query-params/users-query-params.interface.js';
 
 type RequiredProps = 'first_name' | 'last_name';
@@ -18,20 +18,18 @@ class UsersService extends Service {
   ): Promise<AxiosResponse<ApiUser, any>>;
   create(data: RequirementsOf<ApiUser, RequiredProps>, options: Options): Promise<User>;
   create(data: RequirementsOf<ApiUser, RequiredProps>, options?: Options) {
-    return super.fetch<ApiUser>({ url: this.apiPath, data, method: 'POST' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new User(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiUser>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new User(res.data)));
   }
 
   get(id: number): Promise<User>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiUser, any>>;
   get(id: number, options: Options): Promise<User>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiUser>({ url: `${this.apiPath}/${id}` }, options).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : new User(res.data)),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiUser>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new User(res.data)));
   }
 
   async *list(query: UsersQueryParams, options?: Options) {
@@ -67,20 +65,16 @@ class UsersService extends Service {
         data,
         method: 'POST',
       })
-      .then(
-        (res) => Promise.resolve(options?.rawResponse ? res : new User(res.data)),
-        (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-      );
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new User(res.data)));
   }
 
   delete(id: number): Promise<number>;
   delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
-    return super.fetch<ApiUser>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }).then(
-      (res) => Promise.resolve(options?.rawResponse ? res : res.status),
-      (err) => Promise.reject(options?.rawResponse ? err : new ErrorResponse(err))
-    );
+    return super
+      .fetch<ApiUser>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
 

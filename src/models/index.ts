@@ -9,7 +9,7 @@ export * from './day-note.model.js';
 export * from './days-off-pattern.model.js';
 export * from './days-off.model.js';
 export * from './document.model.js';
-export * from './error-response.model.js';
+export * from './SDKError.model.js';
 export * from './group.model.js';
 export * from './holiday-allowance-custom.model.js';
 export * from './holiday-allowance.model.js';
