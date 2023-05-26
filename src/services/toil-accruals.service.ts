@@ -1,11 +1,25 @@
 import { AxiosResponse } from 'axios';
-import { Options, Service } from './service';
+import { Options, RequirementsOf, Service } from './service';
 import { ToilAccrualsQueryParams } from '../interfaces/query-params/toil-accruals-query-params.interface';
 import { ToilAccrual } from '../models/toil-accrual.model';
 import { ApiToilAccrual } from '../interfaces/toil-accrual.interface';
 
+type RequiredProps = 'duration_hours' | 'date' | 'leave_year' | 'user_id';
+
 export class ToilAccrualsService extends Service {
   private apiPath = '/toil_accruals';
+
+  create(data: RequirementsOf<ApiToilAccrual, RequiredProps>): Promise<ToilAccrual>;
+  create(
+    data: RequirementsOf<ApiToilAccrual, RequiredProps>,
+    options: { rawResponse: true } & Options
+  ): Promise<AxiosResponse<ApiToilAccrual, any>>;
+  create(data: RequirementsOf<ApiToilAccrual, RequiredProps>, options: Options): Promise<ToilAccrual>;
+  create(data: RequirementsOf<ApiToilAccrual, RequiredProps>, options?: Options) {
+    return super
+      .fetch<ToilAccrual>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new ToilAccrual(res.data)));
+  }
 
   get(id: number): Promise<ToilAccrual>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ToilAccrual, any>>;
