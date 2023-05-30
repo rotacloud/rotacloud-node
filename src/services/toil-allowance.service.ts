@@ -15,8 +15,7 @@ export class ToilAllowanceService extends Service {
     }
   }
 
-  listAll(year: number, query: ToilAllowanceQueryParams, options?: Options): Promise<ToilAllowance[]>;
-  async listAll(year: number, query: ToilAllowanceQueryParams, options?: Options) {
+  async listAll(year: number, query: ToilAllowanceQueryParams, options?: Options): Promise<ToilAllowance[]> {
     const toilAllowances = [] as ToilAllowance[];
     for await (const allowance of this.list(year, query, options)) {
       toilAllowances.push(allowance);

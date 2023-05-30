@@ -36,8 +36,7 @@ export class ToilAccrualsService extends Service {
     }
   }
 
-  listAll(query: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]>;
-  async listAll(query: ToilAccrualsQueryParams, options?: Options) {
+  async listAll(query: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]> {
     const toilAccruals = [] as ToilAccrual[];
     for await (const accrual of this.list(query, options)) {
       toilAccruals.push(accrual);
