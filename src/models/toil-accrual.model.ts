@@ -7,11 +7,11 @@ export class ToilAccrual {
   public date: string;
   public deleted: boolean;
   public deleted_at: string | null;
-  public deleted_by: string | null;
+  public deleted_by: number | null;
   public duration_hours: number;
   public id: number;
   public leave_year: number;
-  public location_id: number;
+  public location_id: number | null;
   public user_id: number;
   constructor(accrual: ApiToilAccrual) {
     this.comments = accrual.comments;

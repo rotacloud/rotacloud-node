@@ -5,10 +5,10 @@ export interface ApiToilAccrual {
   date: string;
   deleted: boolean;
   deleted_at: string | null;
-  deleted_by: string | null;
+  deleted_by: number | null;
   duration_hours: number;
   id: number;
   leave_year: number;
-  location_id: number;
+  location_id: number | null;
   user_id: number;
 }
