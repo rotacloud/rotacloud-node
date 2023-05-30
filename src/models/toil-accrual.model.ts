@@ -3,7 +3,7 @@ import { ApiToilAccrual } from '../interfaces/toil-accrual.interface';
 export class ToilAccrual {
   public comments: string;
   public created_at: number;
-  public created_by: number;
+  public created_by: number | null;
   public date: string;
   public deleted: boolean;
   public deleted_at: string | null;

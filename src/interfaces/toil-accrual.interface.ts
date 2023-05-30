@@ -1,7 +1,7 @@
 export interface ApiToilAccrual {
   comments: string;
   created_at: number;
-  created_by: number;
+  created_by: number | null;
   date: string;
   deleted: boolean;
   deleted_at: string | null;
