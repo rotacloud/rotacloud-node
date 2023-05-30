@@ -4,8 +4,8 @@ export interface ApiToilAccrual {
   created_by: number;
   date: string;
   deleted: boolean;
-  deleted_at?: string;
-  deleted_by?: string;
+  deleted_at: string | null;
+  deleted_by: string | null;
   duration_hours: number;
   id: number;
   leave_year: number;

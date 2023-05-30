@@ -6,8 +6,8 @@ export class ToilAccrual {
   public created_by: number;
   public date: string;
   public deleted: boolean;
-  public deleted_at?: string;
-  public deleted_by?: string;
+  public deleted_at: string | null;
+  public deleted_by: string | null;
   public duration_hours: number;
   public id: number;
   public leave_year: number;
