@@ -47,6 +47,7 @@ export interface Options {
   expand?: string[];
   fields?: string[];
   limit?: number;
+  dryRun?: boolean;
 }
 
 interface PagingObject {

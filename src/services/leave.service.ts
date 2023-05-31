@@ -16,13 +16,18 @@ export class LeaveService extends Service {
   create(data: RequirementsOf<ApiLeave, RequiredProps>): Promise<Leave[]>;
   create(
     data: RequirementsOf<ApiLeave, RequiredProps>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true; dryRun: false } & Options
   ): Promise<AxiosResponse<ApiLeave[], any>>;
   create(data: RequirementsOf<ApiLeave, RequiredProps>, options: Options): Promise<Leave[]>;
   create(data: RequirementsOf<ApiLeave, RequiredProps>, options?: Options) {
     return super
-      .fetch<ApiLeave[]>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => new Leave(leave))]));
+      .fetch<ApiLeave[]>({ url: options?.dryRun ? `${this.apiPath}?dry_run=true` : this.apiPath, data, method: 'POST' })
+      .then((res) => {
+        if (options?.dryRun) {
+          return Promise.resolve(res);
+        }
+        return Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => new Leave(leave))]);
+      });
   }
 
   get(id: number): Promise<Leave>;
