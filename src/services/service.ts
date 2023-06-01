@@ -138,6 +138,8 @@ export abstract class Service<ApiResponse = any> {
       this.isLeaveRequest(httpOptions.url) ? (headers.User = `${httpOptions.data.user}`) : undefined;
     }
 
+    httpOptions.url = options?.dryRun ? `${httpOptions.url}?dry_run=true` : httpOptions.url;
+
     const reqObject: AxiosRequestConfig<T> = {
       ...httpOptions,
       baseURL: RotaCloud.config.baseUri,

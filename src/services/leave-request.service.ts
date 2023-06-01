@@ -19,11 +19,14 @@ export class LeaveRequestService extends Service {
   create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options: Options): Promise<LeaveRequest>;
   create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options?: Options) {
     return super
-      .fetch<ApiLeaveRequest>({
-        url: options?.dryRun ? `${this.apiPath}?dry_run=true` : this.apiPath,
-        data,
-        method: 'POST',
-      })
+      .fetch<ApiLeaveRequest>(
+        {
+          url: this.apiPath,
+          data,
+          method: 'POST',
+        },
+        options
+      )
       .then((res) => {
         if (options?.dryRun) {
           return Promise.resolve(res);
