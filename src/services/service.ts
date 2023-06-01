@@ -116,6 +116,10 @@ export abstract class Service<ApiResponse = any> {
     return pageData;
   }
 
+  public isLeaveRequestOrLeave(endpoint?: string): boolean {
+    return endpoint === '/leave_requests' || endpoint === '/leave';
+  }
+
   public fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: AxiosRequestHeaders = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
@@ -138,7 +142,9 @@ export abstract class Service<ApiResponse = any> {
       this.isLeaveRequest(httpOptions.url) ? (headers.User = `${httpOptions.data.user}`) : undefined;
     }
 
-    httpOptions.url = options?.dryRun ? `${httpOptions.url}?dry_run=true` : httpOptions.url;
+    if (this.isLeaveRequestOrLeave(httpOptions.url)) {
+      httpOptions.url = options?.dryRun ? `${httpOptions.url}?dry_run=true` : httpOptions.url;
+    }
 
     const reqObject: AxiosRequestConfig<T> = {
       ...httpOptions,
