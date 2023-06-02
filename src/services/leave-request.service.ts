@@ -28,9 +28,6 @@ export class LeaveRequestService extends Service {
         options
       )
       .then((res) => {
-        if (options?.dryRun) {
-          return Promise.resolve(res);
-        }
         return Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data));
       });
   }
