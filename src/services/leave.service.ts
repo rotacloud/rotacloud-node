@@ -20,9 +20,9 @@ export class LeaveService extends Service {
   ): Promise<AxiosResponse<ApiLeave[], any>>;
   create(data: RequirementsOf<ApiLeave, RequiredProps>, options: Options): Promise<Leave[]>;
   create(data: RequirementsOf<ApiLeave, RequiredProps>, options?: Options) {
-    return super.fetch<ApiLeave[]>({ url: this.apiPath, data, method: 'POST' }, options).then((res) => {
-      return Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => new Leave(leave))]);
-    });
+    return super
+      .fetch<ApiLeave[]>({ url: this.apiPath, data, method: 'POST' }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => new Leave(leave))]));
   }
 
   get(id: number): Promise<Leave>;

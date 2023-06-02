@@ -27,9 +27,7 @@ export class LeaveRequestService extends Service {
         },
         options
       )
-      .then((res) => {
-        return Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data));
-      });
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
   }
 
   get(id: number): Promise<LeaveRequest>;
