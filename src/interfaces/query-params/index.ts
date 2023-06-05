@@ -21,5 +21,7 @@ export * from './settings-query-params.interface.js';
 export * from './shifts-query-params.interface.js';
 export * from './swap-requests-query-params.interface.js';
 export * from './terminals-query-params.interface.js';
+export * from './toil-accruals-query-params.interface.js';
+export * from './toil-allowance-query-params.interface.js';
 export * from './unavailability-requests-query-params.interface.js';
 export * from './users-query-params.interface.js';

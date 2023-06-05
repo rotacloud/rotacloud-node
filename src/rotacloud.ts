@@ -15,6 +15,8 @@ import {
   RolesService,
   SettingsService,
   ShiftsService,
+  ToilAccrualsService,
+  ToilAllowanceService,
   UsersService,
 } from './services/index.js';
 import { SDKConfig } from './interfaces/index.js';
@@ -45,6 +47,8 @@ export class RotaCloud {
   public roles = new RolesService();
   public settings = new SettingsService();
   public shifts = new ShiftsService();
+  public toilAccruals = new ToilAccrualsService();
+  public toilAllowance = new ToilAllowanceService();
   public users = new UsersService();
 
   constructor(config: SDKConfig) {

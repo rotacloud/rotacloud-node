@@ -47,6 +47,7 @@ export interface Options {
   expand?: string[];
   fields?: string[];
   limit?: number;
+  dryRun?: boolean;
 }
 
 interface PagingObject {
@@ -145,6 +146,7 @@ export abstract class Service<ApiResponse = any> {
         expand: options?.expand,
         fields: options?.fields,
         limit: options?.limit,
+        dry_run: options?.dryRun,
         ...httpOptions?.params,
       },
       paramsSerializer: this.buildQueryStr,

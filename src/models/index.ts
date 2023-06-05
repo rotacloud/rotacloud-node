@@ -26,4 +26,6 @@ export * from './role.model.js';
 export * from './settings.model.js';
 export * from './shift.model.js';
 export * from './terminal.model.js';
+export * from './toil-accrual.model.js';
+export * from './toil-allowance.model.js';
 export * from './user.model.js';
