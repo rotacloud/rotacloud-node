@@ -18,7 +18,7 @@ export class Leave {
   public admin: number;
   public start_am_pm: string;
   public end_am_pm: string;
-  public hours: { [key: string]: number };
+  public hours: { [key: string]: number | null };
   public hours_method: string;
   public hours_set: boolean;
   public requested_at: number;

@@ -16,7 +16,7 @@ export interface ApiLeave {
   start_am_pm: string;
   end_date: string;
   end_am_pm: string;
-  hours: { [key: string]: number };
+  hours: { [key: string]: number | null };
   hours_method: string;
   hours_set: boolean;
   dates: ApiLeaveDate[];
