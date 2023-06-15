@@ -4,9 +4,9 @@ export interface SDKErrorConfig {
   data?: unknown;
 }
 export class SDKError extends Error {
+  override name = 'SDKError';
   readonly code?: number;
   readonly data?: unknown;
-  override name = this.constructor.name;
 
   constructor(errorConfig: SDKErrorConfig) {
     super(errorConfig.message);
