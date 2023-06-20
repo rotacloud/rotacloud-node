@@ -21,6 +21,7 @@ import {
 } from './services/index.js';
 import { SDKConfig } from './interfaces/index.js';
 import { DayNotesService } from './services/day-notes.service.js';
+import { LeaveTypesService } from './services/leave-types.service.js';
 
 const DEFAULT_CONFIG: Partial<SDKConfig> = {
   baseUri: 'https://api.rotacloud.com/v1',
@@ -43,6 +44,7 @@ export class RotaCloud {
   public leaveEmbargoes = new LeaveEmbargoesService();
   public leaveRequests = new LeaveRequestService();
   public leave = new LeaveService();
+  public leaveTypes = new LeaveTypesService();
   public locations = new LocationsService();
   public roles = new RolesService();
   public settings = new SettingsService();
