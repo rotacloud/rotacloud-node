@@ -68,11 +68,14 @@ export class LeaveService extends Service {
   update(id: number, data: Partial<ApiLeave>, options: Options): Promise<Leave>;
   update(id: number, data: Partial<ApiLeave>, options?: Options) {
     return super
-      .fetch<ApiLeave>({
-        url: `${this.apiPath}/${id}`,
-        data,
-        method: 'POST',
-      })
+      .fetch<ApiLeave>(
+        {
+          url: `${this.apiPath}/${id}`,
+          data,
+          method: 'POST',
+        },
+        options
+      )
       .then((res) => Promise.resolve(options?.rawResponse ? res : new Leave(res.data)));
   }
 
