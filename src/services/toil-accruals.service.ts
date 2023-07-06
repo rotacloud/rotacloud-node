@@ -4,7 +4,7 @@ import { ToilAccrualsQueryParams } from '../interfaces/query-params/toil-accrual
 import { ToilAccrual } from '../models/toil-accrual.model';
 import { ApiToilAccrual } from '../interfaces/toil-accrual.interface';
 
-type RequiredProps = 'duration_hours' | 'date' | 'leave_year' | 'user_id';
+type RequiredProps = 'duration_hours' | 'leave_year' | 'user_id';
 
 export class ToilAccrualsService extends Service {
   private apiPath = '/toil_accruals';
