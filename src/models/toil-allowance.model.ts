@@ -9,7 +9,7 @@ export class ToilAllowance {
   constructor(allowance: ApiToilAllowance) {
     this.user = allowance.user;
     this.accrued_hours = allowance.accrued_hours;
-    this.remaining_hours = allowance.accrued_hours;
+    this.remaining_hours = allowance.remaining_hours;
     this.used_hours = allowance.used_hours;
     this.has_toil_records = allowance.has_toil_records;
   }
