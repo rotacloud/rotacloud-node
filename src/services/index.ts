@@ -14,6 +14,7 @@ export * from './locations.service.js';
 export * from './roles.service.js';
 export * from './settings.service.js';
 export * from './shifts.service.js';
+export * from './terminals.service.js';
 export * from './toil-accruals.service.js';
 export * from './toil-allowance.service.js';
 export * from './users.service.js';

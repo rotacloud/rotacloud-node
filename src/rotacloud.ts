@@ -15,6 +15,7 @@ import {
   RolesService,
   SettingsService,
   ShiftsService,
+  TerminalService,
   ToilAccrualsService,
   ToilAllowanceService,
   UsersService,
@@ -49,6 +50,7 @@ export class RotaCloud {
   public roles = new RolesService();
   public settings = new SettingsService();
   public shifts = new ShiftsService();
+  public terminals = new TerminalService();
   public toilAccruals = new ToilAccrualsService();
   public toilAllowance = new ToilAllowanceService();
   public users = new UsersService();

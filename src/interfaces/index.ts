@@ -28,6 +28,7 @@ export * from './role.interface.js';
 export * from './sdk-config.interface.js';
 export * from './settings.interface.js';
 export * from './shift.interface.js';
+export * from './terminal.interface.js';
 export * from './toil-accrual.interface.js';
 export * from './toil-allowance.interface.js';
 export * from './user.interface.js';
