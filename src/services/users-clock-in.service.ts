@@ -60,6 +60,15 @@ type RequiredProps = 'method';
 class UsersClockInService extends Service {
   private apiPath = '/users_clocked_in';
 
+  getClockedInUser(id: number): Promise<UserClockedIn>;
+  getClockedInUser(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiUserClockedIn, any>>;
+  getClockedInUser(id: number, options: Options): Promise<UserClockedIn>;
+  getClockedInUser(id: number, options?: Options) {
+    return super
+      .fetch<ApiUserClockedIn>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedIn(res.data)));
+  }
+
   clockIn(data: RequirementsOf<UserClockInRequest, RequiredProps>): Promise<UserClockedIn>;
   clockIn(
     data: RequirementsOf<UserClockInRequest, RequiredProps>,
