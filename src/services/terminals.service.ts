@@ -6,7 +6,7 @@ import { Terminal } from '../models/terminal.model.js';
 
 type RequiredProps = 'name' | 'timezone';
 
-export class TerminalService extends Service {
+class TerminalService extends Service {
   private apiPath = '/terminals';
 
   create(data: RequirementsOf<ApiTerminal, RequiredProps>): Promise<Terminal>;
@@ -66,3 +66,4 @@ export class TerminalService extends Service {
     return super.iterator<ApiTerminal>({ url: this.apiPath }, options).byPage();
   }
 }
+export { TerminalService };

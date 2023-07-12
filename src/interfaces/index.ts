@@ -32,3 +32,5 @@ export * from './terminal.interface.js';
 export * from './toil-accrual.interface.js';
 export * from './toil-allowance.interface.js';
 export * from './user.interface.js';
+export * from './users-clocked-in.interface.js';
+export * from './users-clocked-out.interface.js';

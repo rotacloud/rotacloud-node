@@ -29,3 +29,5 @@ export * from './terminal.model.js';
 export * from './toil-accrual.model.js';
 export * from './toil-allowance.model.js';
 export * from './user.model.js';
+export * from './users-clocked-in.model.js';
+export * from './users-clocked-out.model.js';
