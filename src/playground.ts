@@ -36,3 +36,12 @@ const rc = new RotaCloud({
 //     //
 //   }
 // })();
+
+// rc.terminals.create({ name: 'RW Terminal', timezone: 1 }).then(
+//   (res) => console.log(res),
+//   (err) => console.log(err)
+// );
+
+// rc.terminals.listAll().then((res) => console.log(res));
+// rc.terminalsActive.launchTerminal({ terminal: 70009, device: 'Test Device' }).then((res) => console.log(res));
+rc.terminalsActive.pingTerminal(70009, { action: 'ping', device: 'Test Device' }).then((res) => console.log(res));

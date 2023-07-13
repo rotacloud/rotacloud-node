@@ -8,7 +8,7 @@ export class UserClockedIn {
   public minutes_late: number;
   public shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   public in_method: string;
-  public in_location: any;
+  public in_location: any; // ?
   public in_device: null; // ?
   public in_terminal: null; // ?
 

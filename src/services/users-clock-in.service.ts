@@ -69,6 +69,25 @@ class UsersClockInService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedIn(res.data)));
   }
 
+  async *list(options?: Options) {
+    for await (const res of super.iterator<ApiUserClockedIn>({ url: this.apiPath }, options)) {
+      yield new UserClockedIn(res);
+    }
+  }
+
+  listAll(options?: Options): Promise<UserClockedIn[]>;
+  async listAll(options?: Options) {
+    const users = [] as UserClockedIn[];
+    for await (const user of this.list(options)) {
+      users.push(user);
+    }
+    return users;
+  }
+
+  listByPage(options?: Options) {
+    return super.iterator<ApiUserClockedIn>({ url: this.apiPath }, options).byPage();
+  }
+
   clockIn(data: RequirementsOf<UserClockInRequest, RequiredProps>): Promise<UserClockedIn>;
   clockIn(
     data: RequirementsOf<UserClockInRequest, RequiredProps>,
