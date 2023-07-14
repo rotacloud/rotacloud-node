@@ -5,7 +5,7 @@ export interface ApiUserClockedOut {
   deleted: boolean;
   approved: boolean;
   user: number;
-  location: any; // todo
+  location: number;
   role: number;
   in_time: number;
   out_time: number;
@@ -18,10 +18,10 @@ export interface ApiUserClockedOut {
   shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   in_method: string;
   in_location: ApiTerminalLocation;
-  in_device: any | null; // todo
-  in_terminal: any | null; // todo
+  in_device: string | null;
+  in_terminal: number | null;
   out_method: string;
   out_location: ApiTerminalLocation;
-  out_device: any | null; // todo
-  out_terminal: any | null; // todo
+  out_device: string | null;
+  out_terminal: number | null;
 }

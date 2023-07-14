@@ -23,6 +23,7 @@ export * from './location.interface.js';
 export * from './logbook-category.interface.js';
 export * from './logbook-event.interface.js';
 export * from './pay-period.interface.js';
+export * from './pin.interface.js';
 export * from './role-rate.interface.js';
 export * from './role.interface.js';
 export * from './sdk-config.interface.js';

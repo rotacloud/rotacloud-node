@@ -5,7 +5,7 @@ export class UserClockedOut {
   public deleted: boolean;
   public approved: boolean;
   public user: number;
-  public location: any; // todo
+  public location: unknown; // todo
   public role: number;
   public in_time: number;
   public out_time: number;
@@ -18,12 +18,12 @@ export class UserClockedOut {
   public shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   public in_method: string;
   public in_location: ApiTerminalLocation;
-  public in_device: any | null; // todo
-  public in_terminal: any | null; // todo
+  public in_device: string | null;
+  public in_terminal: number | null;
   public out_method: string;
   public out_location: ApiTerminalLocation;
-  public out_device: any | null; // todo
-  public out_terminal: any | null; // todo
+  public out_device: string | null;
+  public out_terminal: number | null;
 
   constructor(apiUserClockedOut: ApiUserClockedOut) {
     this.id = apiUserClockedOut.id;

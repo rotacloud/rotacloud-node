@@ -22,8 +22,8 @@ export class Attendance {
   public out_location: ApiTerminalLocation;
   public in_device: number;
   public out_device: number;
-  public in_terminal: any | null; // todo
-  public out_terminal: any | null; // todo
+  public in_terminal: number | null;
+  public out_terminal: number | null;
 
   constructor(attendance: ApiAttendance) {
     this.id = attendance.id;

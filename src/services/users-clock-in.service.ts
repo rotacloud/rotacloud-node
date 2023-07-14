@@ -10,7 +10,7 @@ interface UserClockIn {
   terminal: number;
   user: number;
   photo?: string;
-  location?: ApiTerminalLocation;
+  location: ApiTerminalLocation;
 }
 
 interface UserClockOut extends Omit<UserClockIn, 'user' | 'shift'> {}
@@ -20,7 +20,7 @@ interface UserBreak {
   action: string;
   terminal: number;
   photo?: string;
-  location?: ApiTerminalLocation;
+  location: ApiTerminalLocation;
 }
 
 class UserBreak {

@@ -36,6 +36,7 @@ export interface ApiUser {
   leave_rates_unit: string;
   leave_rates_type: string;
   notes: string | null;
+  pin: string | null;
 }
 
 export interface ApiUserBreak {

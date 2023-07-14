@@ -2,15 +2,15 @@ import { ApiUserClockedIn, ApiShift, ApiTerminalLocation } from '../interfaces/i
 
 export class UserClockedIn {
   public user: number;
-  public location: any; // todo
+  public location: unknown; // todo
   public role: number;
   public in_time: number;
   public minutes_late: number;
   public shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   public in_method: string;
   public in_location: ApiTerminalLocation;
-  public in_device: any | null; // todo
-  public in_terminal: any | null; // todo
+  public in_device: string | null;
+  public in_terminal: number | null;
 
   constructor(apiUserClockedIn: ApiUserClockedIn) {
     this.user = apiUserClockedIn.user;

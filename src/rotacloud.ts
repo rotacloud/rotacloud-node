@@ -25,6 +25,7 @@ import {
   UsersClockInService,
 } from './services/index.js';
 import { SDKConfig } from './interfaces/index.js';
+import { PinsService } from './services/pins.service.js';
 
 const DEFAULT_CONFIG: Partial<SDKConfig> = {
   baseUri: 'https://api.rotacloud.com/v1',
@@ -49,6 +50,7 @@ export class RotaCloud {
   public leaveTypes = new LeaveTypesService();
   public leave = new LeaveService();
   public locations = new LocationsService();
+  public pins = new PinsService();
   public roles = new RolesService();
   public settings = new SettingsService();
   public shifts = new ShiftsService();
