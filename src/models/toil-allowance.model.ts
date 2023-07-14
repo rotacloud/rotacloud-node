@@ -6,6 +6,7 @@ export class ToilAllowance {
   public remaining_hours: number;
   public used_hours: number;
   public has_toil_records: boolean;
+
   constructor(allowance: ApiToilAllowance) {
     this.user = allowance.user;
     this.accrued_hours = allowance.accrued_hours;

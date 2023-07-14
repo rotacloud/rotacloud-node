@@ -1,11 +1,11 @@
-import { ApiUserClockedOut } from '../interfaces/index.js';
+import { ApiShift, ApiTerminalLocation, ApiUserClockedOut } from '../interfaces/index.js';
 
 export class UserClockedOut {
   public id: number;
   public deleted: boolean;
   public approved: boolean;
   public user: number;
-  public location: number | null;
+  public location: any; // todo
   public role: number;
   public in_time: number;
   public out_time: number;
@@ -14,16 +14,16 @@ export class UserClockedOut {
   public hours: number;
   public hours_auto: number;
   public hours_is_auto: number;
-  public notes: null; // ?
-  public shift: any;
+  public notes: string | null;
+  public shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   public in_method: string;
-  public in_location: any; // ?
-  public in_device: null; // ?
-  public in_terminal: null; // ?
+  public in_location: ApiTerminalLocation;
+  public in_device: any | null; // todo
+  public in_terminal: any | null; // todo
   public out_method: string;
-  public out_location: any; // ?
-  public out_device: null; // ?
-  public out_terminal: null; // ?
+  public out_location: ApiTerminalLocation;
+  public out_device: any | null; // todo
+  public out_terminal: any | null; // todo
 
   constructor(apiUserClockedOut: ApiUserClockedOut) {
     this.id = apiUserClockedOut.id;
@@ -36,5 +36,17 @@ export class UserClockedOut {
     this.out_time = apiUserClockedOut.out_time;
     this.minutes_break = apiUserClockedOut.minutes_break;
     this.minutes_late = apiUserClockedOut.minutes_late;
+    this.hours = apiUserClockedOut.hours;
+    this.hours_auto = apiUserClockedOut.hours_auto;
+    this.notes = apiUserClockedOut.notes ?? null;
+    this.shift = apiUserClockedOut.shift;
+    this.in_method = apiUserClockedOut.in_method;
+    this.in_location = apiUserClockedOut.in_location;
+    this.in_device = apiUserClockedOut.in_device ?? null;
+    this.in_terminal = apiUserClockedOut.in_terminal ?? null;
+    this.out_method = apiUserClockedOut.out_method;
+    this.out_location = apiUserClockedOut.out_location;
+    this.out_device = apiUserClockedOut.out_device ?? null;
+    this.out_terminal = apiUserClockedOut.out_terminal ?? null;
   }
 }

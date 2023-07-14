@@ -1,5 +1,3 @@
-import { ApiLocationCoordinate } from './location-coordinate.interface.js';
-
 export interface ApiTerminal {
   id: number;
   deleted: boolean;
@@ -9,9 +7,15 @@ export interface ApiTerminal {
   device: string | null;
   version: string | null;
   ip: string | null;
-  location: ApiLocationCoordinate | null;
+  location: any | null; // todo
   timezone: number;
   require_photo: boolean;
   require_photo_breaks: boolean;
   debug: boolean;
+}
+
+export interface ApiTerminalLocation {
+  lat: number;
+  lng: number;
+  accuracy: number;
 }

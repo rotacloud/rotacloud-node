@@ -1,52 +1,33 @@
 import { AxiosResponse } from 'axios';
-import { ApiUserClockedIn, ApiUserClockedOut } from '../interfaces/index.js';
+import { ApiUserBreak, ApiUserClockedIn, ApiUserClockedOut, ApiTerminalLocation } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { UserClockedIn, UserClockedOut } from '../models/index.js';
 
-interface UserClockInRequest {
+interface UserClockIn {
   method: string;
+  shift: number;
   terminal: number;
   user: number;
-  shift: number;
+  photo?: string;
+  location?: ApiTerminalLocation;
 }
 
-interface UserClockOutRequest extends Omit<UserClockInRequest, 'user' | 'shift'> {}
+interface UserClockOut extends Omit<UserClockIn, 'user' | 'shift'> {}
 
-interface UserBreakRequest {
+interface UserBreak {
   method: string;
   action: string;
   terminal: number;
-}
-
-interface StartLocation {
-  start_location: {
-    lat: number;
-    lng: number;
-    accuracy: number;
-  };
-}
-
-interface EndLocation {
-  end_location: {
-    lat: number;
-    lng: number;
-    accuracy: number;
-  };
-}
-
-interface ApiUserBreak {
-  start_time: number;
-  start_location: StartLocation;
-  end_time?: number;
-  end_location?: EndLocation;
+  photo?: string;
+  location?: ApiTerminalLocation;
 }
 
 class UserBreak {
   public start_time: number;
-  public start_location: StartLocation;
+  public start_location: ApiTerminalLocation;
   public end_time: number | null;
-  public end_location: EndLocation | null;
+  public end_location: ApiTerminalLocation | null;
   constructor(apiUserBreak: ApiUserBreak) {
     this.start_time = apiUserBreak.start_time;
     this.start_location = apiUserBreak.start_location;
@@ -55,7 +36,8 @@ class UserBreak {
   }
 }
 
-type RequiredProps = 'method';
+type RequiredPropsClockIn = 'method';
+type RequiredPropsBreak = 'method' | 'action';
 
 class UsersClockInService extends Service {
   private apiPath = '/users_clocked_in';
@@ -88,52 +70,52 @@ class UsersClockInService extends Service {
     return super.iterator<ApiUserClockedIn>({ url: this.apiPath }, options).byPage();
   }
 
-  clockIn(data: RequirementsOf<UserClockInRequest, RequiredProps>): Promise<UserClockedIn>;
+  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>): Promise<UserClockedIn>;
   clockIn(
-    data: RequirementsOf<UserClockInRequest, RequiredProps>,
+    data: RequirementsOf<UserClockIn, RequiredPropsClockIn>,
     options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiUserClockedIn, any>>;
-  clockIn(data: RequirementsOf<UserClockInRequest, RequiredProps>, options: Options): Promise<UserClockedIn>;
-  clockIn(data: RequirementsOf<UserClockInRequest, RequiredProps>, options?: Options) {
+  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options: Options): Promise<UserClockedIn>;
+  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options?: Options) {
     return super
       .fetch<ApiUserClockedIn>({ url: this.apiPath, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedIn(res.data)));
   }
 
-  clockOut(id: number, data: UserClockOutRequest): Promise<UserClockedOut>;
+  clockOut(id: number, data: UserClockOut): Promise<UserClockedOut>;
   clockOut(
     id: number,
-    data: UserClockOutRequest,
+    data: UserClockOut,
     options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiUserClockedOut, any>>;
-  clockOut(id: number, data: UserClockOutRequest, options: Options): Promise<UserClockedOut>;
-  clockOut(id: number, data: UserClockOutRequest, options?: Options) {
+  clockOut(id: number, data: UserClockOut, options: Options): Promise<UserClockedOut>;
+  clockOut(id: number, data: UserClockOut, options?: Options) {
     return super
       .fetch<ApiUserClockedOut>({ url: `${this.apiPath}/${id}`, data, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedOut(res.data)));
   }
 
-  startBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredProps>): Promise<UserBreak>;
+  startBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>): Promise<UserBreak>;
   startBreak(
     id: number,
-    data: RequirementsOf<UserBreakRequest, RequiredProps>,
+    data: RequirementsOf<UserBreak, RequiredPropsBreak>,
     options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiUserBreak, any>>;
-  startBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredProps>, options: Options): Promise<UserBreak>;
-  startBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredProps>, options?: Options) {
+  startBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options: Options): Promise<UserBreak>;
+  startBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options?: Options) {
     return super
       .fetch<ApiUserBreak>({ url: `${this.apiPath}/${id}`, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : new UserBreak(res.data)));
   }
 
-  endBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredProps>): Promise<UserBreak>;
+  endBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>): Promise<UserBreak>;
   endBreak(
     id: number,
-    data: RequirementsOf<UserBreakRequest, RequiredProps>,
+    data: RequirementsOf<UserBreak, RequiredPropsBreak>,
     options: { rawResponse: true } & Options
   ): Promise<AxiosResponse<ApiUserBreak, any>>;
-  endBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredProps>, options: Options): Promise<UserBreak>;
-  endBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredProps>, options?: Options) {
+  endBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options: Options): Promise<UserBreak>;
+  endBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options?: Options) {
     return super
       .fetch<ApiUserBreak>({ url: `${this.apiPath}/${id}`, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : new UserBreak(res.data)));

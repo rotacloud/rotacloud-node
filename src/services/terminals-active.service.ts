@@ -1,25 +1,27 @@
 import { AxiosResponse } from 'axios';
-import { ApiLocationCoordinate, ApiTerminal } from '../interfaces/index.js';
+import { ApiTerminal, ApiTerminalLocation } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
 import { Terminal } from '../models/terminal.model.js';
 
-interface LaunchTerminalRequest {
+interface LaunchTerminal {
   terminal: number;
   device: string;
-  location?: ApiLocationCoordinate;
+  location?: ApiTerminalLocation;
+}
+
+interface PingTerminal {
+  action: string;
+  device: string;
 }
 
 class TerminalsActiveService extends Service {
   private apiPath = '/terminals_active';
 
-  launchTerminal(data: LaunchTerminalRequest): Promise<Terminal>;
-  launchTerminal(
-    data: LaunchTerminalRequest,
-    options: { rawResponse: true } & Options
-  ): Promise<AxiosResponse<any, any>>;
-  launchTerminal(data: LaunchTerminalRequest, options: Options): Promise<Terminal>;
-  launchTerminal(data: LaunchTerminalRequest, options?: Options) {
+  launchTerminal(data: LaunchTerminal): Promise<Terminal>;
+  launchTerminal(data: LaunchTerminal, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  launchTerminal(data: LaunchTerminal, options: Options): Promise<Terminal>;
+  launchTerminal(data: LaunchTerminal, options?: Options) {
     return super
       .fetch<ApiTerminal>({
         url: `${this.apiPath}`,
@@ -29,10 +31,14 @@ class TerminalsActiveService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : new Terminal(res.data)));
   }
 
-  pingTerminal(id: number, data: any): Promise<number>;
-  pingTerminal(id: number, data: any, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
-  pingTerminal(id: number, data: any, options: Options): Promise<number>;
-  pingTerminal(id: number, data: any, options?: Options) {
+  pingTerminal(id: number, data: PingTerminal): Promise<number>;
+  pingTerminal(
+    id: number,
+    data: PingTerminal,
+    options: { rawResponse: true } & Options
+  ): Promise<AxiosResponse<any, any>>;
+  pingTerminal(id: number, data: PingTerminal, options: Options): Promise<number>;
+  pingTerminal(id: number, data: PingTerminal, options?: Options) {
     return super
       .fetch({ url: `${this.apiPath}/${id}`, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));

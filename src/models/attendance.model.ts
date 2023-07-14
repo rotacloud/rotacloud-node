@@ -1,4 +1,4 @@
-import { ApiAttendance, ApiAttendanceLocation, ApiShift } from '../interfaces/index.js';
+import { ApiAttendance, ApiTerminalLocation, ApiShift } from '../interfaces/index.js';
 
 export class Attendance {
   public id: number;
@@ -18,12 +18,12 @@ export class Attendance {
   public shift: ApiShift | null;
   public in_method: string;
   public out_method: string;
-  public in_location: ApiAttendanceLocation;
-  public out_location: ApiAttendanceLocation;
+  public in_location: ApiTerminalLocation;
+  public out_location: ApiTerminalLocation;
   public in_device: number;
   public out_device: number;
-  public in_terminal: null;
-  public out_terminal: null;
+  public in_terminal: any | null; // todo
+  public out_terminal: any | null; // todo
 
   constructor(attendance: ApiAttendance) {
     this.id = attendance.id;

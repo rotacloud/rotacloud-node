@@ -17,5 +17,17 @@ export class AvailabilityPattern {
 
   constructor(apiAvailabilityPatterns: ApiAvailabilityPattern) {
     this.id = apiAvailabilityPatterns.id;
+    this.user = apiAvailabilityPatterns.user;
+    this.name = apiAvailabilityPatterns.name;
+    this.start_date = apiAvailabilityPatterns.start_date;
+    this.end_date = apiAvailabilityPatterns.end_date;
+    this.repeat_weeks = apiAvailabilityPatterns.repeat_weeks;
+    this.mon = apiAvailabilityPatterns.mon;
+    this.tue = apiAvailabilityPatterns.tue;
+    this.wed = apiAvailabilityPatterns.wed;
+    this.thu = apiAvailabilityPatterns.thu;
+    this.fri = apiAvailabilityPatterns.fri;
+    this.sat = apiAvailabilityPatterns.sat;
+    this.sun = apiAvailabilityPatterns.sun;
   }
 }
