@@ -1,4 +1,4 @@
 export interface ToilAccrualsQueryParams {
-  year: number;
+  year?: number;
   users?: number[];
 }
