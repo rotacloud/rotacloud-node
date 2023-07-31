@@ -1,4 +1,4 @@
-import { ApiLeaveRate, ApiRoleRate } from './index.js';
+import { ApiLeaveRate, ApiRoleRate, ApiTerminalLocation } from './index.js';
 
 export interface ApiUser {
   id: number;
@@ -36,4 +36,12 @@ export interface ApiUser {
   leave_rates_unit: string;
   leave_rates_type: string;
   notes: string | null;
+  pin: string | null;
+}
+
+export interface ApiUserBreak {
+  start_time: number;
+  start_location: ApiTerminalLocation;
+  end_time?: number;
+  end_location?: ApiTerminalLocation;
 }

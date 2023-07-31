@@ -13,6 +13,7 @@ export class ToilAccrual {
   public leave_year: number;
   public location_id: number | null;
   public user_id: number;
+
   constructor(accrual: ApiToilAccrual) {
     this.comments = accrual.comments;
     this.created_at = accrual.created_at;
