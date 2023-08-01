@@ -47,6 +47,15 @@ class TerminalsService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : new Terminal(res.data)));
   }
 
+  closeTerminal(id: number): Promise<number>;
+  closeTerminal(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<number, any>>;
+  closeTerminal(id: number, options: Options): Promise<number>;
+  closeTerminal(id: number, options?: Options) {
+    return super
+      .fetch({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+  }
+
   async *list(options?: Options) {
     for await (const res of super.iterator<ApiTerminal>({ url: this.apiPath }, options)) {
       yield new Terminal(res);

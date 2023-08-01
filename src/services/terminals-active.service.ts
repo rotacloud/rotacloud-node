@@ -71,5 +71,6 @@ class TerminalsActiveService extends Service {
       .fetch({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
+
 }
 export { TerminalsActiveService };
