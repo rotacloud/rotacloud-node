@@ -62,14 +62,5 @@ class TerminalsActiveService extends Service {
   listByPage(options?: Options) {
     return super.iterator<ApiTerminal>({ url: this.apiPath }, options).byPage();
   }
-
-  closeTerminal(id: number): Promise<number>;
-  closeTerminal(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
-  closeTerminal(id: number, options: Options): Promise<number>;
-  closeTerminal(id: number, options?: Options) {
-    return super
-      .fetch({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
-  }
 }
 export { TerminalsActiveService };
