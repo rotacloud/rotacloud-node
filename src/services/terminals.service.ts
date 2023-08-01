@@ -48,7 +48,7 @@ class TerminalsService extends Service {
   }
 
   closeTerminal(id: number): Promise<number>;
-  closeTerminal(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Number, any>>;
+  closeTerminal(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<number, any>>;
   closeTerminal(id: number, options: Options): Promise<number>;
   closeTerminal(id: number, options?: Options) {
     return super
