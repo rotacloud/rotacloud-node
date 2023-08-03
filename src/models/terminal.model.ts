@@ -1,4 +1,4 @@
-import { ApiLocationCoordinate, ApiTerminal } from '../interfaces/index.js';
+import { ApiTerminalLocation, ApiTerminal } from '../interfaces/index.js';
 
 export class Terminal {
   public id: number;
@@ -9,7 +9,7 @@ export class Terminal {
   public device: string | null;
   public version: string | null;
   public ip: string | null;
-  public location: ApiLocationCoordinate | null;
+  public location: ApiTerminalLocation | null;
   public timezone: number;
   public require_photo: boolean;
   public require_photo_breaks: boolean;

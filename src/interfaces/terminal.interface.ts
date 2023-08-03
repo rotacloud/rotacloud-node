@@ -7,7 +7,7 @@ export interface ApiTerminal {
   device: string | null;
   version: string | null;
   ip: string | null;
-  location: any | null; // todo
+  location: ApiTerminalLocation | null;
   timezone: number;
   require_photo: boolean;
   require_photo_breaks: boolean;
