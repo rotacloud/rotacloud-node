@@ -47,6 +47,7 @@ export interface Options {
   expand?: string[];
   fields?: string[];
   limit?: number;
+  offset?: number;
   dryRun?: boolean;
 }
 
@@ -146,6 +147,7 @@ export abstract class Service<ApiResponse = any> {
         expand: options?.expand,
         fields: options?.fields,
         limit: options?.limit,
+        offset: options?.offset,
         dry_run: options?.dryRun,
         ...httpOptions?.params,
       },
