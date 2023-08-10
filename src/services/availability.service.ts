@@ -40,13 +40,11 @@ export class AvailabilityService extends Service {
     return this.update(
       {
         user,
-        dates: dates.map((date) => {
-          return {
+        dates: dates.map((date) => ({
             date,
             available: [],
             unavailable: [],
-          };
-        }),
+          })),
       },
       options
     );
