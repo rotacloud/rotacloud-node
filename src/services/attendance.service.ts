@@ -26,9 +26,7 @@ export class AttendanceService extends Service {
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiAttendance, any>>;
   get(id: number, options: Options): Promise<Attendance>;
   get(id: number, options?: Options) {
-    return super.fetch<ApiAttendance>({ url: `${this.apiPath}/${id}` }, options).then((res) => {
-      return Promise.resolve(options?.rawResponse ? res : new Attendance(res.data));
-    });
+    return super.fetch<ApiAttendance>({ url: `${this.apiPath}/${id}` }, options).then((res) => Promise.resolve(options?.rawResponse ? res : new Attendance(res.data)));
   }
 
   async *list(query: AttendanceQueryParams, options?: Options) {

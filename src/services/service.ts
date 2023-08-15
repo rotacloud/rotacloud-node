@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
@@ -118,7 +118,7 @@ export abstract class Service<ApiResponse = any> {
   }
 
   public fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
-    const headers: AxiosRequestHeaders = {
+    const headers: Record<string, string> = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
       'SDK-Version': Version.version,
     };
@@ -214,9 +214,7 @@ export abstract class Service<ApiResponse = any> {
           },
         };
       },
-      byPage: () => {
-        return this.listFetch<T>(reqObject, options);
-      },
+      byPage: () => this.listFetch<T>(reqObject, options),
     };
   }
 }
