@@ -3,7 +3,7 @@
   "version": "1.0.54",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "engines": {
-    "node": ">=14.17.0"
+    "node": ">=16.10.0"
   },
   "main": "./dist/cjs/rotacloud.js",
   "module": "./dist/mjs/rotacloud.js",
