@@ -240,12 +240,13 @@ export abstract class Service<ApiResponse = any> {
     reqConfig: AxiosRequestConfig<T[]>,
     options: Options | undefined
   ): AsyncGenerator<AxiosResponse<T[]>> {
+    const fallbackLimit = 20;
     const res = await this.fetch<T[]>(reqConfig, options);
     yield res;
 
-    const limit = Number(res.headers['x-limit'] ?? 1);
-    const entityCount = Number(res.headers['x-total-count'] ?? 0);
-    const requestOffset = Number(res.headers['x-offset'] ?? 0);
+    const limit = Number(res.headers['x-limit']) || fallbackLimit;
+    const entityCount = Number(res.headers['x-total-count']) || 0;
+    const requestOffset = Number(res.headers['x-offset']) || entityCount;
 
     for (let offset = requestOffset + limit; offset < entityCount; offset += limit) {
       yield this.fetch<T[]>(reqConfig, { ...options, offset });
