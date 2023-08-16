@@ -51,36 +51,8 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
   },
 };
 
-const PERSISTENT_PARAMS = new Set(['expand', 'fields', 'limit', 'offset', 'dry_run', 'exclude_link_header']);
-
 type ParameterPrimitive = string | boolean | number | null;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
-
-function* enumerate<T>(iter: Iterable<T>): Generator<[index: number, item: T]> {
-  let idx = 0;
-  for (const item of iter) {
-    yield [idx, item];
-    idx += 1;
-  }
-}
-
-/** Iterates through all {@see AsyncIterator}s in turn such that all iterators
- * that aren't marked as "done" must return a value before they can return another.
- */
-async function* asyncIterInTurn<T>(iters: Iterable<AsyncIterator<T>>): AsyncGenerator<T> {
-  const remaining = [...iters];
-  while (remaining.length > 0) {
-    for (const [idx, iter] of enumerate(remaining)) {
-      const { done, value } = await iter.next();
-      if (done) {
-        remaining.splice(idx, 1);
-        break;
-      }
-
-      yield value;
-    }
-  }
-}
 
 export abstract class Service<ApiResponse = any> {
   protected client: AxiosInstance = this.initialiseAxios();
@@ -137,34 +109,6 @@ export abstract class Service<ApiResponse = any> {
     return new URLSearchParams(reducedParams);
   }
 
-  /** Batches up query parameters to prevent URLs from becoming too large.
-   *
-   * Special query params such as 'limit' and 'offset' will be preserved in every batch
-   */
-  private *batchParams(queryParams: URLSearchParams) {
-    const maxParams = 300;
-    if (queryParams.size <= maxParams) {
-      yield queryParams;
-      return;
-    }
-
-    const baseParams = new URLSearchParams();
-    for (const paramName of PERSISTENT_PARAMS) {
-      const paramVal = queryParams.get(paramName);
-      if (paramVal) baseParams.append(paramName, paramVal);
-    }
-
-    let paramChunk = new URLSearchParams(baseParams);
-    for (const [key, value] of queryParams) {
-      if (!PERSISTENT_PARAMS.has(key)) paramChunk.append(key, value);
-      if (paramChunk.size === maxParams) {
-        yield paramChunk;
-        paramChunk = new URLSearchParams(baseParams);
-      }
-    }
-    if (paramChunk.size > baseParams.size) yield paramChunk;
-  }
-
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
@@ -214,27 +158,6 @@ export abstract class Service<ApiResponse = any> {
     return this.client.request<T>(finalReqConfig);
   }
 
-  /** Splits the request into batches and returns the result for each batch in page order */
-  private async *batchFetch<T = ApiResponse>(
-    reqConfig: AxiosRequestConfig<T[]>,
-    options?: Options
-  ): AsyncGenerator<AxiosResponse<T[]>> {
-    const reqParams = this.buildQueryParams(options, reqConfig.params);
-
-    const batchedRequests: AsyncGenerator<AxiosResponse<T[]>>[] = [];
-    for (const params of this.batchParams(reqParams)) {
-      const batchedReqConfig = {
-        ...reqConfig,
-        params,
-      };
-      batchedRequests.push(this.fetchPages(batchedReqConfig, options));
-    }
-
-    for await (const res of asyncIterInTurn(batchedRequests)) {
-      yield res;
-    }
-  }
-
   /** Iterates through every page for a potentially paginated request */
   private async *fetchPages<T>(
     reqConfig: AxiosRequestConfig<T[]>,
@@ -246,7 +169,7 @@ export abstract class Service<ApiResponse = any> {
 
     const limit = Number(res.headers['x-limit']) || fallbackLimit;
     const entityCount = Number(res.headers['x-total-count']) || 0;
-    const requestOffset = Number(res.headers['x-offset']) || entityCount;
+    const requestOffset = Number(res.headers['x-offset']) || 0;
 
     for (let offset = requestOffset + limit; offset < entityCount; offset += limit) {
       yield this.fetch<T[]>(reqConfig, { ...options, offset });
@@ -254,7 +177,7 @@ export abstract class Service<ApiResponse = any> {
   }
 
   private async *listResponses<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
-    for await (const res of this.batchFetch<T>(reqConfig, options)) {
+    for await (const res of this.fetchPages<T>(reqConfig, options)) {
       yield* res.data;
     }
   }
@@ -262,7 +185,7 @@ export abstract class Service<ApiResponse = any> {
   iterator<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
     return {
       [Symbol.asyncIterator]: () => this.listResponses<T>(reqConfig, options),
-      byPage: () => this.batchFetch<T>(reqConfig, options),
+      byPage: () => this.fetchPages<T>(reqConfig, options),
     };
   }
 }
