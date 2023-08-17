@@ -75,6 +75,7 @@ export class ShiftsService extends Service {
         .fetch<ApiShift>({
           url: `${this.apiPath}/${shifts.id}`,
           data: shifts,
+          method: 'POST',
         })
         .then((res) => (options?.rawResponse ? res : new Shift(res.data)));
     }
