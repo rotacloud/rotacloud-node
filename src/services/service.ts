@@ -27,6 +27,15 @@ export type RetryOptions =
       maxRetries: number;
     };
 
+export interface Options {
+  rawResponse?: boolean;
+  expand?: string[];
+  fields?: string[];
+  limit?: number;
+  offset?: number;
+  dryRun?: boolean;
+}
+
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
 
@@ -41,22 +50,6 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
     delay: DEFAULT_RETRY_DELAY,
   },
 };
-
-export interface Options {
-  rawResponse?: boolean;
-  expand?: string[];
-  fields?: string[];
-  limit?: number;
-  offset?: number;
-  dryRun?: boolean;
-}
-
-interface PagingObject {
-  first: string;
-  prev: string;
-  next: string;
-  last: string;
-}
 
 type ParameterPrimitive = string | boolean | number | null;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
@@ -90,13 +83,22 @@ export abstract class Service<ApiResponse = any> {
     return new SDKError(sdkErrorParams);
   }
 
-  public isLeaveRequest(endpoint?: string): boolean {
+  private isLeaveRequest(endpoint?: string): boolean {
     return endpoint === '/leave_requests';
   }
 
-  private buildQueryStr(queryParams: Record<string, ParameterValue> | undefined) {
-    if (!queryParams) return '';
-    const reducedParams = Object.entries(queryParams).reduce((params, [key, val]) => {
+  private buildQueryParams(options?: Options, extraParams?: Record<string, ParameterValue>) {
+    const queryParams: Record<string, ParameterValue> = {
+      expand: options?.expand,
+      fields: options?.fields,
+      limit: options?.limit,
+      offset: options?.offset,
+      dry_run: options?.dryRun,
+      ...extraParams,
+      // NOTE: Should not overridable so must come after spread of params
+      exclude_link_header: true,
+    };
+    const reducedParams = Object.entries(queryParams ?? {}).reduce((params, [key, val]) => {
       if (val !== undefined && val !== '') {
         if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));
         else params.push([key, String(val)]);
@@ -104,20 +106,10 @@ export abstract class Service<ApiResponse = any> {
       return params;
     }, [] as string[][]);
 
-    return new URLSearchParams(reducedParams).toString();
+    return new URLSearchParams(reducedParams);
   }
 
-  private parsePageLinkHeader(linkHeader: string): Partial<PagingObject> {
-    const pageData = {};
-    for (const link of linkHeader.split(',')) {
-      const { rel, url } = link.match(/<(?<url>.*)>; rel="(?<rel>\w*)"/)?.groups ?? {};
-      pageData[rel] = url;
-    }
-
-    return pageData;
-  }
-
-  public fetch<T = ApiResponse>(httpOptions: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: Record<string, string> = {
       Authorization: `Bearer ${RotaCloud.config.apiKey}`,
       'SDK-Version': Version.version,
@@ -136,22 +128,14 @@ export abstract class Service<ApiResponse = any> {
       headers.Account = String(RotaCloud.config.accountId);
     } else {
       // need to convert user field in payload to a header for creating leave_requests when using an API key
-      this.isLeaveRequest(httpOptions.url) ? (headers.User = `${httpOptions.data.user}`) : undefined;
+      this.isLeaveRequest(reqConfig.url) ? (headers.User = `${reqConfig.data.user}`) : undefined;
     }
 
-    const reqObject: AxiosRequestConfig<T> = {
-      ...httpOptions,
+    const finalReqConfig: AxiosRequestConfig<T> = {
+      ...reqConfig,
       baseURL: RotaCloud.config.baseUri,
       headers,
-      params: {
-        expand: options?.expand,
-        fields: options?.fields,
-        limit: options?.limit,
-        offset: options?.offset,
-        dry_run: options?.dryRun,
-        ...httpOptions?.params,
-      },
-      paramsSerializer: this.buildQueryStr,
+      params: this.buildQueryParams(options, reqConfig.params),
     };
 
     if (RotaCloud.config.retry) {
@@ -171,50 +155,37 @@ export abstract class Service<ApiResponse = any> {
       });
     }
 
-    return this.client.request<T>(reqObject);
+    return this.client.request<T>(finalReqConfig);
   }
 
-  private async *listFetch<T = ApiResponse>(
-    reqObject: AxiosRequestConfig<T[]>,
-    options?: Options
-  ): AsyncGenerator<AxiosResponse<T[], any>> {
-    let pageRequestObject = reqObject;
-    let currentPageUrl = pageRequestObject.url;
+  /** Iterates through every page for a potentially paginated request */
+  private async *fetchPages<T>(
+    reqConfig: AxiosRequestConfig<T[]>,
+    options: Options | undefined
+  ): AsyncGenerator<AxiosResponse<T[]>> {
+    const fallbackLimit = 20;
+    const res = await this.fetch<T[]>(reqConfig, options);
+    yield res;
 
-    let pageRemaining = true;
-    while (pageRemaining) {
-      const res = await this.fetch<T[]>(pageRequestObject, options);
-      const pageLinkMap = this.parsePageLinkHeader(res.headers.link ?? '');
-      pageRemaining = Boolean(pageLinkMap.next);
-      // NOTE: query params including paging options are included in the "next" link
-      pageRequestObject = { url: pageLinkMap.next };
-      yield res;
+    const limit = Number(res.headers['x-limit']) || fallbackLimit;
+    const entityCount = Number(res.headers['x-total-count']) || 0;
+    const requestOffset = Number(res.headers['x-offset']) || 0;
 
-      // Failsafe incase the page does not change
-      if (currentPageUrl === pageRequestObject.url) {
-        throw new Error('Next page link did not change');
-      }
-      currentPageUrl = pageRequestObject.url;
+    for (let offset = requestOffset + limit; offset < entityCount; offset += limit) {
+      yield this.fetch<T[]>(reqConfig, { ...options, offset });
     }
   }
 
-  private async *listResponses<T = ApiResponse>(reqObject: AxiosRequestConfig<T[]>, options?: Options) {
-    for await (const res of this.listFetch<T>(reqObject, options)) {
+  private async *listResponses<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
+    for await (const res of this.fetchPages<T>(reqConfig, options)) {
       yield* res.data;
     }
   }
 
-  public iterator<T = ApiResponse>(reqObject: AxiosRequestConfig<T[]>, options?: Options) {
-    const iterator = this.listResponses<T>(reqObject, options);
+  iterator<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
     return {
-      [Symbol.asyncIterator]() {
-        return {
-          next() {
-            return iterator.next();
-          },
-        };
-      },
-      byPage: () => this.listFetch<T>(reqObject, options),
+      [Symbol.asyncIterator]: () => this.listResponses<T>(reqConfig, options),
+      byPage: () => this.fetchPages<T>(reqConfig, options),
     };
   }
 }

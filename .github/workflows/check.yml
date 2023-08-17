@@ -1,0 +1,36 @@
+name: Check
+on:
+  workflow_call:
+    inputs:
+      NODE_VERSION:
+        type: string
+        description: 'The version of Node to run the checks with'
+        default: 16.10
+  pull_request:
+    branches: [develop]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ inputs.NODE_VERSION }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ inputs.NODE_VERSION }}
+          cache: 'npm'
+          registry-url: https://registry.npmjs.org/
+
+      - name: npm install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Build
+        run: npm run build --if-present
+
+      - name: Publishable
+        run: npm publish --dry-run
