@@ -24,10 +24,10 @@ import {
   UsersService,
   UsersClockInService,
 } from './services/index.js';
-import { SDKConfig } from './interfaces/index.js';
+import { SDKBase, SDKConfig } from './interfaces/index.js';
 import { PinsService } from './services/pins.service.js';
 
-const DEFAULT_CONFIG: Partial<SDKConfig> = {
+const DEFAULT_CONFIG: Partial<SDKBase> = {
   baseUri: 'https://api.rotacloud.com/v1',
   retry: RetryStrategy.Exponential,
 };
