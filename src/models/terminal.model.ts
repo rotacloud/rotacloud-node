@@ -13,6 +13,7 @@ export class Terminal {
   public timezone: number;
   public require_photo: boolean;
   public require_photo_breaks: boolean;
+  public secret: string | null;
 
   constructor(terminal: ApiTerminal) {
     this.id = terminal.id;
@@ -27,5 +28,6 @@ export class Terminal {
     this.timezone = terminal.timezone;
     this.require_photo = terminal.require_photo;
     this.require_photo_breaks = terminal.require_photo_breaks;
+    this.secret = terminal.secret;
   }
 }

@@ -12,6 +12,7 @@ export interface ApiTerminal {
   require_photo: boolean;
   require_photo_breaks: boolean;
   debug: boolean;
+  secret: string;
 }
 
 export interface ApiTerminalLocation {

@@ -111,7 +111,9 @@ export abstract class Service<ApiResponse = any> {
 
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
     const headers: Record<string, string> = {
-      Authorization: `Bearer ${RotaCloud.config.apiKey}`,
+      Authorization: RotaCloud.config.apiKey
+        ? `Bearer ${RotaCloud.config.apiKey}`
+        : `Basic ${RotaCloud.config.basicAuth}`,
       'SDK-Version': Version.version,
     };
 
