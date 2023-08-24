@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiTerminal, ApiTerminalLocation } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
-import { Terminal } from '../models/terminal.model.js';
-
 interface LaunchTerminal {
   terminal: number;
   device: string;
@@ -15,12 +13,12 @@ interface PingTerminal {
   device: string;
 }
 
-class TerminalsActiveService extends Service {
+export class TerminalsActiveService extends Service {
   private apiPath = '/terminals_active';
 
-  launchTerminal(data: LaunchTerminal): Promise<Terminal>;
+  launchTerminal(data: LaunchTerminal): Promise<ApiTerminal>;
   launchTerminal(data: LaunchTerminal, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
-  launchTerminal(data: LaunchTerminal, options: Options): Promise<Terminal>;
+  launchTerminal(data: LaunchTerminal, options: Options): Promise<ApiTerminal>;
   launchTerminal(data: LaunchTerminal, options?: Options) {
     return super
       .fetch<ApiTerminal>({
@@ -28,14 +26,14 @@ class TerminalsActiveService extends Service {
         data,
         method: 'POST',
       })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new Terminal(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   pingTerminal(id: number, data: PingTerminal): Promise<number>;
   pingTerminal(
     id: number,
     data: PingTerminal,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<any, any>>;
   pingTerminal(id: number, data: PingTerminal, options: Options): Promise<number>;
   pingTerminal(id: number, data: PingTerminal, options?: Options) {
@@ -46,13 +44,13 @@ class TerminalsActiveService extends Service {
 
   async *list(options?: Options) {
     for await (const res of super.iterator<ApiTerminal>({ url: this.apiPath }, options)) {
-      yield new Terminal(res);
+      yield res;
     }
   }
 
-  listAll(options?: Options): Promise<Terminal[]>;
+  listAll(options?: Options): Promise<ApiTerminal[]>;
   async listAll(options?: Options) {
-    const users = [] as Terminal[];
+    const users = [] as ApiTerminal[];
     for await (const user of this.list(options)) {
       users.push(user);
     }
@@ -72,4 +70,3 @@ class TerminalsActiveService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
-export { TerminalsActiveService };

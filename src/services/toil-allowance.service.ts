@@ -1,7 +1,6 @@
 import { Options, Service } from './service';
 import { ToilAllowanceQueryParams } from '../interfaces/query-params/toil-allowance-query-params.interface';
 import { ApiToilAllowance } from '../interfaces/toil-allowance.interface';
-import { ToilAllowance } from '../models/toil-allowance.model';
 
 export class ToilAllowanceService extends Service {
   private apiPath = '/toil_allowance';
@@ -9,14 +8,14 @@ export class ToilAllowanceService extends Service {
   async *list(year: number, query: ToilAllowanceQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiToilAllowance>(
       { url: `${this.apiPath}/${year}`, params: query },
-      options
+      options,
     )) {
-      yield new ToilAllowance(res);
+      yield res;
     }
   }
 
-  async listAll(year: number, query: ToilAllowanceQueryParams, options?: Options): Promise<ToilAllowance[]> {
-    const toilAllowances = [] as ToilAllowance[];
+  async listAll(year: number, query: ToilAllowanceQueryParams, options?: Options): Promise<ApiToilAllowance[]> {
+    const toilAllowances = [] as ApiToilAllowance[];
     for await (const allowance of this.list(year, query, options)) {
       toilAllowances.push(allowance);
     }

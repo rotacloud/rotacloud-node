@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiUserBreak, ApiUserClockedIn, ApiUserClockedOut, ApiTerminalLocation } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
-import { UserClockedIn, UserClockedOut } from '../models/index.js';
-
 interface UserClockIn {
   method: string;
   shift: number;
@@ -39,27 +37,27 @@ class UserBreak {
 type RequiredPropsClockIn = 'method';
 type RequiredPropsBreak = 'method' | 'action';
 
-class UsersClockInService extends Service {
+export class UsersClockInService extends Service {
   private apiPath = '/users_clocked_in';
 
-  getClockedInUser(id: number): Promise<UserClockedIn>;
+  getClockedInUser(id: number): Promise<ApiUserClockedIn>;
   getClockedInUser(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiUserClockedIn, any>>;
-  getClockedInUser(id: number, options: Options): Promise<UserClockedIn>;
+  getClockedInUser(id: number, options: Options): Promise<ApiUserClockedIn>;
   getClockedInUser(id: number, options?: Options) {
     return super
       .fetch<ApiUserClockedIn>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedIn(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(options?: Options) {
     for await (const res of super.iterator<ApiUserClockedIn>({ url: this.apiPath }, options)) {
-      yield new UserClockedIn(res);
+      yield res;
     }
   }
 
-  listAll(options?: Options): Promise<UserClockedIn[]>;
+  listAll(options?: Options): Promise<ApiUserClockedIn[]>;
   async listAll(options?: Options) {
-    const users = [] as UserClockedIn[];
+    const users = [] as ApiUserClockedIn[];
     for await (const user of this.list(options)) {
       users.push(user);
     }
@@ -70,36 +68,36 @@ class UsersClockInService extends Service {
     return super.iterator<ApiUserClockedIn>({ url: this.apiPath }, options).byPage();
   }
 
-  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>): Promise<UserClockedIn>;
+  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>): Promise<ApiUserClockedIn>;
   clockIn(
     data: RequirementsOf<UserClockIn, RequiredPropsClockIn>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiUserClockedIn, any>>;
-  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options: Options): Promise<UserClockedIn>;
+  clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options: Options): Promise<ApiUserClockedIn>;
   clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options?: Options) {
     return super
       .fetch<ApiUserClockedIn>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedIn(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  clockOut(id: number, data: UserClockOut): Promise<UserClockedOut>;
+  clockOut(id: number, data: UserClockOut): Promise<ApiUserClockedOut>;
   clockOut(
     id: number,
     data: UserClockOut,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiUserClockedOut, any>>;
-  clockOut(id: number, data: UserClockOut, options: Options): Promise<UserClockedOut>;
+  clockOut(id: number, data: UserClockOut, options: Options): Promise<ApiUserClockedOut>;
   clockOut(id: number, data: UserClockOut, options?: Options) {
     return super
       .fetch<ApiUserClockedOut>({ url: `${this.apiPath}/${id}`, data, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new UserClockedOut(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   startBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>): Promise<UserBreak>;
   startBreak(
     id: number,
     data: RequirementsOf<UserBreak, RequiredPropsBreak>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiUserBreak, any>>;
   startBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options: Options): Promise<UserBreak>;
   startBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options?: Options) {
@@ -112,7 +110,7 @@ class UsersClockInService extends Service {
   endBreak(
     id: number,
     data: RequirementsOf<UserBreak, RequiredPropsBreak>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiUserBreak, any>>;
   endBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options: Options): Promise<UserBreak>;
   endBreak(id: number, data: RequirementsOf<UserBreak, RequiredPropsBreak>, options?: Options) {
@@ -121,5 +119,3 @@ class UsersClockInService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : new UserBreak(res.data)));
   }
 }
-
-export { UsersClockInService };

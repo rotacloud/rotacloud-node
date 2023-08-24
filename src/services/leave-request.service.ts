@@ -4,19 +4,17 @@ import { Service, Options, RequirementsOf } from './index.js';
 
 import { LeaveRequestsQueryParams } from '../interfaces/query-params/leave-requests-query-params.interface.js';
 
-import { LeaveRequest } from '../models/leave-request.model.js';
-
 type RequiredProps = 'start_date' | 'end_date' | 'type' | 'user';
 
 export class LeaveRequestService extends Service {
   private apiPath = '/leave_requests';
 
-  create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>): Promise<LeaveRequest>;
+  create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>): Promise<ApiLeaveRequest>;
   create(
     data: RequirementsOf<ApiLeaveRequest, RequiredProps>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiLeaveRequest, any>>;
-  create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options: Options): Promise<LeaveRequest>;
+  create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options: Options): Promise<ApiLeaveRequest>;
   create(data: RequirementsOf<ApiLeaveRequest, RequiredProps>, options?: Options) {
     return super
       .fetch<ApiLeaveRequest>(
@@ -25,29 +23,29 @@ export class LeaveRequestService extends Service {
           data,
           method: 'POST',
         },
-        options
+        options,
       )
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  get(id: number): Promise<LeaveRequest>;
+  get(id: number): Promise<ApiLeaveRequest>;
   get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<ApiLeaveRequest, any>>;
-  get(id: number, options: Options): Promise<LeaveRequest>;
+  get(id: number, options: Options): Promise<ApiLeaveRequest>;
   get(id: number, options?: Options) {
     return super
       .fetch<ApiLeaveRequest>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(query?: LeaveRequestsQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiLeaveRequest>({ url: this.apiPath, params: query }, options)) {
-      yield new LeaveRequest(res);
+      yield res;
     }
   }
 
-  listAll(query?: LeaveRequestsQueryParams, options?: Options): Promise<LeaveRequest[]>;
+  listAll(query?: LeaveRequestsQueryParams, options?: Options): Promise<ApiLeaveRequest[]>;
   async listAll(query: LeaveRequestsQueryParams, options?: Options) {
-    const leave = [] as LeaveRequest[];
+    const leave = [] as ApiLeaveRequest[];
     for await (const leaveRequestRecord of this.list(query, options)) {
       leave.push(leaveRequestRecord);
     }
@@ -58,13 +56,13 @@ export class LeaveRequestService extends Service {
     return super.iterator<ApiLeaveRequest>({ url: `${this.apiPath}`, params: query }, options).byPage();
   }
 
-  update(id: number, data: Partial<ApiLeaveRequest>): Promise<LeaveRequest>;
+  update(id: number, data: Partial<ApiLeaveRequest>): Promise<ApiLeaveRequest>;
   update(
     id: number,
     data: Partial<ApiLeaveRequest>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiLeaveRequest, any>>;
-  update(id: number, data: Partial<ApiLeaveRequest>, options: Options): Promise<LeaveRequest>;
+  update(id: number, data: Partial<ApiLeaveRequest>, options: Options): Promise<ApiLeaveRequest>;
   update(id: number, data: Partial<ApiLeaveRequest>, options?: Options) {
     return super
       .fetch<ApiLeaveRequest>({
@@ -72,7 +70,7 @@ export class LeaveRequestService extends Service {
         data,
         method: 'POST',
       })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new LeaveRequest(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   delete(id: number): Promise<number>;

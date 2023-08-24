@@ -2,8 +2,6 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ApiShift } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
-import { Shift } from '../models/shift.model.js';
-
 import { ShiftsQueryParams } from '../interfaces/query-params/shifts-query-params.interface.js';
 
 type RequiredProps = 'end_time' | 'start_time' | 'location';
@@ -11,36 +9,36 @@ type RequiredProps = 'end_time' | 'start_time' | 'location';
 export class ShiftsService extends Service {
   private apiPath = '/shifts';
 
-  create(data: RequirementsOf<ApiShift, RequiredProps>): Promise<Shift>;
+  create(data: RequirementsOf<ApiShift, RequiredProps>): Promise<ApiShift>;
   create(
     data: RequirementsOf<ApiShift, RequiredProps>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiShift, any>>;
-  create(data: RequirementsOf<ApiShift, RequiredProps>, options: Options): Promise<Shift>;
+  create(data: RequirementsOf<ApiShift, RequiredProps>, options: Options): Promise<ApiShift>;
   create(data: RequirementsOf<ApiShift, RequiredProps>, options?: Options) {
     return super
       .fetch<ApiShift>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new Shift(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  get(id: number): Promise<Shift>;
+  get(id: number): Promise<ApiShift>;
   get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiShift, any>>;
-  get(id: number, options: Options): Promise<Shift>;
+  get(id: number, options: Options): Promise<ApiShift>;
   get(id: number, options?: Options) {
     return super
       .fetch<ApiShift>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new Shift(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(query: ShiftsQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiShift>({ url: this.apiPath, params: query }, options)) {
-      yield new Shift(res);
+      yield res;
     }
   }
 
-  listAll(query: ShiftsQueryParams, options?: Options): Promise<Shift[]>;
+  listAll(query: ShiftsQueryParams, options?: Options): Promise<ApiShift[]>;
   async listAll(query: ShiftsQueryParams, options?: Options) {
-    const shifts = [] as Shift[];
+    const shifts = [] as ApiShift[];
     for await (const shift of this.list(query, options)) {
       shifts.push(shift);
     }
@@ -51,24 +49,24 @@ export class ShiftsService extends Service {
     return super.iterator<ApiShift>({ url: this.apiPath, params: query }, options).byPage();
   }
 
-  update(shift: RequirementsOf<ApiShift, 'id'>): Promise<Shift>;
+  update(shift: RequirementsOf<ApiShift, 'id'>): Promise<ApiShift>;
   update(
     shift: RequirementsOf<ApiShift, 'id'>,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiShift>>;
-  update(shift: RequirementsOf<ApiShift, 'id'>, options: Options): Promise<Shift>;
-  update(
-    shifts: RequirementsOf<ApiShift, 'id'>[]
-  ): Promise<{ success: Shift[]; failed: { id: number; error: string }[] }>;
-  update(shift: RequirementsOf<ApiShift, 'id'>, options: Options): Promise<Shift>;
+  update(shift: RequirementsOf<ApiShift, 'id'>, options: Options): Promise<ApiShift>;
   update(
     shifts: RequirementsOf<ApiShift, 'id'>[],
-    options: { rawResponse: true } & Options
+  ): Promise<{ success: ApiShift[]; failed: { id: number; error: string }[] }>;
+  update(shift: RequirementsOf<ApiShift, 'id'>, options: Options): Promise<ApiShift>;
+  update(
+    shifts: RequirementsOf<ApiShift, 'id'>[],
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<{ code: number; data?: ApiShift; error?: string }[]>>;
   update(
     shifts: RequirementsOf<ApiShift, 'id'>[],
-    options: Options
-  ): Promise<{ success: Shift[]; failed: { id: number; error: string }[] }>;
+    options: Options,
+  ): Promise<{ success: ApiShift[]; failed: { id: number; error: string }[] }>;
   update(shifts: RequirementsOf<ApiShift, 'id'> | RequirementsOf<ApiShift, 'id'>[], options?: Options) {
     if (!Array.isArray(shifts)) {
       return super
@@ -77,7 +75,7 @@ export class ShiftsService extends Service {
           data: shifts,
           method: 'POST',
         })
-        .then((res) => (options?.rawResponse ? res : new Shift(res.data)));
+        .then((res) => (options?.rawResponse ? res : res.data));
     }
 
     return super
@@ -89,11 +87,11 @@ export class ShiftsService extends Service {
       .then((res) => {
         if (options?.rawResponse) return res;
 
-        const success: Shift[] = [];
+        const success: ApiShift[] = [];
         const failed: { id: number; error: string }[] = [];
         for (let shiftIdx = 0; shiftIdx < res.data.length; shiftIdx += 1) {
           const { data, error } = res.data[shiftIdx];
-          if (data) success.push(new Shift(data));
+          if (data) success.push(data);
           if (error) failed.push({ id: shifts[shiftIdx].id, error });
         }
         return { success, failed };

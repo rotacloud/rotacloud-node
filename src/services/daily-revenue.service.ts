@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiDailyRevenue } from '../interfaces/daily-revenue.interface.js';
 import { Service, Options } from './index.js';
 
-import { DailyRevenue } from '../models/daily-revenue.model.js';
 import { DailyRevenueQueryParams } from '../interfaces/query-params/daily-revenue-query-params.interface.js';
 
 export class DailyRevenueService extends Service {
@@ -10,13 +9,13 @@ export class DailyRevenueService extends Service {
 
   async *list(query: DailyRevenueQueryParams, options?: Options) {
     for await (const res of super.iterator<ApiDailyRevenue>({ url: this.apiPath, params: query }, options)) {
-      yield new DailyRevenue(res);
+      yield res;
     }
   }
 
-  listAll(query: DailyRevenueQueryParams, options?: Options): Promise<DailyRevenue[]>;
+  listAll(query: DailyRevenueQueryParams, options?: Options): Promise<ApiDailyRevenue[]>;
   async listAll(query: DailyRevenueQueryParams, options?: Options) {
-    const attendance = [] as DailyRevenue[];
+    const attendance = [] as ApiDailyRevenue[];
     for await (const atten of this.list(query, options)) {
       attendance.push(atten);
     }
@@ -30,7 +29,7 @@ export class DailyRevenueService extends Service {
   update(data: Partial<ApiDailyRevenue>[]): Promise<number>;
   update(
     data: Partial<ApiDailyRevenue>[],
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiDailyRevenue, any>>;
   update(data: Partial<ApiDailyRevenue>[], options: Options): Promise<number>;
   update(data: Partial<ApiDailyRevenue>[], options?: Options) {

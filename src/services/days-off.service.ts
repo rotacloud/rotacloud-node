@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 import { ApiDaysOff } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
-import { DaysOff } from '../models/days-off.model.js';
 import { DaysOffQueryParams } from '../interfaces/query-params/days-off-query-params.interface.js';
 
 export class DaysOffService extends Service<ApiDaysOff> {
@@ -12,7 +11,7 @@ export class DaysOffService extends Service<ApiDaysOff> {
   create(
     dates: string[],
     users: number[],
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<ApiDaysOff, any>>;
   create(dates: string[], users: number[], options: Options): Promise<number>;
   create(dates: string[], users: number[], options?: Options) {
@@ -30,13 +29,13 @@ export class DaysOffService extends Service<ApiDaysOff> {
 
   async *list(query: DaysOffQueryParams, options?: Options) {
     for await (const res of super.iterator({ url: this.apiPath, params: query }, options)) {
-      yield new DaysOff(res);
+      yield res;
     }
   }
 
-  listAll(query: DaysOffQueryParams, options?: Options): Promise<DaysOff[]>;
+  listAll(query: DaysOffQueryParams, options?: Options): Promise<ApiDaysOff[]>;
   async listAll(query: DaysOffQueryParams, options?: Options) {
-    const daysOff = [] as DaysOff[];
+    const daysOff = [] as ApiDaysOff[];
     for await (const dayOff of this.list(query, options)) {
       daysOff.push(dayOff);
     }
