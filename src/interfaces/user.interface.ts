@@ -39,7 +39,7 @@ export interface User {
   pin: string | null;
 }
 
-export interface ApiUserBreak {
+export interface UserBreak {
   start_time: number;
   start_location: TerminalLocation;
   end_time?: number;

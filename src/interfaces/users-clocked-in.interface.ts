@@ -1,6 +1,6 @@
 import { Shift, TerminalLocation } from '../interfaces/index.js';
 
-export interface ApiUserClockedIn {
+export interface UserClockedIn {
   user: number;
   location: number;
   role: number;

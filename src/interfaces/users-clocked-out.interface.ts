@@ -1,6 +1,6 @@
 import { Shift, TerminalLocation } from './index.js';
 
-export interface ApiUserClockedOut {
+export interface UserClockedOut {
   id: number;
   deleted: boolean;
   approved: boolean;
