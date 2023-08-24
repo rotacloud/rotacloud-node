@@ -1,13 +1,11 @@
 import { AxiosResponse } from 'axios';
-import { ApiTerminal, ApiTerminalLocation } from '../interfaces/index.js';
+import { Terminal, TerminalLocation } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
-
-import { Terminal } from '../models/terminal.model.js';
 
 interface LaunchTerminal {
   terminal: number;
   device: string;
-  location?: ApiTerminalLocation;
+  location?: TerminalLocation;
 }
 
 interface PingTerminal {
@@ -15,7 +13,7 @@ interface PingTerminal {
   device: string;
 }
 
-class TerminalsActiveService extends Service {
+export class TerminalsActiveService extends Service {
   private apiPath = '/terminals_active';
 
   launchTerminal(data: LaunchTerminal): Promise<Terminal>;
@@ -23,19 +21,19 @@ class TerminalsActiveService extends Service {
   launchTerminal(data: LaunchTerminal, options: Options): Promise<Terminal>;
   launchTerminal(data: LaunchTerminal, options?: Options) {
     return super
-      .fetch<ApiTerminal>({
+      .fetch<Terminal>({
         url: `${this.apiPath}`,
         data,
         method: 'POST',
       })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new Terminal(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   pingTerminal(id: number, data: PingTerminal): Promise<number>;
   pingTerminal(
     id: number,
     data: PingTerminal,
-    options: { rawResponse: true } & Options
+    options: { rawResponse: true } & Options,
   ): Promise<AxiosResponse<any, any>>;
   pingTerminal(id: number, data: PingTerminal, options: Options): Promise<number>;
   pingTerminal(id: number, data: PingTerminal, options?: Options) {
@@ -45,8 +43,8 @@ class TerminalsActiveService extends Service {
   }
 
   async *list(options?: Options) {
-    for await (const res of super.iterator<ApiTerminal>({ url: this.apiPath }, options)) {
-      yield new Terminal(res);
+    for await (const res of super.iterator<Terminal>({ url: this.apiPath }, options)) {
+      yield res;
     }
   }
 
@@ -60,7 +58,7 @@ class TerminalsActiveService extends Service {
   }
 
   listByPage(options?: Options) {
-    return super.iterator<ApiTerminal>({ url: this.apiPath }, options).byPage();
+    return super.iterator<Terminal>({ url: this.apiPath }, options).byPage();
   }
 
   closeTerminal(id: number): Promise<number>;
@@ -72,4 +70,3 @@ class TerminalsActiveService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
-export { TerminalsActiveService };

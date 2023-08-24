@@ -1,8 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { ApiShift } from '../interfaces/index.js';
+import { Shift } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
-
-import { Shift } from '../models/shift.model.js';
 
 import { ShiftsQueryParams } from '../interfaces/query-params/shifts-query-params.interface.js';
 
@@ -11,30 +9,30 @@ type RequiredProps = 'end_time' | 'start_time' | 'location';
 export class ShiftsService extends Service {
   private apiPath = '/shifts';
 
-  create(data: RequirementsOf<ApiShift, RequiredProps>): Promise<Shift>;
+  create(data: RequirementsOf<Shift, RequiredProps>): Promise<Shift>;
   create(
-    data: RequirementsOf<ApiShift, RequiredProps>,
-    options: { rawResponse: true } & Options
-  ): Promise<AxiosResponse<ApiShift, any>>;
-  create(data: RequirementsOf<ApiShift, RequiredProps>, options: Options): Promise<Shift>;
-  create(data: RequirementsOf<ApiShift, RequiredProps>, options?: Options) {
+    data: RequirementsOf<Shift, RequiredProps>,
+    options: { rawResponse: true } & Options,
+  ): Promise<AxiosResponse<Shift, any>>;
+  create(data: RequirementsOf<Shift, RequiredProps>, options: Options): Promise<Shift>;
+  create(data: RequirementsOf<Shift, RequiredProps>, options?: Options) {
     return super
-      .fetch<ApiShift>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new Shift(res.data)));
+      .fetch<Shift>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<Shift>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiShift, any>>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Shift, any>>;
   get(id: number, options: Options): Promise<Shift>;
   get(id: number, options?: Options) {
     return super
-      .fetch<ApiShift>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new Shift(res.data)));
+      .fetch<Shift>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(query: ShiftsQueryParams, options?: Options) {
-    for await (const res of super.iterator<ApiShift>({ url: this.apiPath, params: query }, options)) {
-      yield new Shift(res);
+    for await (const res of super.iterator<Shift>({ url: this.apiPath, params: query }, options)) {
+      yield res;
     }
   }
 
@@ -48,40 +46,35 @@ export class ShiftsService extends Service {
   }
 
   listByPage(query: ShiftsQueryParams, options?: Options) {
-    return super.iterator<ApiShift>({ url: this.apiPath, params: query }, options).byPage();
+    return super.iterator<Shift>({ url: this.apiPath, params: query }, options).byPage();
   }
 
-  update(shift: RequirementsOf<ApiShift, 'id'>): Promise<Shift>;
+  update(shift: RequirementsOf<Shift, 'id'>): Promise<Shift>;
+  update(shift: RequirementsOf<Shift, 'id'>, options: { rawResponse: true } & Options): Promise<AxiosResponse<Shift>>;
+  update(shift: RequirementsOf<Shift, 'id'>, options: Options): Promise<Shift>;
+  update(shifts: RequirementsOf<Shift, 'id'>[]): Promise<{ success: Shift[]; failed: { id: number; error: string }[] }>;
+  update(shift: RequirementsOf<Shift, 'id'>, options: Options): Promise<Shift>;
   update(
-    shift: RequirementsOf<ApiShift, 'id'>,
-    options: { rawResponse: true } & Options
-  ): Promise<AxiosResponse<ApiShift>>;
-  update(shift: RequirementsOf<ApiShift, 'id'>, options: Options): Promise<Shift>;
+    shifts: RequirementsOf<Shift, 'id'>[],
+    options: { rawResponse: true } & Options,
+  ): Promise<AxiosResponse<{ code: number; data?: Shift; error?: string }[]>>;
   update(
-    shifts: RequirementsOf<ApiShift, 'id'>[]
+    shifts: RequirementsOf<Shift, 'id'>[],
+    options: Options,
   ): Promise<{ success: Shift[]; failed: { id: number; error: string }[] }>;
-  update(shift: RequirementsOf<ApiShift, 'id'>, options: Options): Promise<Shift>;
-  update(
-    shifts: RequirementsOf<ApiShift, 'id'>[],
-    options: { rawResponse: true } & Options
-  ): Promise<AxiosResponse<{ code: number; data?: ApiShift; error?: string }[]>>;
-  update(
-    shifts: RequirementsOf<ApiShift, 'id'>[],
-    options: Options
-  ): Promise<{ success: Shift[]; failed: { id: number; error: string }[] }>;
-  update(shifts: RequirementsOf<ApiShift, 'id'> | RequirementsOf<ApiShift, 'id'>[], options?: Options) {
+  update(shifts: RequirementsOf<Shift, 'id'> | RequirementsOf<Shift, 'id'>[], options?: Options) {
     if (!Array.isArray(shifts)) {
       return super
-        .fetch<ApiShift>({
+        .fetch<Shift>({
           url: `${this.apiPath}/${shifts.id}`,
           data: shifts,
           method: 'POST',
         })
-        .then((res) => (options?.rawResponse ? res : new Shift(res.data)));
+        .then((res) => (options?.rawResponse ? res : res.data));
     }
 
     return super
-      .fetch<{ code: number; data?: ApiShift; error?: string }[]>({
+      .fetch<{ code: number; data?: Shift; error?: string }[]>({
         url: this.apiPath,
         data: shifts,
         method: 'POST',
@@ -93,7 +86,7 @@ export class ShiftsService extends Service {
         const failed: { id: number; error: string }[] = [];
         for (let shiftIdx = 0; shiftIdx < res.data.length; shiftIdx += 1) {
           const { data, error } = res.data[shiftIdx];
-          if (data) success.push(new Shift(data));
+          if (data) success.push(data);
           if (error) failed.push({ id: shifts[shiftIdx].id, error });
         }
         return { success, failed };
@@ -108,7 +101,7 @@ export class ShiftsService extends Service {
       ? { url: this.apiPath, data: { ids }, method: 'DELETE' }
       : { url: `${this.apiPath}/${ids}`, method: 'DELETE' };
 
-    return super.fetch<ApiShift>(params).then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+    return super.fetch<Shift>(params).then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 
   acknowledge(data: number[]): Promise<number>;
@@ -116,7 +109,7 @@ export class ShiftsService extends Service {
   acknowledge(data: number[], options: Options): Promise<number>;
   acknowledge(data: number[], options?: Options) {
     return super
-      .fetch<ApiShift>({ url: '/shifts_acknowledged', data, method: 'POST' })
+      .fetch<Shift>({ url: '/shifts_acknowledged', data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 
@@ -125,7 +118,7 @@ export class ShiftsService extends Service {
   publish(data: { shifts: number[] }, options: Options): Promise<number>;
   publish(data: { shifts: number[] }, options?: Options) {
     return super
-      .fetch<ApiShift>({ url: '/shifts_published', data, method: 'POST' })
+      .fetch<Shift>({ url: '/shifts_published', data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 
@@ -134,7 +127,7 @@ export class ShiftsService extends Service {
   unpublish(data: { shifts: number[] }, options: Options): Promise<number>;
   unpublish(data: { shifts: number[] }, options?: Options) {
     return super
-      .fetch<ApiShift>({ url: '/shifts_published', data, method: 'DELETE' })
+      .fetch<Shift>({ url: '/shifts_published', data, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

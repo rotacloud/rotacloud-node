@@ -1,4 +1,4 @@
-export interface ApiLeaveType {
+export interface LeaveType {
   id: number;
   name: string;
   short_name: string;

@@ -1,4 +1,4 @@
-export interface ApiHolidayAllowance {
+export interface HolidayAllowance {
   user: number;
   default_holiday_allowance: number;
   default_holiday_allowance_unit: string;

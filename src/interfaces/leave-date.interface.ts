@@ -1,4 +1,4 @@
-export interface ApiLeaveDate {
+export interface LeaveDate {
   date: string;
   year: string;
   days: number;

@@ -1,8 +1,8 @@
-import { ApiUser } from './index.js';
+import { User } from './index.js';
 
-export interface ApiPin
+export interface Pin
   extends Omit<
-    ApiUser,
+    User,
     | 'created_at'
     | 'created_by'
     | 'deleted_at'

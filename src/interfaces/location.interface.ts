@@ -1,11 +1,11 @@
-import { ApiLocationCoordinate } from './index.js';
+import { LocationCoordinate } from './index.js';
 
-export interface ApiLocation {
+export interface Location {
   id: number;
   name: string;
   deleted: boolean;
   address: string;
-  location: ApiLocationCoordinate;
+  location: LocationCoordinate;
   timezone: number;
   users: number[];
   managers: number[];

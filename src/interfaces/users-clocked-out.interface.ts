@@ -1,6 +1,6 @@
-import { ApiShift, ApiTerminalLocation } from './index.js';
+import { Shift, TerminalLocation } from './index.js';
 
-export interface ApiUserClockedOut {
+export interface UserClockedOut {
   id: number;
   deleted: boolean;
   approved: boolean;
@@ -15,13 +15,13 @@ export interface ApiUserClockedOut {
   hours_auto: number;
   hours_is_auto: boolean;
   notes: string | null;
-  shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
+  shift: Pick<Shift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   in_method: string;
-  in_location: ApiTerminalLocation;
+  in_location: TerminalLocation;
   in_device: string | null;
   in_terminal: number | null;
   out_method: string;
-  out_location: ApiTerminalLocation;
+  out_location: TerminalLocation;
   out_device: string | null;
   out_terminal: number | null;
 }

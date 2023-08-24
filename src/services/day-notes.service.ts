@@ -1,34 +1,33 @@
 import { AxiosResponse } from 'axios';
-import { ApiDayNote } from '../interfaces/index.js';
+import { DayNote } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
-import { DayNote } from '../models/day-note.model.js';
 import { DayNotesQueryParams } from '../interfaces/query-params/day-notes-query-params.interface';
 
 export class DayNotesService extends Service {
   private apiPath = '/day_notes';
 
-  create(data: ApiDayNote): Promise<DayNote>;
-  create(data: ApiDayNote, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiDayNote, any>>;
-  create(data: ApiDayNote, options: Options): Promise<DayNote>;
-  create(data: ApiDayNote, options?: Options) {
+  create(data: DayNote): Promise<DayNote>;
+  create(data: DayNote, options: { rawResponse: true } & Options): Promise<AxiosResponse<DayNote, any>>;
+  create(data: DayNote, options: Options): Promise<DayNote>;
+  create(data: DayNote, options?: Options) {
     return super
-      .fetch<ApiDayNote>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)));
+      .fetch<DayNote>({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<DayNote>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiDayNote, any>>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<DayNote, any>>;
   get(id: number, options: Options): Promise<DayNote>;
   get(id: number, options?: Options) {
     return super
-      .fetch<ApiDayNote>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)));
+      .fetch<DayNote>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(query: DayNotesQueryParams, options?: Options) {
-    for await (const res of super.iterator<ApiDayNote>({ url: this.apiPath, params: query }, options)) {
-      yield new DayNote(res);
+    for await (const res of super.iterator<DayNote>({ url: this.apiPath, params: query }, options)) {
+      yield res;
     }
   }
 
@@ -42,24 +41,24 @@ export class DayNotesService extends Service {
   }
 
   listByPage(query: DayNotesQueryParams, options?: Options) {
-    return super.iterator<ApiDayNote>({ url: this.apiPath, params: query }, options).byPage();
+    return super.iterator<DayNote>({ url: this.apiPath, params: query }, options).byPage();
   }
 
-  update(id: number, data: Partial<ApiDayNote>): Promise<DayNote>;
+  update(id: number, data: Partial<DayNote>): Promise<DayNote>;
   update(
     id: number,
-    data: Partial<ApiDayNote>,
-    options: { rawResponse: true } & Options
-  ): Promise<AxiosResponse<ApiDayNote, any>>;
-  update(id: number, data: Partial<ApiDayNote>, options: Options): Promise<DayNote>;
-  update(id: number, data: Partial<ApiDayNote>, options?: Options) {
+    data: Partial<DayNote>,
+    options: { rawResponse: true } & Options,
+  ): Promise<AxiosResponse<DayNote, any>>;
+  update(id: number, data: Partial<DayNote>, options: Options): Promise<DayNote>;
+  update(id: number, data: Partial<DayNote>, options?: Options) {
     return super
-      .fetch<ApiDayNote>({
+      .fetch<DayNote>({
         url: `${this.apiPath}/${id}`,
         data,
         method: 'POST',
       })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : new DayNote(res.data)));
+      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   delete(id: number): Promise<number>;
@@ -67,7 +66,7 @@ export class DayNotesService extends Service {
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<ApiDayNote>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .fetch<DayNote>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

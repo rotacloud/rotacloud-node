@@ -1,4 +1,4 @@
-export interface ApiDailyRevenue {
+export interface DailyRevenue {
   date: string;
   location: number;
   labour_percentage: number;

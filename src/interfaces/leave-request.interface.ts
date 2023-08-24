@@ -1,6 +1,6 @@
-import { ApiLeaveDate } from './leave-date.interface';
+import { LeaveDate } from './leave-date.interface';
 
-export interface ApiLeaveRequest {
+export interface LeaveRequest {
   id: number;
   deleted: boolean;
   type: number;
@@ -10,5 +10,5 @@ export interface ApiLeaveRequest {
   start_am_pm: string;
   end_date: string;
   end_am_pm: string;
-  dates: ApiLeaveDate[];
+  dates: LeaveDate[];
 }
