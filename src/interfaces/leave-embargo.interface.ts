@@ -1,4 +1,4 @@
-export interface ApiLeaveEmbargo {
+export interface LeaveEmbargo {
   id: number;
   start_date: string;
   start_am_pm: string;

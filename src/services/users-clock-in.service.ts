@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ApiUserBreak, ApiUserClockedIn, ApiUserClockedOut, ApiTerminalLocation } from '../interfaces/index.js';
+import { ApiUserBreak, ApiUserClockedIn, ApiUserClockedOut, TerminalLocation } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 interface UserClockIn {
@@ -8,7 +8,7 @@ interface UserClockIn {
   terminal: number;
   user: number;
   photo?: string;
-  location: ApiTerminalLocation;
+  location: TerminalLocation;
 }
 
 interface UserClockOut extends Omit<UserClockIn, 'user' | 'shift'> {}
@@ -18,14 +18,14 @@ interface UserBreak {
   action: string;
   terminal: number;
   photo?: string;
-  location: ApiTerminalLocation;
+  location: TerminalLocation;
 }
 
 class UserBreak {
   public start_time: number;
-  public start_location: ApiTerminalLocation;
+  public start_location: TerminalLocation;
   public end_time: number | null;
-  public end_location: ApiTerminalLocation | null;
+  public end_location: TerminalLocation | null;
   constructor(apiUserBreak: ApiUserBreak) {
     this.start_time = apiUserBreak.start_time;
     this.start_location = apiUserBreak.start_location;

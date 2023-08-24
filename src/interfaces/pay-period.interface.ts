@@ -1,4 +1,4 @@
-export interface ApiPayPeriod {
+export interface PayPeriod {
   id: number;
   start_date: string;
   end_date: string;

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ApiTerminal } from '../interfaces/index.js';
+import { Terminal } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 type RequiredProps = 'name' | 'timezone';
@@ -7,37 +7,37 @@ type RequiredProps = 'name' | 'timezone';
 export class TerminalsService extends Service {
   private apiPath = '/terminals';
 
-  create(data: RequirementsOf<ApiTerminal, RequiredProps>): Promise<ApiTerminal>;
+  create(data: RequirementsOf<Terminal, RequiredProps>): Promise<Terminal>;
   create(
-    data: RequirementsOf<ApiTerminal, RequiredProps>,
+    data: RequirementsOf<Terminal, RequiredProps>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiTerminal, any>>;
-  create(data: RequirementsOf<ApiTerminal, RequiredProps>, options: Options): Promise<ApiTerminal>;
-  create(data: RequirementsOf<ApiTerminal, RequiredProps>, options?: Options) {
+  ): Promise<AxiosResponse<Terminal, any>>;
+  create(data: RequirementsOf<Terminal, RequiredProps>, options: Options): Promise<Terminal>;
+  create(data: RequirementsOf<Terminal, RequiredProps>, options?: Options) {
     return super
-      .fetch<ApiTerminal>({ url: this.apiPath, data, method: 'POST' })
+      .fetch<Terminal>({ url: this.apiPath, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  get(id: number): Promise<ApiTerminal>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiTerminal, any>>;
-  get(id: number, options: Options): Promise<ApiTerminal>;
+  get(id: number): Promise<Terminal>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Terminal, any>>;
+  get(id: number, options: Options): Promise<Terminal>;
   get(id: number, options?: Options) {
     return super
-      .fetch<ApiTerminal>({ url: `${this.apiPath}/${id}` }, options)
+      .fetch<Terminal>({ url: `${this.apiPath}/${id}` }, options)
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  update(id: number, data: Partial<ApiTerminal>): Promise<ApiTerminal>;
+  update(id: number, data: Partial<Terminal>): Promise<Terminal>;
   update(
     id: number,
-    data: Partial<ApiTerminal>,
+    data: Partial<Terminal>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiTerminal, any>>;
-  update(id: number, data: Partial<ApiTerminal>, options: Options): Promise<ApiTerminal>;
-  update(id: number, data: Partial<ApiTerminal>, options?: Options) {
+  ): Promise<AxiosResponse<Terminal, any>>;
+  update(id: number, data: Partial<Terminal>, options: Options): Promise<Terminal>;
+  update(id: number, data: Partial<Terminal>, options?: Options) {
     return super
-      .fetch<ApiTerminal>({
+      .fetch<Terminal>({
         url: `${this.apiPath}/${id}`,
         data,
         method: 'POST',
@@ -55,14 +55,14 @@ export class TerminalsService extends Service {
   }
 
   async *list(options?: Options) {
-    for await (const res of super.iterator<ApiTerminal>({ url: this.apiPath }, options)) {
+    for await (const res of super.iterator<Terminal>({ url: this.apiPath }, options)) {
       yield res;
     }
   }
 
-  listAll(options?: Options): Promise<ApiTerminal[]>;
+  listAll(options?: Options): Promise<Terminal[]>;
   async listAll(options?: Options) {
-    const users = [] as ApiTerminal[];
+    const users = [] as Terminal[];
     for await (const user of this.list(options)) {
       users.push(user);
     }
@@ -70,6 +70,6 @@ export class TerminalsService extends Service {
   }
 
   listByPage(options?: Options) {
-    return super.iterator<ApiTerminal>({ url: this.apiPath }, options).byPage();
+    return super.iterator<Terminal>({ url: this.apiPath }, options).byPage();
   }
 }

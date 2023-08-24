@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
-import { ApiDaysOff } from '../interfaces/index.js';
+import { DaysOff } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
 import { DaysOffQueryParams } from '../interfaces/query-params/days-off-query-params.interface.js';
 
-export class DaysOffService extends Service<ApiDaysOff> {
+export class DaysOffService extends Service<DaysOff> {
   private apiPath = '/days_off';
 
   create(dates: string[], users: number[]): Promise<number>;
@@ -12,7 +12,7 @@ export class DaysOffService extends Service<ApiDaysOff> {
     dates: string[],
     users: number[],
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiDaysOff, any>>;
+  ): Promise<AxiosResponse<DaysOff, any>>;
   create(dates: string[], users: number[], options: Options): Promise<number>;
   create(dates: string[], users: number[], options?: Options) {
     return super
@@ -33,9 +33,9 @@ export class DaysOffService extends Service<ApiDaysOff> {
     }
   }
 
-  listAll(query: DaysOffQueryParams, options?: Options): Promise<ApiDaysOff[]>;
+  listAll(query: DaysOffQueryParams, options?: Options): Promise<DaysOff[]>;
   async listAll(query: DaysOffQueryParams, options?: Options) {
-    const daysOff = [] as ApiDaysOff[];
+    const daysOff = [] as DaysOff[];
     for await (const dayOff of this.list(query, options)) {
       daysOff.push(dayOff);
     }

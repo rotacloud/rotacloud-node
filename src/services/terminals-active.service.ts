@@ -1,11 +1,11 @@
 import { AxiosResponse } from 'axios';
-import { ApiTerminal, ApiTerminalLocation } from '../interfaces/index.js';
+import { Terminal, TerminalLocation } from '../interfaces/index.js';
 import { Service, Options } from './index.js';
 
 interface LaunchTerminal {
   terminal: number;
   device: string;
-  location?: ApiTerminalLocation;
+  location?: TerminalLocation;
 }
 
 interface PingTerminal {
@@ -16,12 +16,12 @@ interface PingTerminal {
 export class TerminalsActiveService extends Service {
   private apiPath = '/terminals_active';
 
-  launchTerminal(data: LaunchTerminal): Promise<ApiTerminal>;
+  launchTerminal(data: LaunchTerminal): Promise<Terminal>;
   launchTerminal(data: LaunchTerminal, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
-  launchTerminal(data: LaunchTerminal, options: Options): Promise<ApiTerminal>;
+  launchTerminal(data: LaunchTerminal, options: Options): Promise<Terminal>;
   launchTerminal(data: LaunchTerminal, options?: Options) {
     return super
-      .fetch<ApiTerminal>({
+      .fetch<Terminal>({
         url: `${this.apiPath}`,
         data,
         method: 'POST',
@@ -43,14 +43,14 @@ export class TerminalsActiveService extends Service {
   }
 
   async *list(options?: Options) {
-    for await (const res of super.iterator<ApiTerminal>({ url: this.apiPath }, options)) {
+    for await (const res of super.iterator<Terminal>({ url: this.apiPath }, options)) {
       yield res;
     }
   }
 
-  listAll(options?: Options): Promise<ApiTerminal[]>;
+  listAll(options?: Options): Promise<Terminal[]>;
   async listAll(options?: Options) {
-    const users = [] as ApiTerminal[];
+    const users = [] as Terminal[];
     for await (const user of this.list(options)) {
       users.push(user);
     }
@@ -58,7 +58,7 @@ export class TerminalsActiveService extends Service {
   }
 
   listByPage(options?: Options) {
-    return super.iterator<ApiTerminal>({ url: this.apiPath }, options).byPage();
+    return super.iterator<Terminal>({ url: this.apiPath }, options).byPage();
   }
 
   closeTerminal(id: number): Promise<number>;

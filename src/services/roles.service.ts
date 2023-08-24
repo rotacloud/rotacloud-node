@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ApiRole } from '../interfaces/index.js';
+import { Role } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { RolesQueryParams } from '../interfaces/query-params/roles-query-params.interface.js';
@@ -9,36 +9,36 @@ type RequiredProps = 'name';
 export class RolesService extends Service {
   private apiPath = '/roles';
 
-  create(data: RequirementsOf<ApiRole, RequiredProps>): Promise<ApiRole>;
+  create(data: RequirementsOf<Role, RequiredProps>): Promise<Role>;
   create(
-    data: RequirementsOf<ApiRole, RequiredProps>,
+    data: RequirementsOf<Role, RequiredProps>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiRole, any>>;
-  create(data: RequirementsOf<ApiRole, RequiredProps>, options: Options): Promise<ApiRole>;
-  create(data: RequirementsOf<ApiRole, RequiredProps>, options?: Options) {
+  ): Promise<AxiosResponse<Role, any>>;
+  create(data: RequirementsOf<Role, RequiredProps>, options: Options): Promise<Role>;
+  create(data: RequirementsOf<Role, RequiredProps>, options?: Options) {
     return super
-      .fetch<ApiRole>({ url: this.apiPath, data, method: 'POST' })
+      .fetch<Role>({ url: this.apiPath, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  get(id: number): Promise<ApiRole>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiRole, any>>;
-  get(id: number, options: Options): Promise<ApiRole>;
+  get(id: number): Promise<Role>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Role, any>>;
+  get(id: number, options: Options): Promise<Role>;
   get(id: number, options?: Options) {
     return super
-      .fetch<ApiRole>({ url: `${this.apiPath}/${id}` }, options)
+      .fetch<Role>({ url: `${this.apiPath}/${id}` }, options)
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(query?: RolesQueryParams, options?: Options) {
-    for await (const res of super.iterator<ApiRole>({ url: this.apiPath, params: query }, options)) {
+    for await (const res of super.iterator<Role>({ url: this.apiPath, params: query }, options)) {
       yield res;
     }
   }
 
-  listAll(query?: RolesQueryParams, options?: Options): Promise<ApiRole[]>;
+  listAll(query?: RolesQueryParams, options?: Options): Promise<Role[]>;
   async listAll(query: RolesQueryParams, options?: Options) {
-    const roles = [] as ApiRole[];
+    const roles = [] as Role[];
     for await (const role of this.list(query, options)) {
       roles.push(role);
     }
@@ -46,18 +46,14 @@ export class RolesService extends Service {
   }
 
   listByPage(query?: RolesQueryParams, options?: Options) {
-    return super.iterator<ApiRole>({ url: this.apiPath, params: query }, options).byPage();
+    return super.iterator<Role>({ url: this.apiPath, params: query }, options).byPage();
   }
-  update(id: number, data: Partial<ApiRole>): Promise<ApiRole>;
-  update(
-    id: number,
-    data: Partial<ApiRole>,
-    options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiRole, any>>;
-  update(id: number, data: Partial<ApiRole>, options: Options): Promise<ApiRole>;
-  update(id: number, data: Partial<ApiRole>, options?: Options) {
+  update(id: number, data: Partial<Role>): Promise<Role>;
+  update(id: number, data: Partial<Role>, options: { rawResponse: true } & Options): Promise<AxiosResponse<Role, any>>;
+  update(id: number, data: Partial<Role>, options: Options): Promise<Role>;
+  update(id: number, data: Partial<Role>, options?: Options) {
     return super
-      .fetch<ApiRole>({
+      .fetch<Role>({
         url: `${this.apiPath}/${id}`,
         data,
         method: 'POST',
@@ -70,7 +66,7 @@ export class RolesService extends Service {
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<ApiRole>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .fetch<Role>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }

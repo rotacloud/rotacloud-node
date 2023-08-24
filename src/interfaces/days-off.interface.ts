@@ -1,9 +1,9 @@
-export interface ApiDayOff {
+export interface DayOff {
   date: string;
   day_off: boolean;
 }
 
-export interface ApiDaysOff {
+export interface DaysOff {
   user: number;
-  dates: ApiDayOff[];
+  dates: DayOff[];
 }

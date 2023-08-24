@@ -1,4 +1,4 @@
-export interface ApiLogbookEvent {
+export interface LogbookEvent {
   id: number;
   created_at: number;
   created_by: number;

@@ -2,7 +2,7 @@ export interface PayCodes {
   [pay_code_id: string]: string | { [leave_type_id: string]: string };
 }
 
-export interface ApiSettings {
+export interface Settings {
   attendance_record_breaks: string;
   automatically_clock_in_to_consecutive_shifts: boolean;
   availability_employees_can_edit: boolean;

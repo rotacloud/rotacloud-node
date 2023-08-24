@@ -1,4 +1,4 @@
-import { ApiShift, ApiTerminalLocation } from '../interfaces/index.js';
+import { Shift, TerminalLocation } from '../interfaces/index.js';
 
 export interface ApiUserClockedIn {
   user: number;
@@ -6,9 +6,9 @@ export interface ApiUserClockedIn {
   role: number;
   in_time: number;
   minutes_late: number;
-  shift: Pick<ApiShift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
+  shift: Pick<Shift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
   in_method: string;
-  in_location: ApiTerminalLocation;
+  in_location: TerminalLocation;
   in_device: string | null;
   in_terminal: number | null;
 }

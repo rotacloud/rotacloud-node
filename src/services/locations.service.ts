@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { ApiLocation } from '../interfaces/index.js';
+import { Location } from '../interfaces/index.js';
 import { Service, Options, RequirementsOf } from './index.js';
 
 import { LocationsQueryParams } from '../interfaces/query-params/locations-query-params.interface.js';
@@ -9,36 +9,36 @@ type RequiredProps = 'name';
 export class LocationsService extends Service {
   private apiPath = '/locations';
 
-  create(data: RequirementsOf<ApiLocation, RequiredProps>): Promise<ApiLocation>;
+  create(data: RequirementsOf<Location, RequiredProps>): Promise<Location>;
   create(
-    data: RequirementsOf<ApiLocation, RequiredProps>,
+    data: RequirementsOf<Location, RequiredProps>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiLocation, any>>;
-  create(data: RequirementsOf<ApiLocation, RequiredProps>, options: Options): Promise<ApiLocation>;
-  create(data: RequirementsOf<ApiLocation, RequiredProps>, options?: Options) {
+  ): Promise<AxiosResponse<Location, any>>;
+  create(data: RequirementsOf<Location, RequiredProps>, options: Options): Promise<Location>;
+  create(data: RequirementsOf<Location, RequiredProps>, options?: Options) {
     return super
-      .fetch<ApiLocation>({ url: `${this.apiPath}`, data, method: 'POST' })
+      .fetch<Location>({ url: `${this.apiPath}`, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
-  get(id: number): Promise<ApiLocation>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<ApiLocation, any>>;
-  get(id: number, options: Options): Promise<ApiLocation>;
+  get(id: number): Promise<Location>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Location, any>>;
+  get(id: number, options: Options): Promise<Location>;
   get(id: number, options?: Options) {
     return super
-      .fetch<ApiLocation>({ url: `${this.apiPath}/${id}` }, options)
+      .fetch<Location>({ url: `${this.apiPath}/${id}` }, options)
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   async *list(query?: LocationsQueryParams, options?: Options) {
-    for await (const res of super.iterator<ApiLocation>({ url: this.apiPath, params: query }, options)) {
+    for await (const res of super.iterator<Location>({ url: this.apiPath, params: query }, options)) {
       yield res;
     }
   }
 
-  listAll(query?: LocationsQueryParams, options?: Options): Promise<ApiLocation[]>;
+  listAll(query?: LocationsQueryParams, options?: Options): Promise<Location[]>;
   async listAll(query: LocationsQueryParams, options?: Options) {
-    const locations = [] as ApiLocation[];
+    const locations = [] as Location[];
     for await (const location of this.list(query, options)) {
       locations.push(location);
     }
@@ -46,19 +46,19 @@ export class LocationsService extends Service {
   }
 
   listByPage(query?: LocationsQueryParams, options?: Options) {
-    return super.iterator<ApiLocation>({ url: this.apiPath, params: query }, options).byPage();
+    return super.iterator<Location>({ url: this.apiPath, params: query }, options).byPage();
   }
 
-  update(id: number, data: Partial<ApiLocation>): Promise<ApiLocation>;
+  update(id: number, data: Partial<Location>): Promise<Location>;
   update(
     id: number,
-    data: Partial<ApiLocation>,
+    data: Partial<Location>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<ApiLocation, any>>;
-  update(id: number, data: Partial<ApiLocation>, options: Options): Promise<ApiLocation>;
-  update(id: number, data: Partial<ApiLocation>, options?: Options) {
+  ): Promise<AxiosResponse<Location, any>>;
+  update(id: number, data: Partial<Location>, options: Options): Promise<Location>;
+  update(id: number, data: Partial<Location>, options?: Options) {
     return super
-      .fetch<ApiLocation>({
+      .fetch<Location>({
         url: `${this.apiPath}/${id}`,
         data,
         method: 'POST',
@@ -71,7 +71,7 @@ export class LocationsService extends Service {
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<ApiLocation>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .fetch<Location>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
