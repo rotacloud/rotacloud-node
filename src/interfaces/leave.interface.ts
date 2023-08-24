@@ -1,6 +1,6 @@
-import { ApiLeaveDate } from './index.js';
+import { LeaveDate } from './index.js';
 
-export interface ApiLeave {
+export interface Leave {
   id: number;
   deleted: boolean;
   deleted_at: number | null;
@@ -19,7 +19,7 @@ export interface ApiLeave {
   hours: { [key: string]: number | null };
   hours_method: string;
   hours_set: boolean;
-  dates: ApiLeaveDate[];
+  dates: LeaveDate[];
   requested_at: number;
   paid: boolean;
   replied_at: number;

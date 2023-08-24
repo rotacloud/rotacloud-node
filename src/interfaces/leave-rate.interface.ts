@@ -1,3 +1,3 @@
-export interface ApiLeaveRate {
+export interface LeaveRate {
   [key: string]: number;
 }

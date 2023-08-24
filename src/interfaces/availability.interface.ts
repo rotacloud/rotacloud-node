@@ -1,15 +1,15 @@
-export interface ApiAvailabilityPeriod {
+export interface AvailabilityPeriod {
   start_time: string;
   end_time: string;
 }
 
-export interface ApiAvailabilityDate {
+export interface AvailabilityDate {
   date: string;
-  available: ApiAvailabilityPeriod[];
-  unavailable: ApiAvailabilityPeriod[];
+  available: AvailabilityPeriod[];
+  unavailable: AvailabilityPeriod[];
 }
 
-export interface ApiAvailability {
+export interface Availability {
   user: number;
-  dates: ApiAvailabilityDate[];
+  dates: AvailabilityDate[];
 }

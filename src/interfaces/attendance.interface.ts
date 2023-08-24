@@ -1,12 +1,12 @@
-import { ApiShift } from './index.js';
+import { Shift } from './index.js';
 
-export interface ApiAttendanceLocation {
+export interface AttendanceLocation {
   lat: number;
   lng: number;
   accuracy: number;
 }
 
-export interface ApiAttendance {
+export interface Attendance {
   id: number;
   deleted: boolean;
   approved: boolean;
@@ -21,11 +21,11 @@ export interface ApiAttendance {
   hours_auto: number;
   hours_is_auto: boolean;
   notes: string | null;
-  shift: ApiShift | null;
+  shift: Shift | null;
   in_method: string;
   out_method: string;
-  in_location: ApiAttendanceLocation;
-  out_location: ApiAttendanceLocation;
+  in_location: AttendanceLocation;
+  out_location: AttendanceLocation;
   in_device: number;
   out_device: number;
   in_terminal: null;

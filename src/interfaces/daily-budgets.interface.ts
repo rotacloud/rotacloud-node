@@ -1,4 +1,4 @@
-export interface ApiDailyBudgets {
+export interface DailyBudgets {
   date: string;
   location: number;
   hours_budget: number;

@@ -1,4 +1,4 @@
-export interface ApiTerminal {
+export interface Terminal {
   id: number;
   deleted: boolean;
   name: string;
@@ -7,7 +7,7 @@ export interface ApiTerminal {
   device: string | null;
   version: string | null;
   ip: string | null;
-  location: ApiTerminalLocation | null;
+  location: TerminalLocation | null;
   timezone: number;
   require_photo: boolean;
   require_photo_breaks: boolean;
@@ -15,7 +15,7 @@ export interface ApiTerminal {
   secret: string | null;
 }
 
-export interface ApiTerminalLocation {
+export interface TerminalLocation {
   lat: number;
   lng: number;
   accuracy: number;

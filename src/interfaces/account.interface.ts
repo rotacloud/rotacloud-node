@@ -1,6 +1,6 @@
-import { ApiAccountServices } from './index.js';
+import { AccountServices } from './index.js';
 
-export interface ApiAccount {
+export interface Account {
   id: number;
   name: string;
   level: string;
@@ -16,7 +16,7 @@ export interface ApiAccount {
   county: string | null;
   postcode: string | null;
   country: number;
-  services: ApiAccountServices[];
+  services: AccountServices[];
   total_price: number;
   pricing: object;
   expires_in: number;

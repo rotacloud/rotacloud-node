@@ -1,4 +1,4 @@
-export interface ApiShift {
+export interface Shift {
   id: number;
   deleted: boolean;
   deleted_at: number | null;

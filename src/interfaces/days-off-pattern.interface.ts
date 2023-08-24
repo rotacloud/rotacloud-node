@@ -1,4 +1,4 @@
-export interface ApiDaysOffPattern {
+export interface DaysOffPattern {
   id: number;
   user: number;
   start_date: string;

@@ -1,8 +1,8 @@
-import { ApiAvailabilityPeriod } from './index.js';
+import { AvailabilityPeriod } from './index.js';
 
-export interface ApiAvailabilityPatternAvailability {
-  available: ApiAvailabilityPeriod[];
-  unavailable: ApiAvailabilityPeriod[];
+export interface AvailabilityPatternAvailability {
+  available: AvailabilityPeriod[];
+  unavailable: AvailabilityPeriod[];
 }
 
 export interface ApiAvailabilityPattern {
@@ -12,11 +12,11 @@ export interface ApiAvailabilityPattern {
   start_date: string;
   end_date: string;
   repeat_weeks: number;
-  mon: ApiAvailabilityPatternAvailability;
-  tue: ApiAvailabilityPatternAvailability;
-  wed: ApiAvailabilityPatternAvailability;
-  thu: ApiAvailabilityPatternAvailability;
-  fri: ApiAvailabilityPatternAvailability;
-  sat: ApiAvailabilityPatternAvailability;
-  sun: ApiAvailabilityPatternAvailability;
+  mon: AvailabilityPatternAvailability;
+  tue: AvailabilityPatternAvailability;
+  wed: AvailabilityPatternAvailability;
+  thu: AvailabilityPatternAvailability;
+  fri: AvailabilityPatternAvailability;
+  sat: AvailabilityPatternAvailability;
+  sun: AvailabilityPatternAvailability;
 }

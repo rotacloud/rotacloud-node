@@ -1,16 +1,15 @@
 import { AxiosResponse } from 'axios';
-import { ApiDailyBudgets } from '../interfaces/daily-budgets.interface.js';
+import { DailyBudgets } from '../interfaces/daily-budgets.interface.js';
 import { Service, Options } from './index.js';
 
-import { DailyBudgets } from '../models/daily-budgets.model.js';
 import { DailyBudgetsQueryParams } from '../interfaces/query-params/daily-budgets-query-params.interface.js';
 
 export class DailyBudgetsService extends Service {
   private apiPath = '/daily_budgets';
 
   async *list(query: DailyBudgetsQueryParams, options?: Options) {
-    for await (const res of super.iterator<ApiDailyBudgets>({ url: this.apiPath, params: query }, options)) {
-      yield new DailyBudgets(res);
+    for await (const res of super.iterator<DailyBudgets>({ url: this.apiPath, params: query }, options)) {
+      yield res;
     }
   }
 
@@ -24,18 +23,18 @@ export class DailyBudgetsService extends Service {
   }
 
   listByPage(query: DailyBudgetsQueryParams, options?: Options) {
-    return super.iterator<ApiDailyBudgets>({ url: this.apiPath, params: query }, options).byPage();
+    return super.iterator<DailyBudgets>({ url: this.apiPath, params: query }, options).byPage();
   }
 
-  update(data: Partial<ApiDailyBudgets>[]): Promise<number>;
+  update(data: Partial<DailyBudgets>[]): Promise<number>;
   update(
-    data: Partial<ApiDailyBudgets>[],
-    options: { rawResponse: true } & Options
-  ): Promise<AxiosResponse<ApiDailyBudgets, any>>;
-  update(data: Partial<ApiDailyBudgets>[], options: Options): Promise<number>;
-  update(data: Partial<ApiDailyBudgets>[], options?: Options) {
+    data: Partial<DailyBudgets>[],
+    options: { rawResponse: true } & Options,
+  ): Promise<AxiosResponse<DailyBudgets, any>>;
+  update(data: Partial<DailyBudgets>[], options: Options): Promise<number>;
+  update(data: Partial<DailyBudgets>[], options?: Options) {
     return super
-      .fetch<ApiDailyBudgets>({
+      .fetch<DailyBudgets>({
         url: `${this.apiPath}`,
         data,
         method: 'POST',

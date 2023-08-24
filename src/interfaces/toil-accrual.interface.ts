@@ -1,4 +1,4 @@
-export interface ApiToilAccrual {
+export interface ToilAccrual {
   comments: string;
   created_at: number;
   created_by: number | null;

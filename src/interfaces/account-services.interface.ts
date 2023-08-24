@@ -1,7 +1,7 @@
-import { ApiAccountService } from './index.js';
+import { AccountService } from './index.js';
 
-export interface ApiAccountServices {
-  time_attendance: ApiAccountService;
-  sms: ApiAccountService;
-  pro: ApiAccountService;
+export interface AccountServices {
+  time_attendance: AccountService;
+  sms: AccountService;
+  pro: AccountService;
 }

@@ -1,4 +1,4 @@
-export interface ApiAccountService {
+export interface AccountService {
   active: boolean;
   billed: boolean;
   hidden: boolean;

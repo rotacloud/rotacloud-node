@@ -1,4 +1,4 @@
-export interface ApiDayNote {
+export interface DayNote {
   id: number;
   start_date: string;
   end_date: string;
