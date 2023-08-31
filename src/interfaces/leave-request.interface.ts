@@ -11,4 +11,7 @@ export interface LeaveRequest {
   end_date: string;
   end_am_pm: string;
   dates: LeaveDate[];
+  hours: { [key: string]: number | null };
+  hours_method: string;
+  requested_at: number;
 }
