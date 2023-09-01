@@ -15,7 +15,7 @@ export interface LeaveRequest {
   start_am_pm: string;
   end_date: string;
   end_am_pm: string;
-  hours: { [year: `${number}`]: number | null };
+  hours: { [year: number]: number | null };
   hours_method: string;
   hours_set: boolean;
   dates: LeaveDate[];
