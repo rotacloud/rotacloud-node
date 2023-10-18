@@ -19,6 +19,7 @@ import {
   ShiftsService,
   TerminalsService,
   TerminalsActiveService,
+  TimeZoneService,
   ToilAccrualsService,
   ToilAllowanceService,
   UsersService,
@@ -56,6 +57,7 @@ export class RotaCloud {
   public shifts = new ShiftsService();
   public terminals = new TerminalsService();
   public terminalsActive = new TerminalsActiveService();
+  public timeZone = new TimeZoneService();
   public toilAccruals = new ToilAccrualsService();
   public toilAllowance = new ToilAllowanceService();
   public usersClockInService = new UsersClockInService();

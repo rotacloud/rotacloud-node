@@ -13,6 +13,7 @@ export interface Terminal {
   require_photo_breaks: boolean;
   debug: boolean;
   secret: string | null;
+  server_time?: number;
 }
 
 export interface TerminalLocation {
