@@ -28,7 +28,7 @@ export class DaysOffService extends Service<DaysOff> {
   }
 
   async *list(query: DaysOffQueryParams, options?: Options) {
-    for await (const res of super.iterator({ url: this.apiPath, params: query }, options)) {
+    for await (const res of super.iterator<DaysOff>({ url: this.apiPath, params: query }, options)) {
       yield res;
     }
   }

@@ -27,10 +27,11 @@ export type RetryOptions =
       maxRetries: number;
     };
 
-export interface Options {
+export interface Options<T = unknown> {
   rawResponse?: boolean;
   expand?: string[];
-  fields?: string[];
+  fields?: (keyof T)[];
+  // fields?: (keyof T | `${keyof T}.${string}`)[];
   limit?: number;
   offset?: number;
   dryRun?: boolean;
@@ -51,7 +52,7 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
   },
 };
 
-type ParameterPrimitive = string | boolean | number | null;
+type ParameterPrimitive = string | boolean | number | null | symbol;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
@@ -65,7 +66,7 @@ export abstract class Service<ApiResponse = any> {
         const parsedError = this.parseClientError(error);
 
         return Promise.reject(parsedError);
-      }
+      },
     );
     return client;
   }
@@ -87,7 +88,7 @@ export abstract class Service<ApiResponse = any> {
     return endpoint === '/leave_requests';
   }
 
-  private buildQueryParams(options?: Options, extraParams?: Record<string, ParameterValue>) {
+  private buildQueryParams<T = ApiResponse>(options?: Options<T>, extraParams?: Record<string, ParameterValue>) {
     const queryParams: Record<string, ParameterValue> = {
       expand: options?.expand,
       fields: options?.fields,
@@ -109,7 +110,10 @@ export abstract class Service<ApiResponse = any> {
     return new URLSearchParams(reducedParams);
   }
 
-  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
+  fetch<T = ApiResponse, TOptions = ApiResponse>(
+    reqConfig: AxiosRequestConfig,
+    options?: Options<TOptions>,
+  ): Promise<AxiosResponse<T>> {
     const headers: Record<string, string> = {
       Authorization: RotaCloud.config.apiKey
         ? `Bearer ${RotaCloud.config.apiKey}`
@@ -161,12 +165,12 @@ export abstract class Service<ApiResponse = any> {
   }
 
   /** Iterates through every page for a potentially paginated request */
-  private async *fetchPages<T>(
+  private async *fetchPages<T = ApiResponse>(
     reqConfig: AxiosRequestConfig<T[]>,
-    options: Options | undefined
+    options: Options<T> | undefined,
   ): AsyncGenerator<AxiosResponse<T[]>> {
     const fallbackLimit = 20;
-    const res = await this.fetch<T[]>(reqConfig, options);
+    const res = await this.fetch<T[], T>(reqConfig, options);
     yield res;
 
     const limit = Number(res.headers['x-limit']) || fallbackLimit;
@@ -174,17 +178,17 @@ export abstract class Service<ApiResponse = any> {
     const requestOffset = Number(res.headers['x-offset']) || 0;
 
     for (let offset = requestOffset + limit; offset < entityCount; offset += limit) {
-      yield this.fetch<T[]>(reqConfig, { ...options, offset });
+      yield this.fetch<T[], T>(reqConfig, { ...options, offset });
     }
   }
 
-  private async *listResponses<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
+  private async *listResponses<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options<T>) {
     for await (const res of this.fetchPages<T>(reqConfig, options)) {
       yield* res.data;
     }
   }
 
-  iterator<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
+  iterator<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options<T>) {
     return {
       [Symbol.asyncIterator]: () => this.listResponses<T>(reqConfig, options),
       byPage: () => this.fetchPages<T>(reqConfig, options),
