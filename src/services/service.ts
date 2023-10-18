@@ -109,9 +109,9 @@ export abstract class Service<ApiResponse = any> {
     return new URLSearchParams(reducedParams);
   }
 
-  fetch<T = ApiResponse, TOptions = ApiResponse>(
+  fetch<T = ApiResponse>(
     reqConfig: AxiosRequestConfig,
-    options?: Options<TOptions>,
+    options?: Options<T extends Array<unknown> ? T[number] : T>,
   ): Promise<AxiosResponse<T>> {
     const headers: Record<string, string> = {
       Authorization: RotaCloud.config.apiKey
@@ -169,7 +169,7 @@ export abstract class Service<ApiResponse = any> {
     options: Options<T> | undefined,
   ): AsyncGenerator<AxiosResponse<T[]>> {
     const fallbackLimit = 20;
-    const res = await this.fetch<T[], T>(reqConfig, options);
+    const res = await this.fetch<T[]>(reqConfig, options);
     yield res;
 
     const limit = Number(res.headers['x-limit']) || fallbackLimit;
@@ -177,7 +177,7 @@ export abstract class Service<ApiResponse = any> {
     const requestOffset = Number(res.headers['x-offset']) || 0;
 
     for (let offset = requestOffset + limit; offset < entityCount; offset += limit) {
-      yield this.fetch<T[], T>(reqConfig, { ...options, offset });
+      yield this.fetch<T[]>(reqConfig, { ...options, offset });
     }
   }
 
