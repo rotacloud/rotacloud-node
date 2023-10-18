@@ -30,8 +30,7 @@ export type RetryOptions =
 export interface Options<T = unknown> {
   rawResponse?: boolean;
   expand?: string[];
-  fields?: (keyof T)[];
-  // fields?: (keyof T | `${keyof T}.${string}`)[];
+  fields?: (keyof T | `${string & keyof T}.${string}`)[];
   limit?: number;
   offset?: number;
   dryRun?: boolean;
