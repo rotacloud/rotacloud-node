@@ -22,6 +22,10 @@ export class UsersService extends Service<User> {
   }
 
   get(id: number): Promise<User>;
+  get(
+    id: number,
+    options: { expand: string[]; fields: string[]; rawResponse: true } & Options<User>,
+  ): Promise<AxiosResponse<Partial<User>>>;
   get<F extends keyof User>(
     id: number,
     options: { fields: F[]; rawResponse: true } & Options<User>,

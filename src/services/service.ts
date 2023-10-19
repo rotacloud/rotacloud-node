@@ -27,18 +27,28 @@ export type RetryOptions =
       maxRetries: number;
     };
 
-export type Options<T = unknown> = {
-  rawResponse?: boolean;
-  expand?: string[];
-  fields?: (keyof T)[];
-  // fields?: (keyof T | `${string & keyof T}.${string}`)[];
-  limit?: number;
-  offset?: number;
-  dryRun?: boolean;
-}; /* & {
-  expand: string[];
-  fields: (keyof T | `${string & keyof T}.${string}`)[];
-}; */
+export type Options<T = unknown> =
+  | {
+      rawResponse?: boolean;
+      expand?: string[];
+      fields?: (keyof T)[];
+      limit?: number;
+      offset?: number;
+      dryRun?: boolean;
+    }
+  | {
+      rawResponse?: boolean;
+      expand: string[];
+      fields: (keyof T | `${string & keyof T}.${string}`)[];
+      limit?: number;
+      offset?: number;
+      dryRun?: boolean;
+    };
+
+export const testOpts: Options<{ prop1: string }> = {
+  expand: [],
+  fields: ['prop1', 'prop1.val'],
+};
 
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
@@ -116,11 +126,19 @@ export abstract class Service<ApiResponse = any> {
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig): Promise<AxiosResponse<T>>;
   fetch<T = ApiResponse>(
     reqConfig: AxiosRequestConfig,
-    options: { fields: Required<Options<T>>['fields'] } & Options<T>,
+    options: { expand: string[] } & Options<T>,
+  ): Promise<AxiosResponse<T>>;
+  fetch<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig,
+    options: { expand: undefined; fields: Required<Options<T>>['fields'] } & Options<T>,
   ): Promise<AxiosResponse<Pick<T, (typeof options)['fields'][number]>>>;
   fetch<T extends unknown[] = ApiResponse[], E = T[number]>(
     reqConfig: AxiosRequestConfig,
-    options: { fields: Required<Options<E>>['fields'] } & Options<E>,
+    options: { expand: string[] } & Options<E>,
+  ): Promise<AxiosResponse<E[]>>;
+  fetch<T extends unknown[] = ApiResponse[], E = T[number]>(
+    reqConfig: AxiosRequestConfig,
+    options: { expand: undefined; fields: Required<Options<E>>['fields'] } & Options<E>,
   ): Promise<AxiosResponse<Pick<E, (typeof options)['fields'][number]>[]>>;
   fetch<T extends unknown[] = ApiResponse[], E = T[number]>(
     reqConfig: AxiosRequestConfig,
@@ -182,7 +200,11 @@ export abstract class Service<ApiResponse = any> {
   private fetchPages<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>): AsyncGenerator<AxiosResponse<T[]>>;
   private fetchPages<T = ApiResponse>(
     reqConfig: AxiosRequestConfig<T[]>,
-    options: { fields: Required<Options<T>>['fields'] } & Options<T>,
+    options: { expand: string[] } & Options<T>,
+  ): AsyncGenerator<AxiosResponse<T[]>>;
+  private fetchPages<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig<T[]>,
+    options: { expand: undefined; fields: Required<Options<T>>['fields'] } & Options<T>,
   ): AsyncGenerator<AxiosResponse<Pick<T, (typeof options)['fields'][number]>[]>>;
   private fetchPages<T = ApiResponse>(
     reqConfig: AxiosRequestConfig<T[]>,
@@ -201,7 +223,7 @@ export abstract class Service<ApiResponse = any> {
     const requestOffset = Number(res.headers['x-offset']) || 0;
 
     for (let offset = requestOffset + limit; offset < entityCount; offset += limit) {
-      yield this.fetch<T[]>(reqConfig, { ...options, offset });
+      yield this.fetch<T[]>(reqConfig, { ...options, offset } as Options<T>);
     }
   }
 
