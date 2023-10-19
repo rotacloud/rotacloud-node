@@ -6,7 +6,7 @@ import { LeaveEmbargoesQueryParams } from '../rotacloud.js';
 
 type RequiredProps = 'start_date' | 'end_date' | 'users';
 
-export class LeaveEmbargoesService extends Service {
+export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
   private apiPath = '/leave_embargoes';
 
   create(data: RequirementsOf<LeaveEmbargo, RequiredProps>): Promise<LeaveEmbargo>;

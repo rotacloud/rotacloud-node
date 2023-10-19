@@ -27,14 +27,18 @@ export type RetryOptions =
       maxRetries: number;
     };
 
-export interface Options<T = unknown> {
+export type Options<T = unknown> = {
   rawResponse?: boolean;
   expand?: string[];
-  fields?: (keyof T | `${string & keyof T}.${string}`)[];
+  fields?: (keyof T)[];
+  // fields?: (keyof T | `${string & keyof T}.${string}`)[];
   limit?: number;
   offset?: number;
   dryRun?: boolean;
-}
+}; /* & {
+  expand: string[];
+  fields: (keyof T | `${string & keyof T}.${string}`)[];
+}; */
 
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
@@ -109,10 +113,21 @@ export abstract class Service<ApiResponse = any> {
     return new URLSearchParams(reducedParams);
   }
 
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig): Promise<AxiosResponse<T>>;
   fetch<T = ApiResponse>(
     reqConfig: AxiosRequestConfig,
-    options?: Options<T extends Array<unknown> ? T[number] : T>,
-  ): Promise<AxiosResponse<T>> {
+    options: { fields: Required<Options<T>>['fields'] } & Options<T>,
+  ): Promise<AxiosResponse<Pick<T, (typeof options)['fields'][number]>>>;
+  fetch<T extends unknown[] = ApiResponse[], E = T[number]>(
+    reqConfig: AxiosRequestConfig,
+    options: { fields: Required<Options<E>>['fields'] } & Options<E>,
+  ): Promise<AxiosResponse<Pick<E, (typeof options)['fields'][number]>[]>>;
+  fetch<T extends unknown[] = ApiResponse[], E = T[number]>(
+    reqConfig: AxiosRequestConfig,
+    options?: Options<E>,
+  ): Promise<AxiosResponse<E[]>>;
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options<T>): Promise<AxiosResponse<T | Partial<T>>>;
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options<T>) {
     const headers: Record<string, string> = {
       Authorization: RotaCloud.config.apiKey
         ? `Bearer ${RotaCloud.config.apiKey}`
@@ -164,9 +179,18 @@ export abstract class Service<ApiResponse = any> {
   }
 
   /** Iterates through every page for a potentially paginated request */
+  private fetchPages<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>): AsyncGenerator<AxiosResponse<T[]>>;
+  private fetchPages<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig<T[]>,
+    options: { fields: Required<Options<T>>['fields'] } & Options<T>,
+  ): AsyncGenerator<AxiosResponse<Pick<T, (typeof options)['fields'][number]>[]>>;
+  private fetchPages<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig<T[]>,
+    options?: Options<T>,
+  ): AsyncGenerator<AxiosResponse<T[]>>;
   private async *fetchPages<T = ApiResponse>(
     reqConfig: AxiosRequestConfig<T[]>,
-    options: Options<T> | undefined,
+    options?: Options<T>,
   ): AsyncGenerator<AxiosResponse<T[]>> {
     const fallbackLimit = 20;
     const res = await this.fetch<T[]>(reqConfig, options);

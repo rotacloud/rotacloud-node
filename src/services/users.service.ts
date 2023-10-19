@@ -17,17 +17,22 @@ export class UsersService extends Service<User> {
   create(data: RequirementsOf<User, RequiredProps>, options: Options<User>): Promise<User>;
   create(data: RequirementsOf<User, RequiredProps>, options?: Options<User>) {
     return super
-      .fetch<User>({ url: this.apiPath, data, method: 'POST' })
+      .fetch({ url: this.apiPath, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<User>;
-  get(id: number, options: { rawResponse: true } & Options<User>): Promise<AxiosResponse<User, any>>;
-  get(id: number, options: Options<User>): Promise<User>;
-  get(id: number, options?: Options<User>) {
+  get<F extends keyof User>(
+    id: number,
+    options: { fields: F[]; rawResponse: true } & Options<User>,
+  ): Promise<AxiosResponse<Pick<User, F>>>;
+  get<F extends keyof User>(id: number, options: { fields: F[] } & Options<User>): Promise<Pick<User, F>>;
+  get(id: number, options: { rawResponse: true } & Options<User>): Promise<AxiosResponse<User>>;
+  get(id: number, options?: Options<User>): Promise<User>;
+  async get(id: number, options?: Options<User>) {
     return super
-      .fetch({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .fetch<User>({ url: `${this.apiPath}/${id}` }, options)
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   async *list(query: UsersQueryParams, options?: Options<User>) {
@@ -58,7 +63,7 @@ export class UsersService extends Service<User> {
   update(id: number, data: Partial<User>, options: Options<User>): Promise<User>;
   update(id: number, data: Partial<User>, options?: Options<User>) {
     return super
-      .fetch<User>({
+      .fetch({
         url: `${this.apiPath}/${id}`,
         data,
         method: 'POST',
@@ -71,7 +76,7 @@ export class UsersService extends Service<User> {
   delete(id: number, options: Options<User>): Promise<number>;
   delete(id: number, options?: Options<User>) {
     return super
-      .fetch<User>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .fetch({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
   }
 }
