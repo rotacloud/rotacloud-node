@@ -1,10 +1,10 @@
 import { AxiosResponse } from 'axios';
 import { DayNote } from '../interfaces/index.js';
-import { Service, Options } from './index.js';
+import { Service, Options, OptionsExtended } from './index.js';
 
 import { DayNotesQueryParams } from '../interfaces/query-params/day-notes-query-params.interface';
 
-export class DayNotesService extends Service {
+export class DayNotesService extends Service<DayNote> {
   private apiPath = '/day_notes';
 
   create(data: DayNote): Promise<DayNote>;
@@ -12,27 +12,45 @@ export class DayNotesService extends Service {
   create(data: DayNote, options: Options): Promise<DayNote>;
   create(data: DayNote, options?: Options) {
     return super
-      .fetch<DayNote>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .fetch({ url: this.apiPath, data, method: 'POST' })
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<DayNote>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<DayNote, any>>;
-  get(id: number, options: Options): Promise<DayNote>;
-  get(id: number, options?: Options) {
+  get<F extends keyof DayNote>(
+    id: number,
+    options: { fields: F[]; rawResponse: true } & OptionsExtended<DayNote>,
+  ): Promise<AxiosResponse<Pick<DayNote, F>>>;
+  get<F extends keyof DayNote>(
+    id: number,
+    options: { fields: F[] } & OptionsExtended<DayNote>,
+  ): Promise<Pick<DayNote, F>>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<DayNote>>;
+  get(id: number, options?: OptionsExtended<DayNote>): Promise<DayNote>;
+  get(id: number, options?: OptionsExtended<DayNote>) {
     return super
       .fetch<DayNote>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(query: DayNotesQueryParams, options?: Options) {
-    for await (const res of super.iterator<DayNote>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+  list(query: DayNotesQueryParams): AsyncGenerator<DayNote>;
+  list<F extends keyof DayNote>(
+    query: DayNotesQueryParams,
+    options: { fields: F[] } & OptionsExtended<DayNote>,
+  ): AsyncGenerator<Pick<DayNote, F>>;
+  list(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<DayNote>;
+  async *list(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
+    yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: DayNotesQueryParams, options?: Options): Promise<DayNote[]>;
-  async listAll(query: DayNotesQueryParams, options?: Options) {
+  listAll(query: DayNotesQueryParams): Promise<DayNote[]>;
+  listAll<F extends keyof DayNote>(
+    query: DayNotesQueryParams,
+    options: { fields: F[] } & OptionsExtended<DayNote[]>,
+  ): Promise<Pick<DayNote, F>[]>;
+  listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): Promise<DayNote[]>;
+  listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): Promise<DayNote[]>;
+  async listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
     const dayNotes: DayNote[] = [];
     for await (const dayNote of this.list(query, options)) {
       dayNotes.push(dayNote);
@@ -40,8 +58,14 @@ export class DayNotesService extends Service {
     return dayNotes;
   }
 
-  listByPage(query: DayNotesQueryParams, options?: Options) {
-    return super.iterator<DayNote>({ url: this.apiPath, params: query }, options).byPage();
+  listByPage(query: DayNotesQueryParams): AsyncGenerator<AxiosResponse<DayNote[]>>;
+  listByPage<F extends keyof DayNote>(
+    query: DayNotesQueryParams,
+    options: { fields: F[] } & OptionsExtended<DayNote[]>,
+  ): AsyncGenerator<AxiosResponse<Pick<DayNote, F>[]>>;
+  listByPage(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<AxiosResponse<DayNote[]>>;
+  listByPage(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
+    return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<DayNote>): Promise<DayNote>;
@@ -53,20 +77,23 @@ export class DayNotesService extends Service {
   update(id: number, data: Partial<DayNote>, options: Options): Promise<DayNote>;
   update(id: number, data: Partial<DayNote>, options?: Options) {
     return super
-      .fetch<DayNote>({
-        url: `${this.apiPath}/${id}`,
-        data,
-        method: 'POST',
-      })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .fetch<DayNote>(
+        {
+          url: `${this.apiPath}/${id}`,
+          data,
+          method: 'POST',
+        },
+        options,
+      )
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<number>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<DayNote>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+      .fetch<number>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }, options)
+      .then((res) => (options?.rawResponse ? res : res.status));
   }
 }

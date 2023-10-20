@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { Group } from '../interfaces/index.js';
-import { Service, Options, RequirementsOf } from './index.js';
+import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
 
 import { GroupsQueryParams } from '../interfaces/query-params/groups-query-params.interface.js';
 
 type RequiredProps = 'name';
 
-export class GroupsService extends Service {
+export class GroupsService extends Service<Group> {
   private apiPath = '/groups';
 
   create(data: RequirementsOf<Group, RequiredProps>): Promise<Group>;
@@ -17,27 +17,41 @@ export class GroupsService extends Service {
   create(data: RequirementsOf<Group, RequiredProps>, options: Options): Promise<Group>;
   create(data: RequirementsOf<Group, RequiredProps>, options?: Options) {
     return super
-      .fetch<Group>({ url: this.apiPath, data, method: 'POST' })
+      .fetch({ url: this.apiPath, data, method: 'POST' })
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<Group>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Group, any>>;
-  get(id: number, options: Options): Promise<Group>;
-  get(id: number, options?: Options) {
+  get<F extends keyof Group>(
+    id: number,
+    options: { fields: F[]; rawResponse: true } & OptionsExtended<Group>,
+  ): Promise<AxiosResponse<Pick<Group, F>>>;
+  get<F extends keyof Group>(id: number, options: { fields: F[] } & OptionsExtended<Group>): Promise<Pick<Group, F>>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Group>>;
+  get(id: number, options?: OptionsExtended<Group>): Promise<Group>;
+  get(id: number, options?: OptionsExtended<Group>) {
     return super
       .fetch<Group>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(query?: GroupsQueryParams, options?: Options) {
-    for await (const res of super.iterator<Group>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+  list(query: GroupsQueryParams): AsyncGenerator<Group>;
+  list<F extends keyof Group>(
+    query: GroupsQueryParams,
+    options: { fields: F[] } & OptionsExtended<Group>,
+  ): AsyncGenerator<Pick<Group, F>>;
+  list(query: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<Group>;
+  async *list(query?: GroupsQueryParams, options?: OptionsExtended<Group>) {
+    yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query?: GroupsQueryParams, options?: Options): Promise<Group[]>;
-  async listAll(query: GroupsQueryParams, options?: Options) {
+  listAll(query: GroupsQueryParams): Promise<Group[]>;
+  listAll<F extends keyof Group>(
+    query: GroupsQueryParams,
+    options: { fields: F[] } & OptionsExtended<Group[]>,
+  ): Promise<Pick<Group, F>[]>;
+  listAll(query: GroupsQueryParams, options?: OptionsExtended<Group>): Promise<Group[]>;
+  async listAll(query: GroupsQueryParams, options?: OptionsExtended<Group>) {
     const groups = [] as Group[];
     for await (const group of this.list(query, options)) {
       groups.push(group);
@@ -45,8 +59,14 @@ export class GroupsService extends Service {
     return groups;
   }
 
-  listByPage(query?: GroupsQueryParams, options?: Options) {
-    return super.iterator<Group>({ url: this.apiPath, params: query }, options).byPage();
+  listByPage(query: GroupsQueryParams): AsyncGenerator<AxiosResponse<Group[]>>;
+  listByPage<F extends keyof Group>(
+    query: GroupsQueryParams,
+    options: { fields: F[] } & OptionsExtended<Group[]>,
+  ): AsyncGenerator<AxiosResponse<Pick<Group, F>[]>>;
+  listByPage(query: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<AxiosResponse<Group[]>>;
+  listByPage(query?: GroupsQueryParams, options?: OptionsExtended<Group>) {
+    return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<Group>): Promise<Group>;
@@ -58,20 +78,20 @@ export class GroupsService extends Service {
   update(id: number, data: Partial<Group>, options: Options): Promise<Group>;
   update(id: number, data: Partial<Group>, options?: Options) {
     return super
-      .fetch<Group>({
+      .fetch({
         url: `${this.apiPath}/${id}`,
         data,
         method: 'POST',
       })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<number>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<Group>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+      .fetch<number>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => (options?.rawResponse ? res : res.status));
   }
 }

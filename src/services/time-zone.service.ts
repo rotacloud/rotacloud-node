@@ -3,7 +3,7 @@ import { Service, Options } from './index.js';
 
 import { TimeZone } from '../interfaces/index.js';
 
-export class TimeZoneService extends Service {
+export class TimeZoneService extends Service<TimeZone> {
   private apiPath = '/timezones';
 
   get(id: number): Promise<TimeZone>;
@@ -12,13 +12,11 @@ export class TimeZoneService extends Service {
   get(id: number, options?: Options) {
     return super
       .fetch<TimeZone>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   async *list(options?: Options) {
-    for await (const res of super.iterator<TimeZone>({ url: this.apiPath }, options)) {
-      yield res;
-    }
+    yield* super.iterator({ url: this.apiPath }, options);
   }
 
   listAll(options?: Options): Promise<TimeZone[]>;
@@ -31,6 +29,6 @@ export class TimeZoneService extends Service {
   }
 
   listByPage(options?: Options) {
-    return super.iterator<TimeZone>({ url: this.apiPath }, options).byPage();
+    return super.iterator({ url: this.apiPath }, options).byPage();
   }
 }

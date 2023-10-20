@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { UserBreak, UserClockedIn, UserClockedOut, TerminalLocation } from '../interfaces/index.js';
-import { Service, Options, RequirementsOf } from './index.js';
+import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
 
 interface UserClockIn {
   method: string;
@@ -24,7 +24,7 @@ interface UserBreakRequest {
 type RequiredPropsClockIn = 'method';
 type RequiredPropsBreak = 'method' | 'action';
 
-export class UsersClockInService extends Service {
+export class UsersClockInService extends Service<UserClockedIn> {
   private apiPath = '/users_clocked_in';
 
   getClockedInUser(id: number): Promise<UserClockedIn>;
@@ -36,13 +36,22 @@ export class UsersClockInService extends Service {
       .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
   }
 
+  list(): AsyncGenerator<UserClockedIn>;
+  list<F extends keyof UserClockedIn>(
+    options: { fields: F[] } & OptionsExtended<UserClockedIn>,
+  ): AsyncGenerator<Pick<UserClockedIn, F>>;
+  list(options?: OptionsExtended<UserClockedIn>): AsyncGenerator<UserClockedIn>;
   async *list(options?: Options) {
     for await (const res of super.iterator<UserClockedIn>({ url: this.apiPath }, options)) {
       yield res;
     }
   }
 
-  listAll(options?: Options): Promise<UserClockedIn[]>;
+  listAll(): Promise<UserClockedIn[]>;
+  listAll<F extends keyof UserClockedIn>(
+    options: { fields: F[] } & OptionsExtended<UserClockedIn[]>,
+  ): Promise<Pick<UserClockedIn, F>[]>;
+  listAll(options?: OptionsExtended<UserClockedIn>): Promise<UserClockedIn[]>;
   async listAll(options?: Options) {
     const users = [] as UserClockedIn[];
     for await (const user of this.list(options)) {
@@ -51,6 +60,11 @@ export class UsersClockInService extends Service {
     return users;
   }
 
+  listByPage(): AsyncGenerator<AxiosResponse<UserClockedIn[]>>;
+  listByPage<F extends keyof UserClockedIn>(
+    options: { fields: F[] } & OptionsExtended<UserClockedIn[]>,
+  ): AsyncGenerator<AxiosResponse<Pick<UserClockedIn, F>[]>>;
+  listByPage(options?: OptionsExtended<UserClockedIn>): AsyncGenerator<AxiosResponse<UserClockedIn[]>>;
   listByPage(options?: Options) {
     return super.iterator<UserClockedIn>({ url: this.apiPath }, options).byPage();
   }

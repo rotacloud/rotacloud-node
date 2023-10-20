@@ -17,7 +17,7 @@ export class ToilAccrualsService extends Service {
   create(data: RequirementsOf<ToilAccrual, RequiredProps>, options?: Options) {
     return super
       .fetch<ToilAccrual>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<ToilAccrual>;
@@ -26,13 +26,11 @@ export class ToilAccrualsService extends Service {
   get(id: number, options?: Options) {
     return super
       .fetch<ToilAccrual>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   async *list(query: ToilAccrualsQueryParams, options?: Options) {
-    for await (const res of super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+    yield* super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options);
   }
 
   async listAll(query: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]> {
@@ -53,6 +51,6 @@ export class ToilAccrualsService extends Service {
   delete(id: number, options?: Options) {
     return super
       .fetch<ToilAccrual>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+      .then((res) => (options?.rawResponse ? res : res.status));
   }
 }

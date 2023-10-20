@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
-import { Leave, LeaveType } from '../interfaces/index.js';
-import { Service, Options, RequirementsOf } from './index.js';
+import { Leave } from '../interfaces/index.js';
+import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
 
 import { LeaveQueryParams } from '../interfaces/query-params/leave-query-params.interface.js';
 
 type RequiredProps = 'users' | 'type' | 'start_date' | 'end_date';
 
-export class LeaveService extends Service {
+export class LeaveService extends Service<Leave> {
   private apiPath = '/leave';
 
   create(data: RequirementsOf<Leave, RequiredProps>): Promise<Leave[]>;
@@ -17,27 +17,41 @@ export class LeaveService extends Service {
   create(data: RequirementsOf<Leave, RequiredProps>, options: Options): Promise<Leave[]>;
   create(data: RequirementsOf<Leave, RequiredProps>, options?: Options) {
     return super
-      .fetch<Leave[]>({ url: this.apiPath, data, method: 'POST' }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : [...res.data.map((leave) => leave)]));
+      .fetch({ url: this.apiPath, data, method: 'POST' }, options)
+      .then((res) => (options?.rawResponse ? res : [...res.data.map((leave) => leave)]));
   }
 
   get(id: number): Promise<Leave>;
-  get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<Leave, any>>;
-  get(id: number, options: Options): Promise<Leave>;
-  get(id: number, options?: Options) {
+  get<F extends keyof Leave>(
+    id: number,
+    options: { fields: F[]; rawResponse: true } & OptionsExtended<Leave>,
+  ): Promise<AxiosResponse<Pick<Leave, F>>>;
+  get<F extends keyof Leave>(id: number, options: { fields: F[] } & OptionsExtended<Leave>): Promise<Pick<Leave, F>>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Leave>>;
+  get(id: number, options?: OptionsExtended<Leave>): Promise<Leave>;
+  get(id: number, options?: OptionsExtended<Leave>) {
     return super
       .fetch<Leave>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(query: LeaveQueryParams, options?: Options) {
-    for await (const res of super.iterator<Leave>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+  list(query: LeaveQueryParams): AsyncGenerator<Leave>;
+  list<F extends keyof Leave>(
+    query: LeaveQueryParams,
+    options: { fields: F[] } & OptionsExtended<Leave>,
+  ): AsyncGenerator<Pick<Leave, F>>;
+  list(query: LeaveQueryParams, options?: OptionsExtended<Leave>): AsyncGenerator<Leave>;
+  async *list(query: LeaveQueryParams, options?: OptionsExtended<Leave>) {
+    yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: LeaveQueryParams, options?: Options): Promise<Leave[]>;
-  async listAll(query: LeaveQueryParams, options?: Options) {
+  listAll(query: LeaveQueryParams): Promise<Leave[]>;
+  listAll<F extends keyof Leave>(
+    query: LeaveQueryParams,
+    options: { fields: F[] } & OptionsExtended<Leave[]>,
+  ): Promise<Pick<Leave, F>[]>;
+  listAll(query: LeaveQueryParams, options?: OptionsExtended<Leave>): Promise<Leave[]>;
+  async listAll(query: LeaveQueryParams, options?: OptionsExtended<Leave>) {
     const leave = [] as Leave[];
     for await (const leaveRecord of this.list(query, options)) {
       leave.push(leaveRecord);
@@ -45,14 +59,14 @@ export class LeaveService extends Service {
     return leave;
   }
 
-  async *listLeaveTypes(query: LeaveQueryParams, options?: Options) {
-    for await (const res of super.iterator<LeaveType>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
-  }
-
-  listByPage(query: LeaveQueryParams, options?: Options) {
-    return super.iterator<Leave>({ url: this.apiPath, params: query }, options).byPage();
+  listByPage(query: LeaveQueryParams): AsyncGenerator<AxiosResponse<Leave[]>>;
+  listByPage<F extends keyof Leave>(
+    query: LeaveQueryParams,
+    options: { fields: F[] } & OptionsExtended<Leave[]>,
+  ): AsyncGenerator<AxiosResponse<Pick<Leave, F>[]>>;
+  listByPage(query: LeaveQueryParams, options?: OptionsExtended<Leave>): AsyncGenerator<AxiosResponse<Leave[]>>;
+  listByPage(query: LeaveQueryParams, options?: OptionsExtended<Leave>) {
+    return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<Leave>): Promise<Leave>;
@@ -72,15 +86,15 @@ export class LeaveService extends Service {
         },
         options,
       )
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Leave, any>>;
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<number>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<Leave>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+      .fetch<number>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => (options?.rawResponse ? res : res.status));
   }
 }
