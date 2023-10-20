@@ -9,7 +9,6 @@ export * from './days-off-patterns-query-params.interface.js';
 export * from './days-off-query-params.interface.js';
 export * from './documents-query-params.interface.js';
 export * from './groups-query-params.interface.js';
-export * from './internal-query-params.interface.js';
 export * from './leave-embargoes-query-params.interface.js';
 export * from './leave-query-params.interface.js';
 export * from './leave-requests-query-params.interface.js';
