@@ -28,12 +28,12 @@ export class UsersClockInService extends Service<UserClockedIn> {
   private apiPath = '/users_clocked_in';
 
   getClockedInUser(id: number): Promise<UserClockedIn>;
-  getClockedInUser(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<UserClockedIn, any>>;
+  getClockedInUser(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<UserClockedIn>>;
   getClockedInUser(id: number, options: Options): Promise<UserClockedIn>;
   getClockedInUser(id: number, options?: Options) {
     return super
       .fetch<UserClockedIn>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   list(): AsyncGenerator<UserClockedIn>;
@@ -73,12 +73,12 @@ export class UsersClockInService extends Service<UserClockedIn> {
   clockIn(
     data: RequirementsOf<UserClockIn, RequiredPropsClockIn>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<UserClockedIn, any>>;
+  ): Promise<AxiosResponse<UserClockedIn>>;
   clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options: Options): Promise<UserClockedIn>;
   clockIn(data: RequirementsOf<UserClockIn, RequiredPropsClockIn>, options?: Options) {
     return super
       .fetch<UserClockedIn>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   clockOut(id: number, data: UserClockOut): Promise<UserClockedOut>;
@@ -86,12 +86,12 @@ export class UsersClockInService extends Service<UserClockedIn> {
     id: number,
     data: UserClockOut,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<UserClockedOut, any>>;
+  ): Promise<AxiosResponse<UserClockedOut>>;
   clockOut(id: number, data: UserClockOut, options: Options): Promise<UserClockedOut>;
   clockOut(id: number, data: UserClockOut, options?: Options) {
     return super
       .fetch<UserClockedOut>({ url: `${this.apiPath}/${id}`, data, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   startBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>): Promise<UserBreak>;
@@ -99,7 +99,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
     id: number,
     data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<UserBreak, any>>;
+  ): Promise<AxiosResponse<UserBreak>>;
   startBreak(
     id: number,
     data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>,
@@ -108,7 +108,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
   startBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>, options?: Options) {
     return super
       .fetch<UserBreak>({ url: `${this.apiPath}/${id}`, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   endBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>): Promise<UserBreak>;
@@ -116,7 +116,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
     id: number,
     data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>,
     options: { rawResponse: true } & Options,
-  ): Promise<AxiosResponse<UserBreak, any>>;
+  ): Promise<AxiosResponse<UserBreak>>;
   endBreak(
     id: number,
     data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>,
@@ -125,6 +125,6 @@ export class UsersClockInService extends Service<UserClockedIn> {
   endBreak(id: number, data: RequirementsOf<UserBreakRequest, RequiredPropsBreak>, options?: Options) {
     return super
       .fetch<UserBreak>({ url: `${this.apiPath}/${id}`, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 }

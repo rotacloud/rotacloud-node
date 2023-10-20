@@ -65,11 +65,11 @@ export class DaysOffService extends Service<DaysOff> {
   }
 
   delete(dates: string[], users: number[]): Promise<number>;
-  delete(dates: string[], users: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(dates: string[], users: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   delete(dates: string[], users: number[], options: Options): Promise<number>;
   delete(dates: string[], users: number[], options?: Options) {
     return super
-      .fetch(
+      .fetch<void>(
         {
           url: this.apiPath,
           method: 'DELETE',

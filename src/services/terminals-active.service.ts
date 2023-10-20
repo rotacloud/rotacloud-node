@@ -77,11 +77,11 @@ export class TerminalsActiveService extends Service<Terminal> {
   }
 
   closeTerminal(id: number): Promise<number>;
-  closeTerminal(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any>>;
+  closeTerminal(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   closeTerminal(id: number, options: Options): Promise<number>;
   closeTerminal(id: number, options?: Options) {
     return super
-      .fetch({ url: `${this.apiPath}/${id}`, method: 'DELETE' }, options)
+      .fetch<void>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }, options)
       .then((res) => (options?.rawResponse ? res : res.status));
   }
 }

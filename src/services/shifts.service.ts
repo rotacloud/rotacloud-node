@@ -120,14 +120,14 @@ export class ShiftsService extends Service<Shift> {
   }
 
   delete(ids: number | number[]): Promise<number>;
-  delete(ids: number | number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any>>;
+  delete(ids: number | number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   delete(ids: number | number[], options: Options): Promise<number>;
   delete(ids: number | number[], options?: Options) {
     const params: AxiosRequestConfig = Array.isArray(ids)
       ? { url: this.apiPath, data: { ids }, method: 'DELETE' }
       : { url: `${this.apiPath}/${ids}`, method: 'DELETE' };
 
-    return super.fetch<number>(params, options).then((res) => (options?.rawResponse ? res : res.status));
+    return super.fetch<void>(params, options).then((res) => (options?.rawResponse ? res : res.status));
   }
 
   acknowledge(data: number[]): Promise<number>;

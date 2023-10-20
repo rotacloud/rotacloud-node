@@ -90,11 +90,11 @@ export class LeaveService extends Service<Leave> {
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<number>>;
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<number>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .fetch<void>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
       .then((res) => (options?.rawResponse ? res : res.status));
   }
 }
