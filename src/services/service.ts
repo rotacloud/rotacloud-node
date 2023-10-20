@@ -56,58 +56,6 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
 type ParameterPrimitive = string | boolean | number | null | symbol;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
-// declare function get<T>(id: number): Promise<T>;
-// /** @deprecated expand is not supported by every endpoint and will be removed in a future release */
-// declare function get<T>(
-//   id: number,
-//   options: {
-//     expand: string[];
-//     fields: string[];
-//     rawResponse: true;
-//   } & OptionsExtended<T>,
-// ): Promise<AxiosResponse<Partial<T>>>;
-// /** @deprecated expand is not supported by every endpoint and will be removed in a future release */
-// declare function get<T>(
-//   id: number,
-//   options: {
-//     expand: string[];
-//     fields: string[];
-//   } & OptionsExtended<T>,
-// ): Promise<Partial<T>>;
-// /** @deprecated expand is not supported by every endpoint and will be removed in a future release */
-// declare function get<T>(
-//   id: number,
-//   options: {
-//     expand: string[];
-//     rawResponse: true;
-//   } & OptionsExtended<T>,
-// ): Promise<AxiosResponse<T>>;
-// /** @deprecated expand is not supported by every endpoint and will be removed in a future release */
-// declare function get<T>(
-//   id: number,
-//   options: {
-//     expand: string[];
-//   } & OptionsExtended<T>,
-// ): Promise<T>;
-// declare function get<T, F extends keyof T>(
-//   id: number,
-//   options: { fields: F[]; rawResponse: true } & OptionsExtended<T>,
-// ): Promise<AxiosResponse<Pick<T, F>>>;
-// declare function get<T, F extends keyof T>(
-//   id: number,
-//   options: { fields: F[] } & OptionsExtended<T>,
-// ): Promise<Pick<T, F>>;
-// declare function get<T>(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<T>>;
-// declare function get<T>(id: number, options?: OptionsExtended<T>): Promise<T>;
-//
-// export function getFetch<T, S extends Service<T>>(baseService: S, apiPath: string): typeof get<T> {
-//   return function get(id: number, options?: OptionsExtended<T>) {
-//     return baseService
-//       .fetch<T>({ url: `${apiPath}/${id}` }, options)
-//       .then((res) => (options?.rawResponse ? res : res.data));
-//   };
-// }
-
 export abstract class Service<ApiResponse = any> {
   protected client: AxiosInstance = this.initialiseAxios();
 
