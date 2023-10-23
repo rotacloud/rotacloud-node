@@ -51,7 +51,7 @@ export class RolesService extends Service<Role> {
     options: { fields: F[] } & OptionsExtended<Role>,
   ): Promise<Pick<Role, F>[]>;
   listAll(query: RolesQueryParams, options?: OptionsExtended<Role>): Promise<Role[]>;
-  async listAll(query: RolesQueryParams, options?: Options) {
+  async listAll(query: RolesQueryParams, options?: OptionsExtended<Role>) {
     const roles = [] as Role[];
     for await (const role of this.list(query, options)) {
       roles.push(role);
@@ -65,7 +65,7 @@ export class RolesService extends Service<Role> {
     options: { fields: F[] } & OptionsExtended<Role>,
   ): AsyncGenerator<AxiosResponse<Pick<Role, F>[]>>;
   listByPage(query: RolesQueryParams, options?: OptionsExtended<Role>): AsyncGenerator<AxiosResponse<Role[]>>;
-  listByPage(query?: RolesQueryParams, options?: Options) {
+  listByPage(query?: RolesQueryParams, options?: OptionsExtended<Role>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

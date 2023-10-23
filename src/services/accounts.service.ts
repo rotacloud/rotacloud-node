@@ -46,7 +46,7 @@ export class AccountsService extends Service<Account> {
     options: { fields: F[] } & OptionsExtended<Account>,
   ): AsyncGenerator<AxiosResponse<Pick<Account, F>[]>>;
   listByPage(options: OptionsExtended<Account>): AsyncGenerator<AxiosResponse<Account[]>>;
-  listByPage(options?: Options) {
+  listByPage(options?: OptionsExtended<Account>) {
     return super.iterator({ url: this.apiPath }, options).byPage();
   }
 }

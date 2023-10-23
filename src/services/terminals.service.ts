@@ -67,14 +67,14 @@ export class TerminalsService extends Service<Terminal> {
     options: { fields: F[] } & OptionsExtended<Terminal>,
   ): AsyncGenerator<Pick<Terminal, F>>;
   list(options?: OptionsExtended<Terminal>): AsyncGenerator<Terminal>;
-  async *list(options?: Options) {
+  async *list(options?: OptionsExtended<Terminal>) {
     yield* super.iterator({ url: this.apiPath }, options);
   }
 
   listAll(): Promise<Terminal[]>;
   listAll<F extends keyof Terminal>(options: { fields: F[] } & OptionsExtended<Terminal>): Promise<Pick<Terminal, F>[]>;
   listAll(options?: OptionsExtended<Terminal>): Promise<Terminal[]>;
-  async listAll(options?: Options) {
+  async listAll(options?: OptionsExtended<Terminal>) {
     const users = [] as Terminal[];
     for await (const user of this.list(options)) {
       users.push(user);
@@ -87,7 +87,7 @@ export class TerminalsService extends Service<Terminal> {
     options: { fields: F[] } & OptionsExtended<Terminal>,
   ): AsyncGenerator<AxiosResponse<Pick<Terminal, F>[]>>;
   listByPage(options?: OptionsExtended<Terminal>): AsyncGenerator<AxiosResponse<Terminal[]>>;
-  listByPage(options?: Options) {
+  listByPage(options?: OptionsExtended<Terminal>) {
     return super.iterator({ url: this.apiPath }, options).byPage();
   }
 }

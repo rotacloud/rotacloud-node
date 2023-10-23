@@ -41,7 +41,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
     options: { fields: F[] } & OptionsExtended<UserClockedIn>,
   ): AsyncGenerator<Pick<UserClockedIn, F>>;
   list(options?: OptionsExtended<UserClockedIn>): AsyncGenerator<UserClockedIn>;
-  async *list(options?: Options) {
+  async *list(options?: OptionsExtended<UserClockedIn>) {
     for await (const res of super.iterator<UserClockedIn>({ url: this.apiPath }, options)) {
       yield res;
     }
@@ -52,7 +52,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
     options: { fields: F[] } & OptionsExtended<UserClockedIn>,
   ): Promise<Pick<UserClockedIn, F>[]>;
   listAll(options?: OptionsExtended<UserClockedIn>): Promise<UserClockedIn[]>;
-  async listAll(options?: Options) {
+  async listAll(options?: OptionsExtended<UserClockedIn>) {
     const users = [] as UserClockedIn[];
     for await (const user of this.list(options)) {
       users.push(user);
@@ -65,7 +65,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
     options: { fields: F[] } & OptionsExtended<UserClockedIn>,
   ): AsyncGenerator<AxiosResponse<Pick<UserClockedIn, F>[]>>;
   listByPage(options?: OptionsExtended<UserClockedIn>): AsyncGenerator<AxiosResponse<UserClockedIn[]>>;
-  listByPage(options?: Options) {
+  listByPage(options?: OptionsExtended<UserClockedIn>) {
     return super.iterator<UserClockedIn>({ url: this.apiPath }, options).byPage();
   }
 

@@ -43,7 +43,7 @@ export class AttendanceService extends Service<Attendance> {
     query: AttendanceQueryParams,
     options: { fields: F[] } & OptionsExtended<Attendance>,
   ): AsyncGenerator<Pick<Attendance, F>>;
-  list(query: AttendanceQueryParams, options?: Options): AsyncGenerator<Attendance>;
+  list(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>): AsyncGenerator<Attendance>;
   async *list(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
