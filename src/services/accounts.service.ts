@@ -31,7 +31,7 @@ export class AccountsService extends Service<Account> {
   }
 
   listAll(): Promise<Account[]>;
-  listAll<F extends keyof Account>(options: { fields: F[] } & OptionsExtended<Account[]>): Promise<Pick<Account, F>[]>;
+  listAll<F extends keyof Account>(options: { fields: F[] } & OptionsExtended<Account>): Promise<Pick<Account, F>[]>;
   listAll(options?: OptionsExtended<Account>): Promise<Account[]>;
   async listAll(options?: OptionsExtended<Account>) {
     const accounts = [] as Account[];
@@ -43,7 +43,7 @@ export class AccountsService extends Service<Account> {
 
   listByPage(): AsyncGenerator<AxiosResponse<Account[]>>;
   listByPage<F extends keyof Account>(
-    options: { fields: F[] } & OptionsExtended<Account[]>,
+    options: { fields: F[] } & OptionsExtended<Account>,
   ): AsyncGenerator<AxiosResponse<Pick<Account, F>[]>>;
   listByPage(options: OptionsExtended<Account>): AsyncGenerator<AxiosResponse<Account[]>>;
   listByPage(options?: Options) {

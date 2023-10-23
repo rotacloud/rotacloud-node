@@ -45,7 +45,7 @@ export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
   listAll(query: LeaveEmbargoesQueryParams): Promise<LeaveEmbargo[]>;
   listAll<F extends keyof LeaveEmbargo>(
     query: LeaveEmbargoesQueryParams,
-    options: { fields: F[] } & OptionsExtended<LeaveEmbargo[]>,
+    options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
   ): Promise<Pick<LeaveEmbargo, F>[]>;
   listAll(query: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): Promise<LeaveEmbargo[]>;
   async listAll(query: LeaveEmbargoesQueryParams, options?: Options) {
@@ -59,7 +59,7 @@ export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
   listByPage(query: LeaveEmbargoesQueryParams): AsyncGenerator<AxiosResponse<LeaveEmbargo[]>>;
   listByPage<F extends keyof LeaveEmbargo>(
     query: LeaveEmbargoesQueryParams,
-    options: { fields: F[] } & OptionsExtended<LeaveEmbargo[]>,
+    options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
   ): AsyncGenerator<AxiosResponse<Pick<LeaveEmbargo, F>[]>>;
   listByPage(
     query: LeaveEmbargoesQueryParams,

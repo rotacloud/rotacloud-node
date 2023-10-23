@@ -20,7 +20,7 @@ export class DailyRevenueService extends Service<DailyRevenue> {
   listAll(query: DailyRevenueQueryParams): Promise<DailyRevenue[]>;
   listAll<F extends keyof DailyRevenue>(
     query: DailyRevenueQueryParams,
-    options: { fields: F[] } & OptionsExtended<DailyRevenue[]>,
+    options: { fields: F[] } & OptionsExtended<DailyRevenue>,
   ): Promise<Pick<DailyRevenue, F>[]>;
   listAll(query: DailyRevenueQueryParams, options?: OptionsExtended<DailyRevenue>): Promise<DailyRevenue[]>;
   async listAll(query: DailyRevenueQueryParams, options?: OptionsExtended<DailyRevenue>) {
@@ -34,7 +34,7 @@ export class DailyRevenueService extends Service<DailyRevenue> {
   listByPage(query: DailyRevenueQueryParams): AsyncGenerator<AxiosResponse<DailyRevenue[]>>;
   listByPage<F extends keyof DailyRevenue>(
     query: DailyRevenueQueryParams,
-    options: { fields: F[] } & OptionsExtended<DailyRevenue[]>,
+    options: { fields: F[] } & OptionsExtended<DailyRevenue>,
   ): AsyncGenerator<AxiosResponse<Pick<DailyRevenue, F>[]>>;
   listByPage(
     query: DailyRevenueQueryParams,
@@ -45,11 +45,11 @@ export class DailyRevenueService extends Service<DailyRevenue> {
   }
 
   update(data: Partial<DailyRevenue>[]): Promise<number>;
-  update(data: Partial<DailyRevenue>[], options: { rawResponse: true } & Options): Promise<AxiosResponse<number>>;
+  update(data: Partial<DailyRevenue>[], options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   update(data: Partial<DailyRevenue>[], options: Options): Promise<number>;
   update(data: Partial<DailyRevenue>[], options?: Options) {
     return super
-      .fetch<number>(
+      .fetch<void>(
         {
           url: `${this.apiPath}`,
           data,

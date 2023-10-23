@@ -48,7 +48,7 @@ export class RolesService extends Service<Role> {
   listAll(query: RolesQueryParams): Promise<Role[]>;
   listAll<F extends keyof Role>(
     query: RolesQueryParams,
-    options: { fields: F[] } & OptionsExtended<Role[]>,
+    options: { fields: F[] } & OptionsExtended<Role>,
   ): Promise<Pick<Role, F>[]>;
   listAll(query: RolesQueryParams, options?: OptionsExtended<Role>): Promise<Role[]>;
   async listAll(query: RolesQueryParams, options?: Options) {
@@ -62,7 +62,7 @@ export class RolesService extends Service<Role> {
   listByPage(query: RolesQueryParams): AsyncGenerator<AxiosResponse<Role[]>>;
   listByPage<F extends keyof Role>(
     query: RolesQueryParams,
-    options: { fields: F[] } & OptionsExtended<Role[]>,
+    options: { fields: F[] } & OptionsExtended<Role>,
   ): AsyncGenerator<AxiosResponse<Pick<Role, F>[]>>;
   listByPage(query: RolesQueryParams, options?: OptionsExtended<Role>): AsyncGenerator<AxiosResponse<Role[]>>;
   listByPage(query?: RolesQueryParams, options?: Options) {

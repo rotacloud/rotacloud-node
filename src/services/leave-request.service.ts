@@ -58,7 +58,7 @@ export class LeaveRequestService extends Service<LeaveRequest> {
   listAll(query: LeaveRequestsQueryParams): Promise<LeaveRequest[]>;
   listAll<F extends keyof LeaveRequest>(
     query: LeaveRequestsQueryParams,
-    options: { fields: F[] } & OptionsExtended<LeaveRequest[]>,
+    options: { fields: F[] } & OptionsExtended<LeaveRequest>,
   ): Promise<Pick<LeaveRequest, F>[]>;
   listAll(query: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>): Promise<LeaveRequest[]>;
   async listAll(query: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>) {
@@ -72,7 +72,7 @@ export class LeaveRequestService extends Service<LeaveRequest> {
   listByPage(query: LeaveRequestsQueryParams): AsyncGenerator<AxiosResponse<LeaveRequest[]>>;
   listByPage<F extends keyof LeaveRequest>(
     query: LeaveRequestsQueryParams,
-    options: { fields: F[] } & OptionsExtended<LeaveRequest[]>,
+    options: { fields: F[] } & OptionsExtended<LeaveRequest>,
   ): AsyncGenerator<AxiosResponse<Pick<LeaveRequest, F>[]>>;
   listByPage(
     query: LeaveRequestsQueryParams,

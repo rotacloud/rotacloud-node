@@ -43,7 +43,7 @@ export class DaysOffService extends Service<DaysOff> {
   listAll(query: DaysOffQueryParams): Promise<DaysOff[]>;
   listAll<F extends keyof DaysOff>(
     query: DaysOffQueryParams,
-    options: { fields: F[] } & OptionsExtended<DaysOff[]>,
+    options: { fields: F[] } & OptionsExtended<DaysOff>,
   ): Promise<Pick<DaysOff, F>[]>;
   listAll(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): Promise<DaysOff[]>;
   async listAll(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
@@ -57,7 +57,7 @@ export class DaysOffService extends Service<DaysOff> {
   listByPage(query: DaysOffQueryParams): AsyncGenerator<AxiosResponse<DaysOff[]>>;
   listByPage<F extends keyof DaysOff>(
     query: DaysOffQueryParams,
-    options: { fields: F[] } & OptionsExtended<DaysOff[]>,
+    options: { fields: F[] } & OptionsExtended<DaysOff>,
   ): AsyncGenerator<AxiosResponse<Pick<DaysOff, F>[]>>;
   listByPage(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): AsyncGenerator<AxiosResponse<DaysOff[]>>;
   listByPage(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {

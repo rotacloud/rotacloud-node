@@ -49,7 +49,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
 
   listAll(): Promise<UserClockedIn[]>;
   listAll<F extends keyof UserClockedIn>(
-    options: { fields: F[] } & OptionsExtended<UserClockedIn[]>,
+    options: { fields: F[] } & OptionsExtended<UserClockedIn>,
   ): Promise<Pick<UserClockedIn, F>[]>;
   listAll(options?: OptionsExtended<UserClockedIn>): Promise<UserClockedIn[]>;
   async listAll(options?: Options) {
@@ -62,7 +62,7 @@ export class UsersClockInService extends Service<UserClockedIn> {
 
   listByPage(): AsyncGenerator<AxiosResponse<UserClockedIn[]>>;
   listByPage<F extends keyof UserClockedIn>(
-    options: { fields: F[] } & OptionsExtended<UserClockedIn[]>,
+    options: { fields: F[] } & OptionsExtended<UserClockedIn>,
   ): AsyncGenerator<AxiosResponse<Pick<UserClockedIn, F>[]>>;
   listByPage(options?: OptionsExtended<UserClockedIn>): AsyncGenerator<AxiosResponse<UserClockedIn[]>>;
   listByPage(options?: Options) {

@@ -51,7 +51,7 @@ export class LocationsService extends Service<Location> {
   listAll(query: LocationsQueryParams): Promise<Location[]>;
   listAll<F extends keyof Location>(
     query: LocationsQueryParams,
-    options: { fields: F[] } & OptionsExtended<Location[]>,
+    options: { fields: F[] } & OptionsExtended<Location>,
   ): Promise<Pick<Location, F>[]>;
   listAll(query: LocationsQueryParams, options?: OptionsExtended<Location>): Promise<Location[]>;
   async listAll(query: LocationsQueryParams, options?: OptionsExtended<Location>) {
@@ -65,7 +65,7 @@ export class LocationsService extends Service<Location> {
   listByPage(query: LocationsQueryParams): AsyncGenerator<AxiosResponse<Location[]>>;
   listByPage<F extends keyof Location>(
     query: LocationsQueryParams,
-    options: { fields: F[] } & OptionsExtended<Location[]>,
+    options: { fields: F[] } & OptionsExtended<Location>,
   ): AsyncGenerator<AxiosResponse<Pick<Location, F>[]>>;
   listByPage(
     query: LocationsQueryParams,

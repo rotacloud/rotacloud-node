@@ -48,7 +48,7 @@ export class UsersService extends Service<User> {
   listAll(query: UsersQueryParams): Promise<User[]>;
   listAll<F extends keyof User>(
     query: UsersQueryParams,
-    options: { fields: F[] } & OptionsExtended<User[]>,
+    options: { fields: F[] } & OptionsExtended<User>,
   ): Promise<Pick<User, F>[]>;
   listAll(query: UsersQueryParams, options?: OptionsExtended<User>): Promise<User[]>;
   async listAll(query: UsersQueryParams, options?: OptionsExtended<User>) {
@@ -62,7 +62,7 @@ export class UsersService extends Service<User> {
   listByPage(query: UsersQueryParams): AsyncGenerator<AxiosResponse<User[]>>;
   listByPage<F extends keyof User>(
     query: UsersQueryParams,
-    options: { fields: F[] } & OptionsExtended<User[]>,
+    options: { fields: F[] } & OptionsExtended<User>,
   ): AsyncGenerator<AxiosResponse<Pick<User, F>[]>>;
   listByPage(query: UsersQueryParams, options?: OptionsExtended<User>): AsyncGenerator<AxiosResponse<User[]>>;
   listByPage(query: UsersQueryParams, options?: OptionsExtended<User>) {

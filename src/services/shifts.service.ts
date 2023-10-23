@@ -48,7 +48,7 @@ export class ShiftsService extends Service<Shift> {
   listAll(query: ShiftsQueryParams): Promise<Shift[]>;
   listAll<F extends keyof Shift>(
     query: ShiftsQueryParams,
-    options: { fields: F[] } & OptionsExtended<Shift[]>,
+    options: { fields: F[] } & OptionsExtended<Shift>,
   ): Promise<Pick<Shift, F>[]>;
   listAll(query: ShiftsQueryParams, options?: OptionsExtended<Shift>): Promise<Shift[]>;
   async listAll(query: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
@@ -62,7 +62,7 @@ export class ShiftsService extends Service<Shift> {
   listByPage(query: ShiftsQueryParams): AsyncGenerator<AxiosResponse<Shift[]>>;
   listByPage<F extends keyof Shift>(
     query: ShiftsQueryParams,
-    options: { fields: F[] } & OptionsExtended<Shift[]>,
+    options: { fields: F[] } & OptionsExtended<Shift>,
   ): AsyncGenerator<AxiosResponse<Pick<Shift, F>[]>>;
   listByPage(query: ShiftsQueryParams, options?: OptionsExtended<Shift>): AsyncGenerator<AxiosResponse<Shift[]>>;
   listByPage(query: ShiftsQueryParams, options?: OptionsExtended<Shift>) {

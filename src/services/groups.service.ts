@@ -48,7 +48,7 @@ export class GroupsService extends Service<Group> {
   listAll(query: GroupsQueryParams): Promise<Group[]>;
   listAll<F extends keyof Group>(
     query: GroupsQueryParams,
-    options: { fields: F[] } & OptionsExtended<Group[]>,
+    options: { fields: F[] } & OptionsExtended<Group>,
   ): Promise<Pick<Group, F>[]>;
   listAll(query: GroupsQueryParams, options?: OptionsExtended<Group>): Promise<Group[]>;
   async listAll(query: GroupsQueryParams, options?: OptionsExtended<Group>) {
@@ -62,7 +62,7 @@ export class GroupsService extends Service<Group> {
   listByPage(query: GroupsQueryParams): AsyncGenerator<AxiosResponse<Group[]>>;
   listByPage<F extends keyof Group>(
     query: GroupsQueryParams,
-    options: { fields: F[] } & OptionsExtended<Group[]>,
+    options: { fields: F[] } & OptionsExtended<Group>,
   ): AsyncGenerator<AxiosResponse<Pick<Group, F>[]>>;
   listByPage(query: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<AxiosResponse<Group[]>>;
   listByPage(query?: GroupsQueryParams, options?: OptionsExtended<Group>) {

@@ -46,9 +46,8 @@ export class DayNotesService extends Service<DayNote> {
   listAll(query: DayNotesQueryParams): Promise<DayNote[]>;
   listAll<F extends keyof DayNote>(
     query: DayNotesQueryParams,
-    options: { fields: F[] } & OptionsExtended<DayNote[]>,
+    options: { fields: F[] } & OptionsExtended<DayNote>,
   ): Promise<Pick<DayNote, F>[]>;
-  listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): Promise<DayNote[]>;
   listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): Promise<DayNote[]>;
   async listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
     const dayNotes: DayNote[] = [];
@@ -61,7 +60,7 @@ export class DayNotesService extends Service<DayNote> {
   listByPage(query: DayNotesQueryParams): AsyncGenerator<AxiosResponse<DayNote[]>>;
   listByPage<F extends keyof DayNote>(
     query: DayNotesQueryParams,
-    options: { fields: F[] } & OptionsExtended<DayNote[]>,
+    options: { fields: F[] } & OptionsExtended<DayNote>,
   ): AsyncGenerator<AxiosResponse<Pick<DayNote, F>[]>>;
   listByPage(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<AxiosResponse<DayNote[]>>;
   listByPage(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {

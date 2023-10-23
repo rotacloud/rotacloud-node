@@ -72,9 +72,7 @@ export class TerminalsService extends Service<Terminal> {
   }
 
   listAll(): Promise<Terminal[]>;
-  listAll<F extends keyof Terminal>(
-    options: { fields: F[] } & OptionsExtended<Terminal[]>,
-  ): Promise<Pick<Terminal, F>[]>;
+  listAll<F extends keyof Terminal>(options: { fields: F[] } & OptionsExtended<Terminal>): Promise<Pick<Terminal, F>[]>;
   listAll(options?: OptionsExtended<Terminal>): Promise<Terminal[]>;
   async listAll(options?: Options) {
     const users = [] as Terminal[];
@@ -86,7 +84,7 @@ export class TerminalsService extends Service<Terminal> {
 
   listByPage(): AsyncGenerator<AxiosResponse<Terminal[]>>;
   listByPage<F extends keyof Terminal>(
-    options: { fields: F[] } & OptionsExtended<Terminal[]>,
+    options: { fields: F[] } & OptionsExtended<Terminal>,
   ): AsyncGenerator<AxiosResponse<Pick<Terminal, F>[]>>;
   listByPage(options?: OptionsExtended<Terminal>): AsyncGenerator<AxiosResponse<Terminal[]>>;
   listByPage(options?: Options) {
