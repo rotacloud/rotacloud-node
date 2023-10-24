@@ -35,23 +35,23 @@ export class ShiftsService extends Service<Shift> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: ShiftsQueryParams): AsyncGenerator<Shift>;
+  list(query?: ShiftsQueryParams): AsyncGenerator<Shift>;
   list<F extends keyof Shift>(
     query: ShiftsQueryParams,
     options: { fields: F[] } & OptionsExtended<Shift>,
   ): AsyncGenerator<Pick<Shift, F>>;
-  list(query: ShiftsQueryParams, options?: OptionsExtended<Shift>): AsyncGenerator<Shift>;
-  async *list(query: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
+  list(query?: ShiftsQueryParams, options?: OptionsExtended<Shift>): AsyncGenerator<Shift>;
+  async *list(query?: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: ShiftsQueryParams): Promise<Shift[]>;
+  listAll(query?: ShiftsQueryParams): Promise<Shift[]>;
   listAll<F extends keyof Shift>(
     query: ShiftsQueryParams,
     options: { fields: F[] } & OptionsExtended<Shift>,
   ): Promise<Pick<Shift, F>[]>;
-  listAll(query: ShiftsQueryParams, options?: OptionsExtended<Shift>): Promise<Shift[]>;
-  async listAll(query: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
+  listAll(query?: ShiftsQueryParams, options?: OptionsExtended<Shift>): Promise<Shift[]>;
+  async listAll(query?: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
     const shifts = [] as Shift[];
     for await (const shift of this.list(query, options)) {
       shifts.push(shift);
@@ -59,13 +59,13 @@ export class ShiftsService extends Service<Shift> {
     return shifts;
   }
 
-  listByPage(query: ShiftsQueryParams): AsyncGenerator<AxiosResponse<Shift[]>>;
+  listByPage(query?: ShiftsQueryParams): AsyncGenerator<AxiosResponse<Shift[]>>;
   listByPage<F extends keyof Shift>(
     query: ShiftsQueryParams,
     options: { fields: F[] } & OptionsExtended<Shift>,
   ): AsyncGenerator<AxiosResponse<Pick<Shift, F>[]>>;
-  listByPage(query: ShiftsQueryParams, options?: OptionsExtended<Shift>): AsyncGenerator<AxiosResponse<Shift[]>>;
-  listByPage(query: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
+  listByPage(query?: ShiftsQueryParams, options?: OptionsExtended<Shift>): AsyncGenerator<AxiosResponse<Shift[]>>;
+  listByPage(query?: ShiftsQueryParams, options?: OptionsExtended<Shift>) {
     return super.iterator<Shift>({ url: this.apiPath, params: query }, options).byPage();
   }
 

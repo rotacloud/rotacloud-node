@@ -35,23 +35,23 @@ export class RolesService extends Service<Role> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: RolesQueryParams): AsyncGenerator<Role>;
+  list(query?: RolesQueryParams): AsyncGenerator<Role>;
   list<F extends keyof Role>(
     query: RolesQueryParams,
     options: { fields: F[] } & OptionsExtended<Role>,
   ): AsyncGenerator<Pick<Role, F>>;
-  list(query: RolesQueryParams, options?: OptionsExtended<Role>): AsyncGenerator<Role>;
+  list(query?: RolesQueryParams, options?: OptionsExtended<Role>): AsyncGenerator<Role>;
   async *list(query?: RolesQueryParams, options?: OptionsExtended<Role>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: RolesQueryParams): Promise<Role[]>;
+  listAll(query?: RolesQueryParams): Promise<Role[]>;
   listAll<F extends keyof Role>(
     query: RolesQueryParams,
     options: { fields: F[] } & OptionsExtended<Role>,
   ): Promise<Pick<Role, F>[]>;
-  listAll(query: RolesQueryParams, options?: OptionsExtended<Role>): Promise<Role[]>;
-  async listAll(query: RolesQueryParams, options?: OptionsExtended<Role>) {
+  listAll(query?: RolesQueryParams, options?: OptionsExtended<Role>): Promise<Role[]>;
+  async listAll(query?: RolesQueryParams, options?: OptionsExtended<Role>) {
     const roles = [] as Role[];
     for await (const role of this.list(query, options)) {
       roles.push(role);
@@ -59,12 +59,12 @@ export class RolesService extends Service<Role> {
     return roles;
   }
 
-  listByPage(query: RolesQueryParams): AsyncGenerator<AxiosResponse<Role[]>>;
+  listByPage(query?: RolesQueryParams): AsyncGenerator<AxiosResponse<Role[]>>;
   listByPage<F extends keyof Role>(
     query: RolesQueryParams,
     options: { fields: F[] } & OptionsExtended<Role>,
   ): AsyncGenerator<AxiosResponse<Pick<Role, F>[]>>;
-  listByPage(query: RolesQueryParams, options?: OptionsExtended<Role>): AsyncGenerator<AxiosResponse<Role[]>>;
+  listByPage(query?: RolesQueryParams, options?: OptionsExtended<Role>): AsyncGenerator<AxiosResponse<Role[]>>;
   listByPage(query?: RolesQueryParams, options?: OptionsExtended<Role>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }

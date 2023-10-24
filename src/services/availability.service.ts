@@ -48,11 +48,11 @@ export class AvailabilityService extends Service<Availability> {
     );
   }
 
-  async *list(query: AvailabilityQueryParams, options?: Options) {
+  async *list(query?: AvailabilityQueryParams, options?: Options) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listByPage(query: AvailabilityQueryParams, options?: Options) {
+  listByPage(query?: AvailabilityQueryParams, options?: Options) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 }

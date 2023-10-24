@@ -35,23 +35,23 @@ export class LeaveService extends Service<Leave> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: LeaveQueryParams): AsyncGenerator<Leave>;
+  list(query?: LeaveQueryParams): AsyncGenerator<Leave>;
   list<F extends keyof Leave>(
     query: LeaveQueryParams,
     options: { fields: F[] } & OptionsExtended<Leave>,
   ): AsyncGenerator<Pick<Leave, F>>;
-  list(query: LeaveQueryParams, options?: OptionsExtended<Leave>): AsyncGenerator<Leave>;
-  async *list(query: LeaveQueryParams, options?: OptionsExtended<Leave>) {
+  list(query?: LeaveQueryParams, options?: OptionsExtended<Leave>): AsyncGenerator<Leave>;
+  async *list(query?: LeaveQueryParams, options?: OptionsExtended<Leave>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: LeaveQueryParams): Promise<Leave[]>;
+  listAll(query?: LeaveQueryParams): Promise<Leave[]>;
   listAll<F extends keyof Leave>(
     query: LeaveQueryParams,
     options: { fields: F[] } & OptionsExtended<Leave>,
   ): Promise<Pick<Leave, F>[]>;
-  listAll(query: LeaveQueryParams, options?: OptionsExtended<Leave>): Promise<Leave[]>;
-  async listAll(query: LeaveQueryParams, options?: OptionsExtended<Leave>) {
+  listAll(query?: LeaveQueryParams, options?: OptionsExtended<Leave>): Promise<Leave[]>;
+  async listAll(query?: LeaveQueryParams, options?: OptionsExtended<Leave>) {
     const leave = [] as Leave[];
     for await (const leaveRecord of this.list(query, options)) {
       leave.push(leaveRecord);
@@ -59,13 +59,13 @@ export class LeaveService extends Service<Leave> {
     return leave;
   }
 
-  listByPage(query: LeaveQueryParams): AsyncGenerator<AxiosResponse<Leave[]>>;
+  listByPage(query?: LeaveQueryParams): AsyncGenerator<AxiosResponse<Leave[]>>;
   listByPage<F extends keyof Leave>(
     query: LeaveQueryParams,
     options: { fields: F[] } & OptionsExtended<Leave>,
   ): AsyncGenerator<AxiosResponse<Pick<Leave, F>[]>>;
-  listByPage(query: LeaveQueryParams, options?: OptionsExtended<Leave>): AsyncGenerator<AxiosResponse<Leave[]>>;
-  listByPage(query: LeaveQueryParams, options?: OptionsExtended<Leave>) {
+  listByPage(query?: LeaveQueryParams, options?: OptionsExtended<Leave>): AsyncGenerator<AxiosResponse<Leave[]>>;
+  listByPage(query?: LeaveQueryParams, options?: OptionsExtended<Leave>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

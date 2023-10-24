@@ -29,11 +29,11 @@ export class ToilAccrualsService extends Service {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(query: ToilAccrualsQueryParams, options?: Options) {
+  async *list(query?: ToilAccrualsQueryParams, options?: Options) {
     yield* super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options);
   }
 
-  async listAll(query: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]> {
+  async listAll(query?: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]> {
     const toilAccruals = [] as ToilAccrual[];
     for await (const accrual of this.list(query, options)) {
       toilAccruals.push(accrual);
@@ -41,7 +41,7 @@ export class ToilAccrualsService extends Service {
     return toilAccruals;
   }
 
-  listByPage(query: ToilAccrualsQueryParams, options?: Options) {
+  listByPage(query?: ToilAccrualsQueryParams, options?: Options) {
     return super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options).byPage();
   }
 

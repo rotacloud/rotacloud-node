@@ -38,23 +38,23 @@ export class LocationsService extends Service<Location> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: LocationsQueryParams): AsyncGenerator<Location>;
+  list(query?: LocationsQueryParams): AsyncGenerator<Location>;
   list<F extends keyof Location>(
     query: LocationsQueryParams,
     options: { fields: F[] } & OptionsExtended<Location>,
   ): AsyncGenerator<Pick<Location, F>>;
-  list(query: LocationsQueryParams, options?: OptionsExtended<Location>): AsyncGenerator<Location>;
+  list(query?: LocationsQueryParams, options?: OptionsExtended<Location>): AsyncGenerator<Location>;
   async *list(query?: LocationsQueryParams, options?: OptionsExtended<Location>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: LocationsQueryParams): Promise<Location[]>;
+  listAll(query?: LocationsQueryParams): Promise<Location[]>;
   listAll<F extends keyof Location>(
     query: LocationsQueryParams,
     options: { fields: F[] } & OptionsExtended<Location>,
   ): Promise<Pick<Location, F>[]>;
-  listAll(query: LocationsQueryParams, options?: OptionsExtended<Location>): Promise<Location[]>;
-  async listAll(query: LocationsQueryParams, options?: OptionsExtended<Location>) {
+  listAll(query?: LocationsQueryParams, options?: OptionsExtended<Location>): Promise<Location[]>;
+  async listAll(query?: LocationsQueryParams, options?: OptionsExtended<Location>) {
     const locations = [] as Location[];
     for await (const location of this.list(query, options)) {
       locations.push(location);
@@ -62,7 +62,7 @@ export class LocationsService extends Service<Location> {
     return locations;
   }
 
-  listByPage(query: LocationsQueryParams): AsyncGenerator<AxiosResponse<Location[]>>;
+  listByPage(query?: LocationsQueryParams): AsyncGenerator<AxiosResponse<Location[]>>;
   listByPage<F extends keyof Location>(
     query: LocationsQueryParams,
     options: { fields: F[] } & OptionsExtended<Location>,

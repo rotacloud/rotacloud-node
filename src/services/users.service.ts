@@ -35,23 +35,23 @@ export class UsersService extends Service<User> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: UsersQueryParams): AsyncGenerator<User>;
+  list(query?: UsersQueryParams): AsyncGenerator<User>;
   list<F extends keyof User>(
     query: UsersQueryParams,
     options: { fields: F[] } & OptionsExtended<User>,
   ): AsyncGenerator<Pick<User, F>>;
-  list(query: UsersQueryParams, options?: OptionsExtended<User>): AsyncGenerator<User>;
-  async *list(query: UsersQueryParams, options?: OptionsExtended<User>) {
+  list(query?: UsersQueryParams, options?: OptionsExtended<User>): AsyncGenerator<User>;
+  async *list(query?: UsersQueryParams, options?: OptionsExtended<User>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: UsersQueryParams): Promise<User[]>;
+  listAll(query?: UsersQueryParams): Promise<User[]>;
   listAll<F extends keyof User>(
     query: UsersQueryParams,
     options: { fields: F[] } & OptionsExtended<User>,
   ): Promise<Pick<User, F>[]>;
-  listAll(query: UsersQueryParams, options?: OptionsExtended<User>): Promise<User[]>;
-  async listAll(query: UsersQueryParams, options?: OptionsExtended<User>) {
+  listAll(query?: UsersQueryParams, options?: OptionsExtended<User>): Promise<User[]>;
+  async listAll(query?: UsersQueryParams, options?: OptionsExtended<User>) {
     const users = [] as User[];
     for await (const user of this.list(query, options)) {
       users.push(user);
@@ -59,13 +59,13 @@ export class UsersService extends Service<User> {
     return users;
   }
 
-  listByPage(query: UsersQueryParams): AsyncGenerator<AxiosResponse<User[]>>;
+  listByPage(query?: UsersQueryParams): AsyncGenerator<AxiosResponse<User[]>>;
   listByPage<F extends keyof User>(
     query: UsersQueryParams,
     options: { fields: F[] } & OptionsExtended<User>,
   ): AsyncGenerator<AxiosResponse<Pick<User, F>[]>>;
-  listByPage(query: UsersQueryParams, options?: OptionsExtended<User>): AsyncGenerator<AxiosResponse<User[]>>;
-  listByPage(query: UsersQueryParams, options?: OptionsExtended<User>) {
+  listByPage(query?: UsersQueryParams, options?: OptionsExtended<User>): AsyncGenerator<AxiosResponse<User[]>>;
+  listByPage(query?: UsersQueryParams, options?: OptionsExtended<User>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

@@ -45,23 +45,23 @@ export class LeaveRequestService extends Service<LeaveRequest> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: LeaveRequestsQueryParams): AsyncGenerator<LeaveRequest>;
+  list(query?: LeaveRequestsQueryParams): AsyncGenerator<LeaveRequest>;
   list<F extends keyof LeaveRequest>(
     query: LeaveRequestsQueryParams,
     options: { fields: F[] } & OptionsExtended<LeaveRequest>,
   ): AsyncGenerator<Pick<LeaveRequest, F>>;
-  list(query: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>): AsyncGenerator<LeaveRequest>;
+  list(query?: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>): AsyncGenerator<LeaveRequest>;
   async *list(query?: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: LeaveRequestsQueryParams): Promise<LeaveRequest[]>;
+  listAll(query?: LeaveRequestsQueryParams): Promise<LeaveRequest[]>;
   listAll<F extends keyof LeaveRequest>(
     query: LeaveRequestsQueryParams,
     options: { fields: F[] } & OptionsExtended<LeaveRequest>,
   ): Promise<Pick<LeaveRequest, F>[]>;
-  listAll(query: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>): Promise<LeaveRequest[]>;
-  async listAll(query: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>) {
+  listAll(query?: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>): Promise<LeaveRequest[]>;
+  async listAll(query?: LeaveRequestsQueryParams, options?: OptionsExtended<LeaveRequest>) {
     const leave = [] as LeaveRequest[];
     for await (const leaveRequestRecord of this.list(query, options)) {
       leave.push(leaveRequestRecord);
@@ -69,7 +69,7 @@ export class LeaveRequestService extends Service<LeaveRequest> {
     return leave;
   }
 
-  listByPage(query: LeaveRequestsQueryParams): AsyncGenerator<AxiosResponse<LeaveRequest[]>>;
+  listByPage(query?: LeaveRequestsQueryParams): AsyncGenerator<AxiosResponse<LeaveRequest[]>>;
   listByPage<F extends keyof LeaveRequest>(
     query: LeaveRequestsQueryParams,
     options: { fields: F[] } & OptionsExtended<LeaveRequest>,

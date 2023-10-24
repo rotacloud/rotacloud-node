@@ -38,23 +38,23 @@ export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: LeaveEmbargoesQueryParams): AsyncGenerator<LeaveEmbargo>;
+  list(query?: LeaveEmbargoesQueryParams): AsyncGenerator<LeaveEmbargo>;
   list<F extends keyof LeaveEmbargo>(
     query: LeaveEmbargoesQueryParams,
     options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
   ): AsyncGenerator<Pick<LeaveEmbargo, F>>;
-  list(query: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): AsyncGenerator<LeaveEmbargo>;
-  async *list(query: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
+  list(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): AsyncGenerator<LeaveEmbargo>;
+  async *list(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: LeaveEmbargoesQueryParams): Promise<LeaveEmbargo[]>;
+  listAll(query?: LeaveEmbargoesQueryParams): Promise<LeaveEmbargo[]>;
   listAll<F extends keyof LeaveEmbargo>(
     query: LeaveEmbargoesQueryParams,
     options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
   ): Promise<Pick<LeaveEmbargo, F>[]>;
-  listAll(query: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): Promise<LeaveEmbargo[]>;
-  async listAll(query: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
+  listAll(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): Promise<LeaveEmbargo[]>;
+  async listAll(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
     const leave = [] as LeaveEmbargo[];
     for await (const leaveEmbargoRecord of this.list(query, options)) {
       leave.push(leaveEmbargoRecord);
@@ -62,7 +62,7 @@ export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
     return leave;
   }
 
-  listByPage(query: LeaveEmbargoesQueryParams): AsyncGenerator<AxiosResponse<LeaveEmbargo[]>>;
+  listByPage(query?: LeaveEmbargoesQueryParams): AsyncGenerator<AxiosResponse<LeaveEmbargo[]>>;
   listByPage<F extends keyof LeaveEmbargo>(
     query: LeaveEmbargoesQueryParams,
     options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
@@ -71,7 +71,7 @@ export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
     query: LeaveEmbargoesQueryParams,
     options?: OptionsExtended<LeaveEmbargo>,
   ): AsyncGenerator<AxiosResponse<LeaveEmbargo[]>>;
-  listByPage(query: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
+  listByPage(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

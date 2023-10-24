@@ -30,23 +30,23 @@ export class DaysOffService extends Service<DaysOff> {
       .then((res) => (options?.rawResponse ? res : res.status));
   }
 
-  list(query: DaysOffQueryParams): AsyncGenerator<DaysOff>;
+  list(query?: DaysOffQueryParams): AsyncGenerator<DaysOff>;
   list<F extends keyof DaysOff>(
     query: DaysOffQueryParams,
     options: { fields: F[] } & OptionsExtended<DaysOff>,
   ): AsyncGenerator<Pick<DaysOff, F>>;
-  list(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): AsyncGenerator<DaysOff>;
-  async *list(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
+  list(query?: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): AsyncGenerator<DaysOff>;
+  async *list(query?: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
     yield* super.iterator<DaysOff>({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: DaysOffQueryParams): Promise<DaysOff[]>;
+  listAll(query?: DaysOffQueryParams): Promise<DaysOff[]>;
   listAll<F extends keyof DaysOff>(
     query: DaysOffQueryParams,
     options: { fields: F[] } & OptionsExtended<DaysOff>,
   ): Promise<Pick<DaysOff, F>[]>;
-  listAll(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): Promise<DaysOff[]>;
-  async listAll(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
+  listAll(query?: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): Promise<DaysOff[]>;
+  async listAll(query?: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
     const daysOff = [] as DaysOff[];
     for await (const dayOff of this.list(query, options)) {
       daysOff.push(dayOff);
@@ -54,13 +54,13 @@ export class DaysOffService extends Service<DaysOff> {
     return daysOff;
   }
 
-  listByPage(query: DaysOffQueryParams): AsyncGenerator<AxiosResponse<DaysOff[]>>;
+  listByPage(query?: DaysOffQueryParams): AsyncGenerator<AxiosResponse<DaysOff[]>>;
   listByPage<F extends keyof DaysOff>(
     query: DaysOffQueryParams,
     options: { fields: F[] } & OptionsExtended<DaysOff>,
   ): AsyncGenerator<AxiosResponse<Pick<DaysOff, F>[]>>;
-  listByPage(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): AsyncGenerator<AxiosResponse<DaysOff[]>>;
-  listByPage(query: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
+  listByPage(query?: DaysOffQueryParams, options?: OptionsExtended<DaysOff>): AsyncGenerator<AxiosResponse<DaysOff[]>>;
+  listByPage(query?: DaysOffQueryParams, options?: OptionsExtended<DaysOff>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

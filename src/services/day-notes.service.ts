@@ -33,23 +33,23 @@ export class DayNotesService extends Service<DayNote> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: DayNotesQueryParams): AsyncGenerator<DayNote>;
+  list(query?: DayNotesQueryParams): AsyncGenerator<DayNote>;
   list<F extends keyof DayNote>(
     query: DayNotesQueryParams,
     options: { fields: F[] } & OptionsExtended<DayNote>,
   ): AsyncGenerator<Pick<DayNote, F>>;
-  list(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<DayNote>;
-  async *list(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
+  list(query?: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<DayNote>;
+  async *list(query?: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: DayNotesQueryParams): Promise<DayNote[]>;
+  listAll(query?: DayNotesQueryParams): Promise<DayNote[]>;
   listAll<F extends keyof DayNote>(
     query: DayNotesQueryParams,
     options: { fields: F[] } & OptionsExtended<DayNote>,
   ): Promise<Pick<DayNote, F>[]>;
-  listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): Promise<DayNote[]>;
-  async listAll(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
+  listAll(query?: DayNotesQueryParams, options?: OptionsExtended<DayNote>): Promise<DayNote[]>;
+  async listAll(query?: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
     const dayNotes: DayNote[] = [];
     for await (const dayNote of this.list(query, options)) {
       dayNotes.push(dayNote);
@@ -57,13 +57,13 @@ export class DayNotesService extends Service<DayNote> {
     return dayNotes;
   }
 
-  listByPage(query: DayNotesQueryParams): AsyncGenerator<AxiosResponse<DayNote[]>>;
+  listByPage(query?: DayNotesQueryParams): AsyncGenerator<AxiosResponse<DayNote[]>>;
   listByPage<F extends keyof DayNote>(
     query: DayNotesQueryParams,
     options: { fields: F[] } & OptionsExtended<DayNote>,
   ): AsyncGenerator<AxiosResponse<Pick<DayNote, F>[]>>;
-  listByPage(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<AxiosResponse<DayNote[]>>;
-  listByPage(query: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
+  listByPage(query?: DayNotesQueryParams, options?: OptionsExtended<DayNote>): AsyncGenerator<AxiosResponse<DayNote[]>>;
+  listByPage(query?: DayNotesQueryParams, options?: OptionsExtended<DayNote>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

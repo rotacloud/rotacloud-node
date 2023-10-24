@@ -35,23 +35,23 @@ export class GroupsService extends Service<Group> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query: GroupsQueryParams): AsyncGenerator<Group>;
+  list(query?: GroupsQueryParams): AsyncGenerator<Group>;
   list<F extends keyof Group>(
     query: GroupsQueryParams,
     options: { fields: F[] } & OptionsExtended<Group>,
   ): AsyncGenerator<Pick<Group, F>>;
-  list(query: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<Group>;
+  list(query?: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<Group>;
   async *list(query?: GroupsQueryParams, options?: OptionsExtended<Group>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: GroupsQueryParams): Promise<Group[]>;
+  listAll(query?: GroupsQueryParams): Promise<Group[]>;
   listAll<F extends keyof Group>(
     query: GroupsQueryParams,
     options: { fields: F[] } & OptionsExtended<Group>,
   ): Promise<Pick<Group, F>[]>;
-  listAll(query: GroupsQueryParams, options?: OptionsExtended<Group>): Promise<Group[]>;
-  async listAll(query: GroupsQueryParams, options?: OptionsExtended<Group>) {
+  listAll(query?: GroupsQueryParams, options?: OptionsExtended<Group>): Promise<Group[]>;
+  async listAll(query?: GroupsQueryParams, options?: OptionsExtended<Group>) {
     const groups = [] as Group[];
     for await (const group of this.list(query, options)) {
       groups.push(group);
@@ -59,12 +59,12 @@ export class GroupsService extends Service<Group> {
     return groups;
   }
 
-  listByPage(query: GroupsQueryParams): AsyncGenerator<AxiosResponse<Group[]>>;
+  listByPage(query?: GroupsQueryParams): AsyncGenerator<AxiosResponse<Group[]>>;
   listByPage<F extends keyof Group>(
     query: GroupsQueryParams,
     options: { fields: F[] } & OptionsExtended<Group>,
   ): AsyncGenerator<AxiosResponse<Pick<Group, F>[]>>;
-  listByPage(query: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<AxiosResponse<Group[]>>;
+  listByPage(query?: GroupsQueryParams, options?: OptionsExtended<Group>): AsyncGenerator<AxiosResponse<Group[]>>;
   listByPage(query?: GroupsQueryParams, options?: OptionsExtended<Group>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
