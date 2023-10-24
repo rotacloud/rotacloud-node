@@ -38,23 +38,23 @@ export class AttendanceService extends Service<Attendance> {
       .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  list(query?: AttendanceQueryParams): AsyncGenerator<Attendance>;
+  list(query: AttendanceQueryParams): AsyncGenerator<Attendance>;
   list<F extends keyof Attendance>(
     query: AttendanceQueryParams,
     options: { fields: F[] } & OptionsExtended<Attendance>,
   ): AsyncGenerator<Pick<Attendance, F>>;
-  list(query?: AttendanceQueryParams, options?: OptionsExtended<Attendance>): AsyncGenerator<Attendance>;
-  async *list(query?: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
+  list(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>): AsyncGenerator<Attendance>;
+  async *list(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query?: AttendanceQueryParams): Promise<Attendance[]>;
+  listAll(query: AttendanceQueryParams): Promise<Attendance[]>;
   listAll<F extends keyof Attendance>(
     query: AttendanceQueryParams,
     options: { fields: F[] } & OptionsExtended<Attendance>,
   ): Promise<Pick<Attendance, F>[]>;
-  listAll(query?: AttendanceQueryParams, options?: OptionsExtended<Attendance>): Promise<Attendance[]>;
-  async listAll(query?: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
+  listAll(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>): Promise<Attendance[]>;
+  async listAll(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
     const attendance = [] as Attendance[];
     for await (const atten of this.list(query, options)) {
       attendance.push(atten);
@@ -62,7 +62,7 @@ export class AttendanceService extends Service<Attendance> {
     return attendance;
   }
 
-  listByPage(query?: AttendanceQueryParams): AsyncGenerator<AxiosResponse<Attendance[]>>;
+  listByPage(query: AttendanceQueryParams): AsyncGenerator<AxiosResponse<Attendance[]>>;
   listByPage<F extends keyof Attendance>(
     query: AttendanceQueryParams,
     options: { fields: F[] } & OptionsExtended<Attendance>,
@@ -71,7 +71,7 @@ export class AttendanceService extends Service<Attendance> {
     query: AttendanceQueryParams,
     options?: OptionsExtended<Attendance>,
   ): AsyncGenerator<AxiosResponse<Attendance[]>>;
-  listByPage(query?: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
+  listByPage(query: AttendanceQueryParams, options?: OptionsExtended<Attendance>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 

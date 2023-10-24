@@ -7,23 +7,23 @@ import { DailyBudgetsQueryParams } from '../interfaces/query-params/daily-budget
 export class DailyBudgetsService extends Service<DailyBudgets> {
   private apiPath = '/daily_budgets';
 
-  list(query?: DailyBudgetsQueryParams): AsyncGenerator<DailyBudgets>;
+  list(query: DailyBudgetsQueryParams): AsyncGenerator<DailyBudgets>;
   list<F extends keyof DailyBudgets>(
     query: DailyBudgetsQueryParams,
     options: { fields: F[] } & OptionsExtended<DailyBudgets>,
   ): AsyncGenerator<Pick<DailyBudgets, F>>;
-  list(query?: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>): AsyncGenerator<DailyBudgets>;
-  async *list(query?: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>) {
+  list(query: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>): AsyncGenerator<DailyBudgets>;
+  async *list(query: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>) {
     yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query?: DailyBudgetsQueryParams): Promise<DailyBudgets[]>;
+  listAll(query: DailyBudgetsQueryParams): Promise<DailyBudgets[]>;
   listAll<F extends keyof DailyBudgets>(
     query: DailyBudgetsQueryParams,
     options: { fields: F[] } & OptionsExtended<DailyBudgets>,
   ): Promise<Pick<DailyBudgets, F>[]>;
-  listAll(query?: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>): Promise<DailyBudgets[]>;
-  async listAll(query?: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>) {
+  listAll(query: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>): Promise<DailyBudgets[]>;
+  async listAll(query: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>) {
     const attendance = [] as DailyBudgets[];
     for await (const atten of this.list(query, options)) {
       attendance.push(atten);
@@ -31,7 +31,7 @@ export class DailyBudgetsService extends Service<DailyBudgets> {
     return attendance;
   }
 
-  listByPage(query?: DailyBudgetsQueryParams): AsyncGenerator<AxiosResponse<DailyBudgets[]>>;
+  listByPage(query: DailyBudgetsQueryParams): AsyncGenerator<AxiosResponse<DailyBudgets[]>>;
   listByPage<F extends keyof DailyBudgets>(
     query: DailyBudgetsQueryParams,
     options: { fields: F[] } & OptionsExtended<DailyBudgets>,
@@ -40,7 +40,7 @@ export class DailyBudgetsService extends Service<DailyBudgets> {
     query: DailyBudgetsQueryParams,
     options?: OptionsExtended<DailyBudgets>,
   ): AsyncGenerator<AxiosResponse<DailyBudgets[]>>;
-  listByPage(query?: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>) {
+  listByPage(query: DailyBudgetsQueryParams, options?: OptionsExtended<DailyBudgets>) {
     return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 
