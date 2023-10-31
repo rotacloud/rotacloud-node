@@ -1,12 +1,12 @@
 import { AxiosResponse } from 'axios';
 import { LeaveEmbargo } from '../interfaces/index.js';
-import { Service, Options, RequirementsOf } from './index.js';
+import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
 
 import { LeaveEmbargoesQueryParams } from '../rotacloud.js';
 
 type RequiredProps = 'start_date' | 'end_date' | 'users';
 
-export class LeaveEmbargoesService extends Service {
+export class LeaveEmbargoesService extends Service<LeaveEmbargo> {
   private apiPath = '/leave_embargoes';
 
   create(data: RequirementsOf<LeaveEmbargo, RequiredProps>): Promise<LeaveEmbargo>;
@@ -17,27 +17,44 @@ export class LeaveEmbargoesService extends Service {
   create(data: RequirementsOf<LeaveEmbargo, RequiredProps>, options: Options): Promise<LeaveEmbargo>;
   create(data: RequirementsOf<LeaveEmbargo, RequiredProps>, options?: Options) {
     return super
-      .fetch<LeaveEmbargo>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .fetch<LeaveEmbargo>({ url: this.apiPath, data, method: 'POST' }, options)
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<LeaveEmbargo>;
-  get(id: number, options: { rawResponse: true }): Promise<AxiosResponse<LeaveEmbargo, any>>;
-  get(id: number, options: Options): Promise<LeaveEmbargo>;
-  get(id: number, options?: Options) {
+  get<F extends keyof LeaveEmbargo>(
+    id: number,
+    options: { fields: F[]; rawResponse: true } & OptionsExtended<LeaveEmbargo>,
+  ): Promise<AxiosResponse<Pick<LeaveEmbargo, F>>>;
+  get<F extends keyof LeaveEmbargo>(
+    id: number,
+    options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
+  ): Promise<Pick<LeaveEmbargo, F>>;
+  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<LeaveEmbargo>>;
+  get(id: number, options?: OptionsExtended<LeaveEmbargo>): Promise<LeaveEmbargo>;
+  get(id: number, options?: OptionsExtended<LeaveEmbargo>) {
     return super
       .fetch<LeaveEmbargo>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(query: LeaveEmbargoesQueryParams, options?: Options) {
-    for await (const res of super.iterator<LeaveEmbargo>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+  list(query?: LeaveEmbargoesQueryParams): AsyncGenerator<LeaveEmbargo>;
+  list<F extends keyof LeaveEmbargo>(
+    query: LeaveEmbargoesQueryParams,
+    options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
+  ): AsyncGenerator<Pick<LeaveEmbargo, F>>;
+  list(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): AsyncGenerator<LeaveEmbargo>;
+  async *list(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
+    yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listAll(query: LeaveEmbargoesQueryParams, options?: Options): Promise<LeaveEmbargo[]>;
-  async listAll(query: LeaveEmbargoesQueryParams, options?: Options) {
+  listAll(query?: LeaveEmbargoesQueryParams): Promise<LeaveEmbargo[]>;
+  listAll<F extends keyof LeaveEmbargo>(
+    query: LeaveEmbargoesQueryParams,
+    options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
+  ): Promise<Pick<LeaveEmbargo, F>[]>;
+  listAll(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>): Promise<LeaveEmbargo[]>;
+  async listAll(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
     const leave = [] as LeaveEmbargo[];
     for await (const leaveEmbargoRecord of this.list(query, options)) {
       leave.push(leaveEmbargoRecord);
@@ -45,8 +62,17 @@ export class LeaveEmbargoesService extends Service {
     return leave;
   }
 
-  listByPage(query: LeaveEmbargoesQueryParams, options?: Options) {
-    return super.iterator<LeaveEmbargo>({ url: this.apiPath, params: query }, options).byPage();
+  listByPage(query?: LeaveEmbargoesQueryParams): AsyncGenerator<AxiosResponse<LeaveEmbargo[]>>;
+  listByPage<F extends keyof LeaveEmbargo>(
+    query: LeaveEmbargoesQueryParams,
+    options: { fields: F[] } & OptionsExtended<LeaveEmbargo>,
+  ): AsyncGenerator<AxiosResponse<Pick<LeaveEmbargo, F>[]>>;
+  listByPage(
+    query: LeaveEmbargoesQueryParams,
+    options?: OptionsExtended<LeaveEmbargo>,
+  ): AsyncGenerator<AxiosResponse<LeaveEmbargo[]>>;
+  listByPage(query?: LeaveEmbargoesQueryParams, options?: OptionsExtended<LeaveEmbargo>) {
+    return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 
   update(id: number, data: Partial<LeaveEmbargo>): Promise<LeaveEmbargo>;
@@ -58,20 +84,23 @@ export class LeaveEmbargoesService extends Service {
   update(id: number, data: Partial<LeaveEmbargo>, options: Options): Promise<LeaveEmbargo>;
   update(id: number, data: Partial<LeaveEmbargo>, options?: Options) {
     return super
-      .fetch<LeaveEmbargo>({
-        url: `${this.apiPath}/${id}`,
-        data,
-        method: 'POST',
-      })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .fetch<LeaveEmbargo>(
+        {
+          url: `${this.apiPath}/${id}`,
+          data,
+          method: 'POST',
+        },
+        options,
+      )
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<LeaveEmbargo>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+      .fetch<void>({ url: `${this.apiPath}/${id}`, method: 'DELETE' }, options)
+      .then((res) => (options?.rawResponse ? res : res.status));
   }
 }

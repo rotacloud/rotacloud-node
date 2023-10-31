@@ -4,7 +4,7 @@ import { Service, Options } from './index.js';
 import { AvailabilityQueryParams } from '../interfaces/query-params/availability-query-params.interface.js';
 import { Availability } from '../interfaces/availability.interface.js';
 
-export class AvailabilityService extends Service {
+export class AvailabilityService extends Service<Availability> {
   private apiPath = '/availability';
 
   update(data: Availability): Promise<Availability>;
@@ -12,12 +12,15 @@ export class AvailabilityService extends Service {
   update(data: Availability, options?: Options): Promise<Availability | AxiosResponse<Availability>>;
   update(data: Availability, options?: Options) {
     return super
-      .fetch<Availability>({
-        url: this.apiPath,
-        data,
-        method: 'POST',
-      })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .fetch<Availability>(
+        {
+          url: this.apiPath,
+          data,
+          method: 'POST',
+        },
+        options,
+      )
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   /** Alias of {@link AvailabilityService["update"]} */
@@ -45,13 +48,11 @@ export class AvailabilityService extends Service {
     );
   }
 
-  async *list(query: AvailabilityQueryParams, options?: Options) {
-    for await (const res of super.iterator<Availability>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+  async *list(query?: AvailabilityQueryParams, options?: Options) {
+    yield* super.iterator({ url: this.apiPath, params: query }, options);
   }
 
-  listByPage(query: AvailabilityQueryParams, options?: Options) {
-    return super.iterator<Availability>({ url: this.apiPath, params: query }, options).byPage();
+  listByPage(query?: AvailabilityQueryParams, options?: Options) {
+    return super.iterator({ url: this.apiPath, params: query }, options).byPage();
   }
 }

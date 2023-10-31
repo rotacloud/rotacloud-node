@@ -2,13 +2,11 @@ import { Options, Service } from './service';
 import { ToilAllowanceQueryParams } from '../interfaces/query-params/toil-allowance-query-params.interface';
 import { ToilAllowance } from '../interfaces/toil-allowance.interface';
 
-export class ToilAllowanceService extends Service {
+export class ToilAllowanceService extends Service<ToilAllowance> {
   private apiPath = '/toil_allowance';
 
   async *list(year: number, query: ToilAllowanceQueryParams, options?: Options) {
-    for await (const res of super.iterator<ToilAllowance>({ url: `${this.apiPath}/${year}`, params: query }, options)) {
-      yield res;
-    }
+    yield* super.iterator({ url: `${this.apiPath}/${year}`, params: query }, options);
   }
 
   async listAll(year: number, query: ToilAllowanceQueryParams, options?: Options): Promise<ToilAllowance[]> {
@@ -20,6 +18,6 @@ export class ToilAllowanceService extends Service {
   }
 
   listByPage(year: number, query: ToilAllowanceQueryParams, options?: Options) {
-    return super.iterator<ToilAllowance[]>({ url: `${this.apiPath}/${year}`, params: query }, options).byPage();
+    return super.iterator({ url: `${this.apiPath}/${year}`, params: query }, options).byPage();
   }
 }

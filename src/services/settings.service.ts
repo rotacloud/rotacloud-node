@@ -5,7 +5,7 @@ import { Settings } from '../interfaces/index.js';
 
 import { SettingsQueryParams } from '../rotacloud.js';
 
-export class SettingsService extends Service {
+export class SettingsService extends Service<Settings> {
   private apiPath = '/settings';
 
   get(query: SettingsQueryParams): Promise<Settings>;
@@ -14,6 +14,6 @@ export class SettingsService extends Service {
   get(query: SettingsQueryParams, options?: Options) {
     return super
       .fetch<Settings>({ url: `${this.apiPath}`, params: query }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 }
