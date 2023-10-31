@@ -29,12 +29,14 @@ export type RetryOptions =
 
 export interface Options {
   rawResponse?: boolean;
-  expand?: string[];
-  fields?: string[];
   limit?: number;
   offset?: number;
   dryRun?: boolean;
 }
+
+export type OptionsExtended<T = unknown> = Options & {
+  fields?: (keyof T)[];
+};
 
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
@@ -51,7 +53,7 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
   },
 };
 
-type ParameterPrimitive = string | boolean | number | null;
+type ParameterPrimitive = string | boolean | number | null | symbol;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
@@ -65,7 +67,7 @@ export abstract class Service<ApiResponse = any> {
         const parsedError = this.parseClientError(error);
 
         return Promise.reject(parsedError);
-      }
+      },
     );
     return client;
   }
@@ -87,9 +89,11 @@ export abstract class Service<ApiResponse = any> {
     return endpoint === '/leave_requests';
   }
 
-  private buildQueryParams(options?: Options, extraParams?: Record<string, ParameterValue>) {
+  private buildQueryParams<T = ApiResponse>(
+    options?: OptionsExtended<T>,
+    extraParams?: Record<string, ParameterValue>,
+  ) {
     const queryParams: Record<string, ParameterValue> = {
-      expand: options?.expand,
       fields: options?.fields,
       limit: options?.limit,
       offset: options?.offset,
@@ -109,7 +113,21 @@ export abstract class Service<ApiResponse = any> {
     return new URLSearchParams(reducedParams);
   }
 
-  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T>> {
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig): Promise<AxiosResponse<T>>;
+  fetch<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig,
+    options: { fields: Required<OptionsExtended<T>>['fields'] } & OptionsExtended<T>,
+  ): Promise<AxiosResponse<Pick<T, (typeof options)['fields'][number]>>>;
+  fetch<T extends unknown[] = ApiResponse[], E = T[number]>(
+    reqConfig: AxiosRequestConfig,
+    options: { fields: Required<OptionsExtended<E>>['fields'] } & OptionsExtended<E>,
+  ): Promise<AxiosResponse<Pick<E, (typeof options)['fields'][number]>[]>>;
+  fetch<T extends unknown[] = ApiResponse[]>(
+    reqConfig: AxiosRequestConfig,
+    options?: Options,
+  ): Promise<AxiosResponse<T>>;
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T | Partial<T>>>;
+  fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options) {
     const headers: Record<string, string> = {
       Authorization: RotaCloud.config.apiKey
         ? `Bearer ${RotaCloud.config.apiKey}`
@@ -161,9 +179,17 @@ export abstract class Service<ApiResponse = any> {
   }
 
   /** Iterates through every page for a potentially paginated request */
-  private async *fetchPages<T>(
+  private fetchPages<T = ApiResponse>(
     reqConfig: AxiosRequestConfig<T[]>,
-    options: Options | undefined
+    options: { fields: Required<OptionsExtended<T>>['fields'] } & OptionsExtended<T>,
+  ): AsyncGenerator<AxiosResponse<Pick<T, (typeof options)['fields'][number]>[]>>;
+  private fetchPages<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig<T[]>,
+    options?: Options,
+  ): AsyncGenerator<AxiosResponse<T[]>>;
+  private async *fetchPages<T = ApiResponse>(
+    reqConfig: AxiosRequestConfig<T[]>,
+    options?: Options,
   ): AsyncGenerator<AxiosResponse<T[]>> {
     const fallbackLimit = 20;
     const res = await this.fetch<T[]>(reqConfig, options);

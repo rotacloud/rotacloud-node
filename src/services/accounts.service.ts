@@ -1,28 +1,39 @@
 import { AxiosResponse } from 'axios';
-import { Service, Options } from './index.js';
+import { Service, Options, OptionsExtended } from './index.js';
 
 import { Account } from '../interfaces/index.js';
 
-export class AccountsService extends Service {
+export class AccountsService extends Service<Account> {
   private apiPath = '/accounts';
 
   get(id: number): Promise<Account>;
-  get(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<Account, any>>;
-  get(id: number, options: Options): Promise<Account>;
-  get(id: number, options?: Options) {
+  get<F extends keyof Account>(
+    id: number,
+    options: { fields: F[]; rawResponse: true } & OptionsExtended<Account>,
+  ): Promise<AxiosResponse<Pick<Account, F>>>;
+  get<F extends keyof Account>(
+    id: number,
+    options: { fields: F[] } & OptionsExtended<Account>,
+  ): Promise<Pick<Account, F>>;
+  get(id: number, options: { rawResponse: true } & OptionsExtended<Account>): Promise<AxiosResponse<Account>>;
+  get(id: number, options?: OptionsExtended<Account>): Promise<Account>;
+  get(id: number, options?: OptionsExtended<Account>) {
     return super
       .fetch<Account>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(options?: Options) {
-    for await (const res of super.iterator<Account>({ url: this.apiPath }, options)) {
-      yield res;
-    }
+  list(): AsyncGenerator<Account>;
+  list<F extends keyof Account>(options: { fields: F[] } & OptionsExtended<Account>): AsyncGenerator<Pick<Account, F>>;
+  list(options?: OptionsExtended<Account>): AsyncGenerator<Account>;
+  async *list(options?: OptionsExtended<Account>) {
+    yield* super.iterator({ url: this.apiPath }, options);
   }
 
-  listAll(options?: Options): Promise<Account[]>;
-  async listAll(options?: Options) {
+  listAll(): Promise<Account[]>;
+  listAll<F extends keyof Account>(options: { fields: F[] } & OptionsExtended<Account>): Promise<Pick<Account, F>[]>;
+  listAll(options?: OptionsExtended<Account>): Promise<Account[]>;
+  async listAll(options?: OptionsExtended<Account>) {
     const accounts = [] as Account[];
     for await (const account of this.list(options)) {
       accounts.push(account);
@@ -30,7 +41,12 @@ export class AccountsService extends Service {
     return accounts;
   }
 
-  listByPage(options?: Options) {
-    return super.iterator<Account>({ url: this.apiPath }, options).byPage();
+  listByPage(): AsyncGenerator<AxiosResponse<Account[]>>;
+  listByPage<F extends keyof Account>(
+    options: { fields: F[] } & OptionsExtended<Account>,
+  ): AsyncGenerator<AxiosResponse<Pick<Account, F>[]>>;
+  listByPage(options: OptionsExtended<Account>): AsyncGenerator<AxiosResponse<Account[]>>;
+  listByPage(options?: OptionsExtended<Account>) {
+    return super.iterator({ url: this.apiPath }, options).byPage();
   }
 }

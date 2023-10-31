@@ -17,7 +17,7 @@ export class ToilAccrualsService extends Service {
   create(data: RequirementsOf<ToilAccrual, RequiredProps>, options?: Options) {
     return super
       .fetch<ToilAccrual>({ url: this.apiPath, data, method: 'POST' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
   get(id: number): Promise<ToilAccrual>;
@@ -26,16 +26,14 @@ export class ToilAccrualsService extends Service {
   get(id: number, options?: Options) {
     return super
       .fetch<ToilAccrual>({ url: `${this.apiPath}/${id}` }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 
-  async *list(query: ToilAccrualsQueryParams, options?: Options) {
-    for await (const res of super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options)) {
-      yield res;
-    }
+  async *list(query?: ToilAccrualsQueryParams, options?: Options) {
+    yield* super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options);
   }
 
-  async listAll(query: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]> {
+  async listAll(query?: ToilAccrualsQueryParams, options?: Options): Promise<ToilAccrual[]> {
     const toilAccruals = [] as ToilAccrual[];
     for await (const accrual of this.list(query, options)) {
       toilAccruals.push(accrual);
@@ -43,16 +41,16 @@ export class ToilAccrualsService extends Service {
     return toilAccruals;
   }
 
-  listByPage(query: ToilAccrualsQueryParams, options?: Options) {
+  listByPage(query?: ToilAccrualsQueryParams, options?: Options) {
     return super.iterator<ToilAccrual>({ url: this.apiPath, params: query }, options).byPage();
   }
 
   delete(id: number): Promise<number>;
-  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<any, any>>;
+  delete(id: number, options: { rawResponse: true } & Options): Promise<AxiosResponse<void>>;
   delete(id: number, options: Options): Promise<number>;
   delete(id: number, options?: Options) {
     return super
-      .fetch<ToilAccrual>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.status));
+      .fetch<void>({ url: `${this.apiPath}/${id}`, method: 'DELETE' })
+      .then((res) => (options?.rawResponse ? res : res.status));
   }
 }

@@ -8,8 +8,6 @@ export class AuthService extends Service {
   get(options?: { rawResponse: true } & Options): Promise<AxiosResponse<Auth, any>>;
   get(options?: Options): Promise<Auth>;
   get(options?: Options) {
-    return super
-      .fetch<Auth>({ url: this.apiPath }, options)
-      .then((res) => Promise.resolve(options?.rawResponse ? res : res.data));
+    return super.fetch<Auth>({ url: this.apiPath }, options).then((res) => (options?.rawResponse ? res : res.data));
   }
 }
