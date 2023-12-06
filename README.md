@@ -1,5 +1,9 @@
 # RotaCloud Node SDK
 
+## Getting started
+
+To use this SDK you'll need to `npm install rotacloud`. This will ensure you're ready to start working with the SDK in your project.
+
 ## Contributing
 
 Please ensure you perform the `npm run version:bump` command before commiting and pushing your changes to the remote branch.

@@ -31,12 +31,13 @@ export interface User {
   salary: number;
   salary_type: string;
   overtime_rate: number;
-  role_rates: LeaveRate;
-  leave_rates: RoleRate;
+  role_rates: RoleRate | null;
+  leave_rates: LeaveRate;
   leave_rates_unit: string;
   leave_rates_type: string;
   notes: string | null;
   pin: string | null;
+  salaried_cost_location: number | null;
 }
 
 export interface UserBreak {
