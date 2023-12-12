@@ -4,7 +4,7 @@ import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
 
 interface UserClockIn {
   method: string;
-  shift: number;
+  shift?: number;
   terminal: number;
   user: number;
   photo?: string;
@@ -16,9 +16,9 @@ interface UserClockOut extends Omit<UserClockIn, 'user' | 'shift'> {}
 interface UserBreakRequest {
   method: string;
   action: string;
-  terminal: number;
+  terminal?: number;
   photo?: string;
-  location: TerminalLocation;
+  location?: TerminalLocation;
 }
 
 type RequiredPropsClockIn = 'method';
