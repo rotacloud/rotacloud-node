@@ -38,6 +38,7 @@ export interface User {
   notes: string | null;
   pin: string | null;
   salaried_cost_location: number | null;
+  permissions: string[] | null;
 }
 
 export interface UserBreak {
