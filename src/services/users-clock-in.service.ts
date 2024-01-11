@@ -5,10 +5,10 @@ import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
 interface UserClockIn {
   method: string;
   shift: number;
-  terminal: number;
+  terminal?: number;
   user: number;
   photo?: string;
-  location: TerminalLocation;
+  location?: TerminalLocation;
 }
 
 interface UserClockOut extends Omit<UserClockIn, 'user' | 'shift'> {}
