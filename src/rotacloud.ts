@@ -90,7 +90,7 @@ export class RotaCloud {
   set config(configVal: SDKConfig) {
     RotaCloud.config = configVal;
     this.client.interceptors.request.clear();
-    this.client.interceptors.request.clear();
+    this.client.interceptors.response.clear();
     this.client.interceptors.response.use(
       (response) => response,
       (error: unknown) => {
