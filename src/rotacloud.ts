@@ -35,7 +35,7 @@ const DEFAULT_CONFIG: Partial<SDKBase> = {
   retry: RetryStrategy.Exponential,
 };
 
-function parseClientError(error: AxiosError): SDKError | unknown {
+function parseClientError(error: AxiosError): SDKError {
   const axiosErrorLocation = error.response || error.request;
   const apiErrorMessage = axiosErrorLocation.data?.error;
   return new SDKError({
