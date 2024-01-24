@@ -1,3 +1,4 @@
+import axios, { AxiosError, isAxiosError } from 'axios';
 import {
   AccountsService,
   AttendanceService,
@@ -27,41 +28,53 @@ import {
 } from './services/index.js';
 import { SDKBase, SDKConfig } from './interfaces/index.js';
 import { PinsService } from './services/pins.service.js';
+import { SDKError } from './models/index.js';
 
 const DEFAULT_CONFIG: Partial<SDKBase> = {
   baseUri: 'https://api.rotacloud.com/v1',
   retry: RetryStrategy.Exponential,
 };
 
-export class RotaCloud {
-  public static config: SDKConfig;
+function parseClientError(error: AxiosError): SDKError {
+  const axiosErrorLocation = error.response || error.request;
+  const apiErrorMessage = axiosErrorLocation.data?.error;
+  return new SDKError({
+    code: axiosErrorLocation.status,
+    message: apiErrorMessage || error.message,
+    data: axiosErrorLocation.data,
+  });
+}
 
-  public defaultAPIURI = DEFAULT_CONFIG.baseUri;
-  public accounts = new AccountsService();
-  public attendance = new AttendanceService();
-  public auth = new AuthService();
-  public availability = new AvailabilityService();
-  public dailyBudgets = new DailyBudgetsService();
-  public dailyRevenue = new DailyRevenueService();
-  public dayNotes = new DayNotesService();
-  public daysOff = new DaysOffService();
-  public group = new GroupsService();
-  public leaveEmbargoes = new LeaveEmbargoesService();
-  public leaveRequests = new LeaveRequestService();
-  public leaveTypes = new LeaveTypesService();
-  public leave = new LeaveService();
-  public locations = new LocationsService();
-  public pins = new PinsService();
-  public roles = new RolesService();
-  public settings = new SettingsService();
-  public shifts = new ShiftsService();
-  public terminals = new TerminalsService();
-  public terminalsActive = new TerminalsActiveService();
-  public timeZone = new TimeZoneService();
-  public toilAccruals = new ToilAccrualsService();
-  public toilAllowance = new ToilAllowanceService();
-  public usersClockInService = new UsersClockInService();
-  public users = new UsersService();
+export class RotaCloud {
+  static config: SDKConfig;
+  private client = axios.create();
+
+  defaultAPIURI = DEFAULT_CONFIG.baseUri;
+  accounts = new AccountsService(this.client);
+  attendance = new AttendanceService(this.client);
+  auth = new AuthService(this.client);
+  availability = new AvailabilityService(this.client);
+  dailyBudgets = new DailyBudgetsService(this.client);
+  dailyRevenue = new DailyRevenueService(this.client);
+  dayNotes = new DayNotesService(this.client);
+  daysOff = new DaysOffService(this.client);
+  group = new GroupsService(this.client);
+  leaveEmbargoes = new LeaveEmbargoesService(this.client);
+  leaveRequests = new LeaveRequestService(this.client);
+  leaveTypes = new LeaveTypesService(this.client);
+  leave = new LeaveService(this.client);
+  locations = new LocationsService(this.client);
+  pins = new PinsService(this.client);
+  roles = new RolesService(this.client);
+  settings = new SettingsService(this.client);
+  shifts = new ShiftsService(this.client);
+  terminals = new TerminalsService(this.client);
+  terminalsActive = new TerminalsActiveService(this.client);
+  timeZone = new TimeZoneService(this.client);
+  toilAccruals = new ToilAccrualsService(this.client);
+  toilAllowance = new ToilAllowanceService(this.client);
+  usersClockInService = new UsersClockInService(this.client);
+  users = new UsersService(this.client);
 
   constructor(config: SDKConfig) {
     this.config = {
@@ -76,6 +89,32 @@ export class RotaCloud {
 
   set config(configVal: SDKConfig) {
     RotaCloud.config = configVal;
+    this.client.interceptors.request.clear();
+    this.client.interceptors.response.clear();
+    this.client.interceptors.response.use(
+      (response) => response,
+      (error: unknown) => {
+        let parsedError = error;
+        if (isAxiosError(error)) {
+          parsedError = parseClientError(error);
+        }
+        return Promise.reject(parsedError);
+      },
+    );
+    for (const requestInterceptor of this.config.interceptors?.request ?? []) {
+      const callbacks =
+        typeof requestInterceptor === 'function'
+          ? ([requestInterceptor] as const)
+          : ([requestInterceptor?.success, requestInterceptor?.error] as const);
+      this.client.interceptors.request.use(...callbacks);
+    }
+    for (const responseInterceptor of this.config.interceptors?.response ?? []) {
+      const callbacks =
+        typeof responseInterceptor === 'function'
+          ? ([responseInterceptor] as const)
+          : ([responseInterceptor?.success, responseInterceptor?.error] as const);
+      this.client.interceptors.response.use(...callbacks);
+    }
   }
 }
 

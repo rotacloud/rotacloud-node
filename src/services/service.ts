@@ -1,8 +1,7 @@
-import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
-import { SDKErrorConfig, SDKError } from '../models/SDKError.model.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
@@ -57,33 +56,7 @@ type ParameterPrimitive = string | boolean | number | null | symbol;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
-  protected client: AxiosInstance = this.initialiseAxios();
-
-  private initialiseAxios(): AxiosInstance {
-    const client = axios.create();
-    client.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        const parsedError = this.parseClientError(error);
-
-        return Promise.reject(parsedError);
-      },
-    );
-    return client;
-  }
-
-  private parseClientError(error: unknown | AxiosError): SDKError | unknown {
-    if (!axios.isAxiosError(error)) return error;
-    const axiosErrorLocation = error.response || error.request;
-    const apiErrorMessage = axiosErrorLocation.data?.error;
-    const sdkErrorParams: SDKErrorConfig = {
-      code: axiosErrorLocation.status,
-      message: apiErrorMessage || error.message,
-      data: axiosErrorLocation.data,
-    };
-
-    return new SDKError(sdkErrorParams);
-  }
+  constructor(protected client: AxiosInstance) {}
 
   private isLeaveRequest(endpoint?: string): boolean {
     return endpoint === '/leave_requests';

@@ -1,4 +1,4 @@
-import { Shift, TerminalLocation } from '../interfaces/index.js';
+import { Shift, TerminalLocation, UserBreak } from '../interfaces/index.js';
 
 export interface UserClockedIn {
   user: number;
@@ -11,4 +11,5 @@ export interface UserClockedIn {
   in_location: TerminalLocation;
   in_device: string | null;
   in_terminal: number | null;
+  breaks_clocked: UserBreak[];
 }
