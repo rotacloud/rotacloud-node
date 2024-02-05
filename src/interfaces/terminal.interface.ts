@@ -4,6 +4,7 @@ export interface Terminal {
   name: string;
   active: boolean;
   platform: string | null;
+  default_location: number | null;
   device: string | null;
   version: string | null;
   ip: string | null;
