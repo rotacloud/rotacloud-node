@@ -1,30 +1,8 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import axiosRetry from 'axios-retry';
 import { RotaCloud } from '../rotacloud.js';
 import { Version } from '../version.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
-
-export enum RetryStrategy {
-  Exponential = 'expo',
-  Static = 'static',
-}
-
-export type RetryOptions =
-  | {
-      /** Use exponential back-off */
-      exponential?: false;
-      /** The maximum number of retries before erroring */
-      maxRetries: number;
-      /** Delay in milliseconds between retry attempts - not used in exponential back-off */
-      delay: number;
-    }
-  | {
-      /** Use exponential back-off */
-      exponential: true;
-      /** The maximum number of retries before erroring */
-      maxRetries: number;
-    };
 
 export interface Options {
   rawResponse?: boolean;
@@ -35,21 +13,6 @@ export interface Options {
 
 export type OptionsExtended<T = unknown> = Options & {
   fields?: (keyof T)[];
-};
-
-const DEFAULT_RETRIES = 3;
-const DEFAULT_RETRY_DELAY = 2000;
-
-const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
-  [RetryStrategy.Exponential]: {
-    exponential: true,
-    maxRetries: DEFAULT_RETRIES,
-  },
-  [RetryStrategy.Static]: {
-    exponential: false,
-    maxRetries: DEFAULT_RETRIES,
-    delay: DEFAULT_RETRY_DELAY,
-  },
 };
 
 type ParameterPrimitive = string | boolean | number | null | symbol;
@@ -130,23 +93,6 @@ export abstract class Service<ApiResponse = any> {
       headers,
       params: this.buildQueryParams(options, reqConfig.params),
     };
-
-    if (RotaCloud.config.retry) {
-      const retryConfig =
-        typeof RotaCloud.config.retry === 'string'
-          ? DEFAULT_RETRY_STRATEGY_OPTIONS[RotaCloud.config.retry]
-          : RotaCloud.config.retry;
-
-      axiosRetry(this.client, {
-        retries: retryConfig.maxRetries,
-        retryDelay: (retryCount) => {
-          if (retryConfig.exponential) {
-            return axiosRetry.exponentialDelay(retryCount);
-          }
-          return retryConfig.delay;
-        },
-      });
-    }
 
     return this.client.request<T>(finalReqConfig);
   }

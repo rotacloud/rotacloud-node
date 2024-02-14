@@ -1,5 +1,25 @@
 import { AxiosInterceptorManager, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
-import { RetryOptions, RetryStrategy } from '../services/service.js';
+
+export enum RetryStrategy {
+  Exponential = 'expo',
+  Static = 'static',
+}
+
+export type RetryOptions =
+  | {
+      /** Use exponential back-off */
+      exponential?: false;
+      /** The maximum number of retries before erroring */
+      maxRetries: number;
+      /** Delay in milliseconds between retry attempts - not used in exponential back-off */
+      delay: number;
+    }
+  | {
+      /** Use exponential back-off */
+      exponential: true;
+      /** The maximum number of retries before erroring */
+      maxRetries: number;
+    };
 
 type RequestInterceptor = Parameters<AxiosInterceptorManager<InternalAxiosRequestConfig>['use']>;
 type ResponseInterceptor = Parameters<AxiosInterceptorManager<AxiosResponse>['use']>;
