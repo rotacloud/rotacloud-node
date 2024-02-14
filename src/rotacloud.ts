@@ -118,7 +118,7 @@ export class RotaCloud {
       axiosRetry(this.client, {
         retries: retryConfig.maxRetries,
         shouldResetTimeout: true,
-        retryCondition: (err: AxiosError) => isNetworkOrIdempotentRequestError(err) || err.response?.status === 429,
+        retryCondition: (err) => isNetworkOrIdempotentRequestError(err) || err.response?.status === 429,
         retryDelay: (retryCount) => {
           if (retryConfig.exponential) {
             return axiosRetry.exponentialDelay(retryCount);
