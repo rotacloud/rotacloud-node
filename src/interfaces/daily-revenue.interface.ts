@@ -1,7 +1,7 @@
 export interface DailyRevenue {
   date: string;
   location: number;
-  labour_percentage: number;
-  revenue_target: number;
-  revenue_actual: number;
+  labour_percentage: number | null;
+  revenue_target: number | null;
+  revenue_actual: number | null;
 }
