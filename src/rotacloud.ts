@@ -61,49 +61,79 @@ function parseClientError(error: AxiosError): SDKError {
 }
 
 export class RotaCloud {
-  static config: SDKConfig;
   private client = axios.create();
+  private sdkConfig: SDKConfig;
+  private logging: (...message: any[]) => void;
 
   defaultAPIURI = DEFAULT_CONFIG.baseUri;
-  accounts = new AccountsService(this.client);
-  attendance = new AttendanceService(this.client);
-  auth = new AuthService(this.client);
-  availability = new AvailabilityService(this.client);
-  dailyBudgets = new DailyBudgetsService(this.client);
-  dailyRevenue = new DailyRevenueService(this.client);
-  dayNotes = new DayNotesService(this.client);
-  daysOff = new DaysOffService(this.client);
-  group = new GroupsService(this.client);
-  leaveEmbargoes = new LeaveEmbargoesService(this.client);
-  leaveRequests = new LeaveRequestService(this.client);
-  leaveTypes = new LeaveTypesService(this.client);
-  leave = new LeaveService(this.client);
-  locations = new LocationsService(this.client);
-  pins = new PinsService(this.client);
-  roles = new RolesService(this.client);
-  settings = new SettingsService(this.client);
-  shifts = new ShiftsService(this.client);
-  terminals = new TerminalsService(this.client);
-  terminalsActive = new TerminalsActiveService(this.client);
-  timeZone = new TimeZoneService(this.client);
-  toilAccruals = new ToilAccrualsService(this.client);
-  toilAllowance = new ToilAllowanceService(this.client);
-  usersClockInService = new UsersClockInService(this.client);
-  users = new UsersService(this.client);
+  accounts: AccountsService;
+  attendance: AttendanceService;
+  auth: AuthService;
+  availability: AvailabilityService;
+  dailyBudgets: DailyBudgetsService;
+  dailyRevenue: DailyRevenueService;
+  dayNotes: DayNotesService;
+  daysOff: DaysOffService;
+  group: GroupsService;
+  leaveEmbargoes: LeaveEmbargoesService;
+  leaveRequests: LeaveRequestService;
+  leaveTypes: LeaveTypesService;
+  leave: LeaveService;
+  locations: LocationsService;
+  pins: PinsService;
+  roles: RolesService;
+  settings: SettingsService;
+  shifts: ShiftsService;
+  terminals: TerminalsService;
+  terminalsActive: TerminalsActiveService;
+  timeZone: TimeZoneService;
+  toilAccruals: ToilAccrualsService;
+  toilAllowance: ToilAllowanceService;
+  usersClockInService: UsersClockInService;
+  users: UsersService;
 
   constructor(config: SDKConfig) {
-    this.config = {
+    const updatedConfig = {
       ...DEFAULT_CONFIG,
       ...config,
-    };
+    }
+
+    this.config = updatedConfig;
+
+    this.accounts = new AccountsService(this.client, updatedConfig);
+    this.attendance = new AttendanceService(this.client, updatedConfig);
+    this.auth = new AuthService(this.client, updatedConfig);
+    this.availability = new AvailabilityService(this.client, updatedConfig);
+    this.dailyBudgets = new DailyBudgetsService(this.client, updatedConfig);
+    this.dailyRevenue = new DailyRevenueService(this.client, updatedConfig);
+    this.dayNotes = new DayNotesService(this.client, updatedConfig);
+    this.daysOff = new DaysOffService(this.client, updatedConfig);
+    this.group = new GroupsService(this.client, updatedConfig);
+    this.leaveEmbargoes = new LeaveEmbargoesService(this.client, updatedConfig);
+    this.leaveRequests = new LeaveRequestService(this.client, updatedConfig);
+    this.leaveTypes = new LeaveTypesService(this.client, updatedConfig);
+    this.leave = new LeaveService(this.client, updatedConfig);
+    this.locations = new LocationsService(this.client, updatedConfig);
+    this.pins = new PinsService(this.client, updatedConfig);
+    this.roles = new RolesService(this.client, updatedConfig);
+    this.settings = new SettingsService(this.client, updatedConfig);
+    this.shifts = new ShiftsService(this.client, updatedConfig);
+    this.terminals = new TerminalsService(this.client, updatedConfig);
+    this.terminalsActive = new TerminalsActiveService(this.client, updatedConfig);
+    this.timeZone = new TimeZoneService(this.client, updatedConfig);
+    this.toilAccruals = new ToilAccrualsService(this.client, updatedConfig);
+    this.toilAllowance = new ToilAllowanceService(this.client, updatedConfig);
+    this.usersClockInService = new UsersClockInService(this.client, updatedConfig);
+    this.users = new UsersService(this.client, updatedConfig);
   }
 
   get config() {
-    return RotaCloud.config;
+    return this.sdkConfig;
   }
 
   set config(configVal: SDKConfig) {
-    RotaCloud.config = configVal;
+    this.logging(configVal);
+    this.sdkConfig = configVal;
     this.setupInterceptors(configVal.retry, configVal.interceptors);
   }
 

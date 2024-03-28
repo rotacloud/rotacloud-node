@@ -1,6 +1,6 @@
-import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { RotaCloud } from '../rotacloud.js';
-import { Version } from '../version.js';
+import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
+import {SDKConfig} from '../rotacloud.js';
+import {Version} from '../version.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
@@ -19,7 +19,12 @@ type ParameterPrimitive = string | boolean | number | null | symbol;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
-  constructor(protected client: AxiosInstance) {}
+  public config: SDKConfig;
+  constructor(
+      protected client: AxiosInstance, config: SDKConfig,
+  ) {
+    this.config = config;
+  }
 
   private isLeaveRequest(endpoint?: string): boolean {
     return endpoint === '/leave_requests';
@@ -65,13 +70,13 @@ export abstract class Service<ApiResponse = any> {
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T | Partial<T>>>;
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options) {
     const headers: Record<string, string> = {
-      Authorization: RotaCloud.config.apiKey
-        ? `Bearer ${RotaCloud.config.apiKey}`
-        : `Basic ${RotaCloud.config.basicAuth}`,
+      Authorization: this.config.apiKey
+        ? `Bearer ${this.config.apiKey}`
+        : `Basic ${this.config.basicAuth}`,
       'SDK-Version': Version.version,
     };
 
-    const extraHeaders = RotaCloud.config.headers;
+    const extraHeaders = this.config.headers;
     if (extraHeaders && typeof extraHeaders === 'object') {
       for (const [key, val] of Object.entries(extraHeaders)) {
         if (typeof key === 'string' && typeof val === 'string') {
@@ -80,8 +85,8 @@ export abstract class Service<ApiResponse = any> {
       }
     }
 
-    if (RotaCloud.config.accountId) {
-      headers.Account = String(RotaCloud.config.accountId);
+    if (this.config.accountId) {
+      headers.Account = String(this.config.accountId);
     } else {
       // need to convert user field in payload to a header for creating leave_requests when using an API key
       this.isLeaveRequest(reqConfig.url) ? (headers.User = `${reqConfig.data.user}`) : undefined;
@@ -89,7 +94,7 @@ export abstract class Service<ApiResponse = any> {
 
     const finalReqConfig: AxiosRequestConfig<T> = {
       ...reqConfig,
-      baseURL: RotaCloud.config.baseUri,
+      baseURL: this.config.baseUri,
       headers,
       params: this.buildQueryParams(options, reqConfig.params),
     };

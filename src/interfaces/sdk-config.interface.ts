@@ -25,6 +25,7 @@ type RequestInterceptor = Parameters<AxiosInterceptorManager<InternalAxiosReques
 type ResponseInterceptor = Parameters<AxiosInterceptorManager<AxiosResponse>['use']>;
 
 export interface SDKBase {
+  logging: (...message: any[]) => void;
   baseUri?: string;
   accountId?: number;
   userId?: number;
