@@ -21,6 +21,11 @@ type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 export abstract class Service<ApiResponse = any> {
   constructor(
       protected client: AxiosInstance,
+      // opt to use options object here, so we could
+      // define the config property as a getter
+      // in RotaCloud class. With this change config in
+      // this class will always be up-to-date with
+      // RotaCloud client config
       protected readonly options: { config: SDKConfig }
   ) {}
 
