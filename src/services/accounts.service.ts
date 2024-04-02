@@ -1,7 +1,7 @@
-import {AxiosResponse} from 'axios';
-import {OptionsExtended, Service} from './index.js';
+import { AxiosResponse } from 'axios';
+import { Service, Options, OptionsExtended } from './index.js';
 
-import {Account} from '../interfaces/index.js';
+import { Account } from '../interfaces/index.js';
 
 export class AccountsService extends Service<Account> {
   private apiPath = '/accounts';

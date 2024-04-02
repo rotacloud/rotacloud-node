@@ -1,6 +1,6 @@
-import {AxiosInstance, AxiosRequestConfig, AxiosResponse} from 'axios';
-import {SDKConfig} from '../rotacloud.js';
-import {Version} from '../version.js';
+import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { Version } from '../version.js';
+import { SDKConfig } from "../interfaces";
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
