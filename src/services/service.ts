@@ -19,12 +19,10 @@ type ParameterPrimitive = string | boolean | number | null | symbol;
 type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
-  public config: SDKConfig;
   constructor(
-      protected client: AxiosInstance, config: SDKConfig,
-  ) {
-    this.config = config;
-  }
+      protected client: AxiosInstance,
+      protected readonly options: { config: SDKConfig }
+  ) {}
 
   private isLeaveRequest(endpoint?: string): boolean {
     return endpoint === '/leave_requests';
@@ -70,13 +68,13 @@ export abstract class Service<ApiResponse = any> {
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options): Promise<AxiosResponse<T | Partial<T>>>;
   fetch<T = ApiResponse>(reqConfig: AxiosRequestConfig, options?: Options) {
     const headers: Record<string, string> = {
-      Authorization: this.config.apiKey
-        ? `Bearer ${this.config.apiKey}`
-        : `Basic ${this.config.basicAuth}`,
+      Authorization: this.options.config.apiKey
+        ? `Bearer ${this.options.config.apiKey}`
+        : `Basic ${this.options.config.basicAuth}`,
       'SDK-Version': Version.version,
     };
 
-    const extraHeaders = this.config.headers;
+    const extraHeaders = this.options.config.headers;
     if (extraHeaders && typeof extraHeaders === 'object') {
       for (const [key, val] of Object.entries(extraHeaders)) {
         if (typeof key === 'string' && typeof val === 'string') {
@@ -85,8 +83,8 @@ export abstract class Service<ApiResponse = any> {
       }
     }
 
-    if (this.config.accountId) {
-      headers.Account = String(this.config.accountId);
+    if (this.options.config.accountId) {
+      headers.Account = String(this.options.config.accountId);
     } else {
       // need to convert user field in payload to a header for creating leave_requests when using an API key
       this.isLeaveRequest(reqConfig.url) ? (headers.User = `${reqConfig.data.user}`) : undefined;
@@ -94,7 +92,7 @@ export abstract class Service<ApiResponse = any> {
 
     const finalReqConfig: AxiosRequestConfig<T> = {
       ...reqConfig,
-      baseURL: this.config.baseUri,
+      baseURL: this.options.config.baseUri,
       headers,
       params: this.buildQueryParams(options, reqConfig.params),
     };

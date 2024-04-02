@@ -63,7 +63,6 @@ function parseClientError(error: AxiosError): SDKError {
 export class RotaCloud {
   private client = axios.create();
   private sdkConfig: SDKConfig;
-  private logging: (...message: any[]) => void;
 
   defaultAPIURI = DEFAULT_CONFIG.baseUri;
   accounts: AccountsService;
@@ -93,38 +92,50 @@ export class RotaCloud {
   users: UsersService;
 
   constructor(config: SDKConfig) {
-    const updatedConfig = {
-      ...DEFAULT_CONFIG,
-      ...config,
+    this.config = this.createConfig(config);
+    const client = this;
+    const options = {
+      get config(): SDKConfig {
+        return client.config;
+      }
     }
 
-    this.config = updatedConfig;
+    this.accounts = new AccountsService(this.client, options);
+    this.attendance = new AttendanceService(this.client, options);
+    this.auth = new AuthService(this.client, options);
+    this.availability = new AvailabilityService(this.client, options);
+    this.dailyBudgets = new DailyBudgetsService(this.client, options);
+    this.dailyRevenue = new DailyRevenueService(this.client, options);
+    this.dayNotes = new DayNotesService(this.client, options);
+    this.daysOff = new DaysOffService(this.client, options);
+    this.group = new GroupsService(this.client, options);
+    this.leaveEmbargoes = new LeaveEmbargoesService(this.client, options);
+    this.leaveRequests = new LeaveRequestService(this.client, options);
+    this.leaveTypes = new LeaveTypesService(this.client, options);
+    this.leave = new LeaveService(this.client, options);
+    this.locations = new LocationsService(this.client, options);
+    this.pins = new PinsService(this.client, options);
+    this.roles = new RolesService(this.client, options);
+    this.settings = new SettingsService(this.client, options);
+    this.shifts = new ShiftsService(this.client, options);
+    this.terminals = new TerminalsService(this.client, options);
+    this.terminalsActive = new TerminalsActiveService(this.client, options);
+    this.timeZone = new TimeZoneService(this.client, options);
+    this.toilAccruals = new ToilAccrualsService(this.client, options);
+    this.toilAllowance = new ToilAllowanceService(this.client, options);
+    this.usersClockInService = new UsersClockInService(this.client, options);
+    this.users = new UsersService(this.client, options);
+  }
 
-    this.accounts = new AccountsService(this.client, updatedConfig);
-    this.attendance = new AttendanceService(this.client, updatedConfig);
-    this.auth = new AuthService(this.client, updatedConfig);
-    this.availability = new AvailabilityService(this.client, updatedConfig);
-    this.dailyBudgets = new DailyBudgetsService(this.client, updatedConfig);
-    this.dailyRevenue = new DailyRevenueService(this.client, updatedConfig);
-    this.dayNotes = new DayNotesService(this.client, updatedConfig);
-    this.daysOff = new DaysOffService(this.client, updatedConfig);
-    this.group = new GroupsService(this.client, updatedConfig);
-    this.leaveEmbargoes = new LeaveEmbargoesService(this.client, updatedConfig);
-    this.leaveRequests = new LeaveRequestService(this.client, updatedConfig);
-    this.leaveTypes = new LeaveTypesService(this.client, updatedConfig);
-    this.leave = new LeaveService(this.client, updatedConfig);
-    this.locations = new LocationsService(this.client, updatedConfig);
-    this.pins = new PinsService(this.client, updatedConfig);
-    this.roles = new RolesService(this.client, updatedConfig);
-    this.settings = new SettingsService(this.client, updatedConfig);
-    this.shifts = new ShiftsService(this.client, updatedConfig);
-    this.terminals = new TerminalsService(this.client, updatedConfig);
-    this.terminalsActive = new TerminalsActiveService(this.client, updatedConfig);
-    this.timeZone = new TimeZoneService(this.client, updatedConfig);
-    this.toilAccruals = new ToilAccrualsService(this.client, updatedConfig);
-    this.toilAllowance = new ToilAllowanceService(this.client, updatedConfig);
-    this.usersClockInService = new UsersClockInService(this.client, updatedConfig);
-    this.users = new UsersService(this.client, updatedConfig);
+  /**
+   * Overrides undefined config with the default config without removing getters in the object
+   */
+  private createConfig(config: SDKConfig): SDKConfig {
+    const keys = Object.keys(DEFAULT_CONFIG) as (keyof typeof DEFAULT_CONFIG)[];
+    for (const key of keys) {
+      config[key] ??= DEFAULT_CONFIG[key];
+    }
+    return config;
   }
 
   get config() {
@@ -132,7 +143,6 @@ export class RotaCloud {
   }
 
   set config(configVal: SDKConfig) {
-    this.logging(configVal);
     this.sdkConfig = configVal;
     this.setupInterceptors(configVal.retry, configVal.interceptors);
   }
