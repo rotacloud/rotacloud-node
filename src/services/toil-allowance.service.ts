@@ -1,6 +1,6 @@
-import { Options, Service } from './service';
-import { ToilAllowanceQueryParams } from '../interfaces/query-params/toil-allowance-query-params.interface';
-import { ToilAllowance } from '../interfaces/toil-allowance.interface';
+import { Options, Service } from './service.js';
+import { ToilAllowanceQueryParams } from '../interfaces/query-params/toil-allowance-query-params.interface.js';
+import { ToilAllowance } from '../interfaces/toil-allowance.interface.js';
 
 export class ToilAllowanceService extends Service<ToilAllowance> {
   private apiPath = '/toil_allowance';
