@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
-import { Options, RequirementsOf, Service } from './service';
-import { ToilAccrualsQueryParams } from '../interfaces/query-params/toil-accruals-query-params.interface';
-import { ToilAccrual } from '../interfaces/toil-accrual.interface';
+import { Options, RequirementsOf, Service } from './service.js';
+import { ToilAccrualsQueryParams } from '../interfaces/query-params/toil-accruals-query-params.interface.js';
+import { ToilAccrual } from '../interfaces/toil-accrual.interface.js';
 
 type RequiredProps = 'duration_hours' | 'leave_year' | 'user_id';
 
