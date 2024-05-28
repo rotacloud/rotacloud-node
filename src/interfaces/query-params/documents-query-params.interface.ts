@@ -1,4 +1,4 @@
 export interface DocumentsQueryParams {
   users?: number[];
-  search?: string;
+  company_only?: boolean;
 }

@@ -29,6 +29,7 @@ import {
 import { RetryOptions, RetryStrategy, SDKBase, SDKConfig } from './interfaces/index.js';
 import { PinsService } from './services/pins.service.js';
 import { SDKError } from './models/index.js';
+import { DocumentsService } from './services/documents.service.js';
 
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
@@ -73,6 +74,7 @@ export class RotaCloud {
   dailyRevenue: DailyRevenueService;
   dayNotes: DayNotesService;
   daysOff: DaysOffService;
+  documents: DocumentsService;
   group: GroupsService;
   leaveEmbargoes: LeaveEmbargoesService;
   leaveRequests: LeaveRequestService;
@@ -97,8 +99,8 @@ export class RotaCloud {
     const options = {
       get config(): SDKConfig {
         return client.config;
-      }
-    }
+      },
+    };
 
     this.accounts = new AccountsService(this.client, options);
     this.attendance = new AttendanceService(this.client, options);
@@ -108,6 +110,7 @@ export class RotaCloud {
     this.dailyRevenue = new DailyRevenueService(this.client, options);
     this.dayNotes = new DayNotesService(this.client, options);
     this.daysOff = new DaysOffService(this.client, options);
+    this.documents = new DocumentsService(this.client, options);
     this.group = new GroupsService(this.client, options);
     this.leaveEmbargoes = new LeaveEmbargoesService(this.client, options);
     this.leaveRequests = new LeaveRequestService(this.client, options);
