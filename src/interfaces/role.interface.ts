@@ -1,7 +1,7 @@
 export interface Role {
   id: number;
   deleted: boolean;
-  name: string;
+  name: string | null;
   colour: string;
   default_break: number;
   users: number[];
