@@ -1,6 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Shift } from '../interfaces/index.js';
-import { Service, Options, RequirementsOf, OptionsExtended } from './index.js';
+import { Options, OptionsExtended, RequirementsOf, Service } from './index.js';
 
 import { ShiftsQueryParams } from '../interfaces/query-params/shifts-query-params.interface.js';
 
@@ -130,12 +130,12 @@ export class ShiftsService extends Service<Shift> {
     return super.fetch<void>(params, options).then((res) => (options?.rawResponse ? res : res.status));
   }
 
-  acknowledge(data: number[]): Promise<number>;
-  acknowledge(data: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any>>;
-  acknowledge(data: number[], options: Options): Promise<number>;
-  acknowledge(data: number[], options?: Options) {
+  acknowledge(shifts: number[]): Promise<number>;
+  acknowledge(shifts: number[], options: { rawResponse: true } & Options): Promise<AxiosResponse<any>>;
+  acknowledge(shifts: number[], options: Options): Promise<number>;
+  acknowledge(shifts: number[], options?: Options) {
     return super
-      .fetch<Shift>({ url: '/shifts_acknowledged', data, method: 'POST' }, options)
+      .fetch<Shift>({ url: '/shifts_acknowledged', data: {shifts}, method: 'POST' }, options)
       .then((res) => (options?.rawResponse ? res : res.status));
   }
 
