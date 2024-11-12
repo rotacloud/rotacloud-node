@@ -1,25 +1,15 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Version } from '../version.js';
-import { SDKConfig } from '../interfaces';
+import { SDKConfig } from "../interfaces";
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
-export type Options =
-  | {
-      rawResponse?: boolean;
-      maxResults?: number;
-      limit?: never;
-      offset?: number;
-      dryRun?: boolean;
-    }
-  | {
-      rawResponse?: boolean;
-      maxResults?: never;
-      /** @deprecated use `maxResults` instead */
-      limit?: number;
-      offset?: number;
-      dryRun?: boolean;
-    };
+export interface Options {
+  rawResponse?: boolean;
+  limit?: number;
+  offset?: number;
+  dryRun?: boolean;
+}
 
 export type OptionsExtended<T = unknown> = Options & {
   fields?: (keyof T)[];
@@ -30,13 +20,13 @@ type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
   constructor(
-    protected client: AxiosInstance,
-    // opt to use options object here, so we could
-    // define the config property as a getter
-    // in RotaCloud class. With this change config in
-    // this class will always be up-to-date with
-    // RotaCloud client config
-    protected readonly options: { config: SDKConfig },
+      protected client: AxiosInstance,
+      // opt to use options object here, so we could
+      // define the config property as a getter
+      // in RotaCloud class. With this change config in
+      // this class will always be up-to-date with
+      // RotaCloud client config
+      protected readonly options: { config: SDKConfig }
   ) {}
 
   private isLeaveRequest(endpoint?: string): boolean {
@@ -49,7 +39,7 @@ export abstract class Service<ApiResponse = any> {
   ) {
     const queryParams: Record<string, ParameterValue> = {
       fields: options?.fields,
-      limit: options?.maxResults ?? options?.limit,
+      limit: options?.limit,
       offset: options?.offset,
       dry_run: options?.dryRun,
       ...extraParams,
@@ -142,20 +132,8 @@ export abstract class Service<ApiResponse = any> {
   }
 
   private async *listResponses<T = ApiResponse>(reqConfig: AxiosRequestConfig<T[]>, options?: Options) {
-    if (!options?.maxResults) {
-      for await (const res of this.fetchPages<T>(reqConfig, options)) {
-        yield* res.data;
-      }
-      return;
-    }
-
-    let entityCount = 0;
     for await (const res of this.fetchPages<T>(reqConfig, options)) {
-      for (const entity of res.data) {
-        yield entity;
-        entityCount += 1;
-        if (entityCount >= options.maxResults) return;
-      }
+      yield* res.data;
     }
   }
 
