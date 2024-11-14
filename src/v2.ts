@@ -1,27 +1,9 @@
-import { ServiceSpecification, createSdkClient } from './macros';
+import { createSdkClient } from './macros';
 import { SDKConfig } from './rotacloud';
+import { SERVICES } from './service';
 // import { createClient } from "./macros" assert {type: "macro"}
 
-const services = {
-  shifts: {
-    endpoint: 'shifts',
-    endpointVersion: 'v2',
-    operations: ['get', 'list', 'delete'],
-    customOperations: {
-      /** Docs for custom operations just work */
-      publish: () => async () => true,
-      /** Overrides for existing operations also work */
-      get: () => async () => true,
-    },
-  },
-  timeZone: {
-    endpoint: 'timezones',
-    endpointVersion: 'v1',
-    operations: ['get', 'list'],
-  },
-} satisfies Record<string, ServiceSpecification>;
-
-export const RotaCloud = createSdkClient(services);
+export const RotaCloud = createSdkClient(SERVICES);
 
 export const CONFIG_STAGING = {
   baseUri: 'https://api.rotacloud-staging.com/v1',
@@ -31,6 +13,6 @@ export const CONFIG_STAGING = {
 
 (async () => {
   const client = RotaCloud(CONFIG_STAGING);
-  console.log(await client.shifts.get());
-  console.log(await client.timeZone.get());
+  console.log(await client.shifts.list());
+  console.log(await client.leave.list());
 })();

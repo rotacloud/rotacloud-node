@@ -32,10 +32,33 @@ function parseClientError(error: AxiosError): SDKError {
   });
 }
 
+function buildQueryParams<T = unknown>(options?: OptionsExtended<T>, extraParams?: Record<string, ParameterValue>) {
+  const queryParams: Record<string, ParameterValue> = {
+    fields: options?.fields,
+    limit: options?.limit,
+    offset: options?.offset,
+    dry_run: options?.dryRun,
+    ...extraParams,
+    // NOTE: Should not overridable so must come after spread of params
+    exclude_link_header: true,
+  };
+  const reducedParams = Object.entries(queryParams ?? {}).reduce((params, [key, val]) => {
+    if (val !== undefined && val !== '') {
+      if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));
+      else params.push([key, String(val)]);
+    }
+    return params;
+  }, [] as string[][]);
+
+  return new URLSearchParams(reducedParams);
+}
+
 export function createCustomAxiosClient(config?: SDKConfig): Axios {
   const axiosClient = axios.create({
     // TODO: sanitise base URI
     baseURL: config?.baseUri,
+    // TODO: inline this?
+    paramsSerializer: (params) => buildQueryParams(params).toString(),
   });
 
   axiosClient.interceptors.request.clear();
@@ -86,27 +109,6 @@ export function createCustomAxiosClient(config?: SDKConfig): Axios {
   }
 
   return axiosClient;
-}
-
-function buildQueryParams<T = unknown>(options?: OptionsExtended<T>, extraParams?: Record<string, ParameterValue>) {
-  const queryParams: Record<string, ParameterValue> = {
-    fields: options?.fields,
-    limit: options?.limit,
-    offset: options?.offset,
-    dry_run: options?.dryRun,
-    ...extraParams,
-    // NOTE: Should not overridable so must come after spread of params
-    exclude_link_header: true,
-  };
-  const reducedParams = Object.entries(queryParams ?? {}).reduce((params, [key, val]) => {
-    if (val !== undefined && val !== '') {
-      if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));
-      else params.push([key, String(val)]);
-    }
-    return params;
-  }, [] as string[][]);
-
-  return new URLSearchParams(reducedParams);
 }
 
 export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknown> {
