@@ -2,10 +2,12 @@ import { Group, Leave, Role, Shift, TimeZone } from './interfaces/index.js';
 import { Operation, OpFunctionFactory } from './ops.js';
 import { GroupsQueryParams, LeaveQueryParams, RolesQueryParams, ShiftsQueryParams } from './rotacloud.js';
 
+type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 export type EndpointVersion = 'v1' | 'v2';
-export interface Endpoint<T = unknown, QueryParameters extends object | undefined = any> {
+export interface Endpoint<T = any, QueryParameters extends object | undefined = any> {
   type: T;
   queryParameters?: QueryParameters;
+  requirementsType?: Partial<T>;
 }
 export type ServiceSpecification =
   | {
@@ -42,10 +44,12 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     shifts: {
       type: Shift;
       queryParameters: ShiftsQueryParams;
+      requirementsType: RequirementsOf<Shift, 'start_time' | 'end_time' | 'location'>;
     };
     leave: {
       type: Leave;
       queryParameters: LeaveQueryParams;
+      requirementsType: RequirementsOf<Leave, 'users' | 'type' | 'start_date' | 'end_date'>;
     };
     timezones: {
       type: TimeZone;
@@ -53,19 +57,16 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     groups: {
       type: Group;
       queryParameters: GroupsQueryParams;
+      requirementsType: RequirementsOf<Group, 'name'>;
     };
     roles: {
       type: Role;
       queryParameters: RolesQueryParams;
+      requirementsType: RequirementsOf<Role, 'name'>;
     };
   };
   /** Type mappings for v2 endpoints */
-  v2: {
-    shifts: {
-      type: Shift;
-      queryParameters: ShiftsQueryParams;
-    };
-  };
+  v2: {};
 }
 
 /**
@@ -75,13 +76,24 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
 export const SERVICES = {
   shift: {
     endpoint: 'shifts',
-    endpointVersion: 'v2',
-    operations: ['get', 'list', 'delete'],
+    endpointVersion: 'v1',
+    operations: ['get', 'list', 'delete', 'create'],
   },
   leave: {
     endpoint: 'leave',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'delete'],
+    operations: ['get', 'list', 'delete', 'create'],
+    customOperations: {
+      // create:
+      //   ({ client, request, service }) =>
+      //   (entity: Partial<LeaveRequest>, opts?: Options) => {
+      //     assert(request.headers !== undefined, 'Invalid create leave request');
+      //     TODO: remove "Account" header
+      //     request.headers.User = entity.user;
+      //     // TODO: replace with "create" op
+      //     return client.post<LeaveRequest>(service.endpoint, request);
+      //   },
+    },
   },
   group: {
     endpoint: 'groups',

@@ -8,6 +8,13 @@ import { version } from '../package.json' assert { type: 'json' };
 type ParameterPrimitive = string | boolean | number | null | symbol;
 export type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
+export interface Options<T> {
+  rawResponse?: boolean;
+  maxResults?: number;
+  dryRun?: boolean;
+  fields?: (keyof T)[];
+}
+
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
 const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
@@ -113,16 +120,11 @@ export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknow
   const extraHeaders = opts.headers;
   if (extraHeaders && typeof extraHeaders === 'object') {
     for (const [key, val] of Object.entries(extraHeaders)) {
-      if (typeof key === 'string' && typeof val === 'string') {
-        headers[key] = val;
-      }
+      headers[key] = String(val);
     }
   }
   if (opts.accountId) {
     headers.Account = String(opts.accountId);
-  } else {
-    // need to convert user field in payload to a header for creating leave_requests when using an API key
-    // this.isLeaveRequest(reqConfig.url) ? (headers.User = `${reqConfig.data.user}`) : undefined;
   }
 
   return {
