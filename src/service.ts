@@ -1,6 +1,37 @@
-import { Group, Leave, Role, Shift, TimeZone } from './interfaces/index.js';
+import {
+  Account,
+  Attendance,
+  Auth,
+  Availability,
+  DailyBudgets,
+  DailyRevenue,
+  DayNote,
+  DaysOff,
+  Group,
+  Leave,
+  Role,
+  Shift,
+  TimeZone,
+  Document,
+  LeaveEmbargo,
+  LeaveRequest,
+} from './interfaces/index.js';
 import { Operation, OpFunctionFactory } from './ops.js';
-import { GroupsQueryParams, LeaveQueryParams, RolesQueryParams, ShiftsQueryParams } from './rotacloud.js';
+import {
+  AttendanceQueryParams,
+  AvailabilityQueryParams,
+  DailyBudgetsQueryParams,
+  DailyRevenueQueryParams,
+  DayNotesQueryParams,
+  DaysOffQueryParams,
+  DocumentsQueryParams,
+  GroupsQueryParams,
+  LeaveEmbargoesQueryParams,
+  LeaveQueryParams,
+  LeaveRequestsQueryParams,
+  RolesQueryParams,
+  ShiftsQueryParams,
+} from './rotacloud.js';
 
 type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 export type EndpointVersion = 'v1' | 'v2';
@@ -45,10 +76,21 @@ export type ServiceSpecification =
 export interface EndpointEntityMap extends Record<EndpointVersion, Record<string, Endpoint>> {
   /** Type mappings for v1 endpoints  */
   v1: {
+    accounts: Endpoint<Account>;
+    attendance: Endpoint<Attendance, AttendanceQueryParams, 'user' | 'in_time'>;
+    auth: Endpoint<Auth>;
+    availability: Endpoint<Availability, AvailabilityQueryParams>;
+    daily_budget: Endpoint<DailyBudgets, DailyBudgetsQueryParams>;
+    daily_revenue: Endpoint<DailyRevenue, DailyRevenueQueryParams>;
+    day_notes: Endpoint<DayNote, DayNotesQueryParams>;
+    days_off: Endpoint<DaysOff, DaysOffQueryParams>;
+    documents: Endpoint<Document, DocumentsQueryParams, 'name' | 'bucket' | 'key'>;
+    groups: Endpoint<Group, GroupsQueryParams, 'name'>;
+    leave_embargoes: Endpoint<LeaveEmbargo, LeaveEmbargoesQueryParams, 'start_date' | 'end_date' | 'users'>;
+    leave_requests: Endpoint<LeaveRequest, LeaveRequestsQueryParams, 'start_date' | 'end_date' | 'type' | 'user'>;
     shifts: Endpoint<Shift, ShiftsQueryParams, 'start_time' | 'end_time' | 'location'>;
     leave: Endpoint<Leave, LeaveQueryParams, 'users' | 'type' | 'start_date' | 'end_date'>;
     timezones: Endpoint<TimeZone>;
-    groups: Endpoint<Group, GroupsQueryParams, 'name'>;
     roles: Endpoint<Role, RolesQueryParams, 'name'>;
   };
   /** Type mappings for v2 endpoints */
@@ -60,6 +102,66 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
  * used to generate the SDK client
  */
 export const SERVICES = {
+  account: {
+    endpoint: 'accounts',
+    endpointVersion: 'v1',
+    operations: ['get', 'list', 'listAll'],
+  },
+  attendance: {
+    endpoint: 'attendance',
+    endpointVersion: 'v1',
+    operations: ['get', 'list', 'listAll', 'delete', 'create', 'update'],
+  },
+  auth: {
+    endpoint: 'auth',
+    endpointVersion: 'v1',
+    operations: ['get'],
+  },
+  availability: {
+    endpoint: 'availability',
+    endpointVersion: 'v1',
+    operations: ['update', 'create', 'delete', 'list', 'listAll'],
+  },
+  dailyBudget: {
+    endpoint: 'daily_budget',
+    endpointVersion: 'v1',
+    operations: ['list', 'listAll', 'update'],
+  },
+  dailyRevenue: {
+    endpoint: 'daily_revenue',
+    endpointVersion: 'v1',
+    operations: ['list', 'listAll', 'update'],
+  },
+  dayNote: {
+    endpoint: 'day_notes',
+    endpointVersion: 'v1',
+    operations: ['get', 'create', 'list', 'listAll', 'update', 'delete'],
+  },
+  dayOff: {
+    endpoint: 'days_off',
+    endpointVersion: 'v1',
+    operations: ['create', 'list', 'listAll', 'delete'],
+  },
+  document: {
+    endpoint: 'documents',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+  },
+  group: {
+    endpoint: 'groups',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+  },
+  leaveEmbargo: {
+    endpoint: 'leave_embargoes',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+  },
+  LeaveRequest: {
+    endpoint: 'leave_requests',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+  },
   shift: {
     endpoint: 'shifts',
     endpointVersion: 'v1',
@@ -81,12 +183,7 @@ export const SERVICES = {
       //   },
     },
   },
-  group: {
-    endpoint: 'groups',
-    endpointVersion: 'v1',
-    operations: ['get', 'list', 'delete'],
-  },
-  roles: {
+  role: {
     endpoint: 'roles',
     endpointVersion: 'v1',
     operations: ['get', 'list', 'delete'],
