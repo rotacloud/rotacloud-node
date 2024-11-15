@@ -4,10 +4,14 @@ import { GroupsQueryParams, LeaveQueryParams, RolesQueryParams, ShiftsQueryParam
 
 type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 export type EndpointVersion = 'v1' | 'v2';
-export interface Endpoint<T = any, QueryParameters extends object | undefined = any> {
-  type: T;
-  queryParameters?: QueryParameters;
-  requirementsType?: Partial<T>;
+export interface Endpoint<
+  Entity = unknown,
+  QueryParameters extends object = any,
+  RequiredFields extends keyof Entity = any,
+> {
+  type: Entity;
+  queryParameters: QueryParameters;
+  createType: RequirementsOf<Entity, RequiredFields>;
 }
 export type ServiceSpecification =
   | {
@@ -41,29 +45,11 @@ export type ServiceSpecification =
 export interface EndpointEntityMap extends Record<EndpointVersion, Record<string, Endpoint>> {
   /** Type mappings for v1 endpoints  */
   v1: {
-    shifts: {
-      type: Shift;
-      queryParameters: ShiftsQueryParams;
-      requirementsType: RequirementsOf<Shift, 'start_time' | 'end_time' | 'location'>;
-    };
-    leave: {
-      type: Leave;
-      queryParameters: LeaveQueryParams;
-      requirementsType: RequirementsOf<Leave, 'users' | 'type' | 'start_date' | 'end_date'>;
-    };
-    timezones: {
-      type: TimeZone;
-    };
-    groups: {
-      type: Group;
-      queryParameters: GroupsQueryParams;
-      requirementsType: RequirementsOf<Group, 'name'>;
-    };
-    roles: {
-      type: Role;
-      queryParameters: RolesQueryParams;
-      requirementsType: RequirementsOf<Role, 'name'>;
-    };
+    shifts: Endpoint<Shift, ShiftsQueryParams, 'start_time' | 'end_time' | 'location'>;
+    leave: Endpoint<Leave, LeaveQueryParams, 'users' | 'type' | 'start_date' | 'end_date'>;
+    timezones: Endpoint<TimeZone>;
+    groups: Endpoint<Group, GroupsQueryParams, 'name'>;
+    roles: Endpoint<Role, RolesQueryParams, 'name'>;
   };
   /** Type mappings for v2 endpoints */
   v2: {};

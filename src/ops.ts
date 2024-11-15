@@ -51,7 +51,7 @@ function getOp<T>({
   client,
   request,
   service,
-}: OpFactoryOptions): (id: number, opts: { rawResponse: true }) => Promise<AxiosResponse<T>>;
+}: OpFactoryOptions): (id: number, opts: { rawResponse: true } & Options<T>) => Promise<AxiosResponse<T>>;
 function getOp<T>({ client, request, service }: OpFactoryOptions): (id: number, opts?: Options<T>) => Promise<T>;
 function getOp<T>({ client, request, service }: OpFactoryOptions) {
   return async (id: number, opts?: Options<T>) => {
@@ -68,15 +68,19 @@ function getOp<T>({ client, request, service }: OpFactoryOptions) {
   };
 }
 
-function createOp<T>({ client, request, service }: OpFactoryOptions): (newEntity: T) => Promise<T>;
-function createOp<T>({
+function createOp<T, R>({ client, request, service }: OpFactoryOptions): (newEntity: T) => Promise<R>;
+function createOp<T, R>({
   client,
   request,
   service,
-}: OpFactoryOptions): (newEntity: T, opts: { rawResponse: true }) => Promise<AxiosResponse<T>>;
-function createOp<T>({ client, request, service }: OpFactoryOptions): (newEntity: T, opts?: Options<T>) => Promise<T>;
-function createOp<T>({ client, request, service }: OpFactoryOptions) {
-  return async (newEntity: T, opts?: Options<T>) => {
+}: OpFactoryOptions): (newEntity: T, opts: { rawResponse: true } & Options<R>) => Promise<AxiosResponse<R>>;
+function createOp<T, R>({
+  client,
+  request,
+  service,
+}: OpFactoryOptions): (newEntity: T, opts?: Options<R>) => Promise<R>;
+function createOp<T, R>({ client, request, service }: OpFactoryOptions) {
+  return async (newEntity: T, opts?: Options<R>) => {
     const paramAppliedRequest = {
       ...request,
       params: {
@@ -84,7 +88,7 @@ function createOp<T>({ client, request, service }: OpFactoryOptions) {
         ...paramsFromOptions(opts ?? {}),
       },
     };
-    const res = await client.post<T>(service.endpoint, newEntity, paramAppliedRequest);
+    const res = await client.post<R>(service.endpoint, newEntity, paramAppliedRequest);
     if (opts?.rawResponse) return res;
     return res.data;
   };
@@ -95,7 +99,7 @@ function updateOp<T extends { id: number }>({
   client,
   request,
   service,
-}: OpFactoryOptions): (entity: T, opts: { rawResponse: true }) => Promise<AxiosResponse<T>>;
+}: OpFactoryOptions): (entity: T, opts: { rawResponse: true } & Options<T>) => Promise<AxiosResponse<T>>;
 function updateOp<T extends { id: number }>({
   client,
   request,
@@ -122,7 +126,7 @@ function deleteOp({
   client,
   request,
   service,
-}: OpFactoryOptions): (id: number, opts: { rawResponse: true }) => Promise<AxiosResponse<void>>;
+}: OpFactoryOptions): (id: number, opts: { rawResponse: true } & Options<unknown>) => Promise<AxiosResponse<void>>;
 function deleteOp({
   client,
   request,
@@ -191,15 +195,15 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
       delete: deleteOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
-      create: createOp<E['requirementsType']>,
+      create: createOp<E['createType'], T>,
       update: updateOp<T extends { id: number } ? T : never>,
     },
     v2: {
       get: getOp<T>,
       delete: deleteOp,
       list: listOp<T, E['queryParameters']>,
-      listAll: listAllOp<T, E['queryParameters']>,
-      create: createOp<E['requirementsType']>,
+      listAll: listAllOp<E['queryParameters'], T>,
+      create: createOp<E['createType'], T>,
       update: updateOp<T extends { id: number } ? T : never>,
     },
   } satisfies Record<EndpointVersion, OpFunctionMap<T>>;
