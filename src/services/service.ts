@@ -1,6 +1,6 @@
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Version } from '../version.js';
-import { SDKConfig } from "../interfaces";
+import { version } from '../../package.json' assert { type: 'json' };
+import { SDKConfig } from '../interfaces/index.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
@@ -20,13 +20,13 @@ type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 export abstract class Service<ApiResponse = any> {
   constructor(
-      protected client: AxiosInstance,
-      // opt to use options object here, so we could
-      // define the config property as a getter
-      // in RotaCloud class. With this change config in
-      // this class will always be up-to-date with
-      // RotaCloud client config
-      protected readonly options: { config: SDKConfig }
+    protected client: AxiosInstance,
+    // opt to use options object here, so we could
+    // define the config property as a getter
+    // in RotaCloud class. With this change config in
+    // this class will always be up-to-date with
+    // RotaCloud client config
+    protected readonly options: { config: SDKConfig },
   ) {}
 
   private isLeaveRequest(endpoint?: string): boolean {
@@ -76,7 +76,7 @@ export abstract class Service<ApiResponse = any> {
       Authorization: this.options.config.apiKey
         ? `Bearer ${this.options.config.apiKey}`
         : `Basic ${this.options.config.basicAuth}`,
-      'SDK-Version': Version.version,
+      'SDK-Version': version,
     };
 
     const extraHeaders = this.options.config.headers;

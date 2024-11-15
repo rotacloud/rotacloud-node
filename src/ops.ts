@@ -1,21 +1,31 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { Options } from '../dist/cjs/services';
-import { Endpoint, EndpointVersion, ServiceSpecification } from './service';
+import { Endpoint, EndpointVersion, ServiceSpecification } from './service.js';
+import { Options, OptionsExtended } from './services/service.js';
+import { ParameterValue } from './fetchv2.js';
 
 // TODO: investigate sets of operations e.g. "read-only" grants "list" and "get"
 export type Operation = 'get' | 'list' | 'listAll' | 'delete';
 
 export type OpFunctionFactory<T extends (...args: any[]) => Promise<unknown> = () => Promise<unknown>> = (opts: {
   client: Readonly<Axios>;
-  requestConfig: Readonly<AxiosRequestConfig<Awaited<ReturnType<T>>>>;
+  request: Readonly<AxiosRequestConfig<Awaited<ReturnType<T>>>>;
   service: ServiceSpecification;
 }) => T;
 
 type OpFactoryOptions = {
   client: Readonly<Axios>;
-  requestConfig: Readonly<AxiosRequestConfig<unknown>>;
+  request: Readonly<AxiosRequestConfig<unknown>>;
   service: Readonly<ServiceSpecification>;
 };
+
+function paramsFromOptions(opts: OptionsExtended): Record<string, ParameterValue> {
+  return {
+    fields: opts?.fields,
+    limit: opts?.limit,
+    offset: opts?.offset,
+    dry_run: opts?.dryRun,
+  };
+}
 
 function* pagedParams<T>(
   response: AxiosResponse<T>,
@@ -39,31 +49,45 @@ function* pagedParams<T>(
   }
 }
 
-function getOp<T>({ client, requestConfig, service }: OpFactoryOptions): (id: number) => Promise<T>;
+function getOp<T>({ client, request, service }: OpFactoryOptions): (id: number) => Promise<T>;
 function getOp<T>({
   client,
-  requestConfig,
+  request,
   service,
 }: OpFactoryOptions): (id: number, opts: { rawResponse: true }) => Promise<AxiosResponse<T>>;
-function getOp<T>({ client, requestConfig, service }: OpFactoryOptions): (id: number, opts?: Options) => Promise<T>;
-function getOp<T>({ client, requestConfig, service }: OpFactoryOptions) {
+function getOp<T>({ client, request, service }: OpFactoryOptions): (id: number, opts?: Options) => Promise<T>;
+function getOp<T>({ client, request, service }: OpFactoryOptions) {
   return async (id: number, opts?: Options) => {
-    const res = await client.get<T>(`${service.endpoint}/${id}`, requestConfig);
+    const paramAppliedRequest = {
+      ...request,
+      params: {
+        ...request.params,
+        ...paramsFromOptions(opts ?? {}),
+      },
+    };
+    const res = await client.get<T>(`${service.endpoint}/${id}`, paramAppliedRequest);
     if (opts?.rawResponse) return res;
     return res.data;
   };
 }
 
-function deleteOp({ client, requestConfig, service }: OpFactoryOptions): (id: number) => Promise<void>;
+function deleteOp({ client, request, service }: OpFactoryOptions): (id: number) => Promise<void>;
 function deleteOp({
   client,
-  requestConfig,
+  request,
   service,
 }: OpFactoryOptions): (id: number, opts: { rawResponse: true }) => Promise<AxiosResponse<void>>;
-function deleteOp({ client, requestConfig, service }: OpFactoryOptions): (id: number, opts?: Options) => Promise<void>;
-function deleteOp({ client, requestConfig, service }: OpFactoryOptions) {
+function deleteOp({ client, request, service }: OpFactoryOptions): (id: number, opts?: Options) => Promise<void>;
+function deleteOp({ client, request, service }: OpFactoryOptions) {
   return async (id: number, opts?: Options) => {
-    const res = await client.delete(`${service.endpoint}/${id}`, requestConfig);
+    const paramAppliedRequest = {
+      ...request,
+      params: {
+        ...request.params,
+        ...paramsFromOptions(opts ?? {}),
+      },
+    };
+    const res = await client.delete(`${service.endpoint}/${id}`, paramAppliedRequest);
     if (opts?.rawResponse) return res;
     return res.data;
   };
@@ -71,32 +95,33 @@ function deleteOp({ client, requestConfig, service }: OpFactoryOptions) {
 
 function listOp<T, Q>({
   client,
-  requestConfig,
+  request,
   service,
 }: OpFactoryOptions): (query: Q, opts?: Exclude<Options, 'rawResponse'>) => AsyncGenerator<T>;
-function listOp<T, Q>({ client, requestConfig, service }: OpFactoryOptions) {
+function listOp<T, Q>({ client, request: requestConfig, service }: OpFactoryOptions) {
   return async function* list(query: Q, opts?: Options) {
-    const queriedRequestConfig = {
+    const queriedRequest = {
       ...requestConfig,
       params: {
         ...requestConfig.params,
+        ...paramsFromOptions(opts ?? {}),
         ...query,
       },
     };
-    const res = await client.get<T[]>(service.endpoint, requestConfig);
+    const res = await client.get<T[]>(service.endpoint, queriedRequest);
     yield* res.data;
 
-    for (const pagedRequestConfig of pagedParams(res, requestConfig)) {
-      const pagedRes = await client.get<T[]>(service.endpoint, pagedRequestConfig);
+    for (const pagedRequest of pagedParams(res, requestConfig)) {
+      const pagedRes = await client.get<T[]>(service.endpoint, pagedRequest);
       yield* pagedRes.data;
     }
   };
 }
 
-function listAllOp<T, Q>({ client, requestConfig, service }: OpFactoryOptions) {
+function listAllOp<T, Q>({ client, request: requestConfig, service }: OpFactoryOptions) {
   return async (query: Q, opts?: Exclude<Options, 'rawResponse'>) => {
     const results: T[] = [];
-    for await (const entity of listOp<T, Q>({ client, requestConfig, service })(query, opts)) {
+    for await (const entity of listOp<T, Q>({ client, request: requestConfig, service })(query, opts)) {
       results.push(entity);
     }
     return results;

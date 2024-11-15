@@ -1,8 +1,8 @@
 import { Axios, AxiosRequestConfig } from 'axios';
-import { createCustomAxiosClient, getBaseRequestConfig } from './fetchv2';
-import { SDKConfig } from './interfaces';
-import { getOpMap, OpFunctionFactory } from './ops';
-import { Endpoint, EndpointEntityMap, ServiceSpecification } from './service';
+import { createCustomAxiosClient, getBaseRequestConfig } from './fetchv2.js';
+import { SDKConfig } from './interfaces/index.js';
+import { getOpMap, OpFunctionFactory } from './ops.js';
+import { Endpoint, EndpointEntityMap, ServiceSpecification } from './service.js';
 
 /** Utility type to make working with the Endpoint map easier */
 type ExtractEndpoint<Spec extends ServiceSpecification> =
@@ -47,7 +47,7 @@ function serviceForSpec<Spec extends ServiceSpecification>(
   for (const op of serviceSpec.operations) {
     service[op] = opMap[serviceSpec.endpointVersion][op]({
       client: opts.axiosClient,
-      requestConfig: opts.axiosConfig,
+      request: opts.axiosConfig,
       service: serviceSpec,
     });
   }

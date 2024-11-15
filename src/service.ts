@@ -1,6 +1,6 @@
-import { Leave, Shift, TimeZone } from './interfaces';
-import { Operation, OpFunctionFactory } from './ops';
-import { LeaveQueryParams, ShiftsQueryParams } from './rotacloud';
+import { Group, Leave, Role, Shift, TimeZone } from './interfaces/index.js';
+import { Operation, OpFunctionFactory } from './ops.js';
+import { GroupsQueryParams, LeaveQueryParams, RolesQueryParams, ShiftsQueryParams } from './rotacloud.js';
 
 export type EndpointVersion = 'v1' | 'v2';
 export interface Endpoint<T = unknown, QueryParameters extends object | undefined = any> {
@@ -50,6 +50,14 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     timezones: {
       type: TimeZone;
     };
+    groups: {
+      type: Group;
+      queryParameters: GroupsQueryParams;
+    };
+    roles: {
+      type: Role;
+      queryParameters: RolesQueryParams;
+    };
   };
   /** Type mappings for v2 endpoints */
   v2: {
@@ -65,13 +73,23 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
  * used to generate the SDK client
  */
 export const SERVICES = {
-  shifts: {
+  shift: {
     endpoint: 'shifts',
     endpointVersion: 'v2',
     operations: ['get', 'list', 'delete'],
   },
   leave: {
     endpoint: 'leave',
+    endpointVersion: 'v1',
+    operations: ['get', 'list', 'delete'],
+  },
+  group: {
+    endpoint: 'groups',
+    endpointVersion: 'v1',
+    operations: ['get', 'list', 'delete'],
+  },
+  roles: {
+    endpoint: 'roles',
     endpointVersion: 'v1',
     operations: ['get', 'list', 'delete'],
   },

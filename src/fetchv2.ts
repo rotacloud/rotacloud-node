@@ -1,12 +1,13 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
-import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces';
-import { SDKError } from './models';
-import { Version } from './version';
-import { OptionsExtended } from './services/service';
+import assert from 'assert';
+import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
+import { SDKError } from './models/index.js';
+import { version } from '../package.json' assert { type: 'json' };
+import { Options, OptionsExtended } from './services/service.js';
 
 type ParameterPrimitive = string | boolean | number | null | symbol;
-type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
+export type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
 
 const DEFAULT_RETRIES = 3;
 const DEFAULT_RETRY_DELAY = 2000;
@@ -32,16 +33,9 @@ function parseClientError(error: AxiosError): SDKError {
   });
 }
 
-function buildQueryParams<T = unknown>(options?: OptionsExtended<T>, extraParams?: Record<string, ParameterValue>) {
-  const queryParams: Record<string, ParameterValue> = {
-    fields: options?.fields,
-    limit: options?.limit,
-    offset: options?.offset,
-    dry_run: options?.dryRun,
-    ...extraParams,
-    // NOTE: Should not overridable so must come after spread of params
-    exclude_link_header: true,
-  };
+/** Converts a map of query parameter key/values into API compatible {@see URLSearchParams} */
+function toSearchParams(params?: Record<string, ParameterValue>): URLSearchParams {
+  const queryParams: Record<string, ParameterValue> = { ...params };
   const reducedParams = Object.entries(queryParams ?? {}).reduce((params, [key, val]) => {
     if (val !== undefined && val !== '') {
       if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));
@@ -54,11 +48,11 @@ function buildQueryParams<T = unknown>(options?: OptionsExtended<T>, extraParams
 }
 
 export function createCustomAxiosClient(config?: SDKConfig): Axios {
+  const baseURL = URL.parse(config?.baseUri ?? '')?.toString();
+  assert(baseURL !== null, 'Must have a valid base URL');
   const axiosClient = axios.create({
-    // TODO: sanitise base URI
-    baseURL: config?.baseUri,
-    // TODO: inline this?
-    paramsSerializer: (params) => buildQueryParams(params).toString(),
+    baseURL,
+    paramsSerializer: (params) => toSearchParams({ ...params, exclude_link_header: true }).toString(),
   });
 
   axiosClient.interceptors.request.clear();
@@ -114,7 +108,7 @@ export function createCustomAxiosClient(config?: SDKConfig): Axios {
 export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknown> {
   const headers: Record<string, string> = {
     Authorization: opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`,
-    'SDK-Version': Version.version,
+    'SDK-Version': version,
   };
 
   const extraHeaders = opts.headers;

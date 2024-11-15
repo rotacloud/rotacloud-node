@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { DayNote } from '../interfaces/index.js';
 import { Service, Options, OptionsExtended } from './index.js';
 
-import { DayNotesQueryParams } from '../interfaces/query-params/day-notes-query-params.interface';
+import { DayNotesQueryParams } from '../interfaces/query-params/day-notes-query-params.interface.js';
 
 export class DayNotesService extends Service<DayNote> {
   private apiPath = '/day_notes';
