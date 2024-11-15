@@ -4,7 +4,6 @@ import assert from 'assert';
 import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
 import { SDKError } from './models/index.js';
 import { version } from '../package.json' assert { type: 'json' };
-import { Options, OptionsExtended } from './services/service.js';
 
 type ParameterPrimitive = string | boolean | number | null | symbol;
 export type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
