@@ -1,3 +1,4 @@
+import { Settings } from 'http2';
 import {
   Account,
   Attendance,
@@ -15,6 +16,14 @@ import {
   Document,
   LeaveEmbargo,
   LeaveRequest,
+  LeaveType,
+  Location,
+  Pin,
+  Terminal,
+  ToilAccrual,
+  ToilAllowance,
+  UserClockedIn,
+  User,
 } from './interfaces/index.js';
 import { Operation, OpFunctionFactory } from './ops.js';
 import {
@@ -29,8 +38,14 @@ import {
   LeaveEmbargoesQueryParams,
   LeaveQueryParams,
   LeaveRequestsQueryParams,
+  LocationsQueryParams,
   RolesQueryParams,
+  SettingsQueryParams,
   ShiftsQueryParams,
+  TerminalsQueryParams,
+  ToilAccrualsQueryParams,
+  ToilAllowanceQueryParams,
+  UsersQueryParams,
 } from './rotacloud.js';
 
 type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
@@ -88,10 +103,21 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     groups: Endpoint<Group, GroupsQueryParams, 'name'>;
     leave_embargoes: Endpoint<LeaveEmbargo, LeaveEmbargoesQueryParams, 'start_date' | 'end_date' | 'users'>;
     leave_requests: Endpoint<LeaveRequest, LeaveRequestsQueryParams, 'start_date' | 'end_date' | 'type' | 'user'>;
-    shifts: Endpoint<Shift, ShiftsQueryParams, 'start_time' | 'end_time' | 'location'>;
+    leave_types: Endpoint<LeaveType>;
     leave: Endpoint<Leave, LeaveQueryParams, 'users' | 'type' | 'start_date' | 'end_date'>;
-    timezones: Endpoint<TimeZone>;
+    locations: Endpoint<Location, LocationsQueryParams, 'name'>;
+    pins: Endpoint<Pin>;
     roles: Endpoint<Role, RolesQueryParams, 'name'>;
+    settings: Endpoint<Settings, SettingsQueryParams>;
+    shifts: Endpoint<Shift, ShiftsQueryParams, 'start_time' | 'end_time' | 'location'>;
+    terminals: Endpoint<Terminal, TerminalsQueryParams, 'name' | 'timezone'>;
+    terminals_active: Endpoint<Terminal>;
+    timezones: Endpoint<TimeZone>;
+    toil_accruals: Endpoint<ToilAccrual, ToilAccrualsQueryParams, 'duration_hours' | 'leave_year' | 'user_id'>;
+    toil_allowance: Endpoint<ToilAllowance, ToilAllowanceQueryParams>;
+    // TODO: fixup
+    users_clocked_in: Endpoint<UserClockedIn, never, 'in_method'>;
+    users: Endpoint<User, UsersQueryParams, 'first_name' | 'last_name'>;
   };
   /** Type mappings for v2 endpoints */
   v2: {};
@@ -157,15 +183,15 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
   },
-  LeaveRequest: {
+  leaveRequest: {
     endpoint: 'leave_requests',
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
   },
-  shift: {
-    endpoint: 'shifts',
+  leaveType: {
+    endpoint: 'leave_types',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'delete', 'create'],
+    operations: ['list', 'listAll'],
   },
   leave: {
     endpoint: 'leave',
@@ -183,14 +209,84 @@ export const SERVICES = {
       //   },
     },
   },
+  location: {
+    endpoint: 'locations',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+  },
+  pin: {
+    endpoint: 'pins',
+    endpointVersion: 'v1',
+    operations: ['get'],
+  },
   role: {
     endpoint: 'roles',
     endpointVersion: 'v1',
     operations: ['get', 'list', 'delete'],
   },
+  settings: {
+    endpoint: 'settings',
+    endpointVersion: 'v1',
+    operations: ['list', 'listAll'],
+  },
+  shift: {
+    endpoint: 'shifts',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+    customOperations: {
+      //   acknowledge: () => undefined,
+      //   publish: () => undefined,
+      //   unpublish: () => undefined,
+    },
+  },
+  terminal: {
+    endpoint: 'terminals',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'update', 'list', 'listAll'],
+    customOperations: {
+      // close: () => undefined
+    },
+  },
+  terminalActive: {
+    endpoint: 'terminals',
+    endpointVersion: 'v1',
+    operations: ['list', 'listAll'],
+    customOperations: {
+      // launch: () => undefined
+      // ping: () => undefined
+      // close: () => undefined
+    },
+  },
   timeZone: {
     endpoint: 'timezones',
     endpointVersion: 'v1',
-    operations: ['get', 'list'],
+    operations: ['get', 'list', 'listAll'],
+  },
+  toilAccrual: {
+    endpoint: 'toil_accruals',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'delete'],
+  },
+  toilAllowance: {
+    endpoint: 'toil_allowance',
+    endpointVersion: 'v1',
+    operations: ['list', 'listAll'],
+  },
+  userClockIn: {
+    endpoint: 'users_clocked_in',
+    endpointVersion: 'v1',
+    // TODO: check types
+    operations: ['get', 'list', 'listAll'],
+    customOperations: {
+      // clockIn: () => undefined
+      // clockOut: () => undefined
+      // startBreak: () => undefined
+      // endBreak: () => undefined
+    },
+  },
+  user: {
+    endpoint: 'users',
+    endpointVersion: 'v1',
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
   },
 } satisfies Record<string, ServiceSpecification>;
