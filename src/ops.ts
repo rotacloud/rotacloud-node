@@ -13,11 +13,65 @@ type OpFactoryOptions = {
   service: Readonly<ServiceSpecification>;
 };
 
-export type OpFunctionFactory<T extends (...args: any[]) => Promise<unknown> = () => Promise<unknown>> = (
-  opts: OpFactoryOptions,
-) => T;
+export type OpFunction<Entity, Param = unknown, R = Entity> = {
+  (param: Param): Promise<R>;
+  <T = Entity>(
+    param: Param,
+    opts?: {
+      rawResponse: true;
+    } & Options<T>,
+  ): Promise<AxiosResponse<Entity>>;
+  <T = Entity>(param: Param, opts?: Options<T>): Promise<R>;
+  <T extends Array<any>>(query: Param, opts?: Options<T>): Promise<R>;
+};
 
-function paramsFromOptions<T>(opts: Options<T>): Record<string, ParameterValue> {
+type OpFunctionFactoryEntity = {
+  // Single param
+  <T, R = T>(factoryOpts: OpFactoryOptions): (id: number) => Promise<R>;
+  <T, R = T>(factoryOpts: OpFactoryOptions): (entity: T) => Promise<R>;
+
+  // Raw response enabled
+  <T, R>(
+    factoryOpts: OpFactoryOptions,
+  ): (
+    id: number,
+    opts: {
+      rawResponse: true;
+    } & Options<T>,
+  ) => Promise<AxiosResponse<R>>;
+  <T, R = T, PartialT extends Partial<PartialT> = Partial<T>>(
+    factoryOpts: OpFactoryOptions,
+  ): (
+    entity: PartialT,
+    opts: {
+      rawResponse: true;
+    } & Options<T>,
+  ) => Promise<AxiosResponse<R>>;
+  <T, R = T>(
+    factoryOpts: OpFactoryOptions,
+  ): (
+    entity: T,
+    opts: {
+      rawResponse: true;
+    } & Options<T>,
+  ) => Promise<AxiosResponse<R>>;
+
+  // Raw response disabled
+  <T, R = T>(factoryOpts: OpFactoryOptions): (id: number, opts?: Options<T>) => Promise<R>;
+  <T, R = T, PartialT extends Partial<T> = Partial<T>>(
+    factoryOpts: OpFactoryOptions,
+  ): (entity: PartialT, opts?: Options<T>) => Promise<R>;
+  <T, R = T>(factoryOpts: OpFactoryOptions): (entity: T, opts?: Options<T>) => Promise<R>;
+};
+
+type OpFunctionFactoryQuery = {
+  <T, Q>(factoryOpts: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => AsyncGenerator<T>;
+  <T, Q>(factoryOpts: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => Promise<T[]>;
+};
+
+export type OpFunctionFactory = OpFunctionFactoryEntity | OpFunctionFactoryQuery;
+
+export function paramsFromOptions<T>(opts: Options<T>): Record<string, ParameterValue> {
   return {
     fields: opts?.fields,
     limit: opts?.maxResults,
@@ -47,15 +101,8 @@ function* pagedParams<T>(
   }
 }
 
-function getOp<T>({ client, request, service }: OpFactoryOptions): (id: number) => Promise<T>;
-function getOp<T>({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (id: number, opts: { rawResponse: true } & Options<T>) => Promise<AxiosResponse<T>>;
-function getOp<T>({ client, request, service }: OpFactoryOptions): (id: number, opts?: Options<T>) => Promise<T>;
-function getOp<T>({ client, request, service }: OpFactoryOptions) {
-  return async (id: number, opts?: Options<T>) => {
+function getOp<Entity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity, number> {
+  return async <T = Entity>(id: number, opts?: Options<T>) => {
     const paramAppliedRequest = {
       ...request,
       params: {
@@ -68,20 +115,23 @@ function getOp<T>({ client, request, service }: OpFactoryOptions) {
     return res.data;
   };
 }
+// function getOp<Entity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
+//   return async <T = Entity>(id: number, opts?: Options<T>) => {
+//     const paramAppliedRequest = {
+//       ...request,
+//       params: {
+//         ...request.params,
+//         ...paramsFromOptions(opts ?? {}),
+//       },
+//     };
+//     const res = await client.get<T>(`${service.endpoint}/${id}`, paramAppliedRequest);
+//     if (opts?.rawResponse) return res;
+//     return res.data;
+//   };
+// }
 
-function createOp<T, R>({ client, request, service }: OpFactoryOptions): (newEntity: T) => Promise<R>;
-function createOp<T, R>({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (newEntity: T, opts: { rawResponse: true } & Options<R>) => Promise<AxiosResponse<R>>;
-function createOp<T, R>({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (newEntity: T, opts?: Options<R>) => Promise<R>;
-function createOp<T, R>({ client, request, service }: OpFactoryOptions) {
-  return async (newEntity: T, opts?: Options<R>) => {
+function createOp<Entity, PartialEntity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
+  return async <T = Entity, R = PartialEntity>(newEntity: R, opts?: Options<T>) => {
     const paramAppliedRequest = {
       ...request,
       params: {
@@ -89,25 +139,14 @@ function createOp<T, R>({ client, request, service }: OpFactoryOptions) {
         ...paramsFromOptions(opts ?? {}),
       },
     };
-    const res = await client.post<R>(service.endpoint, newEntity, paramAppliedRequest);
+    const res = await client.post<T>(service.endpoint, newEntity, paramAppliedRequest);
     if (opts?.rawResponse) return res;
     return res.data;
   };
 }
 
-function updateOp<T extends { id: number }>({ client, request, service }: OpFactoryOptions): (entity: T) => Promise<T>;
-function updateOp<T extends { id: number }>({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (entity: T, opts: { rawResponse: true } & Options<T>) => Promise<AxiosResponse<T>>;
-function updateOp<T extends { id: number }>({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (entity: T, opts?: Options<T>) => Promise<T>;
-function updateOp<T extends { id: number }>({ client, request, service }: OpFactoryOptions) {
-  return async (entity: T, opts?: Options<T>) => {
+function updateOp<Entity extends { id: number }>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
+  return async <T extends { id: number } = Entity>(entity: T, opts?: Options<T>) => {
     assert(typeof entity.id === 'number', 'Entity must already exist with a valid ID');
     const paramAppliedRequest = {
       ...request,
@@ -122,19 +161,8 @@ function updateOp<T extends { id: number }>({ client, request, service }: OpFact
   };
 }
 
-function deleteOp({ client, request, service }: OpFactoryOptions): (id: number) => Promise<void>;
-function deleteOp({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (id: number, opts: { rawResponse: true } & Options<unknown>) => Promise<AxiosResponse<void>>;
-function deleteOp({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (id: number, opts?: Options<unknown>) => Promise<void>;
-function deleteOp({ client, request, service }: OpFactoryOptions) {
-  return async (id: number, opts?: Options<unknown>) => {
+function deleteOp<Entity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity, number, void> {
+  return async <T = Entity, R = void>(id: number, opts?: Options<T>) => {
     const paramAppliedRequest = {
       ...request,
       params: {
@@ -142,23 +170,21 @@ function deleteOp({ client, request, service }: OpFactoryOptions) {
         ...paramsFromOptions(opts ?? {}),
       },
     };
-    const res = await client.delete(`${service.endpoint}/${id}`, paramAppliedRequest);
+    const res = await client.delete<R>(`${service.endpoint}/${id}`, paramAppliedRequest);
     if (opts?.rawResponse) return res;
     return res.data;
   };
 }
 
-function listOp<T, Q>({
-  client,
-  request,
-  service,
-}: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => AsyncGenerator<T>;
-function listOp<T, Q>({ client, request: requestConfig, service }: OpFactoryOptions) {
-  return async function* list(query: Q, opts?: Options<T[]>) {
+function listOp<Entity, Query>({ client, request, service }: OpFactoryOptions) {
+  return async function* list<T = Entity>(
+    query: Query,
+    opts?: Exclude<Options<T[]>, 'rawResponse'>,
+  ): AsyncGenerator<T> {
     const queriedRequest = {
-      ...requestConfig,
+      ...request,
       params: {
-        ...requestConfig.params,
+        ...request.params,
         ...paramsFromOptions(opts ?? {}),
         ...query,
       },
@@ -166,34 +192,29 @@ function listOp<T, Q>({ client, request: requestConfig, service }: OpFactoryOpti
     const res = await client.get<T[]>(service.endpoint, queriedRequest);
     yield* res.data;
 
-    for (const pagedRequest of pagedParams(res, requestConfig)) {
+    for (const pagedRequest of pagedParams(res, request)) {
       const pagedRes = await client.get<T[]>(service.endpoint, pagedRequest);
       yield* pagedRes.data;
     }
   };
 }
 
-function listAllOp<T, Q>({ client, request: requestConfig, service }: OpFactoryOptions) {
-  return async (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => {
+function listAllOp<Entity, Query>({ client, request, service }: OpFactoryOptions) {
+  return async <T = Entity, Q = Query>(query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => {
     const results: T[] = [];
-    for await (const entity of listOp<T, Q>({ client, request: requestConfig, service })(query, opts)) {
+    for await (const entity of listOp<T, Q>({ client, request, service })(query, opts)) {
       results.push(entity);
     }
     return results;
   };
 }
 
-interface OpFunctionMap<T> extends Record<Operation, OpFunctionFactory<any>> {
-  get: OpFunctionFactory<(id: number, opts?: Options<T[]>) => Promise<T>>;
-  delete: OpFunctionFactory<(id: number, opts?: Options<T[]>) => Promise<void>>;
-  listAll: OpFunctionFactory<(query: any, opts?: Options<T[]>) => Promise<T[]>>;
-}
-
 export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() {
   return {
     v1: {
       get: getOp<T>,
-      delete: deleteOp,
+      // TODO: ensure void return argument
+      delete: deleteOp<T>,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<E['createType'], T>,
@@ -201,11 +222,12 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
     },
     v2: {
       get: getOp<T>,
-      delete: deleteOp,
+      // TODO: ensure void return argument
+      delete: deleteOp<T>,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<E['queryParameters'], T>,
       create: createOp<E['createType'], T>,
       update: updateOp<T extends { id: number } ? T : never>,
     },
-  } satisfies Record<EndpointVersion, OpFunctionMap<T>>;
+  } satisfies Record<EndpointVersion, Record<Operation, OpFunctionFactory | Function>>;
 }
