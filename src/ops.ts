@@ -115,20 +115,6 @@ function getOp<Entity>({ client, request, service }: OpFactoryOptions): OpFuncti
     return res.data;
   };
 }
-// function getOp<Entity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
-//   return async <T = Entity>(id: number, opts?: Options<T>) => {
-//     const paramAppliedRequest = {
-//       ...request,
-//       params: {
-//         ...request.params,
-//         ...paramsFromOptions(opts ?? {}),
-//       },
-//     };
-//     const res = await client.get<T>(`${service.endpoint}/${id}`, paramAppliedRequest);
-//     if (opts?.rawResponse) return res;
-//     return res.data;
-//   };
-// }
 
 function createOp<Entity, PartialEntity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
   return async <T = Entity, R = PartialEntity>(newEntity: R, opts?: Options<T>) => {
@@ -213,7 +199,6 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
   return {
     v1: {
       get: getOp<T>,
-      // TODO: ensure void return argument
       delete: deleteOp<T>,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
@@ -222,12 +207,11 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
     },
     v2: {
       get: getOp<T>,
-      // TODO: ensure void return argument
       delete: deleteOp<T>,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<E['queryParameters'], T>,
       create: createOp<E['createType'], T>,
       update: updateOp<T extends { id: number } ? T : never>,
     },
-  } satisfies Record<EndpointVersion, Record<Operation, OpFunctionFactory | Function>>;
+  } satisfies Record<EndpointVersion, Record<Operation, OpFunctionFactory | typeof listOp | typeof listAllOp>>;
 }
