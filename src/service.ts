@@ -1,64 +1,7 @@
-import { Settings } from 'http2';
-import {
-  Account,
-  Attendance,
-  Auth,
-  Availability,
-  DailyBudgets,
-  DailyRevenue,
-  DayNote,
-  DaysOff,
-  Group,
-  Leave,
-  Role,
-  Shift,
-  TimeZone,
-  Document,
-  LeaveEmbargo,
-  LeaveRequest,
-  LeaveType,
-  Location,
-  Pin,
-  Terminal,
-  ToilAccrual,
-  ToilAllowance,
-  UserClockedIn,
-  User,
-} from './interfaces/index.js';
+import assert from 'assert';
+import { EndpointEntityMap } from './endpoint.js';
 import { Operation, OpFunctionFactory } from './ops.js';
-import {
-  AttendanceQueryParams,
-  AvailabilityQueryParams,
-  DailyBudgetsQueryParams,
-  DailyRevenueQueryParams,
-  DayNotesQueryParams,
-  DaysOffQueryParams,
-  DocumentsQueryParams,
-  GroupsQueryParams,
-  LeaveEmbargoesQueryParams,
-  LeaveQueryParams,
-  LeaveRequestsQueryParams,
-  LocationsQueryParams,
-  RolesQueryParams,
-  SettingsQueryParams,
-  ShiftsQueryParams,
-  TerminalsQueryParams,
-  ToilAccrualsQueryParams,
-  ToilAllowanceQueryParams,
-  UsersQueryParams,
-} from './rotacloud.js';
 
-type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
-export type EndpointVersion = 'v1' | 'v2';
-export interface Endpoint<
-  Entity = unknown,
-  QueryParameters extends object = any,
-  RequiredFields extends keyof Entity = any,
-> {
-  type: Entity;
-  queryParameters: QueryParameters;
-  createType: RequirementsOf<Entity, RequiredFields>;
-}
 export type ServiceSpecification =
   | {
       /** URL of the endpoint */
@@ -86,42 +29,6 @@ export type ServiceSpecification =
        */
       customOperations?: Record<string, OpFunctionFactory>;
     };
-
-/** Mapping between a endpoint URL and it's associated entity type */
-export interface EndpointEntityMap extends Record<EndpointVersion, Record<string, Endpoint>> {
-  /** Type mappings for v1 endpoints  */
-  v1: {
-    accounts: Endpoint<Account>;
-    attendance: Endpoint<Attendance, AttendanceQueryParams, 'user' | 'in_time'>;
-    auth: Endpoint<Auth>;
-    availability: Endpoint<Availability, AvailabilityQueryParams>;
-    daily_budget: Endpoint<DailyBudgets, DailyBudgetsQueryParams>;
-    daily_revenue: Endpoint<DailyRevenue, DailyRevenueQueryParams>;
-    day_notes: Endpoint<DayNote, DayNotesQueryParams>;
-    days_off: Endpoint<DaysOff, DaysOffQueryParams>;
-    documents: Endpoint<Document, DocumentsQueryParams, 'name' | 'bucket' | 'key'>;
-    groups: Endpoint<Group, GroupsQueryParams, 'name'>;
-    leave_embargoes: Endpoint<LeaveEmbargo, LeaveEmbargoesQueryParams, 'start_date' | 'end_date' | 'users'>;
-    leave_requests: Endpoint<LeaveRequest, LeaveRequestsQueryParams, 'start_date' | 'end_date' | 'type' | 'user'>;
-    leave_types: Endpoint<LeaveType>;
-    leave: Endpoint<Leave, LeaveQueryParams, 'users' | 'type' | 'start_date' | 'end_date'>;
-    locations: Endpoint<Location, LocationsQueryParams, 'name'>;
-    pins: Endpoint<Pin>;
-    roles: Endpoint<Role, RolesQueryParams, 'name'>;
-    settings: Endpoint<Settings, SettingsQueryParams>;
-    shifts: Endpoint<Shift, ShiftsQueryParams, 'start_time' | 'end_time' | 'location'>;
-    terminals: Endpoint<Terminal, TerminalsQueryParams, 'name' | 'timezone'>;
-    terminals_active: Endpoint<Terminal>;
-    timezones: Endpoint<TimeZone>;
-    toil_accruals: Endpoint<ToilAccrual, ToilAccrualsQueryParams, 'duration_hours' | 'leave_year' | 'user_id'>;
-    toil_allowance: Endpoint<ToilAllowance, ToilAllowanceQueryParams>;
-    // TODO: fixup
-    users_clocked_in: Endpoint<UserClockedIn, never, 'in_method'>;
-    users: Endpoint<User, UsersQueryParams, 'first_name' | 'last_name'>;
-  };
-  /** Type mappings for v2 endpoints */
-  v2: {};
-}
 
 /**
  * List of all supported service specifications
@@ -198,15 +105,27 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['get', 'list', 'delete', 'create'],
     customOperations: {
-      // create:
-      //   ({ client, request, service }) =>
-      //   (entity: Partial<LeaveRequest>, opts?: Options) => {
-      //     assert(request.headers !== undefined, 'Invalid create leave request');
-      //     TODO: remove "Account" header
-      //     request.headers.User = entity.user;
-      //     // TODO: replace with "create" op
-      //     return client.post<LeaveRequest>(service.endpoint, request);
-      //   },
+      //   create:
+      //     ({ client, request, service }) =>
+      //     async (entity: Partial<LeaveRequest>, opts?: Options<LeaveRequest>) => {
+      //       const modifiedRequest = {
+      //         ...request,
+      //         headers: {
+      //           ...request.headers,
+      //           Account: undefined,
+      //           User: entity.user,
+      //         },
+      //         params: {
+      //           ...request.params,
+      //           ...paramsFromOptions(opts ?? {}),
+      //         },
+      //       };
+      //       assert(request.headers !== undefined, 'Invalid create leave request');
+      //       const res = await client.post<LeaveRequest>(service.endpoint, entity, modifiedRequest);
+      //
+      //       if (opts?.rawResponse) return res;
+      //       return res.data;
+      //     },
     },
   },
   location: {

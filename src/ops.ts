@@ -1,7 +1,8 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { assert } from 'console';
-import { Endpoint, EndpointVersion, ServiceSpecification } from './service.js';
+import { ServiceSpecification } from './service.js';
 import { Options, ParameterValue } from './fetchv2.js';
+import { Endpoint, EndpointVersion } from './endpoint.js';
 
 // TODO: investigate sets of operations e.g. "read-only" grants "list" and "get"
 // TODO: should we add "upsert"?
