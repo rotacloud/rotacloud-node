@@ -7,13 +7,13 @@ import { Endpoint, EndpointVersion } from './endpoint.js';
 // TODO: investigate sets of operations e.g. "read-only" grants "list" and "get"
 // TODO: should we add "upsert"?
 export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'create' | 'update';
-type OpFactoryOptions = {
+export type OpFactoryOptions = {
   client: Readonly<Axios>;
   request: Readonly<AxiosRequestConfig<unknown>>;
   service: Readonly<ServiceSpecification>;
 };
 
-export type OpFunction<Entity, Param = unknown, R = Entity> = {
+export type OpFunction<Entity = any, Param = unknown, R = Entity> = {
   (param: Param): Promise<R>;
   <T = Entity>(
     param: Param,
@@ -25,7 +25,7 @@ export type OpFunction<Entity, Param = unknown, R = Entity> = {
   <T extends Array<any>>(query: Param, opts?: Options<T>): Promise<R>;
 };
 
-type OpFunctionFactoryEntity = {
+type OpFactoryEntity = {
   // Single param
   <T, R = T>(factoryOpts: OpFactoryOptions): (id: number) => Promise<R>;
   <T, R = T>(factoryOpts: OpFactoryOptions): (entity: T) => Promise<R>;
@@ -64,16 +64,16 @@ type OpFunctionFactoryEntity = {
   <T, R = T>(factoryOpts: OpFactoryOptions): (entity: T, opts?: Options<T>) => Promise<R>;
 };
 
-type OpFunctionFactoryQuery = {
+type OpFactoryQuery = {
   <T, Q>(factoryOpts: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => AsyncGenerator<T>;
   <T, Q>(factoryOpts: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => Promise<T[]>;
 };
 
-export type OpFunctionFactory = OpFunctionFactoryEntity | OpFunctionFactoryQuery;
+export type OpFactory = OpFactoryEntity | OpFactoryQuery;
 
 export function paramsFromOptions<T>(opts: Options<T>): Record<string, ParameterValue> {
   return {
-    fields: opts?.fields,
+    // fields: opts?.fields,
     limit: opts?.maxResults,
     dry_run: opts?.dryRun,
   };
@@ -213,5 +213,5 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
       create: createOp<E['createType'], T>,
       update: updateOp<T extends { id: number } ? T : never>,
     },
-  } satisfies Record<EndpointVersion, Record<Operation, OpFunctionFactory | typeof listOp | typeof listAllOp>>;
+  } satisfies Record<EndpointVersion, Record<Operation, OpFactory | typeof listOp | typeof listAllOp>>;
 }

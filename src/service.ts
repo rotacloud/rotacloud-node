@@ -1,34 +1,33 @@
-import assert from 'assert';
 import { EndpointEntityMap } from './endpoint.js';
-import { Operation, OpFunctionFactory } from './ops.js';
+import { Operation, OpFactoryOptions, OpFunction, paramsFromOptions } from './ops.js';
+import { LeaveRequest, Terminal } from './rotacloud.js';
+import { Options } from './fetchv2.js';
+import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
 
-export type ServiceSpecification =
+export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
+
+export type ServiceSpecification = {
+  /** Operations allowed and usable for the endpoint */
+  operations: Operation[];
+  /**
+   * Operations unique to the service
+   * Can be used to override operations listed in {@see ServiceSpecification['operations']}
+   */
+  customOperations?: Record<string, (opts: OpFactoryOptions) => (...args: any[]) => any>;
+} & (
   | {
       /** URL of the endpoint */
       endpoint: keyof EndpointEntityMap['v1'];
       /** API version of the endpoint */
       endpointVersion: 'v1';
-      /** Operations allowed and usable for the endpoint */
-      operations: Operation[];
-      /**
-       * Operations unique to the serive
-       * Can be used to override operations listed in {@see ServiceSpecification['operations']}
-       */
-      customOperations?: Record<string, OpFunctionFactory>;
     }
   | {
       /** URL of the endpoint */
       endpoint: keyof EndpointEntityMap['v2'];
       /** API version of the endpoint */
       endpointVersion: 'v2';
-      /** Operations allowed and usable for the endpoint */
-      operations: Operation[];
-      /**
-       * Operations unique to the serive
-       * Can be used to override operations listed in {@see ServiceSpecification['operations']}
-       */
-      customOperations?: Record<string, OpFunctionFactory>;
-    };
+    }
+);
 
 /**
  * List of all supported service specifications
@@ -105,27 +104,31 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['get', 'list', 'delete', 'create'],
     customOperations: {
-      //   create:
-      //     ({ client, request, service }) =>
-      //     async (entity: Partial<LeaveRequest>, opts?: Options<LeaveRequest>) => {
-      //       const modifiedRequest = {
-      //         ...request,
-      //         headers: {
-      //           ...request.headers,
-      //           Account: undefined,
-      //           User: entity.user,
-      //         },
-      //         params: {
-      //           ...request.params,
-      //           ...paramsFromOptions(opts ?? {}),
-      //         },
-      //       };
-      //       assert(request.headers !== undefined, 'Invalid create leave request');
-      //       const res = await client.post<LeaveRequest>(service.endpoint, entity, modifiedRequest);
-      //
-      //       if (opts?.rawResponse) return res;
-      //       return res.data;
-      //     },
+      create:
+        ({
+          client,
+          request,
+          service,
+        }: OpFactoryOptions): OpFunction<LeaveRequest, RequirementsOf<LeaveRequest, 'user'>> =>
+        async <T = LeaveRequest>(entity: RequirementsOf<LeaveRequest, 'user'>, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            headers: {
+              ...request.headers,
+              Account: undefined,
+              User: entity.user,
+            },
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          // assert(request.headers !== undefined, 'Invalid create leave request');
+          const res = await client.post<T>(service.endpoint, entity, modifiedRequest);
+
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
     },
   },
   location: {
@@ -153,9 +156,49 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
     customOperations: {
-      //   acknowledge: () => undefined,
-      //   publish: () => undefined,
-      //   unpublish: () => undefined,
+      acknowledge:
+        ({ client, request }): OpFunction<void, number[]> =>
+        async <T = void, P = number[]>(shiftIds: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          const res = await client.post('/shifts_acknowledged', { shifts: shiftIds }, modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
+      publish:
+        ({ client, request }): OpFunction<void, number[]> =>
+        async <T = void, P = number[]>(shiftIds: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          const res = await client.post('/shifts_published', { shifts: shiftIds }, modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
+      unpublish:
+        ({ client, request }): OpFunction<void, number[]> =>
+        async <T = void, P = number[]>(shiftIds: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+            data: { shifts: shiftIds },
+          };
+          const res = await client.delete('/shifts_published', modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
     },
   },
   terminal: {
@@ -163,7 +206,20 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'update', 'list', 'listAll'],
     customOperations: {
-      // close: () => undefined
+      close:
+        ({ client, request, service }): OpFunction<void, number> =>
+        async <T = void, P = number>(id: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          const res = await client.delete(`${service.endpoint}/${id}`, modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
     },
   },
   terminalActive: {
@@ -171,9 +227,48 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['list', 'listAll'],
     customOperations: {
-      // launch: () => undefined
-      // ping: () => undefined
-      // close: () => undefined
+      launch:
+        ({ client, request, service }): OpFunction<Terminal, LaunchTerminal> =>
+        async <T = Terminal, P = LaunchTerminal>(id: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          const res = await client.delete(`${service.endpoint}/${id}`, modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
+      ping:
+        ({ client, request, service }): OpFunction<void, { id: number; action: string; device: string }> =>
+        async <T = void, P = { id: number; action: string; device: string }>(id: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          const res = await client.delete(`${service.endpoint}/${id}`, modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
+      close:
+        ({ client, request, service }): OpFunction<void, number> =>
+        async <T = void, P = number>(id: P, opts?: Options<T>) => {
+          const modifiedRequest = {
+            ...request,
+            params: {
+              ...request.params,
+              ...paramsFromOptions(opts ?? {}),
+            },
+          };
+          const res = await client.delete(`${service.endpoint}/${id}`, modifiedRequest);
+          if (opts?.rawResponse) return res;
+          return res.data;
+        },
     },
   },
   timeZone: {

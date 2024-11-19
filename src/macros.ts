@@ -1,7 +1,7 @@
 import { Axios, AxiosRequestConfig } from 'axios';
 import { createCustomAxiosClient, getBaseRequestConfig } from './fetchv2.js';
 import { SDKConfig } from './interfaces/index.js';
-import { getOpMap, OpFunctionFactory } from './ops.js';
+import { getOpMap, OpFactory } from './ops.js';
 import { ServiceSpecification } from './service.js';
 import { Endpoint, EndpointEntityMap } from './endpoint.js';
 
@@ -22,7 +22,7 @@ type ServiceOps<Spec extends ServiceSpecification> = {
 
 /** Mapped index type of all specified custom/overload service operations with their corresponding op function */
 type ServiceCustomOps<Spec extends ServiceSpecification> = {
-  [Key in keyof Spec['customOperations']]: Spec['customOperations'][Key] extends OpFunctionFactory
+  [Key in keyof Spec['customOperations']]: Spec['customOperations'][Key] extends (...args: any[]) => any
     ? ReturnType<Spec['customOperations'][Key]>
     : never;
 };
