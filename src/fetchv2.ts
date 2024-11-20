@@ -5,13 +5,23 @@ import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
 import { SDKError } from './models/index.js';
 import { version } from '../package.json' assert { type: 'json' };
 
-type ParameterPrimitive = string | boolean | number | null | symbol;
-export type ParameterValue = ParameterPrimitive | ParameterPrimitive[] | undefined;
+/** Supported primitive/atomic types for query parameters */
+type QueryParameterPrimitive = string | boolean | number | null | symbol;
+/** Supported types for query parameters */
+export type QueryParameterValue = QueryParameterPrimitive | QueryParameterPrimitive[] | undefined;
 
-export interface Options<T> {
+/** SDK specific options for configuring a request */
+export interface RequestOptions<T> {
+  /** Client side option to determine whether to return the entire response
+   * including metadata such as status code and headers */
   rawResponse?: boolean;
+  /** The maximum number of entities to return
+   *
+   * Once the limit is reached, paginated requests will stop automatically */
   maxResults?: number;
+  /* Prevent the API from committing to a desired action */
   dryRun?: boolean;
+  /* Specify which fields should be returned for an entity */
   fields?: T extends Object ? (keyof T)[] : never;
 }
 
@@ -40,8 +50,8 @@ function parseClientError(error: AxiosError): SDKError {
 }
 
 /** Converts a map of query parameter key/values into API compatible {@see URLSearchParams} */
-function toSearchParams(parameters?: Record<string, ParameterValue>): URLSearchParams {
-  const queryParams: Record<string, ParameterValue> = { ...parameters };
+function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSearchParams {
+  const queryParams: Record<string, QueryParameterValue> = { ...parameters };
   const reducedParams = Object.entries(queryParams ?? {}).reduce((params, [key, val]) => {
     if (val !== undefined && val !== '') {
       if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));
@@ -53,6 +63,9 @@ function toSearchParams(parameters?: Record<string, ParameterValue>): URLSearchP
   return new URLSearchParams(reducedParams);
 }
 
+/** Creates and configures an Axios client for use in all calls to API endpoints
+ * according to the provided {@see SDKConfig}
+ */
 export function createCustomAxiosClient(config?: SDKConfig): Axios {
   const baseURL = URL.parse(config?.baseUri ?? '')?.toString();
   assert(baseURL !== null, 'Must have a valid base URL');
@@ -111,6 +124,9 @@ export function createCustomAxiosClient(config?: SDKConfig): Axios {
   return axiosClient;
 }
 
+/** Utility for getting a basic {@see AxiosRequestConfig} for a given request ready
+ * for an {@see OpFunction} to adapt/use
+ */
 export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknown> {
   const headers: Record<string, string> = {
     Authorization: opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`,

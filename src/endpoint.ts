@@ -1,4 +1,3 @@
-import { Settings } from 'http2';
 import {
   Account,
   Attendance,
@@ -24,6 +23,7 @@ import {
   ToilAllowance,
   UserClockedIn,
   User,
+  Settings,
 } from './interfaces/index.js';
 import {
   AttendanceQueryParams,
@@ -46,22 +46,30 @@ import {
   ToilAllowanceQueryParams,
   UsersQueryParams,
 } from './interfaces/query-params/index.js';
+import { RequirementsOf } from './utils.js';
 
-type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
+/** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
+/** Associated types for a given API endpoint */
 export interface Endpoint<
   Entity = unknown,
-  QueryParameters extends object = any,
+  QueryParameters extends object | undefined = any,
   RequiredFields extends keyof Entity = any,
 > {
+  /** The type returned by an endpoint */
   type: Entity;
+  /** The query parameters for endpoints that support listing */
   queryParameters: QueryParameters;
+  /** The entity type required for endpoints that support creation */
   createType: RequirementsOf<Entity, RequiredFields>;
 }
 
-/** Mapping between a endpoint URL and it's associated entity type */
+/** Mapping between a endpoint URL and it's associated entity type
+ *
+ * Keys of each version map should be the URL of a given endpoint
+ */
 export interface EndpointEntityMap extends Record<EndpointVersion, Record<string, Endpoint>> {
-  /** Type mappings for v1 endpoints  */
+  /** Type mappings for v1 endpoints */
   v1: {
     accounts: Endpoint<Account>;
     attendance: Endpoint<Attendance, AttendanceQueryParams, 'user' | 'in_time'>;
@@ -87,8 +95,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     timezones: Endpoint<TimeZone>;
     toil_accruals: Endpoint<ToilAccrual, ToilAccrualsQueryParams, 'duration_hours' | 'leave_year' | 'user_id'>;
     toil_allowance: Endpoint<ToilAllowance, ToilAllowanceQueryParams>;
-    // TODO: fixup
-    users_clocked_in: Endpoint<UserClockedIn, never, 'in_method'>;
+    users_clocked_in: Endpoint<UserClockedIn, {} | undefined, 'in_method'>;
     users: Endpoint<User, UsersQueryParams, 'first_name' | 'last_name'>;
   };
   /** Type mappings for v2 endpoints */

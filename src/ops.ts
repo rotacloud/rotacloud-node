@@ -1,38 +1,72 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ServiceSpecification } from './service.js';
-import { Options, ParameterValue } from './fetchv2.js';
+import { RequestOptions, QueryParameterValue } from './fetchv2.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
 
-// TODO: investigate sets of operations e.g. "read-only" grants "list" and "get"
 // TODO: should we add "upsert"?
+/** Supported common operations */
 export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'create' | 'update';
-export type OpFactoryOptions = {
+/** Context provided to all operations */
+export type OperationContext = {
   client: Readonly<Axios>;
   request: Readonly<AxiosRequestConfig<unknown>>;
   service: Readonly<ServiceSpecification>;
 };
 
+/** Defines the mapping between the data sent for a given request (e.g with
+ * "POST" method) and the return type expected back
+ *
+ * NOTE: This is not type safe on purpose. There is no way to guarantee that a
+ * given HTTP call will return a specific type in TS alone
+ */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export type RequestConfig<ReturnData, RequestData> = AxiosRequestConfig<RequestData>;
-export type Op<T, P = any, O = unknown, R = T> =
-  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => RequestConfig<T, R>)
-  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => AsyncIterable<T>)
-  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => Promise<T>);
+export type RequestConfig<RequestData, ResponseData> = AxiosRequestConfig<RequestData>;
 
-export type OpFunction<Entity = any, Param = unknown, R = Entity> = {
-  (entity: Param): R;
-  <T = Entity>(
-    entity: Param,
-    opts?: {
-      rawResponse: true;
-    } & Options<T>,
-  ): Promise<AxiosResponse<R>>;
-  <T = Entity>(entity: Param, opts?: Options<T>): R;
+/** Function to define an {@see OpFunction}
+ *
+ * This is intended as a convenient way of defining {@see OpFunction}s that can then be
+ * "built" ready for the end user to call ({@see buildOp})
+ * */
+export type OpDef<T, P = any, O = unknown, R = T> =
+  | ((ctx: OperationContext, param: P, opts?: RequestOptions<O>) => RequestConfig<T, R>)
+  | ((ctx: OperationContext, param: P, opts?: RequestOptions<O>) => AsyncIterable<T>)
+  | ((ctx: OperationContext, param: P, opts?: RequestOptions<O>) => Promise<T>);
 
-  <T extends Array<any>>(query: Param, opts?: Options<T>): R;
-};
+/** Operation function type to be called by the end user of the SDK.
+ *
+ * All methods on services follow this typing
+ * */
+export type OpFunction<Entity = any, Param = unknown, R = Entity> = Param extends number
+  ? {
+      (id: Param): R;
+      <T = Entity>(
+        id: Param,
+        opts?: {
+          rawResponse: true;
+        } & RequestOptions<T>,
+      ): Promise<AxiosResponse<R>>;
+      <T = Entity>(id: Param, opts?: RequestOptions<T>): R;
+    }
+  : R extends AsyncIterable<any>
+    ? // List based op parameter names
+      {
+        (query: Param): R;
+        <T = Entity>(query: Param, opts?: RequestOptions<T>): R;
+      }
+    : // Entity based op parameter names
+      {
+        (entity: Param): R;
+        <T = Entity>(
+          entity: Param,
+          opts?: {
+            rawResponse: true;
+          } & RequestOptions<T>,
+        ): Promise<AxiosResponse<R>>;
+        <T = Entity>(entity: Param, opts?: RequestOptions<T>): R;
+      };
 
-export function paramsFromOptions<T>(opts: Options<T>): Record<string, ParameterValue> {
+/** Utility for creating a query params map needed by most API requests */
+export function paramsFromOptions<T>(opts: RequestOptions<T>): Record<string, QueryParameterValue> {
   return {
     fields: opts?.fields,
     limit: opts?.maxResults,
@@ -40,7 +74,11 @@ export function paramsFromOptions<T>(opts: Options<T>): Record<string, Parameter
   };
 }
 
-function* pagedParams<T>(
+/** Converts a given `{@see AxiosRequestConfig}` into an iterable of paginated requests
+ *
+ * Utility for simplifying {@see listOp}
+ */
+function* requestPaginated<T>(
   response: AxiosResponse<T>,
   requestConfig: AxiosRequestConfig<T>,
 ): Generator<AxiosRequestConfig<T>> {
@@ -62,7 +100,8 @@ function* pagedParams<T>(
   }
 }
 
-function getOp<T = undefined>(ctx: OpFactoryOptions, id: number, opts?: Options<T>): AxiosRequestConfig<T> {
+/** Operation for getting an entity */
+function getOp<T = undefined>(ctx: OperationContext, id: number, opts?: RequestOptions<T>): AxiosRequestConfig<T> {
   return {
     ...ctx.request,
     method: 'GET',
@@ -74,10 +113,11 @@ function getOp<T = undefined>(ctx: OpFactoryOptions, id: number, opts?: Options<
   } as AxiosRequestConfig<T>;
 }
 
+/** Operation for creating an entity */
 function createOp<T = unknown, NewEntity = unknown>(
-  ctx: OpFactoryOptions,
+  ctx: OperationContext,
   newEntity: NewEntity,
-  opts?: Options<T>,
+  opts?: RequestOptions<T>,
 ): AxiosRequestConfig<T> {
   return {
     ...ctx.request,
@@ -91,10 +131,11 @@ function createOp<T = unknown, NewEntity = unknown>(
   } as AxiosRequestConfig<T>;
 }
 
+/** Operation for updating an entity */
 function updateOp<Return, Entity extends { id: number } & Return>(
-  ctx: OpFactoryOptions,
+  ctx: OperationContext,
   entity: Entity,
-  opts?: Options<Return>,
+  opts?: RequestOptions<Return>,
 ): AxiosRequestConfig<Return> {
   return {
     ...ctx.request,
@@ -108,7 +149,8 @@ function updateOp<Return, Entity extends { id: number } & Return>(
   } as AxiosRequestConfig<Return>;
 }
 
-function deleteOp<T = unknown>(ctx: OpFactoryOptions, id: number, opts?: Options<T>): AxiosRequestConfig<void> {
+/** Operation for deleting an entity */
+function deleteOp<T = unknown>(ctx: OperationContext, id: number, opts?: RequestOptions<T>): AxiosRequestConfig<void> {
   return {
     ...ctx.request,
     method: 'DELETE',
@@ -120,7 +162,10 @@ function deleteOp<T = unknown>(ctx: OpFactoryOptions, id: number, opts?: Options
   } as AxiosRequestConfig<void>;
 }
 
-async function* listOp<T, Query>(ctx: OpFactoryOptions, query: Query, opts?: Options<T[]>): AsyncGenerator<T> {
+/** Operation for listing all entities on an endpoint for a given query by
+ * automatically handling pagination as and when needed
+ */
+async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>): AsyncGenerator<T> {
   const queriedRequest = {
     ...ctx.request,
     params: {
@@ -132,13 +177,14 @@ async function* listOp<T, Query>(ctx: OpFactoryOptions, query: Query, opts?: Opt
   const res = await ctx.client.get<T[]>(ctx.service.endpoint, queriedRequest);
   yield* res.data;
 
-  for (const pagedRequest of pagedParams(res, ctx.request)) {
+  for (const pagedRequest of requestPaginated(res, ctx.request)) {
     const pagedRes = await ctx.client.get<T[]>(ctx.service.endpoint, pagedRequest);
     yield* pagedRes.data;
   }
 }
 
-async function listAllOp<T, Query>(ctx: OpFactoryOptions, query: Query, opts?: Options<T[]>) {
+/** Operation for listing all entities on an endpoint for a given query as an array */
+async function listAllOp<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>) {
   const results: T[] = [];
   for await (const entity of listOp<T, Query>(ctx, query, opts)) {
     results.push(entity);
@@ -146,19 +192,25 @@ async function listAllOp<T, Query>(ctx: OpFactoryOptions, query: Query, opts?: O
   return results;
 }
 
+/** Builds an {@see Op} definition into an {@see OpFunction} ready to be called
+ * by the end user
+ *
+ * This will map typings and parameters defined on an {@see Op} into a more
+ * convenient and type safe format for use by the end user
+ */
 export function buildOp<
-  F extends Op<any>,
+  F extends OpDef<any>,
   Param = Parameters<F>[1],
   Return = ReturnType<F> extends AxiosRequestConfig<infer T> ? Promise<T> : ReturnType<F>,
 >(
-  ctx: OpFactoryOptions,
+  ctx: OperationContext,
   opFunc: F,
 ): OpFunction<ReturnType<F> extends RequestConfig<infer _, infer R> ? R : ReturnType<F>, Param, Return>;
 export function buildOp<
-  F extends Op<any>,
+  F extends OpDef<any>,
   Param = Parameters<F>[1],
   Return = ReturnType<F> extends RequestConfig<infer _, infer R> ? Promise<R> : ReturnType<F>,
->(ctx: OpFactoryOptions, opFunc: F) {
+>(ctx: OperationContext, opFunc: F) {
   return (param: Param, opts?: Parameters<F>[2]) => {
     const req = opFunc(ctx, param, opts);
     if (Symbol.asyncIterator in req) {
@@ -176,6 +228,12 @@ export function buildOp<
   };
 }
 
+/** Function to return type safe mapping between a given endpoint; endpoint
+ * version and a common "op"
+ *
+ * NOTE: This is a function rather than a constant so that type generics work as
+ * intended. It's currently not possible to define a constant with generics
+ */
 export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() {
   return {
     v1: {
@@ -194,5 +252,5 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
       create: createOp<E['createType'], T>,
       update: updateOp<T, T extends { id: number } ? T : never>,
     },
-  } satisfies Record<EndpointVersion, Record<Operation, Op<any, any>>>;
+  } satisfies Record<EndpointVersion, Record<Operation, OpDef<any, any>>>;
 }
