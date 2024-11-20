@@ -12,6 +12,13 @@ export type OpFactoryOptions = {
   service: Readonly<ServiceSpecification>;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export type RequestConfig<ReturnData, RequestData> = AxiosRequestConfig<RequestData>;
+export type Op<T, P = any, O = unknown, R = T> =
+  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => RequestConfig<T, R>)
+  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => AsyncIterable<T>)
+  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => Promise<T>);
+
 export type OpFunction<Entity = any, Param = unknown, R = Entity> = {
   (entity: Param): R;
   <T = Entity>(
@@ -32,16 +39,6 @@ export function paramsFromOptions<T>(opts: Options<T>): Record<string, Parameter
     dry_run: opts?.dryRun,
   };
 }
-
-export type Op<T, P = any, O = unknown> =
-  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => AxiosRequestConfig<T>)
-  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => AsyncIterable<T>)
-  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => Promise<T>);
-
-export type BuiltOp<O extends Op<any>> = (
-  param: Parameters<O>[1],
-  opts?: Parameters<O>[2],
-) => ReturnType<O> extends AxiosRequestConfig<infer T> ? OpFunction<T> : ReturnType<O>;
 
 function* pagedParams<T>(
   response: AxiosResponse<T>,
@@ -156,8 +153,13 @@ export function buildOp<
 >(
   ctx: OpFactoryOptions,
   opFunc: F,
-): OpFunction<ReturnType<F> extends AxiosRequestConfig<infer T> ? T : ReturnType<F>, Param, Return> {
-  return (param: Param, opts?: Parameters<F>[2]): any => {
+): OpFunction<ReturnType<F> extends RequestConfig<infer _, infer R> ? R : ReturnType<F>, Param, Return>;
+export function buildOp<
+  F extends Op<any>,
+  Param = Parameters<F>[1],
+  Return = ReturnType<F> extends RequestConfig<infer _, infer R> ? Promise<R> : ReturnType<F>,
+>(ctx: OpFactoryOptions, opFunc: F) {
+  return (param: Param, opts?: Parameters<F>[2]) => {
     const req = opFunc(ctx, param, opts);
     if (Symbol.asyncIterator in req) {
       return req;

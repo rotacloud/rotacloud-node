@@ -1,19 +1,20 @@
 import { EndpointEntityMap } from './endpoint.js';
-import { LeaveRequest, Terminal } from './interfaces/index.js';
+import { LeaveRequest, Terminal, UserBreak, UserClockedIn, UserClockedOut } from './interfaces/index.js';
 import { Options } from './fetchv2.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
-import { Op, Operation, OpFactoryOptions, paramsFromOptions } from './ops.js';
+import { Op, Operation, OpFactoryOptions, RequestConfig, paramsFromOptions } from './ops.js';
+import { UserBreakRequest, UserClockIn } from './interfaces/user-clock-in.interface.js';
 
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
-export type ServiceSpecification = {
+export type ServiceSpecification<T extends Op<any> = any> = {
   /** Operations allowed and usable for the endpoint */
   operations: Operation[];
   /**
    * Operations unique to the service
    * Can be used to override operations listed in {@see ServiceSpecification['operations']}
    */
-  customOperations?: Record<string, Op<any>>;
+  customOperations?: Record<string, T>;
 } & (
   | {
       /** URL of the endpoint */
@@ -104,25 +105,25 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['get', 'list', 'delete', 'create'],
     customOperations: {
-      // create: (
-      //   { request, service }: OpFactoryOptions,
-      //   entity: RequirementsOf<LeaveRequest, 'user'>,
-      //   opts?: Options<LeaveRequest>,
-      // ) => ({
-      //   ...request,
-      //   method: 'POST',
-      //   url: service.endpoint,
-      //   data: entity,
-      //   headers: {
-      //     ...request.headers,
-      //     Account: undefined,
-      //     User: entity.user,
-      //   },
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
+      create: (
+        { request, service }: OpFactoryOptions,
+        entity: RequirementsOf<LeaveRequest, 'user'>,
+        opts?: Options<LeaveRequest>,
+      ): RequestConfig<typeof entity, LeaveRequest> => ({
+        ...request,
+        method: 'POST',
+        url: service.endpoint,
+        data: entity,
+        headers: {
+          ...request.headers,
+          Account: undefined,
+          User: entity.user,
+        },
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
     },
   },
   location: {
@@ -150,36 +151,44 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
     customOperations: {
-      // acknowledge: ({ request }, shiftIds: number[], opts?: Options<void>) => ({
-      //   ...request,
-      //   method: 'POST',
-      //   url: '/shifts_acknowledged',
-      //   data: { shifts: shiftIds },
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
-      // publish: ({ request }, shiftIds: number[], opts?: Options<void>) => ({
-      //   ...request,
-      //   method: 'POST',
-      //   url: '/shifts_published',
-      //   data: { shifts: shiftIds },
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
-      // unpublish: ({ request }, shiftIds: number[], opts?: Options<void>) => ({
-      //   ...request,
-      //   method: 'DELETE',
-      //   url: '/shifts_published',
-      //   data: { shifts: shiftIds },
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
+      acknowledge: (
+        { request },
+        shiftIds: number[],
+        opts?: Options<void>,
+      ): RequestConfig<{ shifts: number[] }, void> => ({
+        ...request,
+        method: 'POST',
+        url: '/shifts_acknowledged',
+        data: { shifts: shiftIds },
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      publish: ({ request }, shiftIds: number[], opts?: Options<void>): RequestConfig<{ shifts: number[] }, void> => ({
+        ...request,
+        method: 'POST',
+        url: '/shifts_published',
+        data: { shifts: shiftIds },
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      unpublish: (
+        { request },
+        shiftIds: number[],
+        opts?: Options<void>,
+      ): RequestConfig<{ shifts: number[] }, void> => ({
+        ...request,
+        method: 'DELETE',
+        url: '/shifts_published',
+        data: { shifts: shiftIds },
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
     },
   },
   terminal: {
@@ -187,15 +196,15 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'update', 'list', 'listAll'],
     customOperations: {
-      // close: ({ request, service }, id: number, opts?: Options<void>) => ({
-      //   ...request,
-      //   method: 'DELETE',
-      //   url: `/${service.endpoint}/${id}`,
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
+      close: ({ request, service }, id: number, opts?: Options<void>): RequestConfig<void, void> => ({
+        ...request,
+        method: 'DELETE',
+        url: `/${service.endpoint}/${id}`,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
     },
   },
   terminalActive: {
@@ -203,33 +212,37 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['list', 'listAll'],
     customOperations: {
-      // launch: ({ request, service }, id: LaunchTerminal, opts?: Options<Terminal>) => ({
-      //   ...request,
-      //   method: 'DELETE',
-      //   url: `/${service.endpoint}/${id}`,
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
-      // ping: ({ request, service }, id: { id: number; action: string; device: string }, opts?: Options<void>) => ({
-      //   ...request,
-      //   method: 'DELETE',
-      //   url: `${service.endpoint}/${id}`,
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
-      // close: ({ request, service }, id: number, opts?: Options<void>) => ({
-      //   ...request,
-      //   method: 'DELETE',
-      //   url: `${service.endpoint}/${id}`,
-      //   params: {
-      //     ...request.params,
-      //     ...paramsFromOptions(opts ?? {}),
-      //   },
-      // }),
+      launch: ({ request, service }, id: LaunchTerminal, opts?: Options<Terminal>): RequestConfig<void, Terminal> => ({
+        ...request,
+        method: 'DELETE',
+        url: `/${service.endpoint}/${id}`,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      ping: (
+        { request, service },
+        id: { id: number; action: string; device: string },
+        opts?: Options<void>,
+      ): RequestConfig<void, void> => ({
+        ...request,
+        method: 'DELETE',
+        url: `${service.endpoint}/${id}`,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      close: ({ request, service }, id: number, opts?: Options<void>): RequestConfig<void, void> => ({
+        ...request,
+        method: 'DELETE',
+        url: `${service.endpoint}/${id}`,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
     },
   },
   timeZone: {
@@ -250,13 +263,65 @@ export const SERVICES = {
   userClockIn: {
     endpoint: 'users_clocked_in',
     endpointVersion: 'v1',
-    // TODO: check types
     operations: ['get', 'list', 'listAll'],
     customOperations: {
-      // clockIn: () => undefined
-      // clockOut: () => undefined
-      // startBreak: () => undefined
-      // endBreak: () => undefined
+      // TODO: check types
+      clockIn: (
+        { request, service },
+        entity: { id: number } & RequirementsOf<UserClockIn, 'method'>,
+        opts?: Options<typeof entity>,
+      ): RequestConfig<typeof entity, UserClockedIn> => ({
+        ...request,
+        url: `${service.endpoint}/${entity.id}`,
+        method: 'POST',
+        data: entity,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      clockOut: (
+        { request, service },
+        entity: { id: number } & RequirementsOf<UserClockIn, 'method'>,
+        opts?: Options<typeof entity>,
+      ): RequestConfig<typeof entity, UserClockedOut> => ({
+        ...request,
+        url: `${service.endpoint}/${entity.id}`,
+        method: 'POST',
+        data: entity,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      startBreak: (
+        { request, service },
+        entity: { id: number } & RequirementsOf<UserBreakRequest, 'method' | 'action'>,
+        opts?: Options<typeof entity>,
+      ): RequestConfig<typeof entity, UserBreak> => ({
+        ...request,
+        url: `${service.endpoint}/${entity.id}`,
+        method: 'POST',
+        data: entity,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
+      endBreak: (
+        { request, service },
+        entity: { id: number } & RequirementsOf<UserBreakRequest, 'method' | 'action'>,
+        opts?: Options<typeof entity>,
+      ): RequestConfig<typeof entity, UserBreak> => ({
+        ...request,
+        url: `${service.endpoint}/${entity.id}`,
+        method: 'POST',
+        data: entity,
+        params: {
+          ...request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      }),
     },
   },
   user: {
