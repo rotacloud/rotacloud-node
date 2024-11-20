@@ -45,7 +45,7 @@ import {
   ToilAccrualsQueryParams,
   ToilAllowanceQueryParams,
   UsersQueryParams,
-} from './rotacloud.js';
+} from './interfaces/query-params/index.js';
 
 type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 export type EndpointVersion = 'v1' | 'v2';

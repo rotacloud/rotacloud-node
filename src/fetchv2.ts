@@ -40,8 +40,8 @@ function parseClientError(error: AxiosError): SDKError {
 }
 
 /** Converts a map of query parameter key/values into API compatible {@see URLSearchParams} */
-function toSearchParams(params?: Record<string, ParameterValue>): URLSearchParams {
-  const queryParams: Record<string, ParameterValue> = { ...params };
+function toSearchParams(parameters?: Record<string, ParameterValue>): URLSearchParams {
+  const queryParams: Record<string, ParameterValue> = { ...parameters };
   const reducedParams = Object.entries(queryParams ?? {}).reduce((params, [key, val]) => {
     if (val !== undefined && val !== '') {
       if (Array.isArray(val)) params.push(...val.map((item) => [`${key}[]`, String(item)]));

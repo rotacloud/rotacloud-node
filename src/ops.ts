@@ -1,5 +1,4 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
-import { assert } from 'console';
 import { ServiceSpecification } from './service.js';
 import { Options, ParameterValue } from './fetchv2.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
@@ -13,71 +12,36 @@ export type OpFactoryOptions = {
   service: Readonly<ServiceSpecification>;
 };
 
-export type OpFunction<Entity = any, Param = unknown, Return = Entity> = {
-  (param: Param): Promise<Return>;
+export type OpFunction<Entity = any, Param = unknown, R = Entity> = {
+  (entity: Param): R;
   <T = Entity>(
-    param: Param,
+    entity: Param,
     opts?: {
       rawResponse: true;
     } & Options<T>,
-  ): Promise<AxiosResponse<Entity>>;
-  <T = Entity>(param: Param, opts?: Options<T>): Promise<Return>;
-  <T extends Array<any>>(query: Param, opts?: Options<T>): Promise<Return>;
+  ): Promise<AxiosResponse<R>>;
+  <T = Entity>(entity: Param, opts?: Options<T>): R;
+
+  <T extends Array<any>>(query: Param, opts?: Options<T>): R;
 };
-
-type OpFactoryEntity = {
-  // Single param
-  <T, R = T>(factoryOpts: OpFactoryOptions): (id: number) => Promise<R>;
-  <T, R = T>(factoryOpts: OpFactoryOptions): (entity: T) => Promise<R>;
-
-  // Raw response enabled
-  <T, R>(
-    factoryOpts: OpFactoryOptions,
-  ): (
-    id: number,
-    opts: {
-      rawResponse: true;
-    } & Options<T>,
-  ) => Promise<AxiosResponse<R>>;
-  <T, R = T, PartialT extends Partial<PartialT> = Partial<T>>(
-    factoryOpts: OpFactoryOptions,
-  ): (
-    entity: PartialT,
-    opts: {
-      rawResponse: true;
-    } & Options<T>,
-  ) => Promise<AxiosResponse<R>>;
-  <T, R = T>(
-    factoryOpts: OpFactoryOptions,
-  ): (
-    entity: T,
-    opts: {
-      rawResponse: true;
-    } & Options<T>,
-  ) => Promise<AxiosResponse<R>>;
-
-  // Raw response disabled
-  <T, R = T>(factoryOpts: OpFactoryOptions): (id: number, opts?: Options<T>) => Promise<R>;
-  <T, R = T, PartialT extends Partial<T> = Partial<T>>(
-    factoryOpts: OpFactoryOptions,
-  ): (entity: PartialT, opts?: Options<T>) => Promise<R>;
-  <T, R = T>(factoryOpts: OpFactoryOptions): (entity: T, opts?: Options<T>) => Promise<R>;
-};
-
-type OpFactoryQuery = {
-  <T, Q>(factoryOpts: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => AsyncGenerator<T>;
-  <T, Q>(factoryOpts: OpFactoryOptions): (query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => Promise<T[]>;
-};
-
-export type OpFactory = OpFactoryEntity | OpFactoryQuery;
 
 export function paramsFromOptions<T>(opts: Options<T>): Record<string, ParameterValue> {
   return {
-    // fields: opts?.fields,
+    fields: opts?.fields,
     limit: opts?.maxResults,
     dry_run: opts?.dryRun,
   };
 }
+
+export type Op<T, P = any, O = unknown> =
+  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => AxiosRequestConfig<T>)
+  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => AsyncIterable<T>)
+  | ((ctx: OpFactoryOptions, param: P, opts?: Options<O>) => Promise<T>);
+
+export type BuiltOp<O extends Op<any>> = (
+  param: Parameters<O>[1],
+  opts?: Parameters<O>[2],
+) => ReturnType<O> extends AxiosRequestConfig<infer T> ? OpFunction<T> : ReturnType<O>;
 
 function* pagedParams<T>(
   response: AxiosResponse<T>,
@@ -101,97 +65,112 @@ function* pagedParams<T>(
   }
 }
 
-function getOp<Entity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity, number> {
-  return async <T = Entity>(id: number, opts?: Options<T>) => {
-    const paramAppliedRequest = {
-      ...request,
-      params: {
-        ...request.params,
-        ...paramsFromOptions(opts ?? {}),
-      },
-    };
-    const res = await client.get<T>(`${service.endpoint}/${id}`, paramAppliedRequest);
-    if (opts?.rawResponse) return res;
-    return res.data;
-  };
+function getOp<T = undefined>(ctx: OpFactoryOptions, id: number, opts?: Options<T>): AxiosRequestConfig<T> {
+  return {
+    ...ctx.request,
+    method: 'GET',
+    url: `${ctx.service.endpoint}/${id}`,
+    params: {
+      ...ctx.request.params,
+      ...paramsFromOptions(opts ?? {}),
+    },
+  } as AxiosRequestConfig<T>;
 }
 
-function createOp<Entity, PartialEntity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
-  return async <T = Entity, R = PartialEntity>(newEntity: R, opts?: Options<T>) => {
-    const paramAppliedRequest = {
-      ...request,
-      params: {
-        ...request.params,
-        ...paramsFromOptions(opts ?? {}),
-      },
-    };
-    const res = await client.post<T>(service.endpoint, newEntity, paramAppliedRequest);
-    if (opts?.rawResponse) return res;
-    return res.data;
-  };
+function createOp<T = unknown, NewEntity = unknown>(
+  ctx: OpFactoryOptions,
+  newEntity: NewEntity,
+  opts?: Options<T>,
+): AxiosRequestConfig<T> {
+  return {
+    ...ctx.request,
+    method: 'POST',
+    url: ctx.service.endpoint,
+    data: newEntity,
+    params: {
+      ...ctx.request.params,
+      ...paramsFromOptions(opts ?? {}),
+    },
+  } as AxiosRequestConfig<T>;
 }
 
-function updateOp<Entity extends { id: number }>({ client, request, service }: OpFactoryOptions): OpFunction<Entity> {
-  return async <T extends { id: number } = Entity>(entity: T, opts?: Options<T>) => {
-    assert(typeof entity.id === 'number', 'Entity must already exist with a valid ID');
-    const paramAppliedRequest = {
-      ...request,
-      params: {
-        ...request.params,
-        ...paramsFromOptions(opts ?? {}),
-      },
-    };
-    const res = await client.post<T>(`${service.endpoint}/${entity.id}`, entity, paramAppliedRequest);
-    if (opts?.rawResponse) return res;
-    return res.data;
-  };
+function updateOp<Return, Entity extends { id: number } & Return>(
+  ctx: OpFactoryOptions,
+  entity: Entity,
+  opts?: Options<Return>,
+): AxiosRequestConfig<Return> {
+  return {
+    ...ctx.request,
+    method: 'POST',
+    url: `${ctx.service.endpoint}/${entity.id}`,
+    data: entity,
+    params: {
+      ...ctx.request.params,
+      ...paramsFromOptions(opts ?? {}),
+    },
+  } as AxiosRequestConfig<Return>;
 }
 
-function deleteOp<Entity>({ client, request, service }: OpFactoryOptions): OpFunction<Entity, number, void> {
-  return async <T = Entity, R = void>(id: number, opts?: Options<T>) => {
-    const paramAppliedRequest = {
-      ...request,
-      params: {
-        ...request.params,
-        ...paramsFromOptions(opts ?? {}),
-      },
-    };
-    const res = await client.delete<R>(`${service.endpoint}/${id}`, paramAppliedRequest);
-    if (opts?.rawResponse) return res;
-    return res.data;
-  };
+function deleteOp<T = unknown>(ctx: OpFactoryOptions, id: number, opts?: Options<T>): AxiosRequestConfig<void> {
+  return {
+    ...ctx.request,
+    method: 'DELETE',
+    url: `${ctx.service.endpoint}/${id}`,
+    params: {
+      ...ctx.request.params,
+      ...paramsFromOptions(opts ?? {}),
+    },
+  } as AxiosRequestConfig<void>;
 }
 
-function listOp<Entity, Query>({ client, request, service }: OpFactoryOptions) {
-  return async function* list<T = Entity>(
-    query: Query,
-    opts?: Exclude<Options<T[]>, 'rawResponse'>,
-  ): AsyncGenerator<T> {
-    const queriedRequest = {
-      ...request,
-      params: {
-        ...request.params,
-        ...paramsFromOptions(opts ?? {}),
-        ...query,
-      },
-    };
-    const res = await client.get<T[]>(service.endpoint, queriedRequest);
-    yield* res.data;
+async function* listOp<T, Query>(ctx: OpFactoryOptions, query: Query, opts?: Options<T[]>): AsyncGenerator<T> {
+  const queriedRequest = {
+    ...ctx.request,
+    params: {
+      ...ctx.request.params,
+      ...paramsFromOptions(opts ?? {}),
+      ...query,
+    },
+  };
+  const res = await ctx.client.get<T[]>(ctx.service.endpoint, queriedRequest);
+  yield* res.data;
 
-    for (const pagedRequest of pagedParams(res, request)) {
-      const pagedRes = await client.get<T[]>(service.endpoint, pagedRequest);
-      yield* pagedRes.data;
+  for (const pagedRequest of pagedParams(res, ctx.request)) {
+    const pagedRes = await ctx.client.get<T[]>(ctx.service.endpoint, pagedRequest);
+    yield* pagedRes.data;
+  }
+}
+
+async function listAllOp<T, Query>(ctx: OpFactoryOptions, query: Query, opts?: Options<T[]>) {
+  const results: T[] = [];
+  for await (const entity of listOp<T, Query>(ctx, query, opts)) {
+    results.push(entity);
+  }
+  return results;
+}
+
+export function buildOp<
+  F extends Op<any>,
+  Param = Parameters<F>[1],
+  Return = ReturnType<F> extends AxiosRequestConfig<infer T> ? Promise<T> : ReturnType<F>,
+>(
+  ctx: OpFactoryOptions,
+  opFunc: F,
+): OpFunction<ReturnType<F> extends AxiosRequestConfig<infer T> ? T : ReturnType<F>, Param, Return> {
+  return (param: Param, opts?: Parameters<F>[2]): any => {
+    const req = opFunc(ctx, param, opts);
+    if (Symbol.asyncIterator in req) {
+      return req;
     }
-  };
-}
 
-function listAllOp<Entity, Query>({ client, request, service }: OpFactoryOptions) {
-  return async <T = Entity, Q = Query>(query: Q, opts?: Exclude<Options<T[]>, 'rawResponse'>) => {
-    const results: T[] = [];
-    for await (const entity of listOp<T, Q>({ client, request, service })(query, opts)) {
-      results.push(entity);
+    if (req instanceof Promise || ('then' in req && typeof req.then === 'function')) {
+      return req;
     }
-    return results;
+
+    return ctx.client.request<Return>(req).then((res) => {
+      if (opts?.rawResponse) return res;
+      return res.data;
+    });
   };
 }
 
@@ -203,7 +182,7 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<E['createType'], T>,
-      update: updateOp<T extends { id: number } ? T : never>,
+      update: updateOp<T, T extends { id: number } ? T : never>,
     },
     v2: {
       get: getOp<T>,
@@ -211,7 +190,7 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<E['queryParameters'], T>,
       create: createOp<E['createType'], T>,
-      update: updateOp<T extends { id: number } ? T : never>,
+      update: updateOp<T, T extends { id: number } ? T : never>,
     },
-  } satisfies Record<EndpointVersion, Record<Operation, OpFactory | typeof listOp | typeof listAllOp>>;
+  } satisfies Record<EndpointVersion, Record<Operation, Op<any, any>>>;
 }

@@ -1,7 +1,7 @@
 import { Axios, AxiosRequestConfig } from 'axios';
 import { createCustomAxiosClient, getBaseRequestConfig } from './fetchv2.js';
 import { SDKConfig } from './interfaces/index.js';
-import { buildOp, BuiltOp, getOpMap, Op } from './ops2.js';
+import { buildOp, getOpMap, Op } from './ops.js';
 import { ServiceSpecification } from './service.js';
 import { Endpoint, EndpointEntityMap } from './endpoint.js';
 
@@ -23,7 +23,7 @@ type ServiceOps<Spec extends ServiceSpecification> = {
 /** Mapped index type of all specified custom/overload service operations with their corresponding op function */
 type ServiceCustomOps<Spec extends ServiceSpecification> = {
   [Key in keyof Spec['customOperations']]: Spec['customOperations'][Key] extends Op<any, any>
-    ? BuiltOp<Spec['customOperations'][Key]>
+    ? ReturnType<typeof buildOp<Spec['customOperations'][Key]>>
     : never;
 };
 type Service<Spec extends ServiceSpecification> = Omit<ServiceOps<Spec>, keyof ServiceCustomOps<Spec>> &
@@ -43,20 +43,18 @@ function serviceForSpec<Spec extends ServiceSpecification>(
   opts: { axiosClient: Axios; axiosConfig: Readonly<AxiosRequestConfig> },
 ): Service<Spec> {
   const service = {};
+  const opContext = {
+    client: opts.axiosClient,
+    request: opts.axiosConfig,
+    service: serviceSpec,
+  };
 
   const opMap = getOpMap<ExtractEndpoint<Spec>>();
   for (const op of serviceSpec.operations) {
-    service[op] = buildOp(
-      {
-        client: opts.axiosClient,
-        request: opts.axiosConfig,
-        service: serviceSpec,
-      },
-      opMap[serviceSpec.endpointVersion][op],
-    );
+    service[op] = buildOp(opContext, opMap[serviceSpec.endpointVersion][op]);
   }
   for (const [customOpName, customOpFunc] of Object.entries(serviceSpec.customOperations ?? {})) {
-    service[customOpName] = customOpFunc;
+    service[customOpName] = buildOp(opContext, customOpFunc);
   }
 
   return service as Service<Spec>;
