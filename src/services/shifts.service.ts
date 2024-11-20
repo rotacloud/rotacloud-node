@@ -2,7 +2,9 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Shift } from '../interfaces/index.js';
 import { Options, OptionsExtended, RequirementsOf, Service } from './index.js';
 
+import { ShiftDropRequest } from '../interfaces/drop-request.interface.js';
 import { ShiftsQueryParams } from '../interfaces/query-params/shifts-query-params.interface.js';
+import { ShiftSwapRequest } from '../interfaces/swap-request.interface.js';
 
 type RequiredProps = 'end_time' | 'start_time' | 'location';
 
@@ -73,7 +75,6 @@ export class ShiftsService extends Service<Shift> {
   update(shift: RequirementsOf<Shift, 'id'>, options: { rawResponse: true } & Options): Promise<AxiosResponse<Shift>>;
   update(shift: RequirementsOf<Shift, 'id'>, options: Options): Promise<Shift>;
   update(shifts: RequirementsOf<Shift, 'id'>[]): Promise<{ success: Shift[]; failed: { id: number; error: string }[] }>;
-  update(shift: RequirementsOf<Shift, 'id'>, options: Options): Promise<Shift>;
   update(
     shifts: RequirementsOf<Shift, 'id'>[],
     options: { rawResponse: true } & Options,
@@ -135,7 +136,7 @@ export class ShiftsService extends Service<Shift> {
   acknowledge(shifts: number[], options: Options): Promise<number>;
   acknowledge(shifts: number[], options?: Options) {
     return super
-      .fetch<Shift>({ url: '/shifts_acknowledged', data: {shifts}, method: 'POST' }, options)
+      .fetch<Shift>({ url: '/shifts_acknowledged', data: { shifts }, method: 'POST' }, options)
       .then((res) => (options?.rawResponse ? res : res.status));
   }
 
@@ -155,5 +156,45 @@ export class ShiftsService extends Service<Shift> {
     return super
       .fetch<Shift>({ url: '/shifts_published', data, method: 'DELETE' }, options)
       .then((res) => (options?.rawResponse ? res : res.status));
+  }
+
+  updateSwap(data: ShiftSwapRequest): Promise<ShiftSwapRequest>;
+  updateSwap(
+    data: ShiftSwapRequest,
+    options: { rawResponse: true } & Options,
+  ): Promise<AxiosResponse<ShiftSwapRequest>>;
+  updateSwap(data: ShiftSwapRequest, options: Options): Promise<ShiftSwapRequest>;
+  updateSwap(data: ShiftSwapRequest, options?: Options) {
+    return super
+      .fetch<Shift>({ url: `/swap_requests/${data.id}`, data, method: 'POST' }, options)
+      .then((res) => (options?.rawResponse ? res : res.data));
+  }
+
+  updateDrop(data: {
+    request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>;
+    approved: boolean;
+  }): Promise<ShiftDropRequest>;
+  updateDrop(
+    data: { request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>; approved: boolean },
+    options: { rawResponse: true } & Options,
+  ): Promise<AxiosResponse<ShiftDropRequest>>;
+  updateDrop(
+    data: { request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>; approved: boolean },
+    options: Options,
+  ): Promise<ShiftDropRequest>;
+  updateDrop(
+    data: { request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>; approved: boolean },
+    options?: Options,
+  ) {
+    return super
+      .fetch<Shift>(
+        {
+          url: `/unavailability_requests/${data.request.id}/${data.approved ? 'approve' : 'deny'}`,
+          data: { message: data.request.user_message },
+          method: 'POST',
+        },
+        options,
+      )
+      .then((res) => (options?.rawResponse ? res : res.data));
   }
 }
