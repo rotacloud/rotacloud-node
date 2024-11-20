@@ -13,16 +13,16 @@ export type OpFactoryOptions = {
   service: Readonly<ServiceSpecification>;
 };
 
-export type OpFunction<Entity = any, Param = unknown, R = Entity> = {
-  (param: Param): Promise<R>;
+export type OpFunction<Entity = any, Param = unknown, Return = Entity> = {
+  (param: Param): Promise<Return>;
   <T = Entity>(
     param: Param,
     opts?: {
       rawResponse: true;
     } & Options<T>,
   ): Promise<AxiosResponse<Entity>>;
-  <T = Entity>(param: Param, opts?: Options<T>): Promise<R>;
-  <T extends Array<any>>(query: Param, opts?: Options<T>): Promise<R>;
+  <T = Entity>(param: Param, opts?: Options<T>): Promise<Return>;
+  <T extends Array<any>>(query: Param, opts?: Options<T>): Promise<Return>;
 };
 
 type OpFactoryEntity = {

@@ -1,7 +1,7 @@
 import { Axios, AxiosRequestConfig } from 'axios';
 import { createCustomAxiosClient, getBaseRequestConfig } from './fetchv2.js';
 import { SDKConfig } from './interfaces/index.js';
-import { getOpMap, OpFactory } from './ops.js';
+import { buildOp, BuiltOp, getOpMap, Op } from './ops2.js';
 import { ServiceSpecification } from './service.js';
 import { Endpoint, EndpointEntityMap } from './endpoint.js';
 
@@ -16,14 +16,14 @@ type ExtractEndpoint<Spec extends ServiceSpecification> =
 /** Mapped index type of all specified service operations with their corresponding op function */
 type ServiceOps<Spec extends ServiceSpecification> = {
   [Key in Spec['operations'][number]]: Spec['endpoint'] extends keyof EndpointEntityMap[Spec['endpointVersion']]
-    ? ReturnType<ReturnType<typeof getOpMap<ExtractEndpoint<Spec>>>[Spec['endpointVersion']][Key]>
+    ? ReturnType<typeof buildOp<ReturnType<typeof getOpMap<ExtractEndpoint<Spec>>>[Spec['endpointVersion']][Key]>>
     : never;
 };
 
 /** Mapped index type of all specified custom/overload service operations with their corresponding op function */
 type ServiceCustomOps<Spec extends ServiceSpecification> = {
-  [Key in keyof Spec['customOperations']]: Spec['customOperations'][Key] extends (...args: any[]) => any
-    ? ReturnType<Spec['customOperations'][Key]>
+  [Key in keyof Spec['customOperations']]: Spec['customOperations'][Key] extends Op<any, any>
+    ? BuiltOp<Spec['customOperations'][Key]>
     : never;
 };
 type Service<Spec extends ServiceSpecification> = Omit<ServiceOps<Spec>, keyof ServiceCustomOps<Spec>> &
@@ -46,11 +46,14 @@ function serviceForSpec<Spec extends ServiceSpecification>(
 
   const opMap = getOpMap<ExtractEndpoint<Spec>>();
   for (const op of serviceSpec.operations) {
-    service[op] = opMap[serviceSpec.endpointVersion][op]({
-      client: opts.axiosClient,
-      request: opts.axiosConfig,
-      service: serviceSpec,
-    });
+    service[op] = buildOp(
+      {
+        client: opts.axiosClient,
+        request: opts.axiosConfig,
+        service: serviceSpec,
+      },
+      opMap[serviceSpec.endpointVersion][op],
+    );
   }
   for (const [customOpName, customOpFunc] of Object.entries(serviceSpec.customOperations ?? {})) {
     service[customOpName] = customOpFunc;

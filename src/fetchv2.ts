@@ -12,7 +12,7 @@ export interface Options<T> {
   rawResponse?: boolean;
   maxResults?: number;
   dryRun?: boolean;
-  // fields?: T extends Object ? (keyof T)[] : never;
+  fields?: T extends Object ? (keyof T)[] : never;
 }
 
 const DEFAULT_RETRIES = 3;
