@@ -36,33 +36,53 @@ export type OpDef<T, P = any, O = unknown, R = T> =
  *
  * All methods on services follow this typing
  * */
-export type OpFunction<Entity = any, Param = unknown, R = Entity> = Param extends number
+export type OpFunction<R = any, Param = unknown> = Param extends number
   ? {
       (id: Param): R;
-      <T = Entity>(
+      <F extends keyof Awaited<R>>(
+        id: Param,
+        options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
+      ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
+      <F extends keyof Awaited<R>>(
+        id: Param,
+        options: { fields: F[] } & RequestOptions<Awaited<R>>,
+      ): Promise<Pick<Awaited<R>, F>>;
+      (
         id: Param,
         opts?: {
           rawResponse: true;
-        } & RequestOptions<T>,
-      ): Promise<AxiosResponse<R>>;
-      <T = Entity>(id: Param, opts?: RequestOptions<T>): R;
+        } & RequestOptions<Awaited<R>>,
+      ): Promise<AxiosResponse<Awaited<R>>>;
+      (id: Param, opts?: RequestOptions<Awaited<R>>): R;
     }
-  : R extends AsyncIterable<any>
+  : R extends AsyncIterable<infer U>
     ? // List based op parameter names
       {
         (query: Param): R;
-        <T = Entity>(query: Param, opts?: RequestOptions<T>): R;
+        <F extends keyof U>(
+          query: Param,
+          options: { fields: F[] } & RequestOptions<U>,
+        ): Promise<AsyncIterable<Pick<U, F>>>;
+        (query: Param, opts?: RequestOptions<U>): R;
       }
     : // Entity based op parameter names
       {
         (entity: Param): R;
-        <T = Entity>(
+        <F extends keyof R>(
+          entity: Param,
+          options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
+        ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
+        <F extends keyof R>(
+          entity: Param,
+          options: { fields: F[] } & RequestOptions<Awaited<R>>,
+        ): Promise<Pick<Awaited<R>, F>>;
+        (
           entity: Param,
           opts?: {
             rawResponse: true;
-          } & RequestOptions<T>,
-        ): Promise<AxiosResponse<R>>;
-        <T = Entity>(entity: Param, opts?: RequestOptions<T>): R;
+          } & RequestOptions<Awaited<R>>,
+        ): Promise<AxiosResponse<Awaited<R>>>;
+        (entity: Param, opts?: RequestOptions<Awaited<R>>): R;
       };
 
 /** Utility for creating a query params map needed by most API requests */
@@ -101,7 +121,7 @@ function* requestPaginated<T>(
 }
 
 /** Operation for getting an entity */
-function getOp<T = undefined>(ctx: OperationContext, id: number, opts?: RequestOptions<T>): AxiosRequestConfig<T> {
+function getOp<T = undefined>(ctx: OperationContext, id: number, opts?: RequestOptions<T>): RequestConfig<unknown, T> {
   return {
     ...ctx.request,
     method: 'GET',
@@ -110,7 +130,7 @@ function getOp<T = undefined>(ctx: OperationContext, id: number, opts?: RequestO
       ...ctx.request.params,
       ...paramsFromOptions(opts ?? {}),
     },
-  } as AxiosRequestConfig<T>;
+  };
 }
 
 /** Operation for creating an entity */
@@ -118,7 +138,7 @@ function createOp<T = unknown, NewEntity = unknown>(
   ctx: OperationContext,
   newEntity: NewEntity,
   opts?: RequestOptions<T>,
-): AxiosRequestConfig<T> {
+): RequestConfig<NewEntity, T> {
   return {
     ...ctx.request,
     method: 'POST',
@@ -128,7 +148,7 @@ function createOp<T = unknown, NewEntity = unknown>(
       ...ctx.request.params,
       ...paramsFromOptions(opts ?? {}),
     },
-  } as AxiosRequestConfig<T>;
+  };
 }
 
 /** Operation for updating an entity */
@@ -136,7 +156,7 @@ function updateOp<Return, Entity extends { id: number } & Return>(
   ctx: OperationContext,
   entity: Entity,
   opts?: RequestOptions<Return>,
-): AxiosRequestConfig<Return> {
+): RequestConfig<Entity, Return> {
   return {
     ...ctx.request,
     method: 'POST',
@@ -146,11 +166,15 @@ function updateOp<Return, Entity extends { id: number } & Return>(
       ...ctx.request.params,
       ...paramsFromOptions(opts ?? {}),
     },
-  } as AxiosRequestConfig<Return>;
+  };
 }
 
 /** Operation for deleting an entity */
-function deleteOp<T = unknown>(ctx: OperationContext, id: number, opts?: RequestOptions<T>): AxiosRequestConfig<void> {
+function deleteOp<T = unknown>(
+  ctx: OperationContext,
+  id: number,
+  opts?: RequestOptions<T>,
+): RequestConfig<unknown, void> {
   return {
     ...ctx.request,
     method: 'DELETE',
@@ -159,7 +183,7 @@ function deleteOp<T = unknown>(ctx: OperationContext, id: number, opts?: Request
       ...ctx.request.params,
       ...paramsFromOptions(opts ?? {}),
     },
-  } as AxiosRequestConfig<void>;
+  };
 }
 
 /** Operation for listing all entities on an endpoint for a given query by
@@ -201,15 +225,12 @@ async function listAllOp<T, Query>(ctx: OperationContext, query: Query, opts?: R
 export function buildOp<
   F extends OpDef<any>,
   Param = Parameters<F>[1],
-  Return = ReturnType<F> extends AxiosRequestConfig<infer T> ? Promise<T> : ReturnType<F>,
->(
-  ctx: OperationContext,
-  opFunc: F,
-): OpFunction<ReturnType<F> extends RequestConfig<infer _, infer R> ? R : ReturnType<F>, Param, Return>;
+  Return = ReturnType<F> extends RequestConfig<infer _, infer T> ? Promise<T> : ReturnType<F>,
+>(ctx: OperationContext, opFunc: F): OpFunction<Return, Param>;
 export function buildOp<
   F extends OpDef<any>,
   Param = Parameters<F>[1],
-  Return = ReturnType<F> extends RequestConfig<infer _, infer R> ? Promise<R> : ReturnType<F>,
+  Return = ReturnType<F> extends RequestConfig<infer _, infer T> ? Promise<T> : ReturnType<F>,
 >(ctx: OperationContext, opFunc: F) {
   return (param: Param, opts?: Parameters<F>[2]) => {
     const req = opFunc(ctx, param, opts);
