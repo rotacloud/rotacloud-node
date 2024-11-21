@@ -27,10 +27,10 @@ export type RequestConfig<RequestData, ResponseData> = AxiosRequestConfig<Reques
  * This is intended as a convenient way of defining {@see OpFunction}s that can then be
  * "built" ready for the end user to call ({@see buildOp})
  * */
-export type OpDef<T, P = any, O = unknown, R = T> =
-  | ((ctx: OperationContext, param: P, opts?: RequestOptions<O>) => RequestConfig<T, R>)
-  | ((ctx: OperationContext, param: P, opts?: RequestOptions<O>) => AsyncIterable<T>)
-  | ((ctx: OperationContext, param: P, opts?: RequestOptions<O>) => Promise<T>);
+export type OpDef<T, P = any, O extends Partial<RequestOptions<any>> = RequestOptions<unknown>, R = T> =
+  | ((ctx: OperationContext, param: P, opts?: O) => RequestConfig<T, R>)
+  | ((ctx: OperationContext, param: P, opts?: O) => AsyncIterable<T>)
+  | ((ctx: OperationContext, param: P, opts?: O) => Promise<T>);
 
 /** Operation function type to be called by the end user of the SDK.
  *
