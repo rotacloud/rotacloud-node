@@ -8,7 +8,7 @@ import { Endpoint, EndpointEntityMap } from './endpoint.js';
 /** Utility type to make working with the Endpoint map easier */
 type ExtractEndpoint<Spec extends ServiceSpecification> =
   Spec['endpoint'] extends keyof EndpointEntityMap[Spec['endpointVersion']]
-    ? EndpointEntityMap[Spec['endpointVersion']][Spec['endpoint']] extends Endpoint
+    ? EndpointEntityMap[Spec['endpointVersion']][Spec['endpoint']] extends Endpoint<any, any>
       ? EndpointEntityMap[Spec['endpointVersion']][Spec['endpoint']]
       : never
     : never;

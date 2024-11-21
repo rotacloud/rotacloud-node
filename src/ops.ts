@@ -36,54 +36,64 @@ export type OpDef<T, P = any, O = unknown, R = T> =
  *
  * All methods on services follow this typing
  * */
-export type OpFunction<R = any, Param = unknown> = Param extends number
-  ? {
-      (id: Param): R;
-      <F extends keyof Awaited<R>>(
-        id: Param,
-        options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
-      ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
-      <F extends keyof Awaited<R>>(
-        id: Param,
-        options: { fields: F[] } & RequestOptions<Awaited<R>>,
-      ): Promise<Pick<Awaited<R>, F>>;
-      (
-        id: Param,
-        opts?: {
-          rawResponse: true;
-        } & RequestOptions<Awaited<R>>,
-      ): Promise<AxiosResponse<Awaited<R>>>;
-      (id: Param, opts?: RequestOptions<Awaited<R>>): R;
-    }
-  : R extends AsyncIterable<infer U>
+export type OpFunction<R = any, Param = undefined> =
+  R extends AsyncIterable<infer U>
     ? // List based op parameter names
-      {
-        (query: Param): R;
-        <F extends keyof U>(
-          query: Param,
-          options: { fields: F[] } & RequestOptions<U>,
-        ): Promise<AsyncIterable<Pick<U, F>>>;
-        (query: Param, opts?: RequestOptions<U>): R;
-      }
-    : // Entity based op parameter names
-      {
-        (entity: Param): R;
-        <F extends keyof R>(
-          entity: Param,
-          options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
-        ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
-        <F extends keyof R>(
-          entity: Param,
-          options: { fields: F[] } & RequestOptions<Awaited<R>>,
-        ): Promise<Pick<Awaited<R>, F>>;
-        (
-          entity: Param,
-          opts?: {
-            rawResponse: true;
-          } & RequestOptions<Awaited<R>>,
-        ): Promise<AxiosResponse<Awaited<R>>>;
-        (entity: Param, opts?: RequestOptions<Awaited<R>>): R;
-      };
+      Param extends undefined
+      ? {
+          (query?: Param): R;
+          <F extends keyof U>(
+            query: Param,
+            options: { fields: F[] } & RequestOptions<U>,
+          ): Promise<AsyncIterable<Pick<U, F>>>;
+          (query: Param, opts?: RequestOptions<U>): R;
+        }
+      : {
+          (query: Param): R;
+          <F extends keyof U>(
+            query: Param,
+            options: { fields: F[] } & RequestOptions<U>,
+          ): Promise<AsyncIterable<Pick<U, F>>>;
+          (query: Param, opts?: RequestOptions<U>): R;
+        }
+    : Param extends number
+      ? {
+          (id: Param): R;
+          <F extends keyof Awaited<R>>(
+            id: Param,
+            options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
+          ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
+          <F extends keyof Awaited<R>>(
+            id: Param,
+            options: { fields: F[] } & RequestOptions<Awaited<R>>,
+          ): Promise<Pick<Awaited<R>, F>>;
+          (
+            id: Param,
+            opts?: {
+              rawResponse: true;
+            } & RequestOptions<Awaited<R>>,
+          ): Promise<AxiosResponse<Awaited<R>>>;
+          (id: Param, opts?: RequestOptions<Awaited<R>>): R;
+        }
+      : // Entity based op parameter names
+        {
+          (entity: Param): R;
+          <F extends keyof R>(
+            entity: Param,
+            options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
+          ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
+          <F extends keyof R>(
+            entity: Param,
+            options: { fields: F[] } & RequestOptions<Awaited<R>>,
+          ): Promise<Pick<Awaited<R>, F>>;
+          (
+            entity: Param,
+            opts?: {
+              rawResponse: true;
+            } & RequestOptions<Awaited<R>>,
+          ): Promise<AxiosResponse<Awaited<R>>>;
+          (entity: Param, opts?: RequestOptions<Awaited<R>>): R;
+        };
 
 /** Utility for creating a query params map needed by most API requests */
 export function paramsFromOptions<T>(opts: RequestOptions<T>): Record<string, QueryParameterValue> {
@@ -242,7 +252,7 @@ export function buildOp<
  * NOTE: This is a function rather than a constant so that type generics work as
  * intended. It's currently not possible to define a constant with generics
  */
-export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() {
+export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['type']>() {
   return {
     v1: {
       get: getOp<T>,

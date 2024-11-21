@@ -3,7 +3,7 @@ import { LeaveRequest, Terminal, UserBreak, UserClockedIn, UserClockedOut } from
 import { RequestOptions } from './fetchv2.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
 import { OpDef, Operation, OperationContext, RequestConfig, paramsFromOptions } from './ops.js';
-import { UserBreakRequest, UserClockIn } from './interfaces/user-clock-in.interface.js';
+import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
 import { RequirementsOf } from './utils.js';
 
 export type ServiceSpecification<T extends OpDef<any> = any> = {
@@ -237,7 +237,7 @@ export const SERVICES = {
       }),
       clockOut: (
         { request, service },
-        entity: { id: number } & RequirementsOf<UserClockIn, 'method'>,
+        entity: { id: number } & RequirementsOf<UserClockOut, 'method'>,
       ): RequestConfig<typeof entity, UserClockedOut> => ({
         ...request,
         url: `${service.endpoint}/${entity.id}`,

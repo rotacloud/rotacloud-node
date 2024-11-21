@@ -51,24 +51,20 @@ import { RequirementsOf } from './utils.js';
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
 /** Associated types for a given API endpoint */
-export interface Endpoint<
-  Entity = unknown,
-  QueryParameters extends object | undefined = any,
-  RequiredFields extends keyof Entity = any,
-> {
+export type Endpoint<Entity, QueryParameters = undefined, RequiredFields extends keyof Entity = any> = {
   /** The type returned by an endpoint */
   type: Entity;
   /** The query parameters for endpoints that support listing */
   queryParameters: QueryParameters;
   /** The entity type required for endpoints that support creation */
   createType: RequirementsOf<Entity, RequiredFields>;
-}
+};
 
 /** Mapping between a endpoint URL and it's associated entity type
  *
  * Keys of each version map should be the URL of a given endpoint
  */
-export interface EndpointEntityMap extends Record<EndpointVersion, Record<string, Endpoint>> {
+export interface EndpointEntityMap extends Record<EndpointVersion, Record<string, Endpoint<unknown, any>>> {
   /** Type mappings for v1 endpoints */
   v1: {
     accounts: Endpoint<Account>;
