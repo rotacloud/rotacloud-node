@@ -121,15 +121,11 @@ function* requestPaginated<T>(
 }
 
 /** Operation for getting an entity */
-function getOp<T = undefined>(ctx: OperationContext, id: number, opts?: RequestOptions<T>): RequestConfig<unknown, T> {
+function getOp<T = undefined>(ctx: OperationContext, id: number): RequestConfig<unknown, T> {
   return {
     ...ctx.request,
     method: 'GET',
     url: `${ctx.service.endpoint}/${id}`,
-    params: {
-      ...ctx.request.params,
-      ...paramsFromOptions(opts ?? {}),
-    },
   };
 }
 
@@ -137,17 +133,12 @@ function getOp<T = undefined>(ctx: OperationContext, id: number, opts?: RequestO
 function createOp<T = unknown, NewEntity = unknown>(
   ctx: OperationContext,
   newEntity: NewEntity,
-  opts?: RequestOptions<T>,
 ): RequestConfig<NewEntity, T> {
   return {
     ...ctx.request,
     method: 'POST',
     url: ctx.service.endpoint,
     data: newEntity,
-    params: {
-      ...ctx.request.params,
-      ...paramsFromOptions(opts ?? {}),
-    },
   };
 }
 
@@ -155,46 +146,32 @@ function createOp<T = unknown, NewEntity = unknown>(
 function updateOp<Return, Entity extends { id: number } & Return>(
   ctx: OperationContext,
   entity: Entity,
-  opts?: RequestOptions<Return>,
 ): RequestConfig<Entity, Return> {
   return {
     ...ctx.request,
     method: 'POST',
     url: `${ctx.service.endpoint}/${entity.id}`,
     data: entity,
-    params: {
-      ...ctx.request.params,
-      ...paramsFromOptions(opts ?? {}),
-    },
   };
 }
 
 /** Operation for deleting an entity */
-function deleteOp<T = unknown>(
-  ctx: OperationContext,
-  id: number,
-  opts?: RequestOptions<T>,
-): RequestConfig<unknown, void> {
+function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, void> {
   return {
     ...ctx.request,
     method: 'DELETE',
     url: `${ctx.service.endpoint}/${id}`,
-    params: {
-      ...ctx.request.params,
-      ...paramsFromOptions(opts ?? {}),
-    },
   };
 }
 
 /** Operation for listing all entities on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
-async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>): AsyncGenerator<T> {
+async function* listOp<T, Query>(ctx: OperationContext, query: Query): AsyncGenerator<T> {
   const queriedRequest = {
     ...ctx.request,
     params: {
       ...ctx.request.params,
-      ...paramsFromOptions(opts ?? {}),
       ...query,
     },
   };
@@ -208,9 +185,9 @@ async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: Req
 }
 
 /** Operation for listing all entities on an endpoint for a given query as an array */
-async function listAllOp<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>) {
+async function listAllOp<T, Query>(ctx: OperationContext, query: Query) {
   const results: T[] = [];
-  for await (const entity of listOp<T, Query>(ctx, query, opts)) {
+  for await (const entity of listOp<T, Query>(ctx, query)) {
     results.push(entity);
   }
   return results;
@@ -233,7 +210,17 @@ export function buildOp<
   Return = ReturnType<F> extends RequestConfig<infer _, infer T> ? Promise<T> : ReturnType<F>,
 >(ctx: OperationContext, opFunc: F) {
   return (param: Param, opts?: Parameters<F>[2]) => {
-    const req = opFunc(ctx, param, opts);
+    const configuredContext: OperationContext = {
+      ...ctx,
+      request: {
+        ...ctx.request,
+        params: {
+          ...ctx.request.params,
+          ...paramsFromOptions(opts ?? {}),
+        },
+      },
+    };
+    const req = opFunc(configuredContext, param, opts);
     if (Symbol.asyncIterator in req) {
       return req;
     }
@@ -259,7 +246,7 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
   return {
     v1: {
       get: getOp<T>,
-      delete: deleteOp<T>,
+      delete: deleteOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<E['createType'], T>,
@@ -267,7 +254,7 @@ export function getOpMap<E extends Endpoint, T extends E['type'] = E['type']>() 
     },
     v2: {
       get: getOp<T>,
-      delete: deleteOp<T>,
+      delete: deleteOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<E['queryParameters'], T>,
       create: createOp<E['createType'], T>,
