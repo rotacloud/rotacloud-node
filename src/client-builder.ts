@@ -1,5 +1,5 @@
 import { Axios, AxiosRequestConfig } from 'axios';
-import { createCustomAxiosClient, getBaseRequestConfig } from './fetchv2.js';
+import { createCustomAxiosClient, getBaseRequestConfig } from './utils.js';
 import { SDKConfig } from './interfaces/index.js';
 import { buildOp, getOpMap, OpDef } from './ops.js';
 import { ServiceSpecification } from './service.js';

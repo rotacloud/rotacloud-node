@@ -1,6 +1,6 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ServiceSpecification } from './service.js';
-import { RequestOptions, QueryParameterValue } from './fetchv2.js';
+import { RequestOptions, QueryParameterValue } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
 
 // TODO: should we add "upsert"?

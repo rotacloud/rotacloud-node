@@ -1,10 +1,9 @@
 import { EndpointEntityMap } from './endpoint.js';
 import { LeaveRequest, Terminal, UserBreak, UserClockedIn, UserClockedOut } from './interfaces/index.js';
-import { RequestOptions } from './fetchv2.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
 import { OpDef, Operation, OperationContext, RequestConfig, paramsFromOptions } from './ops.js';
 import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
-import { RequirementsOf } from './utils.js';
+import { RequirementsOf, RequestOptions } from './utils.js';
 
 export type ServiceSpecification<T extends OpDef<any> = any> = {
   /** Operations allowed and usable for the endpoint */
@@ -225,7 +224,6 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['get', 'list', 'listAll'],
     customOperations: {
-      // TODO: check types
       clockIn: (
         { request, service },
         entity: { id: number } & RequirementsOf<UserClockIn, 'method'>,
