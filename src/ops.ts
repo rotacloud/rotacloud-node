@@ -177,7 +177,7 @@ function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, voi
 /** Operation for listing all entities on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
-async function* listOp<T, Query>(ctx: OperationContext, query: Query): AsyncGenerator<T> {
+async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>): AsyncGenerator<T> {
   const queriedRequest = {
     ...ctx.request,
     params: {
@@ -186,11 +186,19 @@ async function* listOp<T, Query>(ctx: OperationContext, query: Query): AsyncGene
     },
   };
   const res = await ctx.client.get<T[]>(ctx.service.endpoint, queriedRequest);
-  yield* res.data;
+  const maxEntities = opts?.maxResults ?? Infinity;
+  let entityCount = res.data.length;
+
+  yield* res.data.slice(maxEntities);
+  if (entityCount >= maxEntities) return;
 
   for (const pagedRequest of requestPaginated(res, ctx.request)) {
     const pagedRes = await ctx.client.get<T[]>(ctx.service.endpoint, pagedRequest);
-    yield* pagedRes.data;
+    for (const entity of pagedRes.data) {
+      yield entity;
+      entityCount += 1;
+      if (entityCount >= maxEntities) return;
+    }
   }
 }
 
