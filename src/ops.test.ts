@@ -77,13 +77,16 @@ describe('Operations', () => {
             // eslint-disable-next-line no-plusplus
             'x-offset': pageCount++,
           },
-          data: new Array(pageLimit),
+          data: new Array(pageLimit).fill('entity'),
         }),
       );
 
+      let resultCount = 0;
       for await (const res of client.service.list({}, { maxResults: 3 })) {
+        resultCount += 1;
         res;
       }
+      expect(resultCount).toBe(3);
       expect(mockAxiosClient.get).toHaveBeenCalledTimes(2);
     });
   });

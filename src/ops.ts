@@ -1,4 +1,5 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
+import assert from 'assert';
 import { ServiceSpecification } from './service.js';
 import { RequestOptions, QueryParameterValue } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
@@ -189,7 +190,8 @@ async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: Req
   const maxEntities = opts?.maxResults ?? Infinity;
   let entityCount = res.data.length;
 
-  yield* res.data.slice(maxEntities);
+  assert(Array.isArray(res.data), 'list can only be performed on endpoints returning an array');
+  yield* res.data.slice(0, maxEntities);
   if (entityCount >= maxEntities) return;
 
   for (const pagedRequest of requestPaginated(res, ctx.request)) {
