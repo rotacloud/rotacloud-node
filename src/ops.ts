@@ -70,31 +70,50 @@ export type OpFunction<R = any, Param = undefined> =
           ): Promise<Pick<Awaited<R>, F>>;
           (
             id: Param,
-            opts?: {
+            options?: {
               rawResponse: true;
             } & RequestOptions<Awaited<R>>,
           ): Promise<AxiosResponse<Awaited<R>>>;
-          (id: Param, opts?: RequestOptions<Awaited<R>>): R;
+          (id: Param, options?: RequestOptions<Awaited<R>>): R;
         }
-      : // Entity based op parameter names
-        {
-          (entity: Param): R;
-          <F extends keyof R>(
-            entity: Param,
-            options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
-          ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
-          <F extends keyof R>(
-            entity: Param,
-            options: { fields: F[] } & RequestOptions<Awaited<R>>,
-          ): Promise<Pick<Awaited<R>, F>>;
-          (
-            entity: Param,
-            opts?: {
-              rawResponse: true;
-            } & RequestOptions<Awaited<R>>,
-          ): Promise<AxiosResponse<Awaited<R>>>;
-          (entity: Param, opts?: RequestOptions<Awaited<R>>): R;
-        };
+      : Param extends undefined
+        ? {
+            (entity?: Param): R;
+            <F extends keyof Awaited<R>>(
+              entity: Param,
+              options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
+            ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
+            <F extends keyof Awaited<R>>(
+              entity: Param,
+              options: { fields: F[] } & RequestOptions<Awaited<R>>,
+            ): Promise<Pick<Awaited<R>, F>>;
+            (
+              entity?: Param,
+              options?: {
+                rawResponse: true;
+              } & RequestOptions<Awaited<R>>,
+            ): Promise<AxiosResponse<Awaited<R>>>;
+            (entity?: Param, options?: RequestOptions<Awaited<R>>): R;
+          }
+        : // Entity based op parameter names
+          {
+            (entity: Param): R;
+            <F extends keyof R>(
+              entity: Param,
+              options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<R>>,
+            ): Promise<AxiosResponse<Pick<Awaited<R>, F>>>;
+            <F extends keyof R>(
+              entity: Param,
+              options: { fields: F[] } & RequestOptions<Awaited<R>>,
+            ): Promise<Pick<Awaited<R>, F>>;
+            (
+              entity: Param,
+              options?: {
+                rawResponse: true;
+              } & RequestOptions<Awaited<R>>,
+            ): Promise<AxiosResponse<Awaited<R>>>;
+            (entity: Param, options?: RequestOptions<Awaited<R>>): R;
+          };
 
 /** Utility for creating a query params map needed by most API requests */
 export function paramsFromOptions<T>(opts: RequestOptions<T>): Record<string, QueryParameterValue> {
