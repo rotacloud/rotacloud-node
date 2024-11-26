@@ -1,6 +1,8 @@
 import { describe, expect, test, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient } from './client-builder.js';
+import { getOpMap } from './ops.js';
+import { ServiceSpecification } from './service.js';
 
 let mockAxiosClient: Axios;
 vi.mock(import('axios'), async (importOriginal) => {
@@ -20,16 +22,45 @@ vi.mock(import('axios'), async (importOriginal) => {
 });
 
 describe('Operations', () => {
-  describe('list op', () => {
-    const clientBuilder = createSdkClient({
-      service: {
-        endpoint: 'settings',
-        endpointVersion: 'v1',
-        operations: ['list'],
-      },
-    });
-    const client = clientBuilder({ basicAuth: '' });
+  const service = {
+    endpoint: 'settings',
+    endpointVersion: 'v1',
+    operations: ['get', 'list'],
+    customOperations: {
+      promiseOp: async () => 3,
+    },
+  } satisfies ServiceSpecification;
+  const clientBuilder = createSdkClient({
+    service,
+  });
+  const client = clientBuilder({ basicAuth: '' });
 
+  test('operations returning a request config trigger a request call', async () => {
+    const basicOp = getOpMap().v1.get;
+    const basicOpRes = basicOp(
+      {
+        client: mockAxiosClient,
+        request: {},
+        service,
+      },
+      1,
+    );
+    expect(basicOpRes).toStrictEqual(
+      expect.objectContaining({
+        method: 'GET',
+      }),
+    );
+
+    await client.service.get(1);
+    expect(mockAxiosClient.request).toHaveBeenCalledWith(expect.objectContaining(basicOpRes));
+  });
+
+  test('operations returning a promise are returned as is', async () => {
+    const promiseOpRes = await service.customOperations.promiseOp();
+    expect(promiseOpRes).toStrictEqual(await client.service.promiseOp());
+  });
+
+  describe('list op', () => {
     test('respects `maxResults` parameter in legacy pagination', async () => {
       vi.spyOn(mockAxiosClient, 'get').mockImplementation(() => Promise.resolve({ data: [] }));
 
