@@ -17,7 +17,7 @@
     "watch": "rm -rf dist/* && tsc -p tsconfig.json --watch",
     "build": "rm -rf dist/* && tsc -p tsconfig.json",
     "lint": "eslint src --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/rotacloud/rotacloud-node#readme",
   "devDependencies": {
+    "@types/node": "^18.19.64",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.3.0",
     "eslint": "^8.46.0",
@@ -40,10 +41,10 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.31.0",
     "prettier": "~3.3.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
   },
   "dependencies": {
-    "@types/node": "^16.11.7",
     "axios": "^1.7.7",
     "axios-retry": "^4.5.0"
   }
