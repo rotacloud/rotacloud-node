@@ -13,7 +13,6 @@ import { version } from '../package.json' assert { type: 'json' };
  * */
 export type RequirementsOf<T, K extends keyof T> = Required<Pick<T, K>> & Partial<T>;
 
-
 /** Supported primitive/atomic types for query parameters */
 type QueryParameterPrimitive = string | boolean | number | null | symbol;
 /** Supported types for query parameters */
@@ -75,16 +74,13 @@ function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSe
 /** Creates and configures an Axios client for use in all calls to API endpoints
  * according to the provided {@see SDKConfig}
  */
-export function createCustomAxiosClient(config?: SDKConfig): Axios {
+export function createCustomAxiosClient(config: Readonly<SDKConfig>): Axios {
   const baseURL = URL.parse(config?.baseUri ?? '')?.toString();
   assert(baseURL !== null, 'Must have a valid base URL');
   const axiosClient = axios.create({
     baseURL,
     paramsSerializer: (params) => toSearchParams({ ...params, exclude_link_header: true }).toString(),
   });
-
-  axiosClient.interceptors.request.clear();
-  axiosClient.interceptors.response.clear();
 
   // NOTE: Retry interceptor - must be setup first
   if (config?.retry) {
@@ -155,4 +151,17 @@ export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknow
   return {
     headers,
   };
+}
+
+/** Defaults all undefined properties in a given object with the value specified
+ * in the provided {@see defaultObj} parameter
+ *
+ * This returns a new object and does not modify {@see obj}
+ */
+export function defaultObject<T extends object>(obj: Readonly<T>, defaultObj: Readonly<Partial<T>>): T {
+  const defaulted = { ...obj };
+  for (const [key, value] of Object.entries(defaultObj)) {
+    defaulted[key] ??= value;
+  }
+  return defaulted;
 }

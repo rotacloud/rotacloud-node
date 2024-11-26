@@ -24,7 +24,16 @@ export type RetryOptions =
 type RequestInterceptor = Parameters<AxiosInterceptorManager<InternalAxiosRequestConfig>['use']>;
 type ResponseInterceptor = Parameters<AxiosInterceptorManager<AxiosResponse>['use']>;
 
-export interface SDKBase {
+export type SDKConfig = (
+  | {
+      apiKey: string;
+      basicAuth?: never;
+    }
+  | {
+      apiKey?: never;
+      basicAuth: string;
+    }
+) & {
   baseUri?: string;
   accountId?: number;
   userId?: number;
@@ -46,16 +55,4 @@ export interface SDKBase {
     )[];
   };
   [key: string]: unknown;
-}
-
-export interface SDKBearerAuth extends SDKBase {
-  apiKey: string;
-  basicAuth?: never;
-}
-
-export interface SDKBasicAuth extends SDKBase {
-  apiKey?: never;
-  basicAuth: string;
-}
-
-export type SDKConfig = SDKBasicAuth | SDKBearerAuth;
+};

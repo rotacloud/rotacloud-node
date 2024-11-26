@@ -1,7 +1,7 @@
-import { Axios, AxiosRequestConfig } from 'axios';
-import { createCustomAxiosClient, getBaseRequestConfig } from './utils.js';
-import { SDKConfig } from './interfaces/index.js';
-import { buildOp, getOpMap, OpDef } from './ops.js';
+import { Axios } from 'axios';
+import { createCustomAxiosClient, defaultObject, getBaseRequestConfig } from './utils.js';
+import { RetryStrategy, SDKConfig } from './interfaces/index.js';
+import { buildOp, getOpMap, OpDef, OperationContext } from './ops.js';
 import { ServiceSpecification } from './service.js';
 import { Endpoint, EndpointEntityMap } from './endpoint.js';
 
@@ -32,31 +32,31 @@ type Service<Spec extends ServiceSpecification> = Omit<ServiceOps<Spec>, keyof S
 export type SdkClient<T extends Record<string, ServiceSpecification>> = {
   [ServiceName in keyof T]: Service<T[ServiceName]>;
 } & {
-  fetch: Axios['get'];
-  config: (() => SDKConfig) & {
-    set: () => void;
-  };
+  fetch: Axios['request'];
+  /**
+   * The underlying settings for the SDK
+   */
+  config: Readonly<SDKConfig>;
 };
 
-/** Converts a provided {@see ServiceSpecification} into an {@see Service} with all
- * associated types configured ready to be used by an end user of the SDK
+export const DEFAULT_CONFIG = {
+  baseUri: 'https://api.rotacloud.com/v1',
+  retry: RetryStrategy.Exponential,
+} satisfies Partial<SDKConfig>;
+
+/** Converts a provided {@see OperationContext} into a {@see Service} with all
+ * associated types configured ready to be used by an end user of the SDK.
+ *
+ * The context object provided will be used as is for all operations on a service
  */
-function serviceForSpec<Spec extends ServiceSpecification>(
-  serviceSpec: Spec,
-  opts: { axiosClient: Axios; axiosConfig: Readonly<AxiosRequestConfig> },
-): Service<Spec> {
+function serviceForContext<Spec extends ServiceSpecification>(opContext: OperationContext): Service<Spec> {
   const service = {};
-  const opContext = {
-    client: opts.axiosClient,
-    request: opts.axiosConfig,
-    service: serviceSpec,
-  };
 
   const opMap = getOpMap<ExtractEndpoint<Spec>>();
-  for (const op of serviceSpec.operations) {
-    service[op] = buildOp(opContext, opMap[serviceSpec.endpointVersion][op]);
+  for (const op of opContext.service.operations) {
+    service[op] = buildOp(opContext, opMap[opContext.service.endpointVersion][op]);
   }
-  for (const [customOpName, customOpFunc] of Object.entries(serviceSpec.customOperations ?? {})) {
+  for (const [customOpName, customOpFunc] of Object.entries(opContext.service.customOperations ?? {})) {
     service[customOpName] = buildOp(opContext, customOpFunc);
   }
 
@@ -70,21 +70,34 @@ export function createSdkClient<T extends Record<string, ServiceSpecification>>(
   serviceMap: T,
 ): (config: SDKConfig) => SdkClient<T> {
   return (sdkConfig: SDKConfig) => {
-    const axiosClient = createCustomAxiosClient(sdkConfig);
-    const config = (): SDKConfig => sdkConfig;
-    // TODO: setup setter here - proxy?
-    config.set = () => {};
+    let clientConfig = Object.freeze(defaultObject<SDKConfig>(sdkConfig, DEFAULT_CONFIG));
+    let axiosClient = createCustomAxiosClient(clientConfig);
+    let requestConfig = getBaseRequestConfig(clientConfig);
 
     const sdkClient = {
-      fetch: axiosClient.get,
-      config,
-    };
+      get fetch() {
+        return axiosClient.request;
+      },
+      get config() {
+        return clientConfig;
+      },
+      set config(val: SDKConfig) {
+        clientConfig = Object.freeze(defaultObject<SDKConfig>(val, DEFAULT_CONFIG));
+        axiosClient = createCustomAxiosClient(clientConfig);
+        requestConfig = getBaseRequestConfig(clientConfig);
+      },
+    } satisfies SdkClient<{}>;
 
-    const requestConfig = getBaseRequestConfig(sdkConfig);
     for (const [serviceName, serviceSpec] of Object.entries(serviceMap)) {
-      sdkClient[serviceName] = serviceForSpec(serviceSpec, {
-        axiosClient,
-        get axiosConfig() {
+      sdkClient[serviceName] = serviceForContext({
+        service: serviceSpec,
+        // NOTE: using getters here to allow for changes after client creation
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        get client() {
+          return axiosClient;
+        },
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        get request() {
           return requestConfig;
         },
       });
