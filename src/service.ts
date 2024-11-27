@@ -4,6 +4,8 @@ import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
 import { OpDef, Operation, OperationContext, RequestConfig, paramsFromOptions } from './ops.js';
 import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
 import { RequirementsOf, RequestOptions } from './utils.js';
+import { ShiftSwapRequest } from './interfaces/swap-request.interface.js';
+import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 
 export type ServiceSpecification<T extends OpDef<any> = any> = {
   /** Operations allowed and usable for the endpoint */
@@ -167,6 +169,24 @@ export const SERVICES = {
         method: 'DELETE',
         url: 'v1/shifts_published',
         data: { shifts: shiftIds },
+      }),
+      updateSwap: (
+        { request },
+        swapRequest: RequirementsOf<ShiftSwapRequest, 'id'>,
+      ): RequestConfig<{ shifts: number[] }, void> => ({
+        ...request,
+        method: 'DELETE',
+        url: `v1/swap_requests/${swapRequest.id}`,
+        data: swapRequest,
+      }),
+      updateDrop: (
+        { request },
+        dropRequest: { request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>; approved: boolean },
+      ): RequestConfig<{ shifts: number[] }, void> => ({
+        ...request,
+        method: 'DELETE',
+        url: `v1/unavailability_requests/${dropRequest.request.id}/${dropRequest.approved ? 'approve' : 'deny'}`,
+        data: { message: dropRequest.request.user_message },
       }),
     },
   },
