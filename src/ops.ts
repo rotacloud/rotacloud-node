@@ -288,7 +288,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       delete: deleteOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
-      create: createOp<E['createType'], T>,
+      create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? T : never>,
     },
     v2: {
@@ -296,7 +296,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       delete: deleteOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<E['queryParameters'], T>,
-      create: createOp<E['createType'], T>,
+      create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? T : never>,
     },
   } satisfies Record<EndpointVersion, Record<Operation, OpDef<any, any>>>;
