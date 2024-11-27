@@ -26,6 +26,9 @@ jobs:
       - name: npm install
         run: npm ci
 
+      - name: Formatting
+        run: npx prettier . --check
+
       - name: Lint
         run: npm run lint
 
