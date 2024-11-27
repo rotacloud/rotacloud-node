@@ -2,6 +2,7 @@ import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
 import { SDKConfig } from './main.js';
+import { version } from '../package.json' assert { type: 'json' };
 
 let mockAxiosClient: Axios;
 vi.mock(import('axios'), async (importOriginal) => {
@@ -79,7 +80,7 @@ describe('SDK client builder', () => {
     });
   });
 
-  test("service URL's have their versions specified", async () => {
+  test("service URL's have their versions specified in the URL", async () => {
     const clientBuilder = createSdkClient({
       service: {
         endpoint: 'accounts',
@@ -93,6 +94,26 @@ describe('SDK client builder', () => {
     expect(mockAxiosClient.request).toHaveBeenCalledWith(
       expect.objectContaining({
         url: 'v1/accounts/1',
+      }),
+    );
+  });
+
+  test('SDK version is included as a header', async () => {
+    const clientBuilder = createSdkClient({
+      service: {
+        endpoint: 'settings',
+        endpointVersion: 'v1',
+        operations: ['get'],
+      },
+    });
+    const client = clientBuilder(sdkConfig);
+
+    await client.service.get(1);
+    expect(mockAxiosClient.request).toHaveBeenCalledWith(
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          'SDK-Version': version,
+        }),
       }),
     );
   });
