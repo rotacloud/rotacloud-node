@@ -5,7 +5,7 @@ on:
       NODE_VERSION:
         type: string
         description: 'The version of Node to run the checks with'
-        default: 16.10
+        default: 18.18
   pull_request:
     branches: [develop]
 
@@ -14,10 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Use Node.js ${{ inputs.NODE_VERSION }}
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ inputs.NODE_VERSION }}
           cache: 'npm'
