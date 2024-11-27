@@ -155,7 +155,7 @@ function getOp<T = undefined>(ctx: OperationContext, id: number): RequestConfig<
   return {
     ...ctx.request,
     method: 'GET',
-    url: `${ctx.service.endpoint}/${id}`,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${id}`,
   };
 }
 
@@ -167,7 +167,7 @@ function createOp<T = unknown, NewEntity = unknown>(
   return {
     ...ctx.request,
     method: 'POST',
-    url: ctx.service.endpoint,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
     data: newEntity,
   };
 }
@@ -180,7 +180,7 @@ function updateOp<Return, Entity extends { id: number } & Return>(
   return {
     ...ctx.request,
     method: 'POST',
-    url: `${ctx.service.endpoint}/${entity.id}`,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${entity.id}`,
     data: entity,
   };
 }
@@ -190,7 +190,7 @@ function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, voi
   return {
     ...ctx.request,
     method: 'DELETE',
-    url: `${ctx.service.endpoint}/${id}`,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${id}`,
   };
 }
 
@@ -205,7 +205,7 @@ async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: Req
       ...query,
     },
   };
-  const res = await ctx.client.get<T[]>(ctx.service.endpoint, queriedRequest);
+  const res = await ctx.client.get<T[]>(`${ctx.service.endpointVersion}/${ctx.service.endpoint}`, queriedRequest);
   const maxEntities = opts?.maxResults ?? Infinity;
   let entityCount = res.data.length;
 

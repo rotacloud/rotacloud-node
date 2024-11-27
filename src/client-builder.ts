@@ -40,7 +40,7 @@ export type SdkClient<T extends Record<string, ServiceSpecification>> = {
 };
 
 export const DEFAULT_CONFIG = {
-  baseUri: 'https://api.rotacloud.com/v1',
+  baseUri: 'https://api.rotacloud.com',
   retry: RetryStrategy.Exponential,
 } satisfies Partial<SDKConfig>;
 

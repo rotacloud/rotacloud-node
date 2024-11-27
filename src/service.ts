@@ -153,19 +153,19 @@ export const SERVICES = {
       acknowledge: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,
         method: 'POST',
-        url: '/shifts_acknowledged',
+        url: 'v1/shifts_acknowledged',
         data: { shifts: shiftIds },
       }),
       publish: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,
         method: 'POST',
-        url: '/shifts_published',
+        url: 'v1/shifts_published',
         data: { shifts: shiftIds },
       }),
       unpublish: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,
         method: 'DELETE',
-        url: '/shifts_published',
+        url: 'v1/shifts_published',
         data: { shifts: shiftIds },
       }),
     },
@@ -178,7 +178,7 @@ export const SERVICES = {
       close: ({ request, service }, id: number): RequestConfig<void, void> => ({
         ...request,
         method: 'DELETE',
-        url: `/${service.endpoint}/${id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${id}`,
       }),
     },
   },
@@ -190,17 +190,17 @@ export const SERVICES = {
       launch: ({ request, service }, id: LaunchTerminal): RequestConfig<void, Terminal> => ({
         ...request,
         method: 'DELETE',
-        url: `/${service.endpoint}/${id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${id}`,
       }),
       ping: ({ request, service }, id: { id: number; action: string; device: string }): RequestConfig<void, void> => ({
         ...request,
         method: 'DELETE',
-        url: `${service.endpoint}/${id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${id}`,
       }),
       close: ({ request, service }, id: number): RequestConfig<void, void> => ({
         ...request,
         method: 'DELETE',
-        url: `${service.endpoint}/${id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${id}`,
       }),
     },
   },
@@ -229,7 +229,7 @@ export const SERVICES = {
         entity: { id: number } & RequirementsOf<UserClockIn, 'method'>,
       ): RequestConfig<typeof entity, UserClockedIn> => ({
         ...request,
-        url: `${service.endpoint}/${entity.id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${entity.id}`,
         method: 'POST',
         data: entity,
       }),
@@ -238,7 +238,7 @@ export const SERVICES = {
         entity: { id: number } & RequirementsOf<UserClockOut, 'method'>,
       ): RequestConfig<typeof entity, UserClockedOut> => ({
         ...request,
-        url: `${service.endpoint}/${entity.id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${entity.id}`,
         method: 'POST',
         data: entity,
       }),
@@ -247,7 +247,7 @@ export const SERVICES = {
         entity: { id: number } & RequirementsOf<UserBreakRequest, 'method' | 'action'>,
       ): RequestConfig<typeof entity, UserBreak> => ({
         ...request,
-        url: `${service.endpoint}/${entity.id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${entity.id}`,
         method: 'POST',
         data: entity,
       }),
@@ -256,7 +256,7 @@ export const SERVICES = {
         entity: { id: number } & RequirementsOf<UserBreakRequest, 'method' | 'action'>,
       ): RequestConfig<typeof entity, UserBreak> => ({
         ...request,
-        url: `${service.endpoint}/${entity.id}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${entity.id}`,
         method: 'POST',
         data: entity,
       }),

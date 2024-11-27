@@ -78,6 +78,24 @@ describe('SDK client builder', () => {
       customOp: expect.any(Function),
     });
   });
+
+  test("service URL's have their versions specified", async () => {
+    const clientBuilder = createSdkClient({
+      service: {
+        endpoint: 'accounts',
+        endpointVersion: 'v1',
+        operations: ['get'],
+      },
+    });
+    const client = clientBuilder(sdkConfig);
+
+    await client.service.get(1);
+    expect(mockAxiosClient.request).toHaveBeenCalledWith(
+      expect.objectContaining({
+        url: 'v1/accounts/1',
+      }),
+    );
+  });
 });
 
 describe('SDK client configuration', () => {
@@ -144,6 +162,6 @@ describe('SDK client configuration', () => {
     };
 
     await client.service.get(1);
-    expect(mockAxiosClient.getUri()).toBe(DEFAULT_CONFIG.baseUri);
+    expect(mockAxiosClient.getUri()).toBe(new URL(DEFAULT_CONFIG.baseUri).toString());
   });
 });
