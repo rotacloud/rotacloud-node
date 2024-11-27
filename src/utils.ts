@@ -75,8 +75,13 @@ function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSe
  * according to the provided {@see SDKConfig}
  */
 export function createCustomAxiosClient(config: Readonly<SDKConfig>): Axios {
-  const baseURL = URL.parse(config?.baseUri ?? '')?.toString();
-  assert(baseURL !== null, 'Must have a valid base URL');
+  let baseURL: string | undefined;
+  try {
+    baseURL = new URL(config?.baseUri ?? '').toString();
+  } catch {
+    baseURL = undefined;
+  }
+  assert(baseURL !== undefined, `Must have a valid base URL. Got: ${config.baseUri}`);
   const axiosClient = axios.create({
     baseURL,
     paramsSerializer: (params) => toSearchParams({ ...params, exclude_link_header: true }).toString(),

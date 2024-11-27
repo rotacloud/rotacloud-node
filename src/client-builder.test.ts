@@ -131,17 +131,17 @@ describe('SDK client configuration', () => {
 
   test('default config settings can be overridden', () => {
     const clientBuilder = createSdkClient({});
-    const client = clientBuilder({ basicAuth: '', baseUri: 'newUri' });
+    const client = clientBuilder({ basicAuth: '', baseUri: 'http://example.com' });
     expect(client.config).toStrictEqual({
       ...DEFAULT_CONFIG,
       basicAuth: '',
-      baseUri: 'newUri',
+      baseUri: 'http://example.com',
     });
   });
 
   test('changing config properties with defaults to undefined will restore default values', () => {
     const clientBuilder = createSdkClient({});
-    const client = clientBuilder({ basicAuth: '', baseUri: 'newUri' });
+    const client = clientBuilder({ basicAuth: '', baseUri: 'http://example.com' });
     client.config = {
       ...client.config,
       baseUri: undefined,
