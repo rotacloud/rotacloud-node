@@ -1,5 +1,12 @@
 import { EndpointEntityMap } from './endpoint.js';
-import { LeaveRequest, Terminal, UserBreak, UserClockedIn, UserClockedOut } from './interfaces/index.js';
+import {
+  LeaveRequest,
+  ShiftHistoryRecord,
+  Terminal,
+  UserBreak,
+  UserClockedIn,
+  UserClockedOut,
+} from './interfaces/index.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
 import { OpDef, Operation, OperationContext, RequestConfig, paramsFromOptions } from './ops.js';
 import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
@@ -157,6 +164,11 @@ export const SERVICES = {
         method: 'POST',
         url: 'v1/shifts_acknowledged',
         data: { shifts: shiftIds },
+      }),
+      history: ({ request, service }, id: number): RequestConfig<void, ShiftHistoryRecord[]> => ({
+        ...request,
+        method: 'GET',
+        url: `v1/${service.endpoint}/${id}/history`,
       }),
       publish: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,

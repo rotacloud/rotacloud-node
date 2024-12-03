@@ -23,3 +23,15 @@ export interface Shift {
   swap_requests: number[];
   unavailability_requests: number[];
 }
+
+export interface ShiftHistoryRecord {
+  changes?: {
+    key: string;
+    value: string;
+  }[];
+  colour: string | null;
+  icon: string | null;
+  text: string;
+  time: number;
+  user: number;
+}
