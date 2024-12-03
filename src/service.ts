@@ -1,6 +1,8 @@
+import { request } from 'http';
 import { EndpointEntityMap } from './endpoint.js';
 import {
   LeaveRequest,
+  LeaveType,
   ShiftHistoryRecord,
   Terminal,
   UserBreak,
@@ -103,11 +105,6 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
   },
-  leaveType: {
-    endpoint: 'leave_types',
-    endpointVersion: 'v1',
-    operations: ['list', 'listAll'],
-  },
   leave: {
     endpoint: 'leave',
     endpointVersion: 'v1',
@@ -131,6 +128,11 @@ export const SERVICES = {
           ...request.params,
           ...paramsFromOptions(opts ?? {}),
         },
+      }),
+      types: ({ request }): RequestConfig<void, LeaveType[]> => ({
+        ...request,
+        method: 'GET',
+        url: 'v1/leave_types',
       }),
     },
   },
