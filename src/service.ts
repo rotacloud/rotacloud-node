@@ -1,4 +1,3 @@
-import { request } from 'http';
 import { EndpointEntityMap } from './endpoint.js';
 import {
   LeaveRequest,
@@ -108,7 +107,7 @@ export const SERVICES = {
   leave: {
     endpoint: 'leave',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'delete', 'create'],
+    operations: ['get', 'list', 'listAll', 'delete', 'create'],
     customOperations: {
       create: (
         { request, service }: OperationContext,
@@ -149,7 +148,7 @@ export const SERVICES = {
   role: {
     endpoint: 'roles',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'delete'],
+    operations: ['get', 'list', 'listAll', 'delete'],
   },
   settings: {
     endpoint: 'settings',
