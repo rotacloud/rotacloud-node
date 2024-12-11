@@ -1,24 +1,23 @@
 {
   "name": "rotacloud",
-  "version": "1.5.2",
+  "version": "2.0.0",
   "description": "The RotaCloud SDK for the RotaCloud API",
+  "type": "module",
   "engines": {
-    "node": ">=16.10.0"
+    "node": ">=18.18.0"
   },
-  "main": "./dist/cjs/rotacloud.js",
-  "module": "./dist/mjs/rotacloud.js",
-  "exports": {
-    ".": {
-      "require": "./dist/cjs/rotacloud.js",
-      "import": "./dist/mjs/rotacloud.js"
-    }
-  },
+  "exports": "./dist/main.js",
+  "files": [
+    "src",
+    "dist",
+    "*.md"
+  ],
   "scripts": {
     "version:bump": "npm --no-git-tag-version version patch",
-    "watch": "rm -rf dist/* && concurrently \"tsc -p tsconfig.json --watch\" \"tsc -p tsconfig-cjs.json --watch\" && ./fixup",
-    "build": "rm -rf dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && ./fixup",
+    "watch": "rm -rf dist/* && tsc -p tsconfig.json --watch",
+    "build": "rm -rf dist/* && tsc -p tsconfig.json",
     "lint": "eslint src --ext .ts",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "vitest",
     "prepublishOnly": "npm run build"
   },
   "repository": {
@@ -32,21 +31,21 @@
   },
   "homepage": "https://github.com/rotacloud/rotacloud-node#readme",
   "devDependencies": {
+    "@types/node": "^18.19.64",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.3.0",
-    "concurrently": "^8.2.0",
     "eslint": "^8.46.0",
     "eslint-config-airbnb": "^19.0.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-import": "^2.28.0",
-    "prettier": "~3.2.2",
-    "typescript": "^5.3.3"
+    "eslint-plugin-import": "^2.31.0",
+    "prettier": "~3.4.1",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.6"
   },
   "dependencies": {
-    "@types/node": "^16.11.7",
-    "axios": "^1.6.5",
-    "axios-retry": "^4.0.0"
+    "axios": "^1.7.7",
+    "axios-retry": "^4.5.0"
   }
 }
