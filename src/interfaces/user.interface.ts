@@ -48,7 +48,7 @@ export interface User {
   leave_rates_unit: string;
   leave_rates_type: string;
   notes: string | null;
-  pin: string | null;
+  pin?: string | null;
   salaried_cost_location: number | null;
   permissions: ManagerPermission[];
 }
