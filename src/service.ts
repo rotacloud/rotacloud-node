@@ -1,5 +1,7 @@
 import { EndpointEntityMap } from './endpoint.js';
 import {
+  DailyBudgets,
+  DailyRevenue,
   LeaveRequest,
   LeaveType,
   ShiftHistoryRecord,
@@ -15,14 +17,14 @@ import { RequirementsOf, RequestOptions } from './utils.js';
 import { ShiftSwapRequest } from './interfaces/swap-request.interface.js';
 import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 
-export type ServiceSpecification<T extends OpDef<any> = any> = {
+export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
   operations: Operation[];
   /**
    * Operations unique to the service
    * Can be used to override operations listed in {@see ServiceSpecification['operations']}
    */
-  customOperations?: Record<string, T>;
+  customOperations?: Record<string, CustomOp>;
 } & (
   | {
       /** URL of the endpoint */
@@ -68,11 +70,27 @@ export const SERVICES = {
     endpoint: 'daily_budget',
     endpointVersion: 'v1',
     operations: ['list', 'listAll', 'update'],
+    customOperations: {
+      update: ({ request, service }, entities: DailyBudgets[]): RequestConfig<typeof entities, void> => ({
+        ...request,
+        method: 'POST',
+        url: service.endpoint,
+        data: entities,
+      }),
+    },
   },
   dailyRevenue: {
     endpoint: 'daily_revenue',
     endpointVersion: 'v1',
     operations: ['list', 'listAll', 'update'],
+    customOperations: {
+      update: ({ request, service }, entities: DailyRevenue[]): RequestConfig<typeof entities, void> => ({
+        ...request,
+        method: 'POST',
+        url: service.endpoint,
+        data: entities,
+      }),
+    },
   },
   dayNote: {
     endpoint: 'day_notes',
@@ -128,11 +146,14 @@ export const SERVICES = {
           ...paramsFromOptions(opts ?? {}),
         },
       }),
-      types: ({ request }): RequestConfig<void, LeaveType[]> => ({
-        ...request,
-        method: 'GET',
-        url: 'v1/leave_types',
-      }),
+      types: ({ request }): RequestConfig<void, LeaveType[]> => {
+        const req = {
+          ...request,
+          method: 'GET',
+          url: 'v1/leave_types',
+        };
+        return req;
+      },
     },
   },
   location: {
@@ -185,19 +206,30 @@ export const SERVICES = {
       }),
       updateSwap: (
         { request },
-        swapRequest: RequirementsOf<ShiftSwapRequest, 'id'>,
-      ): RequestConfig<{ shifts: number[] }, void> => ({
-        ...request,
-        method: 'DELETE',
-        url: `v1/swap_requests/${swapRequest.id}`,
-        data: swapRequest,
-      }),
+        swapRequest:
+          | RequirementsOf<ShiftSwapRequest, 'id' | 'admin_approved'>
+          | RequirementsOf<ShiftSwapRequest, 'id' | 'user_approved'>,
+      ): RequestConfig<{ admin_approved: boolean } | { user_approved: boolean }, ShiftSwapRequest> => {
+        let payload: { admin_approved: boolean } | { user_approved: boolean } | undefined;
+        if (swapRequest.admin_approved !== null && swapRequest.admin_approved !== undefined) {
+          payload = { admin_approved: swapRequest.admin_approved };
+        } else if (swapRequest.user_approved !== null && swapRequest.user_approved !== undefined) {
+          payload = { user_approved: swapRequest.user_approved };
+        }
+
+        return {
+          ...request,
+          method: 'POST',
+          url: `v1/swap_requests/${swapRequest.id}`,
+          data: payload,
+        };
+      },
       updateDrop: (
         { request },
         dropRequest: { request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>; approved: boolean },
-      ): RequestConfig<{ shifts: number[] }, void> => ({
+      ): RequestConfig<{ message: string }, ShiftDropRequest> => ({
         ...request,
-        method: 'DELETE',
+        method: 'POST',
         url: `v1/unavailability_requests/${dropRequest.request.id}/${dropRequest.approved ? 'approve' : 'deny'}`,
         data: { message: dropRequest.request.user_message },
       }),
