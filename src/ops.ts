@@ -6,7 +6,7 @@ import { Endpoint, EndpointVersion } from './endpoint.js';
 
 // TODO: should we add "upsert"?
 /** Supported common operations */
-export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'create' | 'update';
+export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'deleteBatch' | 'create' | 'update';
 /** Context provided to all operations */
 export type OperationContext = {
   client: Readonly<Axios>;
@@ -202,6 +202,16 @@ function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, voi
   };
 }
 
+/** Operation for deleting a list of entities */
+function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unknown, void> {
+  return {
+    ...ctx.request,
+    method: 'DELETE',
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
+    data: ids,
+  };
+}
+
 /** Operation for listing all entities on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
@@ -294,6 +304,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
     v1: {
       get: getOp<T>,
       delete: deleteOp,
+      deleteBatch: deleteBatchOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
@@ -302,6 +313,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
     v2: {
       get: getOp<T>,
       delete: deleteOp,
+      deleteBatch: deleteBatchOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
