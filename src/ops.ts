@@ -44,7 +44,11 @@ export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<inf
         <F extends keyof U>(
           query: Param,
           options: { fields: F[] } & RequestOptions<U>,
-        ): Promise<AsyncIterable<Pick<U, F>>>;
+        ): R extends AsyncIterable<U>
+          ? Promise<AsyncIterable<Pick<U, F>>>
+          : R extends Promise<Array<U>>
+            ? Promise<Array<Pick<U, F>>>
+            : Promise<Iterable<Pick<U, F>>>;
         (query: Param, opts?: RequestOptions<U>): R;
       }
     : Partial<Param> extends Param
@@ -53,7 +57,11 @@ export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<inf
           <F extends keyof U>(
             query: Param,
             options: { fields: F[] } & RequestOptions<U>,
-          ): Promise<AsyncIterable<Pick<U, F>>>;
+          ): R extends AsyncIterable<U>
+            ? Promise<AsyncIterable<Pick<U, F>>>
+            : R extends Promise<Array<U>>
+              ? Promise<Array<Pick<U, F>>>
+              : Promise<Iterable<Pick<U, F>>>;
           (query?: Param, opts?: RequestOptions<U>): R;
         }
       : {
@@ -61,7 +69,11 @@ export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<inf
           <F extends keyof U>(
             query: Param,
             options: { fields: F[] } & RequestOptions<U>,
-          ): Promise<AsyncIterable<Pick<U, F>>>;
+          ): R extends AsyncIterable<U>
+            ? Promise<AsyncIterable<Pick<U, F>>>
+            : R extends Promise<Array<U>>
+              ? Promise<Array<Pick<U, F>>>
+              : Promise<Iterable<Pick<U, F>>>;
           (query: Param, opts?: RequestOptions<U>): R;
         }
   : Param extends number
