@@ -179,7 +179,7 @@ export const SERVICES = {
   shift: {
     endpoint: 'shifts',
     endpointVersion: 'v1',
-    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'updateBatch', 'delete', 'deleteBatch'],
     customOperations: {
       acknowledge: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,
