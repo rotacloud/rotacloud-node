@@ -4,9 +4,8 @@ import { ServiceSpecification } from './service.js';
 import { RequestOptions, QueryParameterValue, RequirementsOf } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
 
-// TODO: should we add "upsert"?
 /** Supported common operations */
-export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'deleteBatch' | 'create' | 'update';
+export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'deleteBatch' | 'create' | 'update' | 'updateBatch';
 /** Context provided to all operations */
 export type OperationContext = {
   client: Readonly<Axios>;
@@ -193,6 +192,31 @@ function updateOp<Return, Entity extends { id: number } & Partial<Return>>(
   };
 }
 
+/** Operation for deleting a list of entities */
+async function updateBatchOp<Return, Entity extends { id: number } & Partial<Return>>(
+  ctx: OperationContext,
+  entities: Entity[],
+): Promise<{ success: Return[]; failed: { id: number; error: string }[] }> {
+  const res = await ctx.client.request<{ code: number; data?: Return; error?: string }[]>({
+    ...ctx.request,
+    method: 'POST',
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
+    data: entities,
+  });
+
+  return res.data.reduce(
+    (acc, entityRes, shiftIdx) => {
+      if (entityRes.error) {
+        acc.failed.push({ id: entities[shiftIdx].id, error: entityRes.error });
+      } else if (entityRes.data) {
+        acc.success.push(entityRes.data);
+      }
+      return acc;
+    },
+    { success: [] as Return[], failed: [] as { id: number; error: string }[] },
+  );
+}
+
 /** Operation for deleting an entity */
 function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, void> {
   return {
@@ -309,6 +333,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
+      updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
     },
     v2: {
       get: getOp<T>,
@@ -318,6 +343,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       listAll: listAllOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
+      updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
     },
   } satisfies Record<EndpointVersion, Record<Operation, OpDef<any, any>>>;
 }
