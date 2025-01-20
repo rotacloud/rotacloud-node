@@ -1,9 +1,8 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
-import assert from 'assert';
 import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
 import { SDKError } from './models/index.js';
-import { version } from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 /** Creates a `Partial<T>` where all properties specified by `K` are required
  *
@@ -46,6 +45,17 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
     delay: DEFAULT_RETRY_DELAY,
   },
 };
+
+class AssertionError extends Error {
+  override name = AssertionError.prototype.name;
+}
+
+export function assert(value: unknown, message?: string | Error): asserts value {
+  if (value) return;
+  if (!message || typeof message === 'string')
+    throw new AssertionError(message ?? `Assertion failed - value = ${value}`);
+  throw message;
+}
 
 function parseClientError(error: AxiosError): SDKError {
   const axiosErrorLocation = error.response || error.request;
