@@ -2,7 +2,7 @@ import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
 import { SDKConfig } from './main.js';
-import { version } from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 let mockAxiosClient: Axios;
 vi.mock(import('axios'), async (importOriginal) => {
@@ -68,7 +68,7 @@ describe('SDK client builder', () => {
         endpointVersion: 'v1',
         operations: ['get'],
         customOperations: {
-          customOp: () => {},
+          customOp: async () => {},
         },
       },
     });
@@ -112,7 +112,7 @@ describe('SDK client builder', () => {
     expect(mockAxiosClient.request).toHaveBeenCalledWith(
       expect.objectContaining({
         headers: expect.objectContaining({
-          'SDK-Version': version,
+          'SDK-Version': pkg.version,
         }),
       }),
     );
