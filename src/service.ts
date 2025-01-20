@@ -1,8 +1,10 @@
 import { EndpointEntityMap } from './endpoint.js';
 import {
+  Auth,
+  Availability,
   DailyBudgets,
   DailyRevenue,
-  LeaveRequest,
+  Leave,
   LeaveType,
   ShiftHistoryRecord,
   Terminal,
@@ -59,15 +61,46 @@ export const SERVICES = {
   auth: {
     endpoint: 'auth',
     endpointVersion: 'v1',
-    operations: ['get'],
+    operations: [],
+    customOperations: {
+      get: ({ request, service }): RequestConfig<void, Auth> => ({
+        ...request,
+        url: service.endpoint,
+        method: 'GET',
+      }),
+    },
   },
   availability: {
     endpoint: 'availability',
     endpointVersion: 'v1',
     operations: ['update', 'create', 'delete', 'list', 'listAll'],
+    customOperations: {
+      update: ({ request, service }, entity: Availability): RequestConfig<typeof entity, Availability> => ({
+        ...request,
+        method: 'POST',
+        url: service.endpoint,
+        data: entity,
+      }),
+      delete: (
+        { request, service },
+        entity: { user: number; dates: string[] },
+      ): RequestConfig<Availability, Availability> => ({
+        ...request,
+        method: 'POST',
+        url: service.endpoint,
+        data: {
+          ...entity,
+          dates: entity.dates.map((date) => ({
+            date,
+            available: [],
+            unavailable: [],
+          })),
+        },
+      }),
+    },
   },
   dailyBudget: {
-    endpoint: 'daily_budget',
+    endpoint: 'daily_budgets',
     endpointVersion: 'v1',
     operations: ['list', 'listAll', 'update'],
     customOperations: {
@@ -125,13 +158,13 @@ export const SERVICES = {
   leave: {
     endpoint: 'leave',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'listAll', 'delete', 'create'],
+    operations: ['get', 'list', 'listAll', 'delete', 'create', 'update'],
     customOperations: {
       create: (
         { request, service }: OperationContext,
-        entity: RequirementsOf<LeaveRequest, 'user'>,
-        opts?: RequestOptions<LeaveRequest>,
-      ): RequestConfig<typeof entity, LeaveRequest> => ({
+        entity: EndpointEntityMap['v1']['leave']['createType'],
+        opts?: RequestOptions<Leave>,
+      ): RequestConfig<typeof entity, Leave[]> => ({
         ...request,
         method: 'POST',
         url: service.endpoint,
@@ -277,7 +310,7 @@ export const SERVICES = {
   toilAccrual: {
     endpoint: 'toil_accruals',
     endpointVersion: 'v1',
-    operations: ['create', 'get', 'list', 'listAll', 'delete'],
+    operations: ['create', 'get', 'list', 'listAll', 'listByPage', 'delete'],
   },
   toilAllowance: {
     endpoint: 'toil_allowance',
