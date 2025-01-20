@@ -71,7 +71,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     attendance: Endpoint<Attendance, AttendanceQueryParams, 'user' | 'in_time'>;
     auth: Endpoint<Auth>;
     availability: Endpoint<Availability, AvailabilityQueryParams>;
-    daily_budget: Endpoint<DailyBudgets, DailyBudgetsQueryParams>;
+    daily_budgets: Endpoint<DailyBudgets, DailyBudgetsQueryParams>;
     daily_revenue: Endpoint<DailyRevenue, DailyRevenueQueryParams>;
     day_notes: Endpoint<DayNote, DayNotesQueryParams>;
     days_off: Endpoint<DaysOff, DaysOffQueryParams>;
