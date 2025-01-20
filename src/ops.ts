@@ -1,11 +1,19 @@
 import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
-import assert from 'assert';
 import { ServiceSpecification } from './service.js';
-import { RequestOptions, QueryParameterValue, RequirementsOf } from './utils.js';
+import { RequestOptions, QueryParameterValue, RequirementsOf, assert } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
 
 /** Supported common operations */
-export type Operation = 'get' | 'list' | 'listAll' | 'delete' | 'deleteBatch' | 'create' | 'update' | 'updateBatch';
+export type Operation =
+  | 'get'
+  | 'list'
+  | 'listAll'
+  | 'listByPage'
+  | 'delete'
+  | 'deleteBatch'
+  | 'create'
+  | 'update'
+  | 'updateBatch';
 /** Context provided to all operations */
 export type OperationContext = {
   client: Readonly<Axios>;
@@ -36,7 +44,9 @@ export type OpDef<T, Param = any, Opts extends Partial<RequestOptions<any>> = Re
  *
  * All methods on services follow this typing
  * */
-export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<infer U> | Promise<Iterable<infer U>>
+export type OpFunction<R = any, Param = undefined, Opts = RequestOptions<unknown>> = R extends
+  | AsyncIterable<infer U>
+  | Promise<Iterable<infer U>>
   ? // List based op parameter names
     Param extends undefined
     ? {
@@ -49,7 +59,7 @@ export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<inf
           : R extends Promise<Array<U>>
             ? Promise<Array<Pick<U, F>>>
             : Promise<Iterable<Pick<U, F>>>;
-        (query: Param, opts?: RequestOptions<U>): R;
+        (query: Param, options?: Opts): R;
       }
     : Partial<Param> extends Param
       ? {
@@ -62,7 +72,7 @@ export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<inf
             : R extends Promise<Array<U>>
               ? Promise<Array<Pick<U, F>>>
               : Promise<Iterable<Pick<U, F>>>;
-          (query?: Param, opts?: RequestOptions<U>): R;
+          (query?: Param, options?: Opts): R;
         }
       : {
           (query: Param): R;
@@ -74,7 +84,7 @@ export type OpFunction<R = any, Param = undefined> = R extends AsyncIterable<inf
             : R extends Promise<Array<U>>
               ? Promise<Array<Pick<U, F>>>
               : Promise<Iterable<Pick<U, F>>>;
-          (query: Param, opts?: RequestOptions<U>): R;
+          (query: Param, Options?: Opts): R;
         }
   : Param extends number
     ? {
@@ -251,12 +261,18 @@ function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unkn
 /** Operation for listing all entities on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
-async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>): AsyncGenerator<T> {
+async function* listOp<T, Query>(
+  ctx: OperationContext,
+  query: Query,
+  // NOTE: offset is only supported in v1
+  opts?: RequestOptions<T[]> & { offset?: number },
+): AsyncGenerator<T> {
   const queriedRequest = {
     ...ctx.request,
     params: {
       ...ctx.request.params,
       ...query,
+      offset: opts?.offset,
     },
   };
   const res = await ctx.client.get<T[]>(`${ctx.service.endpointVersion}/${ctx.service.endpoint}`, queriedRequest);
@@ -278,12 +294,50 @@ async function* listOp<T, Query>(ctx: OperationContext, query: Query, opts?: Req
 }
 
 /** Operation for listing all entities on an endpoint for a given query as an array */
-async function listAllOp<T, Query>(ctx: OperationContext, query: Query) {
+async function listAllOp<T, Query>(
+  ctx: OperationContext,
+  query: Query,
+  // NOTE: offset is only supported in v1
+  opts?: RequestOptions<T[]> & { offset?: number },
+) {
   const results: T[] = [];
-  for await (const entity of listOp<T, Query>(ctx, query)) {
+  for await (const entity of listOp<T, Query>(ctx, query, opts)) {
     results.push(entity);
   }
   return results;
+}
+
+/** Operation for listing all entity pages on an endpoint for a given query by
+ * automatically handling pagination as and when needed
+ */
+async function* listByPageOp<T, Query>(
+  ctx: OperationContext,
+  query: Query,
+  // NOTE: offset is only supported in v1
+  opts?: RequestOptions<T[]> & { offset?: number },
+): AsyncGenerator<AxiosResponse<T[]>> {
+  const queriedRequest = {
+    ...ctx.request,
+    params: {
+      ...ctx.request.params,
+      ...query,
+      offset: opts?.offset,
+    },
+  };
+  const res = await ctx.client.get<T[]>(`${ctx.service.endpointVersion}/${ctx.service.endpoint}`, queriedRequest);
+  const maxEntities = opts?.maxResults ?? Infinity;
+  let entityCount = res.data.length;
+
+  assert(Array.isArray(res.data), 'listByPage can only be performed on endpoints returning an array');
+  yield res;
+  if (entityCount >= maxEntities) return;
+
+  for (const pagedRequest of requestPaginated(res, ctx.request)) {
+    const pagedRes = await ctx.client.get<T[]>(ctx.service.endpoint, pagedRequest);
+    yield pagedRes;
+    entityCount += pagedRes.data.length;
+    if (entityCount >= maxEntities) return;
+  }
 }
 
 /** Builds an {@see Op} definition into an {@see OpFunction} ready to be called
@@ -295,8 +349,9 @@ async function listAllOp<T, Query>(ctx: OperationContext, query: Query) {
 export function buildOp<
   F extends OpDef<any>,
   Param = Parameters<F>[1],
+  Opts = Parameters<F>[2],
   Return = ReturnType<F> extends RequestConfig<infer _, infer T> ? Promise<T> : ReturnType<F>,
->(ctx: OperationContext, opFunc: F): OpFunction<Return, Param>;
+>(ctx: OperationContext, opFunc: F): OpFunction<Return, Param, Opts>;
 export function buildOp<
   F extends OpDef<any>,
   Param = Parameters<F>[1],
@@ -343,6 +398,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       deleteBatch: deleteBatchOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
+      listByPage: listByPageOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
       updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
@@ -353,6 +409,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       deleteBatch: deleteBatchOp,
       list: listOp<T, E['queryParameters']>,
       listAll: listAllOp<T, E['queryParameters']>,
+      listByPage: listByPageOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
       updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
