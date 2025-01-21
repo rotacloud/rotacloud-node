@@ -239,9 +239,7 @@ export const SERVICES = {
       }),
       updateSwap: (
         { request },
-        swapRequest:
-          | RequirementsOf<ShiftSwapRequest, 'id' | 'admin_approved'>
-          | RequirementsOf<ShiftSwapRequest, 'id' | 'user_approved'>,
+        swapRequest: RequirementsOf<ShiftSwapRequest, 'id'>,
       ): RequestConfig<{ admin_approved: boolean } | { user_approved: boolean }, ShiftSwapRequest> => {
         let payload: { admin_approved: boolean } | { user_approved: boolean } | undefined;
         if (swapRequest.admin_approved !== null && swapRequest.admin_approved !== undefined) {
