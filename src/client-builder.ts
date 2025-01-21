@@ -75,9 +75,14 @@ export function createSdkClient<T extends Record<string, ServiceSpecification>>(
     let requestConfig = getBaseRequestConfig(clientConfig);
 
     const sdkClient = {
-      get fetch() {
-        return axiosClient.request;
-      },
+      fetch: (req) =>
+        axiosClient.request({
+          ...req,
+          headers: {
+            ...req.headers,
+            ...requestConfig.headers,
+          },
+        }),
       get config() {
         return clientConfig;
       },
