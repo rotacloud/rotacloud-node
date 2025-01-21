@@ -148,10 +148,7 @@ export function createCustomAxiosClient(config: Readonly<SDKConfig>): Axios {
  * for an {@see OpFunction} to adapt/use
  */
 export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknown> {
-  const headers: Record<string, string> = {
-    Authorization: opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`,
-    'SDK-Version': version,
-  };
+  const headers: Record<string, string> = {};
 
   const extraHeaders = opts.headers;
   if (extraHeaders && typeof extraHeaders === 'object') {
@@ -162,6 +159,12 @@ export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknow
   if (opts.accountId) {
     headers.Account = String(opts.accountId);
   }
+
+  // Set last to prevent being overridden
+  // if (typeof opts.apiKey !== 'string' && typeof opts.basicAuth !== 'string')
+  //   throw new SDKError({ message: 'No auth provided to SDK' });
+  headers.Authorization = opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`;
+  headers['SDK-Version'] = pkg.version;
 
   return {
     headers,
