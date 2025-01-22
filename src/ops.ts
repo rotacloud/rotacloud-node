@@ -261,7 +261,7 @@ function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unkn
 /** Operation for listing all entities on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
-async function* listOp<T, Query>(
+export async function* listOp<T, Query>(
   ctx: OperationContext,
   query: Query,
   // NOTE: offset is only supported in v1
@@ -294,7 +294,7 @@ async function* listOp<T, Query>(
 }
 
 /** Operation for listing all entities on an endpoint for a given query as an array */
-async function listAllOp<T, Query>(
+export async function listAllOp<T, Query>(
   ctx: OperationContext,
   query: Query,
   // NOTE: offset is only supported in v1

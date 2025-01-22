@@ -8,16 +8,18 @@ import {
   LeaveType,
   ShiftHistoryRecord,
   Terminal,
+  ToilAllowance,
   UserBreak,
   UserClockedIn,
   UserClockedOut,
 } from './interfaces/index.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
-import { OpDef, Operation, OperationContext, RequestConfig, paramsFromOptions } from './ops.js';
+import { OpDef, Operation, OperationContext, RequestConfig, listAllOp, listOp, paramsFromOptions } from './ops.js';
 import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
 import { RequirementsOf, RequestOptions } from './utils.js';
 import { ShiftSwapRequest } from './interfaces/swap-request.interface.js';
 import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
+import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -311,6 +313,36 @@ export const SERVICES = {
     endpoint: 'toil_allowance',
     endpointVersion: 'v1',
     operations: ['list', 'listAll'],
+    customOperations: {
+      list: (ctx, query: ToilAllowanceQueryParams, opts) =>
+        // Maps the "year" query parameter into the endpoint URL
+        listOp<ToilAllowance, Omit<typeof query, 'year'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/${query.year}` as typeof ctx.service.endpoint,
+              endpointVersion: 'v1',
+            },
+          },
+          { users: query.users },
+          opts,
+        ),
+      listAll: (ctx, query: ToilAllowanceQueryParams, opts) =>
+        // Maps the "year" query parameter into the endpoint URL
+        listAllOp<ToilAllowance, Omit<typeof query, 'year'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/${query.year}` as typeof ctx.service.endpoint,
+              endpointVersion: 'v1',
+            },
+          },
+          { users: query.users },
+          opts,
+        ),
+    },
   },
   userClockIn: {
     endpoint: 'users_clocked_in',
