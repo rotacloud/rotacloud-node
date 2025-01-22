@@ -33,7 +33,7 @@ You will find a `list()` method on most services within the SDK which can be con
 const client = createRotaCloudClient({...})
 
 try {
-  for await (const user of client.user.list({})) {
+  for await (const user of client.user.list()) {
     console.log(user);
   }
 } catch (e) {
