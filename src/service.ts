@@ -65,7 +65,7 @@ export const SERVICES = {
     customOperations: {
       get: ({ request, service }): RequestConfig<void, Auth> => ({
         ...request,
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         method: 'GET',
       }),
     },
@@ -78,7 +78,7 @@ export const SERVICES = {
       update: ({ request, service }, entity: Availability): RequestConfig<typeof entity, Availability> => ({
         ...request,
         method: 'POST',
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         data: entity,
       }),
       delete: (
@@ -87,7 +87,7 @@ export const SERVICES = {
       ): RequestConfig<Availability, Availability> => ({
         ...request,
         method: 'POST',
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         data: {
           ...entity,
           dates: entity.dates.map((date) => ({
@@ -107,7 +107,7 @@ export const SERVICES = {
       updateBatch: ({ request, service }, entities: DailyBudgets[]): RequestConfig<typeof entities, void> => ({
         ...request,
         method: 'POST',
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         data: entities,
       }),
     },
@@ -120,7 +120,7 @@ export const SERVICES = {
       updateBatch: ({ request, service }, entities: DailyRevenue[]): RequestConfig<typeof entities, void> => ({
         ...request,
         method: 'POST',
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         data: entities,
       }),
     },
@@ -167,7 +167,7 @@ export const SERVICES = {
       ): RequestConfig<typeof entity, Leave[]> => ({
         ...request,
         method: 'POST',
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         data: entity,
         headers: {
           ...request.headers,
