@@ -179,14 +179,11 @@ export const SERVICES = {
           ...paramsFromOptions(opts ?? {}),
         },
       }),
-      types: ({ request }): RequestConfig<void, LeaveType[]> => {
-        const req = {
-          ...request,
-          method: 'GET',
-          url: 'v1/leave_types',
-        };
-        return req;
-      },
+      types: ({ request }): RequestConfig<void, LeaveType[]> => ({
+        ...request,
+        method: 'GET',
+        url: 'v1/leave_types',
+      }),
     },
   },
   location: {
