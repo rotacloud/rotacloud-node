@@ -102,9 +102,9 @@ export const SERVICES = {
   dailyBudget: {
     endpoint: 'daily_budgets',
     endpointVersion: 'v1',
-    operations: ['list', 'listAll', 'update'],
+    operations: ['list', 'listAll', 'updateBatch'],
     customOperations: {
-      update: ({ request, service }, entities: DailyBudgets[]): RequestConfig<typeof entities, void> => ({
+      updateBatch: ({ request, service }, entities: DailyBudgets[]): RequestConfig<typeof entities, void> => ({
         ...request,
         method: 'POST',
         url: service.endpoint,
@@ -115,9 +115,9 @@ export const SERVICES = {
   dailyRevenue: {
     endpoint: 'daily_revenue',
     endpointVersion: 'v1',
-    operations: ['list', 'listAll', 'update'],
+    operations: ['list', 'listAll', 'updateBatch'],
     customOperations: {
-      update: ({ request, service }, entities: DailyRevenue[]): RequestConfig<typeof entities, void> => ({
+      updateBatch: ({ request, service }, entities: DailyRevenue[]): RequestConfig<typeof entities, void> => ({
         ...request,
         method: 'POST',
         url: service.endpoint,
