@@ -2,6 +2,7 @@ import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ServiceSpecification } from './service.js';
 import { RequestOptions, QueryParameterValue, RequirementsOf, assert } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
+import { SDKConfig } from './main.js';
 
 /** Supported common operations */
 export type Operation =
@@ -19,6 +20,7 @@ export type OperationContext = {
   client: Readonly<Axios>;
   request: Readonly<AxiosRequestConfig>;
   service: Readonly<ServiceSpecification>;
+  sdkConfig: Readonly<SDKConfig>;
 };
 
 /** Defines the mapping between the data sent for a given request (e.g with

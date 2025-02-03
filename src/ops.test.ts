@@ -42,6 +42,7 @@ describe('Operations', () => {
         client: mockAxiosClient,
         request: {},
         service,
+        sdkConfig: { apiKey: '' },
       },
       1,
     );

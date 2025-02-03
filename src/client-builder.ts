@@ -105,6 +105,10 @@ export function createSdkClient<T extends Record<string, ServiceSpecification>>(
         get request() {
           return requestConfig;
         },
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        get sdkConfig() {
+          return clientConfig;
+        },
       });
     }
 

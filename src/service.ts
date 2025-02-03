@@ -163,7 +163,7 @@ export const SERVICES = {
     operations: ['get', 'list', 'listAll', 'delete', 'create', 'update'],
     customOperations: {
       create: (
-        { request, service }: OperationContext,
+        { request, service, sdkConfig }: OperationContext,
         entity: EndpointEntityMap['v1']['leave']['createType'],
         opts?: RequestOptions<Leave>,
       ): RequestConfig<typeof entity, Leave[]> => ({
@@ -173,7 +173,7 @@ export const SERVICES = {
         data: entity,
         headers: {
           ...request.headers,
-          Account: undefined,
+          Account: sdkConfig.accountId,
           User: entity.user,
         },
         params: {
