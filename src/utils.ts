@@ -161,8 +161,6 @@ export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknow
   }
 
   // Set last to prevent being overridden
-  // if (typeof opts.apiKey !== 'string' && typeof opts.basicAuth !== 'string')
-  //   throw new SDKError({ message: 'No auth provided to SDK' });
   headers.Authorization = opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`;
   headers['SDK-Version'] = pkg.version;
 
