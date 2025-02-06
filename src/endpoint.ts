@@ -71,7 +71,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     attendance: Endpoint<Attendance, AttendanceQueryParams, 'user' | 'in_time'>;
     auth: Endpoint<Auth>;
     availability: Endpoint<Availability, AvailabilityQueryParams>;
-    daily_budget: Endpoint<DailyBudgets, DailyBudgetsQueryParams>;
+    daily_budgets: Endpoint<DailyBudgets, DailyBudgetsQueryParams>;
     daily_revenue: Endpoint<DailyRevenue, DailyRevenueQueryParams>;
     day_notes: Endpoint<DayNote, DayNotesQueryParams>;
     days_off: Endpoint<DaysOff, DaysOffQueryParams>;
@@ -91,7 +91,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     timezones: Endpoint<TimeZone>;
     toil_accruals: Endpoint<ToilAccrual, ToilAccrualsQueryParams, 'duration_hours' | 'leave_year' | 'user_id'>;
     toil_allowance: Endpoint<ToilAllowance, ToilAllowanceQueryParams>;
-    users_clocked_in: Endpoint<UserClockedIn, {} | undefined, 'in_method'>;
+    users_clocked_in: Endpoint<UserClockedIn, undefined, 'in_method'>;
     users: Endpoint<User, UsersQueryParams, 'first_name' | 'last_name'>;
   };
   /** Type mappings for v2 endpoints */

@@ -75,9 +75,14 @@ export function createSdkClient<T extends Record<string, ServiceSpecification>>(
     let requestConfig = getBaseRequestConfig(clientConfig);
 
     const sdkClient = {
-      get fetch() {
-        return axiosClient.request;
-      },
+      fetch: (req) =>
+        axiosClient.request({
+          ...req,
+          headers: {
+            ...req.headers,
+            ...requestConfig.headers,
+          },
+        }),
       get config() {
         return clientConfig;
       },
@@ -99,6 +104,10 @@ export function createSdkClient<T extends Record<string, ServiceSpecification>>(
         // eslint-disable-next-line @typescript-eslint/no-loop-func
         get request() {
           return requestConfig;
+        },
+        // eslint-disable-next-line @typescript-eslint/no-loop-func
+        get sdkConfig() {
+          return clientConfig;
         },
       });
     }

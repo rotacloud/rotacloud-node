@@ -1,28 +1,34 @@
 import { EndpointEntityMap } from './endpoint.js';
 import {
-  LeaveRequest,
+  Auth,
+  Availability,
+  DailyBudgets,
+  DailyRevenue,
+  Leave,
   LeaveType,
   ShiftHistoryRecord,
   Terminal,
+  ToilAllowance,
   UserBreak,
   UserClockedIn,
   UserClockedOut,
 } from './interfaces/index.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
-import { OpDef, Operation, OperationContext, RequestConfig, paramsFromOptions } from './ops.js';
+import { OpDef, Operation, OperationContext, RequestConfig, listAllOp, listOp, paramsFromOptions } from './ops.js';
 import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
 import { RequirementsOf, RequestOptions } from './utils.js';
 import { ShiftSwapRequest } from './interfaces/swap-request.interface.js';
 import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
+import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 
-export type ServiceSpecification<T extends OpDef<any> = any> = {
+export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
   operations: Operation[];
   /**
    * Operations unique to the service
    * Can be used to override operations listed in {@see ServiceSpecification['operations']}
    */
-  customOperations?: Record<string, T>;
+  customOperations?: Record<string, CustomOp>;
 } & (
   | {
       /** URL of the endpoint */
@@ -57,22 +63,69 @@ export const SERVICES = {
   auth: {
     endpoint: 'auth',
     endpointVersion: 'v1',
-    operations: ['get'],
+    operations: [],
+    customOperations: {
+      get: ({ request, service }): RequestConfig<void, Auth> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'GET',
+      }),
+    },
   },
   availability: {
     endpoint: 'availability',
     endpointVersion: 'v1',
     operations: ['update', 'create', 'delete', 'list', 'listAll'],
+    customOperations: {
+      update: ({ request, service }, entity: Availability): RequestConfig<typeof entity, Availability> => ({
+        ...request,
+        method: 'POST',
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        data: entity,
+      }),
+      delete: (
+        { request, service },
+        entity: { user: number; dates: string[] },
+      ): RequestConfig<Availability, Availability> => ({
+        ...request,
+        method: 'POST',
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        data: {
+          ...entity,
+          dates: entity.dates.map((date) => ({
+            date,
+            available: [],
+            unavailable: [],
+          })),
+        },
+      }),
+    },
   },
   dailyBudget: {
-    endpoint: 'daily_budget',
+    endpoint: 'daily_budgets',
     endpointVersion: 'v1',
-    operations: ['list', 'listAll', 'update'],
+    operations: ['list', 'listAll', 'updateBatch'],
+    customOperations: {
+      updateBatch: ({ request, service }, entities: DailyBudgets[]): RequestConfig<typeof entities, void> => ({
+        ...request,
+        method: 'POST',
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        data: entities,
+      }),
+    },
   },
   dailyRevenue: {
     endpoint: 'daily_revenue',
     endpointVersion: 'v1',
-    operations: ['list', 'listAll', 'update'],
+    operations: ['list', 'listAll', 'updateBatch'],
+    customOperations: {
+      updateBatch: ({ request, service }, entities: DailyRevenue[]): RequestConfig<typeof entities, void> => ({
+        ...request,
+        method: 'POST',
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        data: entities,
+      }),
+    },
   },
   dayNote: {
     endpoint: 'day_notes',
@@ -107,20 +160,20 @@ export const SERVICES = {
   leave: {
     endpoint: 'leave',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'listAll', 'delete', 'create'],
+    operations: ['get', 'list', 'listAll', 'delete', 'create', 'update'],
     customOperations: {
       create: (
-        { request, service }: OperationContext,
-        entity: RequirementsOf<LeaveRequest, 'user'>,
-        opts?: RequestOptions<LeaveRequest>,
-      ): RequestConfig<typeof entity, LeaveRequest> => ({
+        { request, service, sdkConfig }: OperationContext,
+        entity: EndpointEntityMap['v1']['leave']['createType'],
+        opts?: RequestOptions<Leave>,
+      ): RequestConfig<typeof entity, Leave[]> => ({
         ...request,
         method: 'POST',
-        url: service.endpoint,
+        url: `${service.endpointVersion}/${service.endpoint}`,
         data: entity,
         headers: {
           ...request.headers,
-          Account: undefined,
+          Account: sdkConfig.accountId,
           User: entity.user,
         },
         params: {
@@ -158,7 +211,7 @@ export const SERVICES = {
   shift: {
     endpoint: 'shifts',
     endpointVersion: 'v1',
-    operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+    operations: ['create', 'get', 'list', 'listAll', 'update', 'updateBatch', 'delete', 'deleteBatch'],
     customOperations: {
       acknowledge: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,
@@ -186,18 +239,27 @@ export const SERVICES = {
       updateSwap: (
         { request },
         swapRequest: RequirementsOf<ShiftSwapRequest, 'id'>,
-      ): RequestConfig<{ shifts: number[] }, void> => ({
-        ...request,
-        method: 'DELETE',
-        url: `v1/swap_requests/${swapRequest.id}`,
-        data: swapRequest,
-      }),
+      ): RequestConfig<{ admin_approved: boolean } | { user_approved: boolean }, ShiftSwapRequest> => {
+        let payload: { admin_approved: boolean } | { user_approved: boolean } | undefined;
+        if (swapRequest.admin_approved !== null && swapRequest.admin_approved !== undefined) {
+          payload = { admin_approved: swapRequest.admin_approved };
+        } else if (swapRequest.user_approved !== null && swapRequest.user_approved !== undefined) {
+          payload = { user_approved: swapRequest.user_approved };
+        }
+
+        return {
+          ...request,
+          method: 'POST',
+          url: `v1/swap_requests/${swapRequest.id}`,
+          data: payload,
+        };
+      },
       updateDrop: (
         { request },
         dropRequest: { request: RequirementsOf<ShiftDropRequest, 'id' | 'user_message'>; approved: boolean },
-      ): RequestConfig<{ shifts: number[] }, void> => ({
+      ): RequestConfig<{ message: string }, ShiftDropRequest> => ({
         ...request,
-        method: 'DELETE',
+        method: 'POST',
         url: `v1/unavailability_requests/${dropRequest.request.id}/${dropRequest.approved ? 'approve' : 'deny'}`,
         data: { message: dropRequest.request.user_message },
       }),
@@ -245,12 +307,42 @@ export const SERVICES = {
   toilAccrual: {
     endpoint: 'toil_accruals',
     endpointVersion: 'v1',
-    operations: ['create', 'get', 'list', 'listAll', 'delete'],
+    operations: ['create', 'get', 'list', 'listAll', 'listByPage', 'delete'],
   },
   toilAllowance: {
     endpoint: 'toil_allowance',
     endpointVersion: 'v1',
     operations: ['list', 'listAll'],
+    customOperations: {
+      list: (ctx, query: ToilAllowanceQueryParams, opts) =>
+        // Maps the "year" query parameter into the endpoint URL
+        listOp<ToilAllowance, Omit<typeof query, 'year'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/${query.year}` as typeof ctx.service.endpoint,
+              endpointVersion: 'v1',
+            },
+          },
+          { users: query.users },
+          opts,
+        ),
+      listAll: (ctx, query: ToilAllowanceQueryParams, opts) =>
+        // Maps the "year" query parameter into the endpoint URL
+        listAllOp<ToilAllowance, Omit<typeof query, 'year'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/${query.year}` as typeof ctx.service.endpoint,
+              endpointVersion: 'v1',
+            },
+          },
+          { users: query.users },
+          opts,
+        ),
+    },
   },
   userClockIn: {
     endpoint: 'users_clocked_in',

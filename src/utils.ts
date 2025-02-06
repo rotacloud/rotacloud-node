@@ -1,9 +1,8 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
-import assert from 'assert';
 import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
 import { SDKError } from './models/index.js';
-import { version } from '../package.json' assert { type: 'json' };
+import pkg from '../package.json' with { type: 'json' };
 
 /** Creates a `Partial<T>` where all properties specified by `K` are required
  *
@@ -46,6 +45,17 @@ const DEFAULT_RETRY_STRATEGY_OPTIONS: Record<RetryStrategy, RetryOptions> = {
     delay: DEFAULT_RETRY_DELAY,
   },
 };
+
+class AssertionError extends Error {
+  override name = AssertionError.prototype.name;
+}
+
+export function assert(value: unknown, message?: string | Error): asserts value {
+  if (value) return;
+  if (!message || typeof message === 'string')
+    throw new AssertionError(message ?? `Assertion failed - value = ${value}`);
+  throw message;
+}
 
 function parseClientError(error: AxiosError): SDKError {
   const axiosErrorLocation = error.response || error.request;
@@ -138,10 +148,7 @@ export function createCustomAxiosClient(config: Readonly<SDKConfig>): Axios {
  * for an {@see OpFunction} to adapt/use
  */
 export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknown> {
-  const headers: Record<string, string> = {
-    Authorization: opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`,
-    'SDK-Version': version,
-  };
+  const headers: Record<string, string> = {};
 
   const extraHeaders = opts.headers;
   if (extraHeaders && typeof extraHeaders === 'object') {
@@ -152,6 +159,10 @@ export function getBaseRequestConfig(opts: SDKConfig): AxiosRequestConfig<unknow
   if (opts.accountId) {
     headers.Account = String(opts.accountId);
   }
+
+  // Set last to prevent being overridden
+  headers.Authorization = opts.apiKey ? `Bearer ${opts.apiKey}` : `Basic ${opts.basicAuth}`;
+  headers['SDK-Version'] = pkg.version;
 
   return {
     headers,
