@@ -146,6 +146,23 @@ export type OpFunction<R = any, Param = undefined, Opts = RequestOptions<unknown
           (entity: Param, options?: RequestOptions<Awaited<R>>): R;
         };
 
+/** Wrapper type for expressing the response returned by a v2 list op supported endpoint */
+interface PagedResponse<T> {
+  /** List of entities in a page */
+  data: T[];
+  /** Metadata about the current page */
+  pagination: {
+    /**
+     * The "cursor" for the next page where `null` means there is no next page
+     *
+     * Used as a value to the query parameter `cursor` in a supported endpoint
+     */
+    next: string | null;
+    /** Total count of entities matching the list query */
+    count: number;
+  };
+}
+
 /** Utility for creating a query params map needed by most API requests */
 export function paramsFromOptions<T>(opts: RequestOptions<T>): Record<string, QueryParameterValue> {
   return {
@@ -260,15 +277,7 @@ function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unkn
   };
 }
 
-interface PagedResponse<T> {
-  data: T[];
-  pagination: {
-    next: string | null;
-    count: number;
-  };
-}
-
-/** Operation for listing all entities on an endpoint for a given query by
+/** Operation for listing all entities on a v1 endpoint for a given query by
  * automatically handling pagination as and when needed
  */
 export async function* listOp<T, Query>(
@@ -304,7 +313,7 @@ export async function* listOp<T, Query>(
   }
 }
 
-/** Operation for listing all entities on an endpoint for a given query by
+/** Operation for listing all entities on a v2 endpoint for a given query by
  * automatically handling pagination as and when needed
  */
 export async function* listV2Op<T, Query>(
@@ -349,7 +358,7 @@ export async function* listV2Op<T, Query>(
   }
 }
 
-/** Operation for listing all entities on an endpoint for a given query as an array */
+/** Operation for listing all entities on a v1 endpoint for a given query as an array */
 export async function listAllOp<T, Query>(
   ctx: OperationContext,
   query: Query,
@@ -363,7 +372,7 @@ export async function listAllOp<T, Query>(
   return results;
 }
 
-/** Operation for listing all entities on an endpoint for a given query as an array */
+/** Operation for listing all entities on a v2 endpoint for a given query as an array */
 export async function listAllV2Op<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>) {
   const results: T[] = [];
   for await (const entity of listV2Op<T, Query>(ctx, query, opts)) {
@@ -372,7 +381,7 @@ export async function listAllV2Op<T, Query>(ctx: OperationContext, query: Query,
   return results;
 }
 
-/** Operation for listing all entity pages on an endpoint for a given query by
+/** Operation for listing all entity pages on a v1 endpoint for a given query by
  * automatically handling pagination as and when needed
  */
 async function* listByPageOp<T, Query>(
@@ -406,7 +415,7 @@ async function* listByPageOp<T, Query>(
   }
 }
 
-/** Operation for listing all entity pages on an endpoint for a given query by
+/** Operation for listing all entity pages on a v2 endpoint for a given query by
  * automatically handling pagination as and when needed
  */
 async function* listByPageV2Op<T, Query>(
