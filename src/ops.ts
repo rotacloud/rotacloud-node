@@ -435,7 +435,7 @@ async function* listByPageV2Op<T, Query>(
   const maxEntities = opts?.maxResults ?? Infinity;
   let entityCount = res.data.data.length;
 
-  assert(Array.isArray(res.data), 'listByPage can only be performed on endpoints returning an array');
+  assert(Array.isArray(res.data.data), 'listByPage can only be performed on endpoints returning an array');
   yield res;
   if (entityCount >= maxEntities) return;
 
