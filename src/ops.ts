@@ -263,9 +263,7 @@ function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unkn
 interface PagedResponse<T> {
   data: T[];
   pagination: {
-    next?: string;
-    prev?: string;
-    last?: string;
+    next: string | null;
     count: number;
   };
 }
@@ -320,31 +318,33 @@ export async function* listV2Op<T, Query>(
     params: {
       ...ctx.request.params,
       ...query,
+      limit: opts?.maxResults,
     },
   };
   const res = await ctx.client.request<PagedResponse<T>>(queriedRequest);
   const { data: entities, pagination } = res.data;
   const maxEntities = opts?.maxResults ?? Infinity;
-  let entityCount = entities.length;
+  let pagedEntityCount = entities.length;
 
   assert(Array.isArray(entities), 'list can only be performed on endpoints returning an array');
   yield* entities.slice(0, maxEntities);
-  if (entityCount >= maxEntities) return;
+  if (pagedEntityCount >= maxEntities) return;
 
-  let nextPage = pagination.next;
+  let nextPage: string | undefined = pagination.next ?? undefined;
   while (nextPage !== undefined) {
     const pagedRes = await ctx.client.request<PagedResponse<T>>({
       ...queriedRequest,
       params: {
         ...queriedRequest.params,
+        limit: pagedEntityCount,
         cursor: nextPage,
       },
     });
-    nextPage = pagedRes.data.pagination.next;
+    nextPage = pagedRes.data.pagination.next ?? undefined;
     for (const entity of pagedRes.data.data) {
       yield entity;
-      entityCount += 1;
-      if (entityCount >= maxEntities) return;
+      pagedEntityCount += 1;
+      if (pagedEntityCount >= maxEntities) return;
     }
   }
 }
