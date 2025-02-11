@@ -260,6 +260,16 @@ function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unkn
   };
 }
 
+interface PagedResponse<T> {
+  data: T[];
+  pagination: {
+    next?: string;
+    prev?: string;
+    last?: string;
+    count: number;
+  };
+}
+
 /** Operation for listing all entities on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
@@ -271,13 +281,14 @@ export async function* listOp<T, Query>(
 ): AsyncGenerator<T> {
   const queriedRequest = {
     ...ctx.request,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
     params: {
       ...ctx.request.params,
       ...query,
       offset: opts?.offset,
     },
   };
-  const res = await ctx.client.get<T[]>(`${ctx.service.endpointVersion}/${ctx.service.endpoint}`, queriedRequest);
+  const res = await ctx.client.request<T[]>(queriedRequest);
   const maxEntities = opts?.maxResults ?? Infinity;
   let entityCount = res.data.length;
 
@@ -286,8 +297,51 @@ export async function* listOp<T, Query>(
   if (entityCount >= maxEntities) return;
 
   for (const pagedRequest of requestPaginated(res, ctx.request)) {
-    const pagedRes = await ctx.client.get<T[]>(ctx.service.endpoint, pagedRequest);
+    const pagedRes = await ctx.client.request<T[]>(pagedRequest);
     for (const entity of pagedRes.data) {
+      yield entity;
+      entityCount += 1;
+      if (entityCount >= maxEntities) return;
+    }
+  }
+}
+
+/** Operation for listing all entities on an endpoint for a given query by
+ * automatically handling pagination as and when needed
+ */
+export async function* listV2Op<T, Query>(
+  ctx: OperationContext,
+  query: Query,
+  opts?: RequestOptions<T[]>,
+): AsyncGenerator<T> {
+  const queriedRequest = {
+    ...ctx.request,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
+    params: {
+      ...ctx.request.params,
+      ...query,
+    },
+  };
+  const res = await ctx.client.request<PagedResponse<T>>(queriedRequest);
+  const { data: entities, pagination } = res.data;
+  const maxEntities = opts?.maxResults ?? Infinity;
+  let entityCount = entities.length;
+
+  assert(Array.isArray(entities), 'list can only be performed on endpoints returning an array');
+  yield* entities.slice(0, maxEntities);
+  if (entityCount >= maxEntities) return;
+
+  let nextPage = pagination.next;
+  while (nextPage !== undefined) {
+    const pagedRes = await ctx.client.request<PagedResponse<T>>({
+      ...queriedRequest,
+      params: {
+        ...queriedRequest.params,
+        cursor: nextPage,
+      },
+    });
+    nextPage = pagedRes.data.pagination.next;
+    for (const entity of pagedRes.data.data) {
       yield entity;
       entityCount += 1;
       if (entityCount >= maxEntities) return;
@@ -309,6 +363,15 @@ export async function listAllOp<T, Query>(
   return results;
 }
 
+/** Operation for listing all entities on an endpoint for a given query as an array */
+export async function listAllV2Op<T, Query>(ctx: OperationContext, query: Query, opts?: RequestOptions<T[]>) {
+  const results: T[] = [];
+  for await (const entity of listV2Op<T, Query>(ctx, query, opts)) {
+    results.push(entity);
+  }
+  return results;
+}
+
 /** Operation for listing all entity pages on an endpoint for a given query by
  * automatically handling pagination as and when needed
  */
@@ -320,13 +383,14 @@ async function* listByPageOp<T, Query>(
 ): AsyncGenerator<AxiosResponse<T[]>> {
   const queriedRequest = {
     ...ctx.request,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
     params: {
       ...ctx.request.params,
       ...query,
       offset: opts?.offset,
     },
   };
-  const res = await ctx.client.get<T[]>(`${ctx.service.endpointVersion}/${ctx.service.endpoint}`, queriedRequest);
+  const res = await ctx.client.request<T[]>(queriedRequest);
   const maxEntities = opts?.maxResults ?? Infinity;
   let entityCount = res.data.length;
 
@@ -335,9 +399,49 @@ async function* listByPageOp<T, Query>(
   if (entityCount >= maxEntities) return;
 
   for (const pagedRequest of requestPaginated(res, ctx.request)) {
-    const pagedRes = await ctx.client.get<T[]>(ctx.service.endpoint, pagedRequest);
+    const pagedRes = await ctx.client.request<T[]>(pagedRequest);
     yield pagedRes;
     entityCount += pagedRes.data.length;
+    if (entityCount >= maxEntities) return;
+  }
+}
+
+/** Operation for listing all entity pages on an endpoint for a given query by
+ * automatically handling pagination as and when needed
+ */
+async function* listByPageV2Op<T, Query>(
+  ctx: OperationContext,
+  query: Query,
+  opts?: RequestOptions<T[]>,
+): AsyncGenerator<AxiosResponse<PagedResponse<T>>> {
+  const queriedRequest = {
+    ...ctx.request,
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
+    params: {
+      ...ctx.request.params,
+      ...query,
+    },
+  };
+  const res = await ctx.client.request<PagedResponse<T>>(queriedRequest);
+  const maxEntities = opts?.maxResults ?? Infinity;
+  let entityCount = res.data.data.length;
+
+  assert(Array.isArray(res.data), 'listByPage can only be performed on endpoints returning an array');
+  yield res;
+  if (entityCount >= maxEntities) return;
+
+  let nextPage = res.data.pagination.next;
+  while (nextPage !== undefined) {
+    const pagedRes = await ctx.client.request<PagedResponse<T>>({
+      ...queriedRequest,
+      params: {
+        ...queriedRequest.params,
+        cursor: nextPage,
+      },
+    });
+    nextPage = pagedRes.data.pagination.next;
+    yield pagedRes;
+    entityCount += pagedRes.data.data.length;
     if (entityCount >= maxEntities) return;
   }
 }
@@ -409,9 +513,9 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       get: getOp<T>,
       delete: deleteOp,
       deleteBatch: deleteBatchOp,
-      list: listOp<T, E['queryParameters']>,
-      listAll: listAllOp<T, E['queryParameters']>,
-      listByPage: listByPageOp<T, E['queryParameters']>,
+      list: listV2Op<T, E['queryParameters']>,
+      listAll: listAllV2Op<T, E['queryParameters']>,
+      listByPage: listByPageV2Op<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
       update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
       updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
