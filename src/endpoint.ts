@@ -102,7 +102,6 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
   };
   /** Type mappings for v2 endpoints */
   v2: {
-    // TODO: fill in properly
     logbook: Endpoint<LogbookEntry, LogbookQueryParameters, 'name' | 'description' | 'date' | 'userId'>;
     'logbook/categories': Endpoint<LogbookCategory, undefined, Pick<LogbookCategory, 'name'>>;
   };
