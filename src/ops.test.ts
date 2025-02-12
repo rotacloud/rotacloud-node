@@ -63,12 +63,12 @@ describe('Operations', () => {
 
   describe('list op', () => {
     test('respects `maxResults` parameter in legacy pagination', async () => {
-      vi.spyOn(mockAxiosClient, 'get').mockImplementation(() => Promise.resolve({ data: [] }));
+      vi.spyOn(mockAxiosClient, 'request').mockResolvedValue({ data: [] });
 
       await client.service.list({}, { maxResults: 2 }).next();
-      expect(mockAxiosClient.get).toHaveBeenCalledWith(
-        expect.any(String),
+      expect(mockAxiosClient.request).toHaveBeenCalledWith(
         expect.objectContaining({
+          url: expect.any(String),
           params: {
             limit: 2,
           },
@@ -79,39 +79,35 @@ describe('Operations', () => {
     test('automatically paginates', async () => {
       const pageTotal = 3;
       let pageCount = 0;
-      vi.spyOn(mockAxiosClient, 'get').mockImplementation(() =>
-        Promise.resolve({
-          headers: {
-            'x-limit': 1,
-            'x-total-count': pageTotal,
-            // eslint-disable-next-line no-plusplus
-            'x-offset': pageCount++,
-          },
-          data: [],
-        }),
-      );
+      vi.spyOn(mockAxiosClient, 'request').mockResolvedValue({
+        headers: {
+          'x-limit': 1,
+          'x-total-count': pageTotal,
+          // eslint-disable-next-line no-plusplus
+          'x-offset': pageCount++,
+        },
+        data: [],
+      });
 
       for await (const res of client.service.list({})) {
         res;
       }
-      expect(mockAxiosClient.get).toHaveBeenCalledTimes(pageTotal);
+      expect(mockAxiosClient.request).toHaveBeenCalledTimes(pageTotal);
     });
 
     test('stops automatic pagination after maxResults reached', async () => {
       const pageLimit = 2;
       const pageTotal = 6;
       let pageCount = 0;
-      vi.spyOn(mockAxiosClient, 'get').mockImplementation(() =>
-        Promise.resolve({
-          headers: {
-            'x-limit': pageLimit,
-            'x-total-count': pageTotal,
-            // eslint-disable-next-line no-plusplus
-            'x-offset': pageCount++,
-          },
-          data: new Array(pageLimit).fill('entity'),
-        }),
-      );
+      vi.spyOn(mockAxiosClient, 'request').mockResolvedValue({
+        headers: {
+          'x-limit': pageLimit,
+          'x-total-count': pageTotal,
+          // eslint-disable-next-line no-plusplus
+          'x-offset': pageCount++,
+        },
+        data: new Array(pageLimit).fill('entity'),
+      });
 
       let resultCount = 0;
       for await (const res of client.service.list({}, { maxResults: 3 })) {
@@ -119,7 +115,7 @@ describe('Operations', () => {
         res;
       }
       expect(resultCount).toBe(3);
-      expect(mockAxiosClient.get).toHaveBeenCalledTimes(2);
+      expect(mockAxiosClient.request).toHaveBeenCalledTimes(2);
     });
   });
 });

@@ -57,16 +57,6 @@ export function assert(value: unknown, message?: string | Error): asserts value 
   throw message;
 }
 
-function parseClientError(error: AxiosError): SDKError {
-  const axiosErrorLocation = error.response || error.request;
-  const apiErrorMessage = axiosErrorLocation.data?.error;
-  return new SDKError({
-    code: axiosErrorLocation.status,
-    message: apiErrorMessage || error.message,
-    data: axiosErrorLocation.data,
-  });
-}
-
 /** Converts a map of query parameter key/values into API compatible {@see URLSearchParams} */
 function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSearchParams {
   const queryParams: Record<string, QueryParameterValue> = { ...parameters };
@@ -79,6 +69,26 @@ function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSe
   }, [] as string[][]);
 
   return new URLSearchParams(reducedParams);
+}
+
+function parseClientError(error: AxiosError): SDKError {
+  const axiosErrorLocation = error.response || error.request;
+  const apiErrorMessage = axiosErrorLocation.data?.error;
+  let url: URL | undefined;
+  try {
+    url = new URL(error.config?.url ?? '', error.config?.baseURL);
+    for (const [key, value] of toSearchParams(error.config?.params)) {
+      url.searchParams.set(key, value);
+    }
+  } catch (err) {
+    url = undefined;
+  }
+  return new SDKError({
+    url: url?.toString(),
+    code: axiosErrorLocation.status,
+    message: apiErrorMessage || error.message,
+    data: axiosErrorLocation.data,
+  });
 }
 
 /** Creates and configures an Axios client for use in all calls to API endpoints
