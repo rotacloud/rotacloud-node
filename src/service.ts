@@ -39,6 +39,7 @@ export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> =
    * Can be used to override operations listed in {@see ServiceSpecification['operations']}
    */
   customOperations?: Record<string, CustomOp>;
+  subService?: Record<string, ServiceSpecification<CustomOp>>;
 } & (
   | {
       /** URL of the endpoint */

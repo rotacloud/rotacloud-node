@@ -26,8 +26,21 @@ type ServiceCustomOps<Spec extends ServiceSpecification> = {
     ? ReturnType<typeof buildOp<Spec['customOperations'][Key]>>
     : never;
 };
+
+/** Mapped index type of all sub services defined on a provided {@link ServiceSpecification] */
+type ServiceSubServices<Spec extends ServiceSpecification> = {
+  [Key in keyof Spec['subService']]: Spec['subService'][Key] extends ServiceSpecification
+    ? Service<Spec['subService'][Key]>
+    : never;
+};
+
+/**
+ * Service constructed from a provided {@link ServiceSpecification} consisting of
+ * built operation methods and sub services
+ */
 type Service<Spec extends ServiceSpecification> = Omit<ServiceOps<Spec>, keyof ServiceCustomOps<Spec>> &
-  ServiceCustomOps<Spec>;
+  ServiceCustomOps<Spec> &
+  ServiceSubServices<Spec>;
 
 export type SdkClient<T extends Record<string, ServiceSpecification>> = {
   [ServiceName in keyof T]: Service<T[ServiceName]>;
@@ -58,6 +71,20 @@ function serviceForContext<Spec extends ServiceSpecification>(opContext: Operati
   }
   for (const [customOpName, customOpFunc] of Object.entries(opContext.service.customOperations ?? {})) {
     service[customOpName] = buildOp(opContext, customOpFunc);
+  }
+  for (const [subServiceName, subServiceSpec] of Object.entries(opContext.service.subService ?? {})) {
+    service[subServiceName] = serviceForContext({
+      get client() {
+        return opContext.client;
+      },
+      get request() {
+        return opContext.request;
+      },
+      get sdkConfig() {
+        return opContext.sdkConfig;
+      },
+      service: subServiceSpec,
+    });
   }
 
   return service as Service<Spec>;
