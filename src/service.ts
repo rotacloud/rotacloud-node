@@ -235,11 +235,13 @@ export const SERVICES = {
           opts,
         ),
     },
-  },
-  logbookCategory: {
-    endpoint: 'logbook/categories',
-    endpointVersion: 'v2',
-    operations: ['get', 'create', 'update', 'delete', 'list', 'listAll'],
+    subService: {
+      category: {
+        endpoint: 'logbook/categories',
+        endpointVersion: 'v2',
+        operations: ['get', 'create', 'update', 'delete', 'list', 'listAll'],
+      },
+    },
   },
   pin: {
     endpoint: 'pins',

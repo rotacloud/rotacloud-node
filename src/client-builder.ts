@@ -36,7 +36,7 @@ type ServiceSubServices<Spec extends ServiceSpecification> = {
 
 /**
  * Service constructed from a provided {@link ServiceSpecification} consisting of
- * built operation methods and sub services
+ * built operation and custom operation methods and sub services
  */
 type Service<Spec extends ServiceSpecification> = Omit<ServiceOps<Spec>, keyof ServiceCustomOps<Spec>> &
   ServiceCustomOps<Spec> &
