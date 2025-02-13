@@ -251,7 +251,7 @@ export const SERVICES = {
   role: {
     endpoint: 'roles',
     endpointVersion: 'v1',
-    operations: ['get', 'list', 'listAll', 'delete'],
+    operations: ['get', 'create', 'update', 'list', 'listAll', 'delete'],
   },
   settings: {
     endpoint: 'settings',
