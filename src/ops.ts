@@ -439,7 +439,7 @@ async function* listByPageV2Op<T, Query>(
   yield res;
   if (entityCount >= maxEntities) return;
 
-  let nextPage = res.data.pagination.next;
+  let nextPage = res.data.pagination.next ?? undefined;
   while (nextPage !== undefined) {
     const pagedRes = await ctx.client.request<PagedResponse<T>>({
       ...queriedRequest,
@@ -448,7 +448,7 @@ async function* listByPageV2Op<T, Query>(
         cursor: nextPage,
       },
     });
-    nextPage = pagedRes.data.pagination.next;
+    nextPage = pagedRes.data.pagination.next ?? undefined;
     yield pagedRes;
     entityCount += pagedRes.data.data.length;
     if (entityCount >= maxEntities) return;
