@@ -1,4 +1,4 @@
-import { LeaveRequest } from './leave-request.interface';
+import { LeaveRequest } from './leave-request.interface.js';
 
 export interface Leave extends LeaveRequest {
   admin: number;

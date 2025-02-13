@@ -1,4 +1,4 @@
-import { LeaveDate } from './leave-date.interface';
+import { LeaveDate } from './leave-date.interface.js';
 
 export interface LeaveRequest {
   id: number;
