@@ -56,14 +56,20 @@ export type EndpointVersion = 'v1' | 'v2';
 export type Endpoint<
   Entity,
   QueryParameters = undefined,
-  RequiredFields extends keyof Entity | Partial<Entity> = any,
+  CreateEntity extends keyof Entity | Partial<Entity> = any,
+  // NOTE: introduced to work around TS inferring `RequirementsOf<Entity, CreateEntity>` incorrectly
+  // TS resolves type to:
+  // `RequirementsOf<Entity, "key 1"> | RequirementsOf<Entity "key 2">`
+  // instead of:
+  // `RequirementsOf<Entity, "key 1" | "key 2">`
+  RequiredFields extends keyof Entity = CreateEntity extends keyof Entity ? CreateEntity : never,
 > = {
   /** The type returned by an endpoint */
   type: Entity;
   /** The query parameters for endpoints that support listing */
   queryParameters: QueryParameters;
   /** The entity type required for endpoints that support creation */
-  createType: RequiredFields extends keyof Entity ? RequirementsOf<Entity, RequiredFields> : RequiredFields;
+  createType: CreateEntity extends keyof Entity ? RequirementsOf<Entity, RequiredFields> : CreateEntity;
 };
 
 /** Mapping between a endpoint URL and it's associated entity type
