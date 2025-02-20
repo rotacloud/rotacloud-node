@@ -303,7 +303,7 @@ export async function* listOp<T, Query>(
   yield* res.data.slice(0, maxEntities);
   if (entityCount >= maxEntities) return;
 
-  for (const pagedRequest of requestPaginated(res, ctx.request)) {
+  for (const pagedRequest of requestPaginated(res, queriedRequest)) {
     const pagedRes = await ctx.client.request<T[]>(pagedRequest);
     for (const entity of pagedRes.data) {
       yield entity;
@@ -407,7 +407,7 @@ async function* listByPageOp<T, Query>(
   yield res;
   if (entityCount >= maxEntities) return;
 
-  for (const pagedRequest of requestPaginated(res, ctx.request)) {
+  for (const pagedRequest of requestPaginated(res, queriedRequest)) {
     const pagedRes = await ctx.client.request<T[]>(pagedRequest);
     yield pagedRes;
     entityCount += pagedRes.data.length;
