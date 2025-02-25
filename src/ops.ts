@@ -273,7 +273,7 @@ function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unkn
     ...ctx.request,
     method: 'DELETE',
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
-    data: ids,
+    data: { ids },
   };
 }
 
