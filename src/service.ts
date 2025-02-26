@@ -444,7 +444,4 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
   },
-  // TODO: disallow "custom" services (can be done with the following but causes
-  // type issues elsewhere on it's own)
-  // Omit<ServiceSpecification, 'custom'>
 } satisfies Record<string, ServiceSpecification>;
