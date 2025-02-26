@@ -13,7 +13,6 @@ export * from './leave-embargoes-query-params.interface.js';
 export * from './leave-query-params.interface.js';
 export * from './leave-requests-query-params.interface.js';
 export * from './locations-query-params.interface.js';
-export * from './logbook-events-query-params.interface.js';
 export * from './pay-periods-query-params.interface.js';
 export * from './roles-query-params.interface.js';
 export * from './settings-query-params.interface.js';
