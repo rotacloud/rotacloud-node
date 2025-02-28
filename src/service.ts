@@ -20,6 +20,7 @@ import {
   OperationContext,
   RequestConfig,
   listAllOp,
+  listAllV2Op,
   listOp,
   listV2Op,
   paramsFromOptions,
@@ -222,6 +223,21 @@ export const SERVICES = {
       list: (ctx, query: LogbookQueryParameters, opts) =>
         // Maps the "userId" query parameter into the endpoint URL
         listV2Op<LogbookEntry, Omit<typeof query, 'userId'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/user/${query.userId}`,
+              endpointVersion: 'v2',
+              custom: true,
+            },
+          },
+          { date: query.date },
+          opts,
+        ),
+      listAll: (ctx, query: LogbookQueryParameters, opts) =>
+        // Maps the "userId" query parameter into the endpoint URL
+        listAllV2Op<LogbookEntry, Omit<typeof query, 'userId'>>(
           {
             ...ctx,
             service: {
