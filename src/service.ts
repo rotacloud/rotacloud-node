@@ -14,12 +14,23 @@ import {
   UserClockedOut,
 } from './interfaces/index.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
-import { OpDef, Operation, OperationContext, RequestConfig, listAllOp, listOp, paramsFromOptions } from './ops.js';
+import {
+  OpDef,
+  Operation,
+  OperationContext,
+  RequestConfig,
+  listAllOp,
+  listAllV2Op,
+  listOp,
+  listV2Op,
+  paramsFromOptions,
+} from './ops.js';
 import { UserBreakRequest, UserClockIn, UserClockOut } from './interfaces/user-clock-in.interface.js';
 import { RequirementsOf, RequestOptions } from './utils.js';
 import { ShiftSwapRequest } from './interfaces/swap-request.interface.js';
 import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
+import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -29,6 +40,7 @@ export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> =
    * Can be used to override operations listed in {@see ServiceSpecification['operations']}
    */
   customOperations?: Record<string, CustomOp>;
+  subService?: Record<string, ServiceSpecification<CustomOp>>;
 } & (
   | {
       /** URL of the endpoint */
@@ -41,6 +53,16 @@ export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> =
       endpoint: keyof EndpointEntityMap['v2'];
       /** API version of the endpoint */
       endpointVersion: 'v2';
+    }
+  | {
+      endpoint: string;
+      endpointVersion: 'v1' | 'v2';
+      /**
+       * Marks the endpoint as one not defined in the {@link EndpointEntityMap}
+       *
+       * Intended for defining customOperations
+       * */
+      custom: true;
     }
 );
 
@@ -193,6 +215,50 @@ export const SERVICES = {
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
   },
+  logbook: {
+    endpoint: 'logbook',
+    endpointVersion: 'v2',
+    operations: ['create', 'get', 'delete', 'update'],
+    customOperations: {
+      list: (ctx, query: LogbookQueryParameters, opts) =>
+        // Maps the "userId" query parameter into the endpoint URL
+        listV2Op<LogbookEntry, Omit<typeof query, 'userId'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/user/${query.userId}`,
+              endpointVersion: 'v2',
+              custom: true,
+            },
+          },
+          { date: query.date },
+          opts,
+        ),
+      listAll: (ctx, query: LogbookQueryParameters, opts) =>
+        // Maps the "userId" query parameter into the endpoint URL
+        listAllV2Op<LogbookEntry, Omit<typeof query, 'userId'>>(
+          {
+            ...ctx,
+            service: {
+              ...ctx.service,
+              endpoint: `${ctx.service.endpoint}/user/${query.userId}`,
+              endpointVersion: 'v2',
+              custom: true,
+            },
+          },
+          { date: query.date },
+          opts,
+        ),
+    },
+    subService: {
+      category: {
+        endpoint: 'logbook/categories',
+        endpointVersion: 'v2',
+        operations: ['get', 'create', 'update', 'delete', 'list', 'listAll'],
+      },
+    },
+  },
   pin: {
     endpoint: 'pins',
     endpointVersion: 'v1',
@@ -321,8 +387,9 @@ export const SERVICES = {
             ...ctx,
             service: {
               ...ctx.service,
-              endpoint: `${ctx.service.endpoint}/${query.year}` as typeof ctx.service.endpoint,
+              endpoint: `${ctx.service.endpoint}/${query.year}`,
               endpointVersion: 'v1',
+              custom: true,
             },
           },
           { users: query.users },
@@ -335,8 +402,9 @@ export const SERVICES = {
             ...ctx,
             service: {
               ...ctx.service,
-              endpoint: `${ctx.service.endpoint}/${query.year}` as typeof ctx.service.endpoint,
+              endpoint: `${ctx.service.endpoint}/${query.year}`,
               endpointVersion: 'v1',
+              custom: true,
             },
           },
           { users: query.users },
