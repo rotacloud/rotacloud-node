@@ -220,14 +220,27 @@ function createOp<T = unknown, NewEntity = unknown>(
   };
 }
 
-/** Operation for updating an entity */
-function updateOp<Return, Entity extends { id: number } & Partial<Return>>(
+/** Operation for updating an entity for v1 endpoints */
+function updateV1Op<Return, Entity extends { id: number } & Partial<Return>>(
   ctx: OperationContext,
   entity: Entity,
 ): RequestConfig<Entity, Return> {
   return {
     ...ctx.request,
     method: 'POST',
+    url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${entity.id}`,
+    data: entity,
+  };
+}
+
+/** Operation for updating an entity for v2 endpoints */
+function updateV2Op<Return, Entity extends { id: number } & Partial<Return>>(
+  ctx: OperationContext,
+  entity: Entity,
+): RequestConfig<Entity, Return> {
+  return {
+    ...ctx.request,
+    method: 'PUT',
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${entity.id}`,
     data: entity,
   };
@@ -439,7 +452,7 @@ async function* listByPageV2Op<T, Query>(
   yield res;
   if (entityCount >= maxEntities) return;
 
-  let nextPage = res.data.pagination.next;
+  let nextPage = res.data.pagination.next ?? undefined;
   while (nextPage !== undefined) {
     const pagedRes = await ctx.client.request<PagedResponse<T>>({
       ...queriedRequest,
@@ -448,7 +461,7 @@ async function* listByPageV2Op<T, Query>(
         cursor: nextPage,
       },
     });
-    nextPage = pagedRes.data.pagination.next;
+    nextPage = pagedRes.data.pagination.next ?? undefined;
     yield pagedRes;
     entityCount += pagedRes.data.data.length;
     if (entityCount >= maxEntities) return;
@@ -515,7 +528,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       listAll: listAllOp<T, E['queryParameters']>,
       listByPage: listByPageOp<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
-      update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
+      update: updateV1Op<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
       updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
     },
     v2: {
@@ -526,7 +539,7 @@ export function getOpMap<E extends Endpoint<any, any>, T extends E['type'] = E['
       listAll: listAllV2Op<T, E['queryParameters']>,
       listByPage: listByPageV2Op<T, E['queryParameters']>,
       create: createOp<T, E['createType']>,
-      update: updateOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
+      update: updateV2Op<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
       updateBatch: updateBatchOp<T, T extends { id: number } ? RequirementsOf<T, 'id'> : never>,
     },
   } satisfies Record<EndpointVersion, Record<Operation, OpDef<any, any>>>;
