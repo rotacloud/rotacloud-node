@@ -24,7 +24,9 @@ import {
   UserClockedIn,
   User,
   Settings,
+  LogbookCategory,
 } from './interfaces/index.js';
+import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import {
   AttendanceQueryParams,
   AvailabilityQueryParams,
@@ -51,13 +53,23 @@ import { RequirementsOf } from './utils.js';
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
 /** Associated types for a given API endpoint */
-export type Endpoint<Entity, QueryParameters = undefined, RequiredFields extends keyof Entity = any> = {
+export type Endpoint<
+  Entity,
+  QueryParameters = undefined,
+  CreateEntity extends keyof Entity | Partial<Entity> = any,
+  // NOTE: introduced to work around TS inferring `RequirementsOf<Entity, CreateEntity>` incorrectly
+  // TS resolves type to:
+  // `RequirementsOf<Entity, "key 1"> | RequirementsOf<Entity "key 2">`
+  // instead of:
+  // `RequirementsOf<Entity, "key 1" | "key 2">`
+  RequiredFields extends keyof Entity = CreateEntity extends keyof Entity ? CreateEntity : never,
+> = {
   /** The type returned by an endpoint */
   type: Entity;
   /** The query parameters for endpoints that support listing */
   queryParameters: QueryParameters;
   /** The entity type required for endpoints that support creation */
-  createType: RequirementsOf<Entity, RequiredFields>;
+  createType: CreateEntity extends keyof Entity ? RequirementsOf<Entity, RequiredFields> : CreateEntity;
 };
 
 /** Mapping between a endpoint URL and it's associated entity type
@@ -95,5 +107,8 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     users: Endpoint<User, UsersQueryParams, 'first_name' | 'last_name'>;
   };
   /** Type mappings for v2 endpoints */
-  v2: {};
+  v2: {
+    logbook: Endpoint<LogbookEntry, LogbookQueryParameters, 'name' | 'description' | 'date' | 'userId'>;
+    'logbook/categories': Endpoint<LogbookCategory, undefined, Pick<LogbookCategory, 'name'>>;
+  };
 }
