@@ -344,19 +344,24 @@ export const SERVICES = {
     },
   },
   terminalActive: {
-    endpoint: 'terminals',
+    endpoint: 'terminals_active',
     endpointVersion: 'v1',
     operations: ['list', 'listAll'],
     customOperations: {
-      launch: ({ request, service }, id: LaunchTerminal): RequestConfig<void, Terminal> => ({
+      launch: ({ request, service }, terminal: LaunchTerminal): RequestConfig<LaunchTerminal, Terminal> => ({
         ...request,
-        method: 'DELETE',
-        url: `${service.endpointVersion}/${service.endpoint}/${id}`,
+        method: 'POST',
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        data: terminal,
       }),
-      ping: ({ request, service }, id: { id: number; action: string; device: string }): RequestConfig<void, void> => ({
+      ping: (
+        { request, service },
+        terminal: { id: number; action: string; device: string },
+      ): RequestConfig<Omit<typeof terminal, 'id'>, void> => ({
         ...request,
-        method: 'DELETE',
-        url: `${service.endpointVersion}/${service.endpoint}/${id}`,
+        method: 'POST',
+        url: `${service.endpointVersion}/${service.endpoint}/${terminal.id}`,
+        data: { action: terminal.action, device: terminal.device },
       }),
       close: ({ request, service }, id: number): RequestConfig<void, void> => ({
         ...request,
