@@ -73,7 +73,7 @@ function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSe
 
 function parseClientError(error: AxiosError): SDKError {
   const axiosErrorLocation = error.response || error.request;
-  const apiErrorMessage = axiosErrorLocation.data?.message;
+  const apiErrorMessage = axiosErrorLocation.data?.message ?? axiosErrorLocation.data?.error;
   let url: URL | undefined;
   try {
     url = new URL(error.config?.url ?? '', error.config?.baseURL);
