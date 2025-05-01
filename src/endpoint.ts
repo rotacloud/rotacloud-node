@@ -25,6 +25,8 @@ import {
   User,
   Settings,
   LogbookCategory,
+  DayNoteV2,
+  DayNoteV2QueryParameters,
 } from './interfaces/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import {
@@ -109,6 +111,11 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
   /** Type mappings for v2 endpoints */
   v2: {
     logbook: Endpoint<LogbookEntry, LogbookQueryParameters, 'name' | 'description' | 'date' | 'userId'>;
+    dayNotes: Endpoint<
+      DayNoteV2,
+      DayNoteV2QueryParameters,
+      'title' | 'message' | 'startDate' | 'endDate' | 'locations' | 'visibleToEmployees'
+    >;
     'logbook/categories': Endpoint<LogbookCategory, undefined, Pick<LogbookCategory, 'name'>>;
   };
 }
