@@ -153,6 +153,13 @@ export const SERVICES = {
     endpoint: 'day_notes',
     endpointVersion: 'v1',
     operations: ['get', 'create', 'list', 'listAll', 'update', 'delete'],
+    subService: {
+      v2: {
+        endpoint: 'dayNotes',
+        endpointVersion: 'v2',
+        operations: ['get', 'create', 'list', 'listAll', 'update', 'delete'],
+      },
+    },
   },
   dayOff: {
     endpoint: 'days_off',
