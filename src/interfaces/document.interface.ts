@@ -5,7 +5,7 @@ export interface Document {
   user: number;
   users: number[];
   folder_id: number | null;
-  expires: number | null;
+  expires: string | null;
   public: boolean;
   created_at: number;
   created_by: number | null;
