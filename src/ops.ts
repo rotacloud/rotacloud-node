@@ -2,7 +2,8 @@ import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ServiceSpecification } from './service.js';
 import { RequestOptions, QueryParameterValue, RequirementsOf, assert } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
-import { SDKConfig, ValidationError } from './main.js';
+import { SDKConfig } from './interfaces/index.js';
+import { ValidationError } from './error.js';
 
 /** Supported common operations */
 export type Operation =
@@ -201,7 +202,11 @@ function* requestPaginated<T>(
 /** Operation for getting an entity */
 function getOp<T = undefined>(ctx: OperationContext, id: number): RequestConfig<unknown, T> {
   if (typeof id !== 'number') {
-    throw new ValidationError('Invalid type for id', {});
+    throw new ValidationError('Invalid type for id', {
+      cause: {
+        type: typeof id,
+      },
+    });
   }
   if (!Number.isSafeInteger(id)) {
     throw new ValidationError('Invalid value for id', {
