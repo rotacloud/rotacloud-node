@@ -79,15 +79,15 @@ describe('Operations', () => {
 
     test('getOp rejects invalid IDs', () => {
       for (const invalidId of invalidIds) {
-        expect(client.service.get(invalidId as number)).toThrow();
-        expect(client.serviceV2.get(invalidId as number)).toThrow();
+        expect(() => client.service.get(invalidId as number)).toThrowError();
+        expect(() => client.serviceV2.get(invalidId as number)).toThrowError();
       }
     });
 
     test('deleteOp rejects invalid IDs', () => {
       for (const invalidId of invalidIds) {
-        expect(client.service.delete(invalidId as number)).toThrow();
-        expect(client.serviceV2.delete(invalidId as number)).toThrow();
+        expect(() => client.service.delete(invalidId as number)).toThrowError();
+        expect(() => client.serviceV2.delete(invalidId as number)).toThrowError();
       }
     });
   });
