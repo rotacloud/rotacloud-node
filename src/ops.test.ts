@@ -25,7 +25,7 @@ describe('Operations', () => {
   const serviceV1 = {
     endpoint: 'settings',
     endpointVersion: 'v1',
-    operations: ['get', 'list'],
+    operations: ['get', 'delete', 'list'],
     customOperations: {
       promiseOp: async () => 3,
     },
@@ -33,7 +33,7 @@ describe('Operations', () => {
   const serviceV2 = {
     endpoint: 'logbook',
     endpointVersion: 'v2',
-    operations: ['get', 'list'],
+    operations: ['get', 'delete', 'list'],
     customOperations: {
       promiseOp: async () => 3,
     },
@@ -72,6 +72,24 @@ describe('Operations', () => {
   test('operations returning a promise are returned as is', async () => {
     const promiseOpRes = await serviceV1.customOperations.promiseOp();
     expect(promiseOpRes).toStrictEqual(await client.service.promiseOp());
+  });
+
+  describe('validation', () => {
+    const invalidIds = ['id', { id: 1 }, undefined, null, Infinity, -Infinity, 2.1, NaN];
+
+    test('getOp rejects invalid IDs', () => {
+      for (const invalidId of invalidIds) {
+        expect(client.service.get(invalidId as number)).toThrow();
+        expect(client.serviceV2.get(invalidId as number)).toThrow();
+      }
+    });
+
+    test('deleteOp rejects invalid IDs', () => {
+      for (const invalidId of invalidIds) {
+        expect(client.service.delete(invalidId as number)).toThrow();
+        expect(client.serviceV2.delete(invalidId as number)).toThrow();
+      }
+    });
   });
 
   describe('list', () => {
