@@ -392,7 +392,7 @@ export async function* listOp<T, Query>(
   opts?: RequestOptions<T[]> & { offset?: number },
 ): AsyncGenerator<T> {
   // undefined is an accepted type for query
-  if (typeof query !== undefined && (typeof query !== 'object' || query === null)) {
+  if (query !== undefined && (typeof query !== 'object' || query === null)) {
     throw new ValidationError('Invalid type for query', {
       cause: {
         type: typeof query,
@@ -437,7 +437,7 @@ export async function* listV2Op<T, Query>(
   opts?: RequestOptions<T[]>,
 ): AsyncGenerator<T> {
   // undefined is an accepted type for query
-  if (typeof query !== undefined && (typeof query !== 'object' || query === null)) {
+  if (query !== undefined && (typeof query !== 'object' || query === null)) {
     throw new ValidationError('Invalid type for query', {
       cause: {
         type: typeof query,
@@ -516,7 +516,7 @@ async function* listByPageOp<T, Query>(
   opts?: RequestOptions<T[]> & { offset?: number },
 ): AsyncGenerator<AxiosResponse<T[]>> {
   // undefined is an accepted type for query
-  if (typeof query !== undefined && (typeof query !== 'object' || query === null)) {
+  if (query !== undefined && (typeof query !== 'object' || query === null)) {
     throw new ValidationError('Invalid type for query', {
       cause: {
         type: typeof query,
@@ -559,7 +559,7 @@ async function* listByPageV2Op<T, Query>(
   opts?: RequestOptions<T[]>,
 ): AsyncGenerator<AxiosResponse<PagedResponse<T>>> {
   // undefined is an accepted type for query
-  if (typeof query !== undefined && (typeof query !== 'object' || query === null)) {
+  if (query !== undefined && (typeof query !== 'object' || query === null)) {
     throw new ValidationError('Invalid type for query', {
       cause: {
         type: typeof query,
