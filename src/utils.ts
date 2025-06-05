@@ -1,7 +1,7 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
 import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
-import { SDKError } from './models/index.js';
+import { SDKError } from './error.js';
 import pkg from '../package.json' with { type: 'json' };
 
 /** Creates a `Partial<T>` where all properties specified by `K` are required
