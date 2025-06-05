@@ -164,6 +164,22 @@ interface PagedResponse<T> {
   };
 }
 
+/** For validating the query parameter supplied to list ops
+ *
+ * Will throw a {@see ValidationError} if invalid
+ */
+function validateQueryParameter(query: unknown) {
+  // undefined is an accepted type for query
+  if (query !== undefined && (typeof query !== 'object' || query === null)) {
+    throw new ValidationError('Invalid type for query', {
+      cause: {
+        type: typeof query,
+        value: query,
+      },
+    });
+  }
+}
+
 /** Utility for creating a query params map needed by most API requests */
 export function paramsFromOptions<T>(opts: RequestOptions<T>): Record<string, QueryParameterValue> {
   return {
@@ -391,16 +407,7 @@ export async function* listOp<T, Query>(
   // NOTE: offset is only supported in v1
   opts?: RequestOptions<T[]> & { offset?: number },
 ): AsyncGenerator<T> {
-  // undefined is an accepted type for query
-  if (query !== undefined && (typeof query !== 'object' || query === null)) {
-    throw new ValidationError('Invalid type for query', {
-      cause: {
-        type: typeof query,
-        value: query,
-      },
-    });
-  }
-
+  validateQueryParameter(query);
   const queriedRequest = {
     ...ctx.request,
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
@@ -436,15 +443,7 @@ export async function* listV2Op<T, Query>(
   query: Query,
   opts?: RequestOptions<T[]>,
 ): AsyncGenerator<T> {
-  // undefined is an accepted type for query
-  if (query !== undefined && (typeof query !== 'object' || query === null)) {
-    throw new ValidationError('Invalid type for query', {
-      cause: {
-        type: typeof query,
-        value: query,
-      },
-    });
-  }
+  validateQueryParameter(query);
 
   const queriedRequest = {
     ...ctx.request,
@@ -515,15 +514,7 @@ async function* listByPageOp<T, Query>(
   // NOTE: offset is only supported in v1
   opts?: RequestOptions<T[]> & { offset?: number },
 ): AsyncGenerator<AxiosResponse<T[]>> {
-  // undefined is an accepted type for query
-  if (query !== undefined && (typeof query !== 'object' || query === null)) {
-    throw new ValidationError('Invalid type for query', {
-      cause: {
-        type: typeof query,
-        value: query,
-      },
-    });
-  }
+  validateQueryParameter(query);
 
   const queriedRequest = {
     ...ctx.request,
@@ -558,15 +549,7 @@ async function* listByPageV2Op<T, Query>(
   query: Query,
   opts?: RequestOptions<T[]>,
 ): AsyncGenerator<AxiosResponse<PagedResponse<T>>> {
-  // undefined is an accepted type for query
-  if (query !== undefined && (typeof query !== 'object' || query === null)) {
-    throw new ValidationError('Invalid type for query', {
-      cause: {
-        type: typeof query,
-        value: query,
-      },
-    });
-  }
+  validateQueryParameter(query);
 
   const queriedRequest = {
     ...ctx.request,
