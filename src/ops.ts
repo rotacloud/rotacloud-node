@@ -166,7 +166,7 @@ interface PagedResponse<T> {
 
 /** For validating the query parameter supplied to list ops
  *
- * Will throw a {@see ValidationError} if invalid
+ * @throws {ValidationError} if invalid
  */
 function validateQueryParameter(query: unknown) {
   // undefined is an accepted type for query
