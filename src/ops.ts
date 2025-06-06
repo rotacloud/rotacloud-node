@@ -2,7 +2,8 @@ import { Axios, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ServiceSpecification } from './service.js';
 import { RequestOptions, QueryParameterValue, RequirementsOf, assert } from './utils.js';
 import { Endpoint, EndpointVersion } from './endpoint.js';
-import { SDKConfig } from './main.js';
+import { SDKConfig } from './interfaces/index.js';
+import { ValidationError } from './error.js';
 
 /** Supported common operations */
 export type Operation =
@@ -163,6 +164,22 @@ interface PagedResponse<T> {
   };
 }
 
+/** For validating the query parameter supplied to list ops
+ *
+ * @throws {ValidationError} if invalid
+ */
+function validateQueryParameter(query: unknown) {
+  // undefined is an accepted type for query
+  if (query !== undefined && (typeof query !== 'object' || query === null)) {
+    throw new ValidationError('Invalid type for query', {
+      cause: {
+        type: typeof query,
+        value: query,
+      },
+    });
+  }
+}
+
 /** Utility for creating a query params map needed by most API requests */
 export function paramsFromOptions<T>(opts: RequestOptions<T>): Record<string, QueryParameterValue> {
   return {
@@ -200,6 +217,22 @@ function* requestPaginated<T>(
 
 /** Operation for getting an entity */
 function getOp<T = undefined>(ctx: OperationContext, id: number): RequestConfig<unknown, T> {
+  if (typeof id !== 'number') {
+    throw new ValidationError('Invalid type for id', {
+      cause: {
+        type: typeof id,
+      },
+    });
+  }
+  if (!Number.isSafeInteger(id)) {
+    throw new ValidationError('Invalid value for id', {
+      cause: {
+        reason: 'Not a safe integer',
+        value: id,
+      },
+    });
+  }
+
   return {
     ...ctx.request,
     method: 'GET',
@@ -212,6 +245,15 @@ function createOp<T = unknown, NewEntity = unknown>(
   ctx: OperationContext,
   newEntity: NewEntity,
 ): RequestConfig<NewEntity, T> {
+  if (typeof newEntity !== 'object' || newEntity === null) {
+    throw new ValidationError('Invalid type for entity', {
+      cause: {
+        type: typeof newEntity,
+        value: newEntity,
+      },
+    });
+  }
+
   return {
     ...ctx.request,
     method: 'POST',
@@ -225,6 +267,23 @@ function updateV1Op<Return, Entity extends { id: number } & Partial<Return>>(
   ctx: OperationContext,
   entity: Entity,
 ): RequestConfig<Entity, Return> {
+  if (typeof entity !== 'object' || entity === null || !('id' in entity)) {
+    throw new ValidationError('Invalid type for entity', {
+      cause: {
+        type: typeof entity,
+        value: entity,
+      },
+    });
+  }
+  if (!Number.isSafeInteger(entity.id)) {
+    throw new ValidationError('Invalid value for entity id', {
+      cause: {
+        reason: 'Not a safe integer',
+        value: entity.id,
+      },
+    });
+  }
+
   return {
     ...ctx.request,
     method: 'POST',
@@ -238,6 +297,23 @@ function updateV2Op<Return, Entity extends { id: number } & Partial<Return>>(
   ctx: OperationContext,
   entity: Entity,
 ): RequestConfig<Entity, Return> {
+  if (typeof entity !== 'object' || entity === null || !('id' in entity)) {
+    throw new ValidationError('Invalid type for entity', {
+      cause: {
+        type: typeof entity,
+        value: entity,
+      },
+    });
+  }
+  if (!Number.isSafeInteger(entity.id)) {
+    throw new ValidationError('Invalid value for entity id', {
+      cause: {
+        reason: 'Not a safe integer',
+        value: entity.id,
+      },
+    });
+  }
+
   return {
     ...ctx.request,
     method: 'PUT',
@@ -251,6 +327,14 @@ async function updateBatchOp<Return, Entity extends { id: number } & Partial<Ret
   ctx: OperationContext,
   entities: Entity[],
 ): Promise<{ success: Return[]; failed: { id: number; error: string }[] }> {
+  if (!Array.isArray(entities)) {
+    throw new ValidationError('Invalid type for entity array', {
+      cause: {
+        type: typeof entities,
+      },
+    });
+  }
+
   const res = await ctx.client.request<{ code: number; data?: Return; error?: string }[]>({
     ...ctx.request,
     method: 'POST',
@@ -273,6 +357,22 @@ async function updateBatchOp<Return, Entity extends { id: number } & Partial<Ret
 
 /** Operation for deleting an entity */
 function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, void> {
+  if (typeof id !== 'number') {
+    throw new ValidationError('Invalid type for id', {
+      cause: {
+        type: typeof id,
+      },
+    });
+  }
+  if (!Number.isSafeInteger(id)) {
+    throw new ValidationError('Invalid value for id', {
+      cause: {
+        reason: 'Not a safe integer',
+        value: id,
+      },
+    });
+  }
+
   return {
     ...ctx.request,
     method: 'DELETE',
@@ -282,6 +382,14 @@ function deleteOp(ctx: OperationContext, id: number): RequestConfig<unknown, voi
 
 /** Operation for deleting a list of entities */
 function deleteBatchOp(ctx: OperationContext, ids: number[]): RequestConfig<unknown, void> {
+  if (!Array.isArray(ids)) {
+    throw new ValidationError('Invalid type for id array', {
+      cause: {
+        type: typeof ids,
+      },
+    });
+  }
+
   return {
     ...ctx.request,
     method: 'DELETE',
@@ -299,6 +407,7 @@ export async function* listOp<T, Query>(
   // NOTE: offset is only supported in v1
   opts?: RequestOptions<T[]> & { offset?: number },
 ): AsyncGenerator<T> {
+  validateQueryParameter(query);
   const queriedRequest = {
     ...ctx.request,
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
@@ -334,6 +443,8 @@ export async function* listV2Op<T, Query>(
   query: Query,
   opts?: RequestOptions<T[]>,
 ): AsyncGenerator<T> {
+  validateQueryParameter(query);
+
   const queriedRequest = {
     ...ctx.request,
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
@@ -403,6 +514,8 @@ async function* listByPageOp<T, Query>(
   // NOTE: offset is only supported in v1
   opts?: RequestOptions<T[]> & { offset?: number },
 ): AsyncGenerator<AxiosResponse<T[]>> {
+  validateQueryParameter(query);
+
   const queriedRequest = {
     ...ctx.request,
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
@@ -436,6 +549,8 @@ async function* listByPageV2Op<T, Query>(
   query: Query,
   opts?: RequestOptions<T[]>,
 ): AsyncGenerator<AxiosResponse<PagedResponse<T>>> {
+  validateQueryParameter(query);
+
   const queriedRequest = {
     ...ctx.request,
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,

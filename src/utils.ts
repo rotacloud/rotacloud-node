@@ -1,7 +1,7 @@
 import axios, { Axios, AxiosError, AxiosRequestConfig, isAxiosError } from 'axios';
 import axiosRetry, { isNetworkOrIdempotentRequestError } from 'axios-retry';
 import { RetryOptions, RetryStrategy, SDKConfig } from './interfaces/index.js';
-import { SDKError } from './models/index.js';
+import { SDKError } from './error.js';
 import pkg from '../package.json' with { type: 'json' };
 
 /** Creates a `Partial<T>` where all properties specified by `K` are required
@@ -50,11 +50,21 @@ class AssertionError extends Error {
   override name = AssertionError.prototype.name;
 }
 
-export function assert(value: unknown, message?: string | Error): asserts value {
-  if (value) return;
-  if (!message || typeof message === 'string')
-    throw new AssertionError(message ?? `Assertion failed - value = ${value}`);
-  throw message;
+/** Ensures the provided value resolves to `true` before continuing
+ *
+ * If the value doesn't resolve to `true` then the provided `error` will be thrown
+ *
+ * Intended to be run in production and not removed on build
+ *
+ * @param assertion assertion to verify
+ * @param error error to throw. If `undefined` or a `string` then an {@link AssertionError}
+ * will be thrown instead
+ */
+export function assert(assertion: unknown, error?: string | Error): asserts assertion {
+  if (assertion) return;
+  if (error === undefined || typeof error === 'string')
+    throw new AssertionError(error ?? `Assertion failed - value = ${assertion}`);
+  throw error;
 }
 
 /** Converts a map of query parameter key/values into API compatible {@see URLSearchParams} */
