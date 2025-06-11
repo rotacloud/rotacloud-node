@@ -1,7 +1,7 @@
 import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
-import { SDKConfig } from './main.js';
+import { SDKConfig } from './interfaces/index.js';
 import pkg from '../package.json' with { type: 'json' };
 
 let mockAxiosClient: Axios;
