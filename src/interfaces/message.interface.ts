@@ -13,7 +13,7 @@ export interface Message {
     opened: boolean;
     /** Unix timestamp in seconds */
     opened_at: boolean;
-    error: null | unknown;
+    error: string | null;
   }[];
   attachments: {
     name: string;
