@@ -19,6 +19,7 @@ import {
   Operation,
   OperationContext,
   RequestConfig,
+  createOp,
   listAllOp,
   listAllV2Op,
   listOp,
@@ -31,6 +32,7 @@ import { ShiftSwapRequest } from './interfaces/swap-request.interface.js';
 import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
+import { Message } from './interfaces/message.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -264,6 +266,14 @@ export const SERVICES = {
         endpointVersion: 'v2',
         operations: ['get', 'create', 'update', 'delete', 'list', 'listAll'],
       },
+    },
+  },
+  message: {
+    endpoint: 'messages',
+    endpointVersion: 'v1',
+    operations: ['list', 'listAll', 'listByPage'],
+    customOperations: {
+      send: (ctx, message: EndpointEntityMap['v1']['messages']['createType']) => createOp<Message>(ctx, message),
     },
   },
   pin: {
