@@ -100,7 +100,10 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     messages: Endpoint<
       Message,
       undefined,
-      Pick<Message, 'message' | 'subject'> & { users: number[]; attachments?: Message['attachments'] }
+      Pick<Message, 'message' | 'subject'> & {
+        users: number[];
+        attachments?: Pick<Message['attachments'][number], 'key' | 'bucket' | 'name' | 'extension'>[];
+      }
     >;
     pins: Endpoint<Pin>;
     roles: Endpoint<Role, RolesQueryParams, 'name'>;
