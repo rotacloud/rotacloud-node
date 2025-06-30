@@ -29,6 +29,7 @@ import {
   DayNoteV2QueryParameters,
 } from './interfaces/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
+import { Message } from './interfaces/message.interface.js';
 import {
   AttendanceQueryParams,
   AvailabilityQueryParams,
@@ -58,7 +59,7 @@ export type EndpointVersion = 'v1' | 'v2';
 export type Endpoint<
   Entity,
   QueryParameters = undefined,
-  CreateEntity extends keyof Entity | Partial<Entity> = any,
+  CreateEntity extends keyof Entity | object = any,
   // NOTE: introduced to work around TS inferring `RequirementsOf<Entity, CreateEntity>` incorrectly
   // TS resolves type to:
   // `RequirementsOf<Entity, "key 1"> | RequirementsOf<Entity "key 2">`
@@ -96,6 +97,14 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
     leave_types: Endpoint<LeaveType>;
     leave: Endpoint<Leave, LeaveQueryParams, 'users' | 'type' | 'start_date' | 'end_date'>;
     locations: Endpoint<Location, LocationsQueryParams, 'name'>;
+    messages: Endpoint<
+      Message,
+      undefined,
+      Pick<Message, 'message' | 'subject'> & {
+        users: number[];
+        attachments?: Pick<Message['attachments'][number], 'key' | 'bucket' | 'name' | 'extension'>[];
+      }
+    >;
     pins: Endpoint<Pin>;
     roles: Endpoint<Role, RolesQueryParams, 'name'>;
     settings: Endpoint<Settings, SettingsQueryParams>;

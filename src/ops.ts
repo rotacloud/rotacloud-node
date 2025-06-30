@@ -241,7 +241,7 @@ function getOp<T = undefined>(ctx: OperationContext, id: number): RequestConfig<
 }
 
 /** Operation for creating an entity */
-function createOp<T = unknown, NewEntity = unknown>(
+export function createOp<T = unknown, NewEntity = unknown>(
   ctx: OperationContext,
   newEntity: NewEntity,
 ): RequestConfig<NewEntity, T> {
