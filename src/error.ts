@@ -18,3 +18,7 @@ export class SDKError extends Error {
     this.data = errorConfig.data;
   }
 }
+
+export class ValidationError extends Error {
+  override name = 'ValidationError';
+}
