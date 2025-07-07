@@ -3,5 +3,5 @@ export interface TimeZone {
   name: string;
   continent: string;
   city: string;
-  sub: string;
+  sub: string | null;
 }
