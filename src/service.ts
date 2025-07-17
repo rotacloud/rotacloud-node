@@ -33,6 +33,7 @@ import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
+import { Invoice, InvoiceDownload, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -177,6 +178,19 @@ export const SERVICES = {
     endpoint: 'groups',
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'delete'],
+  },
+  invoice: {
+    endpoint: 'invoices',
+    endpointVersion: 'v2',
+    operations: ['get', 'list', 'listAll'],
+    custom: true,
+    customOperations: {
+      get: (ctx, id: number): RequestConfig<void, Invoice & InvoiceDownload> => ({
+        ...ctx.request,
+        url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${id}`,
+        method: 'GET',
+      }),
+    },
   },
   leaveEmbargo: {
     endpoint: 'leave_embargoes',
