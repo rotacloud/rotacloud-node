@@ -33,7 +33,7 @@ import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
-import { Invoice, InvoiceDownload, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
+import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
