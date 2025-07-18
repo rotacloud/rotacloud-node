@@ -183,7 +183,6 @@ export const SERVICES = {
     endpoint: 'invoices',
     endpointVersion: 'v2',
     operations: ['get', 'list', 'listAll'],
-    custom: true,
     customOperations: {
       get: (ctx, id: number): RequestConfig<void, Invoice & InvoiceDownload> => ({
         ...ctx.request,

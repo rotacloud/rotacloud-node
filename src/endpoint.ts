@@ -121,7 +121,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
   /** Type mappings for v2 endpoints */
   v2: {
     logbook: Endpoint<LogbookEntry, LogbookQueryParameters, 'name' | 'description' | 'date' | 'userId'>;
-    invoice: Endpoint<Invoice, InvoiceQueryParameters>;
+    invoices: Endpoint<Invoice, InvoiceQueryParameters>;
     dayNotes: Endpoint<
       DayNoteV2,
       DayNoteV2QueryParameters,
