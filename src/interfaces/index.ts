@@ -12,6 +12,7 @@ export * from './days-off-pattern.interface.js';
 export * from './day-note.interface.js';
 export * from './group.interface.js';
 export * from './holiday_allowance.interface.js';
+export * from './invoice.interface.js';
 export * from './leave-date.interface.js';
 export * from './leave-embargo.interface.js';
 export * from './leave-rate.interface.js';
