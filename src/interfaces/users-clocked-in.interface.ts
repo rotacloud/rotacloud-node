@@ -1,4 +1,4 @@
-import { Shift, TerminalLocation, UserBreak } from '../interfaces/index.js';
+import { TerminalLocation, UserBreak } from '../interfaces/index.js';
 
 export interface UserClockedIn {
   user: number;
@@ -6,7 +6,7 @@ export interface UserClockedIn {
   role: number;
   in_time: number;
   minutes_late: number;
-  shift: Pick<Shift, 'id' | 'start_time' | 'end_time' | 'minutes_break' | 'location' | 'role'>;
+  shift: number;
   in_method: string;
   in_location: TerminalLocation;
   in_device: string | null;
