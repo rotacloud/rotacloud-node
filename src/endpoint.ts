@@ -52,6 +52,7 @@ import {
   UsersQueryParams,
 } from './interfaces/query-params/index.js';
 import { RequirementsOf } from './utils.js';
+import { Invoice, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
 
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
@@ -120,6 +121,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
   /** Type mappings for v2 endpoints */
   v2: {
     logbook: Endpoint<LogbookEntry, LogbookQueryParameters, 'name' | 'description' | 'date' | 'userId'>;
+    invoices: Endpoint<Invoice, InvoiceQueryParameters>;
     dayNotes: Endpoint<
       DayNoteV2,
       DayNoteV2QueryParameters,
