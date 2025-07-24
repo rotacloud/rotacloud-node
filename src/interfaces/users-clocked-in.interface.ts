@@ -6,7 +6,7 @@ export interface UserClockedIn {
   role: number;
   in_time: number;
   minutes_late: number;
-  shift: number;
+  shift: number | null;
   in_method: string;
   in_location: TerminalLocation;
   in_device: string | null;
