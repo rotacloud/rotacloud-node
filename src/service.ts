@@ -36,7 +36,6 @@ import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.inter
 import { Message } from './interfaces/message.interface.js';
 import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
 import { UserV2 } from './interfaces/user-v2.interface.js';
-import { AxiosResponse } from 'axios';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
