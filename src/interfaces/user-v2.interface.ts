@@ -1,8 +1,6 @@
-
-import { LeaveRate } from "./leave-rate.interface.js";
-import { RoleRate } from "./role-rate.interface.js";
-import { ManagerPermission } from "./user.interface.js";
-
+import { LeaveRate } from './leave-rate.interface.js';
+import { RoleRate } from './role-rate.interface.js';
+import { ManagerPermission } from './user.interface.js';
 
 export interface UserV2 {
   id: number;
