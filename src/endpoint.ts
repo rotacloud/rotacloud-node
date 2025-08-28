@@ -53,6 +53,7 @@ import {
 } from './interfaces/query-params/index.js';
 import { RequirementsOf } from './utils.js';
 import { Invoice, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
+import { UserV2 } from './interfaces/user-v2.interface.js';
 
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
@@ -128,5 +129,13 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
       'title' | 'message' | 'startDate' | 'endDate' | 'locations' | 'visibleToEmployees'
     >;
     'logbook/categories': Endpoint<LogbookCategory, undefined, Pick<LogbookCategory, 'name'>>;
+    users: Endpoint<
+      User,
+      undefined,
+      {
+        users: RequirementsOf<UserV2, 'firstName' | 'lastName' | 'roles'>[];
+        sendInvite?: boolean;
+      }
+    >;
   };
 }
