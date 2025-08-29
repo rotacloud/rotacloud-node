@@ -43,7 +43,7 @@ export interface UserV2 {
   permissions: ManagerPermission[];
 }
 
-export interface userRole {
+export interface UserRole {
   id: number;
   perShift: number;
   perHour: number;
