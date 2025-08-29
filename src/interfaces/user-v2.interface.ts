@@ -21,7 +21,7 @@ export interface UserV2 {
   inviteSent: boolean;
   group: number | null;
   locations: number[];
-  roles: userRole[];
+  roles: UserRole[];
   defaultRole: number | null;
   dob: string | null;
   startDate: string | null;

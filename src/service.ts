@@ -514,14 +514,12 @@ export const SERVICES = {
           UserV2,
           'id' | 'firstName' | 'lastName' | 'level' | 'email' | 'locations' | 'roles' | 'salary' | 'salaryType'
         >
-      > => {
-        return {
+      > => ({
           ...request,
           url: `${service.endpointVersion}/${service.endpoint}`,
           method: 'POST',
           data: userSpec,
-        };
-      },
+        }),
     },
   },
 } satisfies Record<string, ServiceSpecification>;
