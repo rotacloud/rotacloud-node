@@ -515,11 +515,11 @@ export const SERVICES = {
           'id' | 'firstName' | 'lastName' | 'level' | 'email' | 'locations' | 'roles' | 'salary' | 'salaryType'
         >
       > => ({
-          ...request,
-          url: `${service.endpointVersion}/${service.endpoint}`,
-          method: 'POST',
-          data: userSpec,
-        }),
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'POST',
+        data: userSpec,
+      }),
     },
   },
 } satisfies Record<string, ServiceSpecification>;
