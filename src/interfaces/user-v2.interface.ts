@@ -9,7 +9,7 @@ export interface UserV2 {
   deleted: boolean;
   deletedAt: number | null;
   deletedBy: number | null;
-  level: string;
+  level: 'admin' | 'employee' | 'manager';
   firstName: string;
   middleName: string | null;
   lastName: string;
@@ -28,10 +28,10 @@ export interface UserV2 {
   finalWorkingDate: string | null;
   weeklyHours: number | null;
   holidayAllowance: number;
-  holidayAllowance_unit: string;
+  holidayAllowanceUnit: string;
   payrollId: string | null;
   salary: number;
-  salaryType: string;
+  salaryType: 'annual' | 'hourly';
   overtimeRate: number;
   roleRates: RoleRate | null;
   leaveRates: LeaveRate;
@@ -45,8 +45,8 @@ export interface UserV2 {
 
 export interface UserRole {
   id: number;
-  perShift: number;
-  perHour: number;
-  payCode: string;
-  isDefault: boolean;
+  perShift?: number;
+  perHour?: number;
+  payCode?: string;
+  isDefault?: boolean;
 }
