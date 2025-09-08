@@ -51,124 +51,124 @@ export type OpFunction<Return = any, Param = undefined, Opts = RequestOptions<un
   | AsyncIterable<infer U>
   | Promise<Iterable<infer U>>
   ? // List based op parameter names
-  Param extends undefined
-  ? {
-    (query?: Param): Return;
-    <F extends keyof U>(
-      query: Param,
-      options: { fields: F[] } & RequestOptions<U>,
-    ): Return extends AsyncIterable<U>
-      ? Promise<AsyncIterable<Pick<U, F>>>
-      : Return extends Promise<Array<U>>
-      ? Promise<Array<Pick<U, F>>>
-      : Promise<Iterable<Pick<U, F>>>;
-    (query: Param, options?: Opts): Return;
-  }
-  : Partial<Param> extends Param
-  ? {
-    (query?: Param): Return;
-    <F extends keyof U>(
-      query: Param,
-      options: { fields: F[] } & RequestOptions<U>,
-    ): Return extends AsyncIterable<U>
-      ? Promise<AsyncIterable<Pick<U, F>>>
-      : Return extends Promise<Array<U>>
-      ? Promise<Array<Pick<U, F>>>
-      : Promise<Iterable<Pick<U, F>>>;
-    (query?: Param, options?: Opts): Return;
-  }
-  : {
-    (query: Param): Return;
-    <F extends keyof U>(
-      query: Param,
-      options: { fields: F[] } & RequestOptions<U>,
-    ): Return extends AsyncIterable<U>
-      ? Promise<AsyncIterable<Pick<U, F>>>
-      : Return extends Promise<Array<U>>
-      ? Promise<Array<Pick<U, F>>>
-      : Promise<Iterable<Pick<U, F>>>;
-    (query: Param, Options?: Opts): Return;
-  }
+    Param extends undefined
+    ? {
+        (query?: Param): Return;
+        <F extends keyof U>(
+          query: Param,
+          options: { fields: F[] } & RequestOptions<U>,
+        ): Return extends AsyncIterable<U>
+          ? Promise<AsyncIterable<Pick<U, F>>>
+          : Return extends Promise<Array<U>>
+            ? Promise<Array<Pick<U, F>>>
+            : Promise<Iterable<Pick<U, F>>>;
+        (query: Param, options?: Opts): Return;
+      }
+    : Partial<Param> extends Param
+      ? {
+          (query?: Param): Return;
+          <F extends keyof U>(
+            query: Param,
+            options: { fields: F[] } & RequestOptions<U>,
+          ): Return extends AsyncIterable<U>
+            ? Promise<AsyncIterable<Pick<U, F>>>
+            : Return extends Promise<Array<U>>
+              ? Promise<Array<Pick<U, F>>>
+              : Promise<Iterable<Pick<U, F>>>;
+          (query?: Param, options?: Opts): Return;
+        }
+      : {
+          (query: Param): Return;
+          <F extends keyof U>(
+            query: Param,
+            options: { fields: F[] } & RequestOptions<U>,
+          ): Return extends AsyncIterable<U>
+            ? Promise<AsyncIterable<Pick<U, F>>>
+            : Return extends Promise<Array<U>>
+              ? Promise<Array<Pick<U, F>>>
+              : Promise<Iterable<Pick<U, F>>>;
+          (query: Param, Options?: Opts): Return;
+        }
   : // ID based op parameters
-  Param extends number
-  ? {
-    (id: Param): Return;
-    <F extends keyof Awaited<Return>>(
-      id: Param,
-      options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
-    <F extends keyof Awaited<Return>>(
-      id: Param,
-      options: { fields: F[] } & RequestOptions<Awaited<Return>>,
-    ): Promise<Pick<Awaited<Return>, F>>;
-    (
-      id: Param,
-      options?: {
-        rawResponse: true;
-      } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Awaited<Return>>>;
-    (id: Param, options?: RequestOptions<Awaited<Return>>): Return;
-  }
-  : Param extends number[]
-  ? {
-    (ids: Param): Return;
-    <F extends keyof Awaited<Return>>(
-      ids: Param,
-      options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
-    <F extends keyof Awaited<Return>>(
-      ids: Param,
-      options: { fields: F[] } & RequestOptions<Awaited<Return>>,
-    ): Promise<Pick<Awaited<Return>, F>>;
-    (
-      ids: Param,
-      options?: {
-        rawResponse: true;
-      } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Awaited<Return>>>;
-    (ids: Param, options?: RequestOptions<Awaited<Return>>): Return;
-  }
-  : // Undefined based op parameters - ensures ops that don't require a
-  // param aren't forced to specify `undefined` but can if they need to specify
-  // options
-  Param extends undefined
-  ? {
-    (): Return;
-    <F extends keyof Awaited<Return>>(
-      none: Param,
-      options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
-    <F extends keyof Awaited<Return>>(
-      none: Param,
-      options: { fields: F[] } & RequestOptions<Awaited<Return>>,
-    ): Promise<Pick<Awaited<Return>, F>>;
-    (
-      none?: Param,
-      options?: {
-        rawResponse: true;
-      } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Awaited<Return>>>;
-    (none?: Param, options?: RequestOptions<Awaited<Return>>): Return;
-  }
-  : // Entity based op parameter names
-  {
-    (entity: Param): Return;
-    <F extends keyof Awaited<Return>>(
-      entity: Param,
-      options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
-    <F extends keyof Awaited<Return>>(
-      entity: Param,
-      options: { fields: F[] } & RequestOptions<Awaited<Return>>,
-    ): Promise<Pick<Awaited<Return>, F>>;
-    (
-      entity: Param,
-      options?: {
-        rawResponse: true;
-      } & RequestOptions<Awaited<Return>>,
-    ): Promise<AxiosResponse<Awaited<Return>>>;
-    (entity: Param, options?: RequestOptions<Awaited<Return>>): Return;
-  };
+    Param extends number
+    ? {
+        (id: Param): Return;
+        <F extends keyof Awaited<Return>>(
+          id: Param,
+          options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
+        ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
+        <F extends keyof Awaited<Return>>(
+          id: Param,
+          options: { fields: F[] } & RequestOptions<Awaited<Return>>,
+        ): Promise<Pick<Awaited<Return>, F>>;
+        (
+          id: Param,
+          options?: {
+            rawResponse: true;
+          } & RequestOptions<Awaited<Return>>,
+        ): Promise<AxiosResponse<Awaited<Return>>>;
+        (id: Param, options?: RequestOptions<Awaited<Return>>): Return;
+      }
+    : Param extends number[]
+      ? {
+          (ids: Param): Return;
+          <F extends keyof Awaited<Return>>(
+            ids: Param,
+            options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
+          ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
+          <F extends keyof Awaited<Return>>(
+            ids: Param,
+            options: { fields: F[] } & RequestOptions<Awaited<Return>>,
+          ): Promise<Pick<Awaited<Return>, F>>;
+          (
+            ids: Param,
+            options?: {
+              rawResponse: true;
+            } & RequestOptions<Awaited<Return>>,
+          ): Promise<AxiosResponse<Awaited<Return>>>;
+          (ids: Param, options?: RequestOptions<Awaited<Return>>): Return;
+        }
+      : // Undefined based op parameters - ensures ops that don't require a
+        // param aren't forced to specify `undefined` but can if they need to specify
+        // options
+        Param extends undefined
+        ? {
+            (): Return;
+            <F extends keyof Awaited<Return>>(
+              none: Param,
+              options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
+            ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
+            <F extends keyof Awaited<Return>>(
+              none: Param,
+              options: { fields: F[] } & RequestOptions<Awaited<Return>>,
+            ): Promise<Pick<Awaited<Return>, F>>;
+            (
+              none?: Param,
+              options?: {
+                rawResponse: true;
+              } & RequestOptions<Awaited<Return>>,
+            ): Promise<AxiosResponse<Awaited<Return>>>;
+            (none?: Param, options?: RequestOptions<Awaited<Return>>): Return;
+          }
+        : // Entity based op parameter names
+          {
+            (entity: Param): Return;
+            <F extends keyof Awaited<Return>>(
+              entity: Param,
+              options: { fields: F[]; rawResponse: true } & RequestOptions<Awaited<Return>>,
+            ): Promise<AxiosResponse<Pick<Awaited<Return>, F>>>;
+            <F extends keyof Awaited<Return>>(
+              entity: Param,
+              options: { fields: F[] } & RequestOptions<Awaited<Return>>,
+            ): Promise<Pick<Awaited<Return>, F>>;
+            (
+              entity: Param,
+              options?: {
+                rawResponse: true;
+              } & RequestOptions<Awaited<Return>>,
+            ): Promise<AxiosResponse<Awaited<Return>>>;
+            (entity: Param, options?: RequestOptions<Awaited<Return>>): Return;
+          };
 
 /** Wrapper type for expressing the response returned by a v2 list op supported endpoint */
 interface PagedResponse<T> {
