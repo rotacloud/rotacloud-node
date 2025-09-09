@@ -15,7 +15,7 @@ export interface PartialUserV2 {
   lastName: string;
   locations: number[];
   roles: UserRole[];
-  email: string;
+  email: string | null;
   level: 'admin' | 'employee' | 'manager';
   salary: number;
   salaryType: 'annual' | 'hourly';
