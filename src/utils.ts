@@ -50,11 +50,13 @@ class AssertionError extends Error {
   override name = AssertionError.prototype.name;
 }
 
-/** Ensures the provided value resolves to `true` before continuing
- *
+/** Ensures the provided value resolves to `true` before continuing.
  * If the value doesn't resolve to `true` then the provided `error` will be thrown
  *
  * Intended to be run in production and not removed on build
+ *
+ * We don't use the `node:assert` package as this SDK needs to run in environments like
+ * web and mobile where the `node:assert` package may not be defined.
  *
  * @param assertion assertion to verify
  * @param error error to throw. If `undefined` or a `string` then an {@link AssertionError}
@@ -81,6 +83,7 @@ function toSearchParams(parameters?: Record<string, QueryParameterValue>): URLSe
   return new URLSearchParams(reducedParams);
 }
 
+/** Interceptor for {@link AxiosError}s mapping them into {@link SDKError} */
 function parseClientError(error: AxiosError): SDKError {
   const axiosErrorLocation = error.response || error.request;
   const apiErrorMessage = axiosErrorLocation.data?.message ?? axiosErrorLocation.data?.error;
