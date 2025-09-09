@@ -35,7 +35,7 @@ import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
 import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
-import { UserV2 } from './interfaces/user-v2.interface.js';
+import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -505,16 +505,10 @@ export const SERVICES = {
       create: (
         { request, service },
         userSpec: {
-          users: RequirementsOf<UserV2, 'firstName' | 'lastName' | 'roles'>[];
+          users: RequirementsOf<CreateUserRequest, 'firstName' | 'lastName' | 'roles'>[];
           sendInvite?: boolean;
         },
-      ): RequestConfig<
-        typeof userSpec,
-        RequirementsOf<
-          UserV2,
-          'id' | 'firstName' | 'lastName' | 'level' | 'email' | 'locations' | 'roles' | 'salary' | 'salaryType'
-        >
-      > => ({
+      ): RequestConfig<typeof userSpec, CreateUserResponse> => ({
         ...request,
         url: `${service.endpointVersion}/${service.endpoint}`,
         method: 'POST',

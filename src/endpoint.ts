@@ -27,6 +27,7 @@ import {
   LogbookCategory,
   DayNoteV2,
   DayNoteV2QueryParameters,
+  PartialUserV2,
 } from './interfaces/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
@@ -53,7 +54,6 @@ import {
 } from './interfaces/query-params/index.js';
 import { RequirementsOf } from './utils.js';
 import { Invoice, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
-import { UserV2 } from './interfaces/user-v2.interface.js';
 
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
@@ -133,7 +133,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
       User,
       undefined,
       {
-        users: RequirementsOf<UserV2, 'firstName' | 'lastName' | 'roles'>[];
+        users: RequirementsOf<PartialUserV2, 'firstName' | 'lastName' | 'roles'>[];
         sendInvite?: boolean;
       }
     >;
