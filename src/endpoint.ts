@@ -27,6 +27,7 @@ import {
   LogbookCategory,
   DayNoteV2,
   DayNoteV2QueryParameters,
+  PartialUserV2,
 } from './interfaces/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
@@ -128,5 +129,13 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
       'title' | 'message' | 'startDate' | 'endDate' | 'locations' | 'visibleToEmployees'
     >;
     'logbook/categories': Endpoint<LogbookCategory, undefined, Pick<LogbookCategory, 'name'>>;
+    users: Endpoint<
+      User,
+      undefined,
+      {
+        users: RequirementsOf<PartialUserV2, 'firstName' | 'lastName' | 'roles'>[];
+        sendInvite?: boolean;
+      }
+    >;
   };
 }
