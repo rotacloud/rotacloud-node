@@ -2,7 +2,7 @@ import { TerminalLocation } from './terminal.interface.js';
 
 export interface UserClockIn {
   method: string;
-  shift: number;
+  shift: number | null;
   terminal?: number;
   user: number;
   photo?: string;
