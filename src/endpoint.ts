@@ -56,7 +56,9 @@ import { RequirementsOf } from './utils.js';
 import { Invoice, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
 import {
   AccountSubscription,
+  CancelSubscriptionReq,
   EstimatesRes,
+  ProductCatalogueRes,
   SubscriptionUpdateReq,
 } from './interfaces/account-subscription.interface.js';
 
@@ -148,5 +150,8 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
       undefined,
       RequirementsOf<SubscriptionUpdateReq, 'addons' | 'plans' | 'paymentFrequency'>
     >;
+    reactivate: Endpoint<void>;
+    cancel: Endpoint<void, undefined, CancelSubscriptionReq>;
+    productCatalogue: Endpoint<ProductCatalogueRes, undefined>;
   };
 }

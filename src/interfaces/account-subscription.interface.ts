@@ -41,6 +41,44 @@ export interface SubscriptionUpdateReq {
 }
 
 export interface EstimatesRes {
-    owed: number;
-    totalPrice: number;
+  owed: number;
+  totalPrice: number;
+}
+
+export interface ProductCatalogueItemPrice {
+  id: string;
+  currency: string;
+  pricingModel: 'stairstep' | 'perUnit';
+  unitPrice: number;
+  stairStep: { startingUnit: number; endingUnit?: number; tierPrice: number };
+  billingPeriod: number;
+  billingPeriodUnit: 'monthly' | 'yearly';
+}
+export interface ProductCatalogueItem {
+  id: string;
+  name: string;
+  itemPrice: ProductCatalogueItemPrice[];
+}
+
+export interface ProductCatalogueRes {
+  plans: ProductCatalogueItem[];
+  addons: ProductCatalogueItem[];
+}
+
+export enum CANCELLATION_REASON {
+  'features',
+  'value',
+  'price',
+  'not_using',
+  'incompatible',
+  'difficulty',
+  'using_competitor',
+  'sold',
+  'temporary_closure',
+  'closed',
+}
+export interface CancelSubscriptionReq {
+  reason: CANCELLATION_REASON;
+  message?: string;
+  detail?: string;
 }

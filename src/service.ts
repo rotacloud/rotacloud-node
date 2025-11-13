@@ -38,7 +38,9 @@ import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
 import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
 import {
   AccountSubscription,
+  CancelSubscriptionReq,
   EstimatesRes,
+  ProductCatalogueRes,
   SubscriptionUpdateReq,
 } from './interfaces/account-subscription.interface.js';
 
@@ -560,6 +562,42 @@ export const SERVICES = {
           }),
         },
       },
+      reactivate: {
+        endpoint: 'account/subscription/reactivate',
+        endpointVersion: 'v2',
+        operations: ['create'],
+        custom: true,
+      },
+      cancel: {
+        endpoint: 'account/subscription/cancel',
+        endpointVersion: 'v2',
+        operations: ['create'],
+        custom: true,
+        customOperations: {
+          create: (
+            { request, service },
+            cancellationReq: CancelSubscriptionReq,
+          ): RequestConfig<typeof cancellationReq, void> => ({
+            ...request,
+            url: `${service.endpointVersion}/${service.endpoint}`,
+            method: 'POST',
+            data: cancellationReq,
+          }),
+        },
+      },
+    },
+  },
+  productCatalogue: {
+    endpoint: 'account/productCatalogue',
+    endpointVersion: 'v2',
+    operations: ['get'],
+    custom: true,
+    customOperations: {
+      get: ({ request, service }): RequestConfig<void, ProductCatalogueRes> => ({
+        ...request,
+        url: `${service.endpointVersion}/ ${service.endpoint}`,
+        method: 'GET',
+      }),
     },
   },
 } satisfies Record<string, ServiceSpecification>;
