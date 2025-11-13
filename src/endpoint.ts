@@ -54,6 +54,11 @@ import {
 } from './interfaces/query-params/index.js';
 import { RequirementsOf } from './utils.js';
 import { Invoice, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
+import {
+  AccountSubscription,
+  EstimatesRes,
+  SubscriptionUpdateReq,
+} from './interfaces/account-subscription.interface.js';
 
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
@@ -136,6 +141,12 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
         users: RequirementsOf<PartialUserV2, 'firstName' | 'lastName' | 'roles'>[];
         sendInvite?: boolean;
       }
+    >;
+    subscription: Endpoint<AccountSubscription, undefined, SubscriptionUpdateReq>;
+    estimates: Endpoint<
+      EstimatesRes,
+      undefined,
+      RequirementsOf<SubscriptionUpdateReq, 'addons' | 'plans' | 'paymentFrequency'>
     >;
   };
 }

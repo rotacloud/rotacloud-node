@@ -36,6 +36,11 @@ import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.inter
 import { Message } from './interfaces/message.interface.js';
 import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
 import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
+import {
+  AccountSubscription,
+  EstimatesRes,
+  SubscriptionUpdateReq,
+} from './interfaces/account-subscription.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -514,6 +519,47 @@ export const SERVICES = {
         method: 'POST',
         data: userSpec,
       }),
+    },
+  },
+  subscription: {
+    endpoint: 'account/subscription',
+    endpointVersion: 'v2',
+    operations: ['update', 'get'],
+    custom: true,
+    customOperations: {
+      update: (
+        { request, service },
+        subscriptionReq: Partial<SubscriptionUpdateReq>,
+      ): RequestConfig<typeof subscriptionReq, AccountSubscription> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'PATCH',
+        data: subscriptionReq,
+      }),
+      get: ({ request, service }): RequestConfig<void, AccountSubscription> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'GET',
+      }),
+    },
+    subService: {
+      estimates: {
+        endpoint: 'account/subscription/estimates',
+        endpointVersion: 'v2',
+        operations: ['create'],
+        custom: true,
+        customOperations: {
+          create: (
+            { request, service },
+            estimateReq: RequirementsOf<SubscriptionUpdateReq, 'paymentFrequency' | 'plans' | 'addons'>,
+          ): RequestConfig<typeof estimateReq, EstimatesRes> => ({
+            ...request,
+            url: `${service.endpointVersion}/${service.endpoint}`,
+            method: 'POST',
+            data: estimateReq,
+          }),
+        },
+      },
     },
   },
 } satisfies Record<string, ServiceSpecification>;
