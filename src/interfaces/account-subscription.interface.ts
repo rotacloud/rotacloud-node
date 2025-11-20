@@ -79,8 +79,8 @@ export interface ProductCatalogueItemPrice {
   id: string;
   currency: string;
   pricingModel: 'stairstep' | 'perUnit';
-  unitPrice: number;
-  stairStep: { startingUnit: number; endingUnit?: number; tierPrice: number };
+  unitPrice?: number;
+  stairStep?: { startingUnit: number; endingUnit?: number; tierPrice: number };
   billingPeriod: number;
   billingPeriodUnit: 'monthly' | 'yearly';
 }
