@@ -61,6 +61,7 @@ import {
   ProductCatalogueRes,
   SubscriptionUpdateReq,
 } from './interfaces/account-subscription.interface.js';
+import { SubscriptionQueryParams } from './interfaces/query-params/subscription-query-params.interface.js';
 
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
@@ -144,7 +145,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
         sendInvite?: boolean;
       }
     >;
-    subscription: Endpoint<AccountSubscription, undefined, SubscriptionUpdateReq>;
+    subscription: Endpoint<AccountSubscription, SubscriptionQueryParams, SubscriptionUpdateReq>;
     estimates: Endpoint<
       EstimatesRes,
       undefined,

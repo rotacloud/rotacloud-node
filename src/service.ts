@@ -43,6 +43,7 @@ import {
   ProductCatalogueRes,
   SubscriptionUpdateReq,
 } from './interfaces/account-subscription.interface.js';
+import { SubscriptionQueryParams } from './interfaces/query-params/subscription-query-params.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
