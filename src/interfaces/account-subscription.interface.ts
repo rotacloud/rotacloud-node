@@ -62,12 +62,12 @@ export interface AccountSubscriptionExtended extends AccountSubscription {
 }
 
 export interface SubscriptionUpdateReq {
-  paymentFrequency: 'monthly' | 'yearly';
-  plans: [{ planId: string; trial?: boolean }];
-  addons: [{ addonId: string; trial?: boolean }];
-  subscriptionPaymentSourceId: string;
-  billingEmail: string;
-  country: number;
+  paymentFrequency?: 'monthly' | 'yearly';
+  plans?: [{ planId: string; trial?: boolean }];
+  addons?: [{ addonId: string; trial?: boolean }];
+  subscriptionPaymentSourceId?: string;
+  billingEmail?: string;
+  country?: number;
 }
 
 export interface EstimatesRes {
