@@ -6,16 +6,16 @@ export interface Plan {
   id: string;
   status: { name: 'active' | 'in_trial' };
 }
-export interface PlanExtended {
-  id: string;
-  status: { name: 'active' | 'in_trial' };
+export interface PlanExtended extends Plan {
   trialEnds: string;
   pricing: PlanPricing;
 }
 
-export interface AddonExtended {
+export interface Addon {
   id: string;
   status: { name: 'active' | 'in_trial' | 'hidden' };
+}
+export interface AddonExtended extends Addon {
   trialEnds: string;
   pricing: PlanPricing;
 }
@@ -33,11 +33,6 @@ export interface PricingTier {
   startingUnit: number;
   endingUnit: number;
   price: number;
-}
-
-export interface Addon {
-  id: string;
-  status: { name: 'active' | 'in_trial' | 'hidden' };
 }
 
 export interface AccountSubscription {
