@@ -95,7 +95,7 @@ export interface ProductCatalogueRes {
   addons: ProductCatalogueItem[];
 }
 
-export enum CANCELLATION_REASON {
+export enum CancellationReason {
   'features',
   'value',
   'price',
@@ -108,7 +108,7 @@ export enum CANCELLATION_REASON {
   'closed',
 }
 export interface CancelSubscriptionReq {
-  reason: CANCELLATION_REASON;
+  reason: CancellationReason;
   message?: string;
   detail?: string;
 }
