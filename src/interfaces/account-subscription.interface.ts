@@ -41,7 +41,7 @@ export interface Addon {
 }
 
 export interface AccountSubscription {
-  status: string;
+  status: 'in_trial' | 'active' | 'non_renewing' | 'paused' | 'cancelled';
   dunningEnds?: string;
   entitlements: Entitlement[];
   plans: Plan[];
