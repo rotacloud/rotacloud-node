@@ -45,6 +45,7 @@ export interface AccountSubscription {
 
 export interface AccountSubscriptionExtended extends AccountSubscription {
   billingFrequency: string;
+  paymentFrequency: 'monthly' | 'yearly';
   billingEmail: string;
   country: number;
   subscriptionPaymentSourceId: string;
