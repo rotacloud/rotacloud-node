@@ -45,6 +45,7 @@ export interface AccountSubscription {
 
 export interface AccountSubscriptionExtended extends AccountSubscription {
   billingFrequency: string;
+  paymentFrequency: 'monthly' | 'yearly';
   billingEmail: string;
   country: number;
   subscriptionPaymentSourceId: string;
@@ -58,8 +59,8 @@ export interface AccountSubscriptionExtended extends AccountSubscription {
 
 export interface SubscriptionUpdateReq {
   paymentFrequency?: 'monthly' | 'yearly';
-  plans?: [{ planId: string; trial?: boolean }];
-  addons?: [{ addonId: string; trial?: boolean }];
+  plans?: { planId: string; trial?: boolean }[];
+  addons?: { addonId: string; trial?: boolean }[];
   subscriptionPaymentSourceId?: string;
   billingEmail?: string;
   country?: number;
