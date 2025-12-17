@@ -66,11 +66,6 @@ export interface SubscriptionUpdateReq {
   country?: number;
 }
 
-export interface EstimatesRes {
-  owed: number;
-  totalPrice: number;
-}
-
 export interface ProductCatalogueItemPrice {
   id: string;
   currency: string;
