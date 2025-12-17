@@ -109,7 +109,7 @@ export interface CancelSubscriptionReq {
   detail?: string;
 }
 
-export interface LineItem {
+export interface EstimateLineItem {
   id: string;
   description: string;
   amount: number;
@@ -138,5 +138,5 @@ export interface EstimatesRes {
   chargedImmediately: number;
   creditsApplied: number;
   quantity: number;
-  lineItems: LineItem[];
+  lineItems: EstimateLineItem[];
 }
