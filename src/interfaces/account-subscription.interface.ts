@@ -66,11 +66,6 @@ export interface SubscriptionUpdateReq {
   country?: number;
 }
 
-export interface EstimatesRes {
-  owed: number;
-  totalPrice: number;
-}
-
 export interface ProductCatalogueItemPrice {
   id: string;
   currency: string;
@@ -107,4 +102,36 @@ export interface CancelSubscriptionReq {
   reason: CancellationReason;
   message?: string;
   detail?: string;
+}
+
+export interface EstimateLineItem {
+  id: string;
+  description: string;
+  amount: number;
+  discountAmount: number;
+}
+
+export interface UpdatedPlan {
+  planId: string;
+  trial?: boolean;
+}
+
+export interface UpdatedAddon {
+  addonId: string;
+  trial?: boolean;
+}
+
+export interface EstimatesReq {
+  plans?: UpdatedPlan[];
+  addons?: UpdatedAddon[];
+  paymentFrequency: 'monthly' | 'yearly';
+}
+
+export interface EstimatesRes {
+  paymentFrequency: 'monthly' | 'yearly';
+  subTotal: number;
+  chargedImmediately: number;
+  creditsApplied: number;
+  quantity: number;
+  lineItems: EstimateLineItem[];
 }
