@@ -54,6 +54,7 @@ import {
 } from './interfaces/query-params/index.js';
 import { RequirementsOf } from './utils.js';
 import { Invoice, InvoiceQueryParameters } from './interfaces/invoice.interface.js';
+import { UpdateUserWithOnboardingInfo } from './interfaces/onboarding.interface.js';
 
 /** Endpoint versions supported by the API */
 export type EndpointVersion = 'v1' | 'v2';
@@ -137,5 +138,6 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
         sendInvite?: boolean;
       }
     >;
+    'users/onboard': Endpoint<void, number, UpdateUserWithOnboardingInfo>;
   };
 }
