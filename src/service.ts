@@ -36,7 +36,7 @@ import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.inter
 import { Message } from './interfaces/message.interface.js';
 import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
 import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
-import { UpdateUserWithOnboardingInfo } from './interfaces/onboarding.interface.js';
+import { AddOrOnboard, UpdateUserWithOnboardingInfo } from './interfaces/onboarding.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
   /** Operations allowed and usable for the endpoint */
@@ -520,7 +520,7 @@ export const SERVICES = {
   onboarding: {
     endpoint: 'users/onboard',
     endpointVersion: 'v2',
-    operations: ['update'],
+    operations: ['update', 'create'],
     customOperations: {
       update: (
         { request, service },
@@ -530,6 +530,24 @@ export const SERVICES = {
         url: `${service.endpointVersion}/${service.endpoint}`,
         method: 'PATCH',
         data: onboardingInfoForm,
+      }),
+      create: ({ request, service }, addOrOnboard: AddOrOnboard): RequestConfig<typeof addOrOnboard, void> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'POST',
+        data: addOrOnboard,
+      }),
+    },
+  },
+  resendOnboardingLink: {
+    endpoint: 'users/onboard/resend',
+    endpointVersion: 'v2',
+    operations: ['create'],
+    customOperations: {
+      create: ({ request, service }, entity: { id: number }): RequestConfig<void, void> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}/${entity.id}/resend`,
+        method: 'POST',
       }),
     },
   },

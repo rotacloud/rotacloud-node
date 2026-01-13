@@ -139,5 +139,6 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
       }
     >;
     'users/onboard': Endpoint<void, number, UpdateUserWithOnboardingInfo>;
+    'users/onboard/resend': Endpoint<void, number>;
   };
 }

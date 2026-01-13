@@ -1,3 +1,6 @@
+import { RequirementsOf } from '../utils.js';
+import { User } from './user.interface.js';
+
 export interface UpdateUserWithOnboardingInfo {
   title: string;
   gender: string;
@@ -12,4 +15,11 @@ export interface UpdateUserWithOnboardingInfo {
   emergencyContactName: string;
   emergencyContactPhone: string;
   emergencyContactRelationship: string;
+}
+
+export type PendingV1User = RequirementsOf<User, 'first_name' | 'last_name' | 'locations' | 'email'>;
+
+export interface AddOrOnboard {
+  users: PendingV1User[];
+  locations: number[];
 }
