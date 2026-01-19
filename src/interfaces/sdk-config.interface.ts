@@ -34,6 +34,7 @@ export type SDKConfig = (
       basicAuth: string;
     }
 ) & {
+  stripeKey?: string;
   baseUri?: string;
   accountId?: number;
   userId?: number;

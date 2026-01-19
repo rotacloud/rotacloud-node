@@ -127,11 +127,16 @@ export interface EstimatesReq {
   paymentFrequency: 'monthly' | 'yearly';
 }
 
+export interface Estimate {
+  subTotal: number;
+  creditsApplied: number;
+  lineItems: EstimateLineItem[];
+}
+
 export interface EstimatesRes {
   paymentFrequency: 'monthly' | 'yearly';
-  subTotal: number;
-  chargedImmediately: number;
-  creditsApplied: number;
   quantity: number;
-  lineItems: EstimateLineItem[];
+  immediateEstimates: Estimate;
+  nextEstimates: Estimate;
+  nextBillingDate: string;
 }
