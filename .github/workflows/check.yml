@@ -5,7 +5,7 @@ on:
       NODE_VERSION:
         type: string
         description: 'The version of Node to run the checks with'
-        default: 18.18
+        default: "20"
   pull_request:
     branches: [develop]
 
