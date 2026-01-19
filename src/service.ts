@@ -517,38 +517,38 @@ export const SERVICES = {
       }),
     },
   },
-  // onboarding: {
-  //   endpoint: 'users/onboard',
-  //   endpointVersion: 'v2',
-  //   operations: ['update', 'create'],
-  //   customOperations: {
-  //     update: (
-  //       { request, service },
-  //       onboardingInfoForm: UpdateUserWithOnboardingInfo,
-  //     ): RequestConfig<typeof onboardingInfoForm, void> => ({
-  //       ...request,
-  //       url: `${service.endpointVersion}/${service.endpoint}`,
-  //       method: 'PATCH',
-  //       data: onboardingInfoForm,
-  //     }),
-  //     create: ({ request, service }, addOrOnboard: AddOrOnboard): RequestConfig<typeof addOrOnboard, void> => ({
-  //       ...request,
-  //       url: `${service.endpointVersion}/${service.endpoint}`,
-  //       method: 'POST',
-  //       data: addOrOnboard,
-  //     }),
-  //   },
-  // },
-  // resendOnboardingLink: {
-  //   endpoint: 'users/onboard/resend',
-  //   endpointVersion: 'v2',
-  //   operations: ['create'],
-  //   customOperations: {
-  //     create: ({ request, service }, entity: { id: number }): RequestConfig<void, void> => ({
-  //       ...request,
-  //       url: `${service.endpointVersion}/${service.endpoint}/${entity.id}/resend`,
-  //       method: 'POST',
-  //     }),
-  //   },
-  // },
+  onboarding: {
+    endpoint: 'users/onboard',
+    endpointVersion: 'v2',
+    operations: ['update', 'create'],
+    customOperations: {
+      update: (
+        { request, service },
+        onboardingInfoForm: UpdateUserWithOnboardingInfo,
+      ): RequestConfig<typeof onboardingInfoForm, void> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'PATCH',
+        data: onboardingInfoForm,
+      }),
+      create: ({ request, service }, addOrOnboard: AddOrOnboard): RequestConfig<typeof addOrOnboard, void> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}`,
+        method: 'POST',
+        data: addOrOnboard,
+      }),
+    },
+  },
+  resendOnboardingLink: {
+    endpoint: 'users/onboard/resend',
+    endpointVersion: 'v2',
+    operations: ['create'],
+    customOperations: {
+      create: ({ request, service }, entity: { id: number }): RequestConfig<void, void> => ({
+        ...request,
+        url: `${service.endpointVersion}/${service.endpoint}/${entity.id}/resend`,
+        method: 'POST',
+      }),
+    },
+  },
 } satisfies Record<string, ServiceSpecification>;
