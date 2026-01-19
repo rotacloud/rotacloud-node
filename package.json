@@ -1,10 +1,10 @@
 {
   "name": "rotacloud",
-  "version": "2.3.9",
+  "version": "2.3.10",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "type": "module",
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=20"
   },
   "exports": "./dist/main.js",
   "files": [
