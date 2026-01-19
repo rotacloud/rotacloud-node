@@ -1,6 +1,6 @@
 {
   "name": "rotacloud",
-  "version": "2.3.10",
+  "version": "2.3.11",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "type": "module",
   "engines": {
