@@ -9,7 +9,6 @@ import {
   ShiftHistoryRecord,
   Terminal,
   ToilAllowance,
-  User,
   UserBreak,
   UserClockedIn,
   UserClockedOut,
@@ -35,7 +34,7 @@ import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
 import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
-import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
+import { CreateUserRequest, CreateUserResponse } from './interfaces/user-v2.interface.js';
 import { AddOrOnboard, UpdateUserWithOnboardingInfo } from './interfaces/onboarding.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
