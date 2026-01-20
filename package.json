@@ -1,10 +1,10 @@
 {
   "name": "rotacloud",
-  "version": "2.3.8",
+  "version": "2.3.14",
   "description": "The RotaCloud SDK for the RotaCloud API",
   "type": "module",
   "engines": {
-    "node": ">=18.18.0"
+    "node": ">=20"
   },
   "exports": "./dist/main.js",
   "files": [
@@ -45,7 +45,7 @@
     "vitest": "^3.0.5"
   },
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.13.0",
     "axios-retry": "^4.5.0"
   }
 }
