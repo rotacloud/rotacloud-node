@@ -107,6 +107,7 @@ export interface CancelSubscriptionReq {
 export interface EstimateLineItem {
   id: string;
   description: string;
+  type: 'addon' | 'plan';
   amount: number;
   discountAmount: number;
 }
