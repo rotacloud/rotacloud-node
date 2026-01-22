@@ -540,7 +540,7 @@ export const SERVICES = {
     },
   },
   resendOnboardingLink: {
-    endpoint: 'users/onboard/resend',
+    endpoint: 'users/onboard',
     endpointVersion: 'v2',
     operations: ['create'],
     customOperations: {
