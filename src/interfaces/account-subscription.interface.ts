@@ -79,6 +79,7 @@ export interface ProductCatalogueItem {
   id: string;
   name: string;
   itemPrice: ProductCatalogueItemPrice[];
+  canBeTrialled: boolean;
 }
 
 export interface ProductCatalogueRes {
