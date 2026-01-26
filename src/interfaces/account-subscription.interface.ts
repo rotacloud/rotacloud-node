@@ -24,7 +24,7 @@ export interface PlanPricing {
   itemPriceId: string;
   price: number;
   pricingModel: 'flat_fee' | 'per_unit' | 'tiered' | 'volume' | 'stairstep' | null;
-  tiers?: PricingTier;
+  tiers?: PricingTier[];
   currentTier?: PricingTier;
   perUnitPrice?: number;
 }
