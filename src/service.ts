@@ -186,7 +186,7 @@ export const SERVICES = {
     endpointVersion: 'v2',
     operations: ['get', 'list', 'listAll'],
     customOperations: {
-      get: (ctx, id: number): RequestConfig<void, Invoice & InvoiceDownload> => ({
+      get: (ctx, id: number): RequestConfig<void, Invoice> => ({
         ...ctx.request,
         url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${id}`,
         method: 'GET',

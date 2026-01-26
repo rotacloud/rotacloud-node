@@ -38,9 +38,6 @@ export interface Invoice {
   subTotal: number | null;
   tax: number | null;
   lineItems: LineItem[] | null;
-}
-
-export interface InvoiceDownload {
   downloadLink: string;
   downloadLinkExpiresAt: string;
 }
@@ -55,6 +52,10 @@ export interface LineItem {
 }
 
 export interface InvoiceQueryParameters {
+  /** The max number of items to return */
+  limit?: number;
+  /** The cursor after which the next page should be fetched. Comes from the previous page's response */
+  cursor?: string;
   /** Invoice status to filter by */
   status?: InvoiceStatus;
   /** The date to filter from, e.g., 2025-01-01 */

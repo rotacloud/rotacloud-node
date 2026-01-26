@@ -79,6 +79,7 @@ export interface ProductCatalogueItem {
   id: string;
   name: string;
   itemPrice: ProductCatalogueItemPrice[];
+  canBeTrialled: boolean;
 }
 
 export interface ProductCatalogueRes {
@@ -107,6 +108,7 @@ export interface CancelSubscriptionReq {
 export interface EstimateLineItem {
   id: string;
   description: string;
+  type: 'addon' | 'plan';
   amount: number;
   discountAmount: number;
 }
