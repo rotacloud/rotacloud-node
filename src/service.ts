@@ -34,7 +34,7 @@ import { ShiftDropRequest } from './interfaces/drop-request.interface.js';
 import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
-import { Invoice, InvoiceDownload } from './interfaces/invoice.interface.js';
+import { Invoice } from './interfaces/invoice.interface.js';
 import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
 import { AddOrOnboard, UpdateUserWithOnboardingInfo } from './interfaces/onboarding.interface.js';
 
@@ -187,7 +187,7 @@ export const SERVICES = {
     endpointVersion: 'v2',
     operations: ['get', 'list', 'listAll'],
     customOperations: {
-      get: (ctx, id: number): RequestConfig<void, Invoice & InvoiceDownload> => ({
+      get: (ctx, id: number): RequestConfig<void, Invoice> => ({
         ...ctx.request,
         url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}/${id}`,
         method: 'GET',
