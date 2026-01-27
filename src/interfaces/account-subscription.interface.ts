@@ -79,7 +79,7 @@ export interface ProductCatalogueItemPrice {
 export interface ProductCatalogueItemStairStep {
   startingUnit: number;
   endingUnit?: number;
-  tierPrice: number;
+  price: number;
 }
 export interface ProductCatalogueItem {
   id: string;
