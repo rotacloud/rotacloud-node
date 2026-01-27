@@ -71,9 +71,15 @@ export interface ProductCatalogueItemPrice {
   currency: string;
   pricingModel: 'stairstep' | 'perUnit';
   unitPrice?: number;
-  stairStep?: { startingUnit: number; endingUnit?: number; tierPrice: number };
+  stairStep?: ProductCatalogueItemStairStep[];
   billingPeriod: number;
   billingPeriodUnit: 'monthly' | 'yearly';
+}
+
+export interface ProductCatalogueItemStairStep {
+  startingUnit: number;
+  endingUnit?: number;
+  tierPrice: number;
 }
 export interface ProductCatalogueItem {
   id: string;
