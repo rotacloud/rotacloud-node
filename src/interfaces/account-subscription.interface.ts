@@ -73,7 +73,8 @@ export interface ProductCatalogueItemPrice {
   unitPrice?: number;
   stairStep?: ProductCatalogueItemStairStep[];
   billingPeriod: number;
-  billingPeriodUnit: 'monthly' | 'yearly';
+  billingPeriodUnit: 'month' | 'year';
+  paymentPeriodUnit: 'monthly' | 'yearly';
 }
 
 export interface ProductCatalogueItemStairStep {
