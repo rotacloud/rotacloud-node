@@ -523,13 +523,13 @@ export const SERVICES = {
     operations: ['update', 'create'],
     customOperations: {
       update: (
-			{ request, service },
-		  params: { id: number, data: UpdateUserWithOnboardingInfo },
+        { request, service },
+        params: { id: number; data: UpdateUserWithOnboardingInfo },
       ): RequestConfig<UpdateUserWithOnboardingInfo, void> => ({
         ...request,
         url: `${service.endpointVersion}/${service.endpoint}/${params.id}`,
         method: 'PATCH',
-        data: params.data
+        data: params.data,
       }),
       create: ({ request, service }, addOrOnboard: AddOrOnboard): RequestConfig<typeof addOrOnboard, void> => ({
         ...request,
