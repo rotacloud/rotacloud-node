@@ -10,6 +10,25 @@ to start working with the SDK in your project.
 Please ensure you perform the `npm run version:bump` command before commiting and
 pushing your changes to the remote branch.
 
+## Local development
+
+When making changes to the SDK and testing them locally with the web app (`rotacloud-app`), follow these steps:
+
+### Initial setup
+
+1.**Build the SDK:**
+
+`npm run build -- --watch`
+
+2.**Link in the web app:**
+/ cd rotacloud-app
+
+`npm link rotacloud`
+
+3.**Verify the link is correct:**
+
+`npm ls rotacloud`
+
 ## Configuration
 
 Configuration is simple, import the `createRotaCloudClient` function from the SDK
