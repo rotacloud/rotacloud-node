@@ -29,17 +29,17 @@ When making changes to the SDK and testing them locally with the web app (`rotac
 
 `npm ls rotacloud`
 
-Expected output: 
-   ```
-   └── rotacloud@x.x.x -> ./../rotacloud-node
-   ```
+Expected output:
+
+```
+└── rotacloud@x.x.x -> ./../rotacloud-node
+```
 
 The version displayed is the bumped version you are linking the app to.
 
 Once you are sure you have the web app linked to the correct version of the package, you can start up the app and test your changes:
 
 `npm run start`
-
 
 ## Configuration
 
