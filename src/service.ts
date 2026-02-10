@@ -35,7 +35,7 @@ import { ToilAllowanceQueryParams } from './interfaces/query-params/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
 import { Invoice } from './interfaces/invoice.interface.js';
-import { CreateUserRequest, CreateUserResponse, PartialUserV2 } from './interfaces/user-v2.interface.js';
+import { CreateUserRequest, CreateUserResponse } from './interfaces/user-v2.interface.js';
 import { AddOrOnboard, UpdateUserWithOnboardingInfo } from './interfaces/onboarding.interface.js';
 
 export type ServiceSpecification<CustomOp extends OpDef<unknown> = OpDef<any>> = {
@@ -524,12 +524,12 @@ export const SERVICES = {
     customOperations: {
       update: (
         { request, service },
-        onboardingInfoForm: UpdateUserWithOnboardingInfo,
-      ): RequestConfig<typeof onboardingInfoForm, void> => ({
+        params: { id: number; data: UpdateUserWithOnboardingInfo },
+      ): RequestConfig<UpdateUserWithOnboardingInfo, void> => ({
         ...request,
-        url: `${service.endpointVersion}/${service.endpoint}`,
+        url: `${service.endpointVersion}/${service.endpoint}/${params.id}`,
         method: 'PATCH',
-        data: onboardingInfoForm,
+        data: params.data,
       }),
       create: ({ request, service }, addOrOnboard: AddOrOnboard): RequestConfig<typeof addOrOnboard, void> => ({
         ...request,
