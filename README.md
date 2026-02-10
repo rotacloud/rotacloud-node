@@ -12,7 +12,7 @@ pushing your changes to the remote branch.
 
 ## Local development
 
-When making changes to the SDK and testing them locally with the web app (`rotacloud-app`), follow these steps:
+When making changes to the SDK and testing them locally with the web app (`rotacloud-app`), follow these steps, provided you have already followed the above ones:
 
 ### Initial setup
 
@@ -28,6 +28,18 @@ When making changes to the SDK and testing them locally with the web app (`rotac
 3.**Verify the link is correct:**
 
 `npm ls rotacloud`
+
+Expected output: 
+   ```
+   └── rotacloud@x.x.x -> ./../rotacloud-node
+   ```
+
+The version displayed is the bumped version you are linking the app to.
+
+Once you are sure you have the web app linked to the correct version of the package, you can start up the app and test your changes:
+
+`npm run start`
+
 
 ## Configuration
 
