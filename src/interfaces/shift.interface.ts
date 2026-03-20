@@ -22,6 +22,7 @@ export interface Shift {
   acknowledged_at: number | null;
   swap_requests: number[];
   unavailability_requests: number[];
+  claim_open_shift_approval_required?: boolean;
 }
 
 export interface ShiftHistoryRecord {
