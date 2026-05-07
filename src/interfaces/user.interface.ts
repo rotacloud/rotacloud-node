@@ -37,6 +37,7 @@ export interface User {
   start_date: string | null;
   final_working_date: string | null;
   weekly_hours: number | null;
+  max_weekly_hours: number | null;
   holiday_allowance: number;
   holiday_allowance_unit: string;
   payroll_id: string | null;
