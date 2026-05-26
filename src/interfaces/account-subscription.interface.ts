@@ -41,7 +41,7 @@ export interface AccountSubscription {
   entitlements: Entitlement[];
   plans: Plan[];
   addons: Addon[];
-  tierLimit: number | null;
+  tierLimit?: number | null;
 }
 
 export interface AccountSubscriptionExtended extends AccountSubscription {
@@ -56,7 +56,7 @@ export interface AccountSubscriptionExtended extends AccountSubscription {
   totalPrice: number;
   plans: PlanExtended[];
   addons: AddonExtended[];
-  tierLimit: number | null;
+  tierLimit?: number | null;
 }
 
 export interface SubscriptionUpdateReq {
