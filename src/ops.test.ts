@@ -33,7 +33,7 @@ describe('Operations', () => {
   const serviceV2 = {
     endpoint: 'logbook',
     endpointVersion: 'v2',
-    operations: ['get', 'delete', 'list'],
+    operations: ['get', 'delete', 'list', 'listAll'],
     customOperations: {
       promiseOp: async () => 3,
     },
@@ -189,6 +189,81 @@ describe('Operations', () => {
           res;
         }
         expect(mockAxiosClient.request).toHaveBeenCalledTimes(pageTotal);
+      });
+
+      test('caps each request at the V2 maximum page size', async () => {
+        vi.spyOn(mockAxiosClient, 'request').mockResolvedValue({
+          data: { data: [], pagination: { next: null, count: 0 } },
+        });
+
+        await client.serviceV2.listAll({ userId: 0 }, { maxResults: 600 });
+
+        expect(mockAxiosClient.request).toHaveBeenCalledWith(
+          expect.objectContaining({
+            params: expect.objectContaining({ limit: 500 }),
+          }),
+        );
+      });
+
+      test('uses the remaining overall limit as the next page size', async () => {
+        vi.spyOn(mockAxiosClient, 'request')
+          .mockResolvedValueOnce({
+            data: {
+              data: new Array(500).fill('entity'),
+              pagination: { next: 'page-2', count: null },
+            },
+          })
+          .mockResolvedValueOnce({
+            data: {
+              data: new Array(250).fill('entity'),
+              pagination: { next: 'unused', count: null },
+            },
+          });
+
+        await expect(client.serviceV2.listAll({ userId: 0 }, { maxResults: 750 })).resolves.toHaveLength(750);
+        expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+          1,
+          expect.objectContaining({ params: expect.objectContaining({ limit: 500 }) }),
+        );
+        expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+          2,
+          expect.objectContaining({
+            params: expect.objectContaining({ cursor: 'page-2', limit: 250 }),
+          }),
+        );
+        expect(mockAxiosClient.request).toHaveBeenCalledTimes(2);
+      });
+
+      test('does not request a page when maxResults is zero', async () => {
+        const request = vi.spyOn(mockAxiosClient, 'request');
+
+        await expect(client.serviceV2.listAll({ userId: 0 }, { maxResults: 0 })).resolves.toEqual([]);
+        expect(request).not.toHaveBeenCalled();
+      });
+
+      test('throws when a V2 endpoint repeats a pagination cursor', async () => {
+        vi.spyOn(mockAxiosClient, 'request').mockResolvedValue({
+          data: {
+            data: ['entity'],
+            pagination: { next: 'repeated-cursor', count: null },
+          },
+        });
+
+        await expect(client.serviceV2.listAll({ userId: 0 })).rejects.toThrow(
+          'V2 pagination returned a repeated cursor',
+        );
+        expect(mockAxiosClient.request).toHaveBeenCalledTimes(2);
+      });
+
+      test('accepts a nullable V2 pagination count', async () => {
+        vi.spyOn(mockAxiosClient, 'request').mockResolvedValue({
+          data: {
+            data: ['entity'],
+            pagination: { next: null, count: null },
+          },
+        });
+
+        await expect(client.serviceV2.listAll({ userId: 0 })).resolves.toEqual(['entity']);
       });
 
       test('stops automatic pagination after maxResults reached', async () => {

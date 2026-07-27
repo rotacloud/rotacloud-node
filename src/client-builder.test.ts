@@ -2,6 +2,7 @@ import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
 import { SDKConfig } from './interfaces/index.js';
+import { SERVICES } from './service.js';
 import pkg from '../package.json' with { type: 'json' };
 
 let mockAxiosClient: Axios;
@@ -94,6 +95,66 @@ describe('SDK client builder', () => {
     expect(mockAxiosClient.request).toHaveBeenCalledWith(
       expect.objectContaining({
         url: 'v1/accounts/1',
+      }),
+    );
+  });
+
+  test('adds V2 shift listing without changing the existing V1 shift service', async () => {
+    const client = createSdkClient({ shift: SERVICES.shift })(sdkConfig);
+    vi.spyOn(mockAxiosClient, 'request')
+      .mockResolvedValueOnce({ data: [], headers: {} })
+      .mockResolvedValueOnce({
+        data: { data: [], pagination: { next: null, count: null } },
+      });
+
+    expect(client.shift).toMatchObject({
+      create: expect.any(Function),
+      get: expect.any(Function),
+      list: expect.any(Function),
+      listAll: expect.any(Function),
+      update: expect.any(Function),
+      updateBatch: expect.any(Function),
+      delete: expect.any(Function),
+      deleteBatch: expect.any(Function),
+      acknowledge: expect.any(Function),
+      history: expect.any(Function),
+      publish: expect.any(Function),
+      unpublish: expect.any(Function),
+      updateSwap: expect.any(Function),
+      updateDrop: expect.any(Function),
+      v2: {
+        list: expect.any(Function),
+        listAll: expect.any(Function),
+      },
+    });
+
+    await client.shift.list({ start: 1, end: 2 }).next();
+    await client.shift.v2
+      .list({
+        start: '2026-07-20T00:00:00.000Z',
+        end: '2026-07-27T00:00:00.000Z',
+        createdBy: [7],
+        hasNotes: true,
+      })
+      .next();
+
+    expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        url: 'v1/shifts',
+        params: expect.objectContaining({ start: 1, end: 2 }),
+      }),
+    );
+    expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        url: 'v2/shifts',
+        params: expect.objectContaining({
+          start: '2026-07-20T00:00:00.000Z',
+          end: '2026-07-27T00:00:00.000Z',
+          createdBy: [7],
+          hasNotes: true,
+        }),
       }),
     );
   });
