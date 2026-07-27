@@ -2,6 +2,7 @@ import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
 import { SDKConfig } from './interfaces/index.js';
+import { ShiftsV2QueryParams } from './interfaces/query-params/index.js';
 import { SERVICES } from './service.js';
 import pkg from '../package.json' with { type: 'json' };
 
@@ -27,6 +28,38 @@ const sdkConfig: SDKConfig = {
 };
 
 describe('SDK client builder', () => {
+  test('V2 shift queries require complete shift or creation date ranges', () => {
+    const shiftDateRange = {
+      start: '2026-07-20T00:00:00.000Z',
+      end: '2026-07-27T00:00:00.000Z',
+    } satisfies ShiftsV2QueryParams;
+    const creationDateRange = {
+      createdAtStart: '2026-07-20T00:00:00.000Z',
+      createdAtEnd: '2026-07-27T00:00:00.000Z',
+    } satisfies ShiftsV2QueryParams;
+    const bothDateRanges = {
+      ...shiftDateRange,
+      ...creationDateRange,
+    } satisfies ShiftsV2QueryParams;
+
+    // @ts-expect-error A date range is required.
+    const empty = {} satisfies ShiftsV2QueryParams;
+    // @ts-expect-error A shift date range requires both boundaries.
+    const partialShiftRange = { start: shiftDateRange.start } satisfies ShiftsV2QueryParams;
+    // @ts-expect-error A creation date range requires both boundaries.
+    const partialCreationRange: ShiftsV2QueryParams = {
+      createdAtStart: creationDateRange.createdAtStart,
+    };
+    // @ts-expect-error A second date range cannot be partial.
+    const completeAndPartialRanges: ShiftsV2QueryParams = {
+      ...shiftDateRange,
+      createdAtStart: creationDateRange.createdAtStart,
+    };
+
+    expect([shiftDateRange, creationDateRange, bothDateRanges]).toHaveLength(3);
+    expect([empty, partialShiftRange, partialCreationRange, completeAndPartialRanges]).toHaveLength(4);
+  });
+
   test('basic services are created', () => {
     const clientBuilder = createSdkClient({
       basicService1: {

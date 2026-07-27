@@ -51,7 +51,7 @@ export type OpFunction<Return = any, Param = undefined, Opts = RequestOptions<un
   | AsyncIterable<infer U>
   | Promise<Iterable<infer U>>
   ? // List based op parameter names
-    Param extends undefined
+    [Param] extends [undefined]
     ? {
         (query?: Param): Return;
         <F extends keyof U>(
@@ -64,7 +64,7 @@ export type OpFunction<Return = any, Param = undefined, Opts = RequestOptions<un
             : Promise<Iterable<Pick<U, F>>>;
         (query: Param, options?: Opts): Return;
       }
-    : Partial<Param> extends Param
+    : [Partial<Param>] extends [Param]
       ? {
           (query?: Param): Return;
           <F extends keyof U>(
