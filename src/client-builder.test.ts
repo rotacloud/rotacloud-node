@@ -1,7 +1,13 @@
 import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
-import { SDKConfig, ShiftDropRequestV2, ShiftSwapRequestV2 } from './interfaces/index.js';
+import {
+  ManagerShiftDropRequestV2,
+  ManagerShiftSwapRequestV2,
+  SDKConfig,
+  ShiftDropRequestV2,
+  ShiftSwapRequestV2,
+} from './interfaces/index.js';
 import { ShiftsV2QueryParams } from './interfaces/query-params/index.js';
 import { SERVICES } from './service.js';
 import pkg from '../package.json' with { type: 'json' };
@@ -28,17 +34,18 @@ const sdkConfig: SDKConfig = {
 };
 
 describe('SDK client builder', () => {
-  test('supports permission-dependent deletion metadata on V2 swap and drop requests', () => {
+  test('models separate employee and manager V2 shift request responses', () => {
     const managerDeletion = {
       isDeleted: true,
       deletedAt: '2026-07-28T00:00:00.000Z',
       deletedBy: 7,
-    } satisfies Pick<ShiftSwapRequestV2, 'isDeleted' | 'deletedAt' | 'deletedBy'> &
-      Pick<ShiftDropRequestV2, 'isDeleted' | 'deletedAt' | 'deletedBy'>;
-    const employeeDeletion = {} satisfies Pick<
-      ShiftSwapRequestV2 | ShiftDropRequestV2,
-      'isDeleted' | 'deletedAt' | 'deletedBy'
+    } satisfies Pick<ManagerShiftSwapRequestV2, 'isDeleted' | 'deletedAt' | 'deletedBy'> &
+      Pick<ManagerShiftDropRequestV2, 'isDeleted' | 'deletedAt' | 'deletedBy'>;
+    type EmployeeDeletionKeys = Extract<
+      keyof ShiftSwapRequestV2 | keyof ShiftDropRequestV2,
+      keyof typeof managerDeletion
     >;
+    const employeeDeletion = {} satisfies Record<EmployeeDeletionKeys, never>;
 
     expect(managerDeletion.isDeleted).toBe(true);
     expect(employeeDeletion).toEqual({});
