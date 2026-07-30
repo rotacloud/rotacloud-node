@@ -14,6 +14,9 @@ export interface ShiftSwapRequestV2 {
   adminApproved: boolean | null;
   shiftId: number;
   swappedShiftId: number | null;
+  isDeleted?: boolean;
+  deletedAt?: string | null;
+  deletedBy?: number | null;
 }
 
 /** A drop request embedded in a V2 shift response. */
@@ -27,6 +30,9 @@ export interface ShiftDropRequestV2 {
   userMessage: string;
   adminMessage: string;
   shiftId: number;
+  isDeleted?: boolean;
+  deletedAt?: string | null;
+  deletedBy?: number | null;
 }
 
 /**
