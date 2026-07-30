@@ -28,7 +28,7 @@ const sdkConfig: SDKConfig = {
 };
 
 describe('SDK client builder', () => {
-  test('models deletion metadata on manager V2 shift requests as optional', () => {
+  test('supports permission-dependent deletion metadata on V2 swap and drop requests', () => {
     const managerDeletion = {
       isDeleted: true,
       deletedAt: '2026-07-28T00:00:00.000Z',
