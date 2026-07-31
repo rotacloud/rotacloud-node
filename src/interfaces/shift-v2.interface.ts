@@ -57,7 +57,7 @@ export interface ShiftV2 {
   claimed?: boolean;
   acknowledgedAt?: string | null;
   acknowledged?: boolean;
-  deleted?: boolean;
+  deleted: boolean;
   deletedAt?: string | null;
   deletedBy?: number | null;
 }
