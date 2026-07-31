@@ -12,6 +12,17 @@ pushing your changes to the remote branch.
 
 ## Local development
 
+The TypeScript API contract is generated from `openapi.json`. It is regenerated
+automatically before every build, or can be updated directly with:
+
+```sh
+npm run generate:api-types
+```
+
+SDK interfaces should reference the generated contract rather than copying its
+properties. CI runs `npm run check:api-types` to ensure the committed generated
+file matches the OpenAPI document.
+
 When making changes to the SDK and testing them locally with the web app (`rotacloud-app`), follow these steps, provided you have already followed the above ones:
 
 ### Initial setup

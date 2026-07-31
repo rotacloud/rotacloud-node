@@ -1,14 +1,8 @@
 import { test, expect, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
-import {
-  ManagerShiftDropRequestV2,
-  ManagerShiftSwapRequestV2,
-  SDKConfig,
-  ShiftDropRequestV2,
-  ShiftSwapRequestV2,
-  ShiftV2,
-} from './interfaces/index.js';
+import { SDKConfig, ShiftV2 } from './interfaces/index.js';
+import type { ManagerShiftDropResponse, ShiftDropResponse, ShiftSwapResponse } from './generated/api-types.js';
 import { ShiftsV2QueryParams } from './interfaces/query-params/index.js';
 import { SERVICES } from './service.js';
 import pkg from '../package.json' with { type: 'json' };
@@ -35,7 +29,7 @@ const sdkConfig: SDKConfig = {
 };
 
 describe('SDK client builder', () => {
-  test('models separate employee and manager V2 shift request responses', () => {
+  test('models the V2 shift request responses from the API contract', () => {
     const employeeSwapRequest = {
       id: 1,
       status: 'requested',
@@ -49,7 +43,7 @@ describe('SDK client builder', () => {
       adminApproved: null,
       shiftId: 1,
       swappedShiftId: 2,
-    } satisfies ShiftSwapRequestV2;
+    } satisfies ShiftSwapResponse;
     const employeeDropRequest = {
       id: 2,
       status: 'requested',
@@ -60,19 +54,13 @@ describe('SDK client builder', () => {
       userMessage: 'Unable to work',
       adminMessage: '',
       shiftId: 1,
-    } satisfies ShiftDropRequestV2;
-    const managerSwapRequest = {
-      ...employeeSwapRequest,
-      isDeleted: true,
-      deletedAt: '2026-07-28T00:00:00.000Z',
-      deletedBy: 7,
-    } satisfies ManagerShiftSwapRequestV2;
+    } satisfies ShiftDropResponse;
     const managerDropRequest = {
       ...employeeDropRequest,
       isDeleted: true,
       deletedAt: '2026-07-28T00:00:00.000Z',
       deletedBy: 7,
-    } satisfies ManagerShiftDropRequestV2;
+    } satisfies ManagerShiftDropResponse;
     const shift = {
       id: 1,
       published: true,
@@ -88,7 +76,7 @@ describe('SDK client builder', () => {
     } satisfies Omit<ShiftV2, 'dropRequests' | 'swapRequests'>;
     const managerShift = {
       ...shift,
-      swapRequests: [managerSwapRequest],
+      swapRequests: [employeeSwapRequest],
       dropRequests: [managerDropRequest],
     } satisfies ShiftV2;
     const employeeShift = {
@@ -97,7 +85,6 @@ describe('SDK client builder', () => {
       dropRequests: [employeeDropRequest],
     } satisfies ShiftV2;
 
-    expect(managerShift.swapRequests[0]).toHaveProperty('isDeleted', true);
     expect(managerShift.dropRequests[0]).toHaveProperty('isDeleted', true);
     expect(employeeShift.swapRequests[0]).not.toHaveProperty('isDeleted');
     expect(employeeShift.dropRequests[0]).not.toHaveProperty('isDeleted');

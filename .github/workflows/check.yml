@@ -29,6 +29,9 @@ jobs:
       - name: Formatting
         run: npx prettier . --check
 
+      - name: Generated API types
+        run: npm run check:api-types
+
       - name: Lint
         run: npm run lint
 

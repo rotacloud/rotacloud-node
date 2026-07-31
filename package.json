@@ -15,10 +15,13 @@
   "scripts": {
     "version:bump": "npm --no-git-tag-version version patch",
     "watch": "rm -rf dist/* && tsc -p tsconfig.json --watch",
+    "prebuild": "npm run generate:api-types",
     "build": "rm -rf dist/* && tsc -p tsconfig.json",
     "lint": "eslint src --ext .ts",
     "test": "vitest",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "generate:api-types": "openapi-typescript openapi.json -o src/generated/api-types.ts --root-types --root-types-no-schema-prefix",
+    "check:api-types": "openapi-typescript openapi.json -o src/generated/api-types.ts --root-types --root-types-no-schema-prefix --check"
   },
   "repository": {
     "type": "git",
@@ -40,6 +43,7 @@
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-import": "^2.31.0",
+    "openapi-typescript": "^7.13.0",
     "prettier": "~3.5.0",
     "typescript": "^5.7.3",
     "vitest": "^3.0.5"
