@@ -4,6 +4,1920 @@
  */
 
 export interface paths {
+    "/v2/account/subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get extended or non-extended subscription for an account. Usable by all users on an account, and by API keys, sharelinks, pins, and terminals. Non-extended by default */
+        get: operations["AccountSubscriptionsController_findOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /**
+         * Update subscription
+         * @description Update the subscription for the given subscription ID. Accepts a partial, so you only have to provide the data you want to change
+         */
+        patch: operations["AccountSubscriptionsController_updateSubscription"];
+        trace?: never;
+    };
+    "/v2/account/subscription/estimates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Get estimates for desired subscription changes */
+        post: operations["AccountSubscriptionsController_getEstimates"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/account/subscription/reactivate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Reactivate a subscription
+         * @description Reactivate a subscription that was previously cancelled, returns no body. Subscription must have a valid payment method
+         */
+        post: operations["AccountSubscriptionsController_reactivateSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/account/subscription/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel subscription
+         * @description Cancels the subscription for the current account whilst recording the reason they cancelled
+         */
+        post: operations["AccountSubscriptionsController_cancelSubscription"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/accounts/{id}/cancellations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["AccountsController_cancelAccount"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/logbook/categories": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all logbook categories */
+        get: operations["LogbookController_getLogbookCategories"];
+        put?: never;
+        /** Create a new logbook category */
+        post: operations["LogbookController_createLogbookCategory"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/logbook/categories/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get logbook category */
+        get: operations["LogbookController_getLogbookCategory"];
+        /** Update a logbook category name */
+        put: operations["LogbookController_updateLogbookCategory"];
+        post?: never;
+        /** Delete a logbook category */
+        delete: operations["LogbookController_deleteLogbookCategory"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/logbook/user/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all logbook entries for user */
+        get: operations["LogbookController_getAllLogbookEntries"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/logbook/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get logbook entry */
+        get: operations["LogbookController_getLogbookEntry"];
+        /** Update logbook entry */
+        put: operations["LogbookController_updateLogbook"];
+        post?: never;
+        /** Delete a logbook entry */
+        delete: operations["LogbookController_deleteLogbookEntry"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/logbook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a new logbook entry */
+        post: operations["LogbookController_createLogbook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/locations/{locationId}/weather": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get the weather for a location
+         * @description Returns the current weather and a weather forecast for the location.
+         */
+        get: operations["LocationsV2Controller_getWeather"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/users/{userId}/inviteDetails": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get invite details */
+        get: operations["UsersController_getInviteDetails"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/users/onboard/{userId}/resend": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Resend invite to onboarding user */
+        post: operations["UsersController_resendInvite"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/users/onboard/{userId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Update onboarding user profile */
+        patch: operations["UsersController_selfOnboard"];
+        trace?: never;
+    };
+    "/v2/users/syncContactDetails": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UsersController_syncContactDetails"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/users/addOrOnboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["UsersController_addOrOnboardUsers"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/users/onboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Onboard new users */
+        post: operations["UsersController_onboard"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/users/employeeList": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get employees */
+        get: operations["UsersController_listEmployees"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/industries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List of industries and groups */
+        get: operations["IndustryController_getItems"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/invites/validate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Validate an invite token
+         * @description Validates the id + hash from an invite link URL and returns basic user and account info. Called before login to populate the signup page and check whether SSO is enabled. This endpoint is public — no API key is required.
+         */
+        get: operations["InvitesController_validate"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/invites/confirm": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Confirm an invite after SSO login
+         * @description Called after a user authenticates via SSO from an invite link. Marks the invite as confirmed, clears the invite token, busts the account cache, and notifies the inviter.
+         */
+        post: operations["InvitesController_confirm"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/countries": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["CountriesController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/callback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Handle SSO callback
+         * @description Processes the callback from identity providers and completes authentication
+         */
+        get: operations["SsoController_handleCallback"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/{accountId}/enabled": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SsoController_isSsoEnabled"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/login/email": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Attempt SSO login by email
+         * @description Attempts to find an SSO-enabled account for the supplied email address and returns the authorization URL if available. Returns 404 when SSO is not configured or the email is unknown.
+         */
+        post: operations["SsoController_initiateLoginByEmail"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/{accountId}/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Initiate SSO login
+         * @description Starts the SSO authentication flow by generating authorization URL with PKCE parameters
+         */
+        post: operations["SsoController_initiateLogin"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/exchange": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Redeem one-time SSO exchange code for credentials */
+        post: operations["SsoController_exchange"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/admin/config": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Save SSO config */
+        put: operations["SsoController_saveAdminConfig"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/admin/enable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Enable SSO */
+        post: operations["SsoController_enableSso"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/auth/sso/admin/disable": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Disable SSO */
+        post: operations["SsoController_disableSso"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/node_healthy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RootController_checkHealth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/healthy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["RootController_checkHealth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/webhooks/chargebee": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["WebhooksController_handleChargebeeWebhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/app_feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Records user feedback about the mobile app, storing it in the database and sending it to Slack */
+        post: operations["AppFeedbackController_postAppFeedback"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/dialogues/app_feedback": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Returns whether the app feedback dialogue should be shown to the user */
+        get: operations["DialoguesController_shouldShowAppFeedbackDialogue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Handles analytic events, fanning them out to third-party services
+         * @description This endpoint is responsible for handling analytic events and fanning them out to third-party services.
+         */
+        post: operations["AnalyticEventsController_handleEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/tevalis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Tevalis integration details
+         * @description Returns details about the Tevalis integration, for example the current mappings, the Tevalis account ID, and the time it was last synced
+         */
+        get: operations["TevalisController_getIntegration"];
+        /**
+         * Configure the Tevalis integration
+         * @description Allows the account's Tevalis integration to be configured. Primarily, this allows the user to map the revenue from Tevalis sites to RotaCloud locations.
+         */
+        put: operations["TevalisController_updateIntegration"];
+        /**
+         * Set up a new Tevalis integration
+         * @description Connects the current RotaCloud account to a specified Tevalis account. When Tevalis credentials are provided, the connection is tested and the configuration saved. Once connected, the integration will begin to sync revenue nightly to the configured mappings.
+         */
+        post: operations["TevalisController_addIntegration"];
+        /** Disconnect the Tevalis integration */
+        delete: operations["TevalisController_removeIntegration"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/tevalis/sites": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Tevalis sites
+         * @description Returns details about all available Tevalis sites
+         */
+        get: operations["TevalisController_getSites"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/square": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Square integration details
+         * @description Returns details about the Square integration, including whether relinking is required, its sync status, current mappings, and the time revenue was last synced
+         */
+        get: operations["SquareController_getIntegration"];
+        /**
+         * Configure the Square integration
+         * @description Allows the account's Square integration to be configured by mapping Square locations to RotaCloud locations.
+         */
+        put: operations["SquareController_updateIntegration"];
+        post?: never;
+        /** Disconnect the Square integration */
+        delete: operations["SquareController_deleteIntegration"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/square/locations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List Square locations
+         * @description Returns all Square locations belonging to the account's connected Square merchant.
+         */
+        get: operations["SquareController_getLocations"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/square/login_url": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Get a login URL for the user to authenticate with Square */
+        post: operations["SquareController_handleIntegrationLoginUrl"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/square/auth": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Create or relink a Square integration */
+        get: operations["SquareController_handleIntegrationAuth"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/zapierSubscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Creates a Zapier webhook subscription for specific action */
+        post: operations["ZapierController_postZapierSubscriptions"];
+        /** Deletes a Zapier webhook subscription for specific action */
+        delete: operations["ZapierController_deleteZapierSubscriptions"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/viasocketSubscriptions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Creates a Viasocket webhook subscription for specific action */
+        post: operations["ViasocketController_postViasocketSubscriptions"];
+        /** Deletes a Viasocket webhook subscription for specific action */
+        delete: operations["ViasocketController_deleteViasocketSubscriptions"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/auth": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Authenticate a user and generate an API key */
+        post: operations["AuthController_login"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/two_factor_secrets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Generates and returns a secret for the user to use to set up 2FA */
+        post: operations["TwoFactorSecretsController_generateTwoFactorSecret"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/two_factor_setups": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sets up two factor authentication for the user when they aren't already signed in */
+        post: operations["TwoFactorSetupsController_setupTwoFactorAuth"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List budget entries
+         * @description List budget entries for a given period, timescale and set of locations
+         */
+        get: operations["BudgetsV2Controller_listBudgetEntries"];
+        /**
+         * Submit budget entries
+         * @description Idempotently submits budget entries in batch. Either creates or updates existing entries.
+         */
+        put: operations["BudgetsV2Controller_submitBudgetEntries"];
+        post?: never;
+        /** Delete budget entries in bulk */
+        delete: operations["BudgetsV2Controller_deleteBudgetEntries"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/copy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Copy a budget pattern across a range
+         * @description Expands and merges a budget copy operation server-side so clients do not need to submit one entry per target day or week.
+         */
+        put: operations["BudgetsV2Controller_copyBudgetEntries"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload budget Cap/Labour Forecasting data */
+        post: operations["BudgetsV2Controller_import"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/importV2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload budget Cap/Labour Forecasting data V2 */
+        post: operations["BudgetsV2Controller_importV2"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download budget Cap/Labour Forecasting data */
+        get: operations["BudgetsV2Controller_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/exportV2": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download budget Cap/Labour Forecasting data */
+        get: operations["BudgetsV2Controller_exportV2"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get budget settings */
+        get: operations["BudgetsV2Controller_getBudgetSettings"];
+        /** Update budget settings */
+        put: operations["BudgetsV2Controller_updateBudgetSettings"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/budgets/notify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Sends notification to admins
+         * @description When labour costs budget has been exceeded, admins are notified
+         */
+        post: operations["BudgetsV2Controller_notifyAdminsAboutExceededBudget"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/weeklyDistributions": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieves a location's normal weekly budget distributions */
+        get: operations["WeeklyDistributionsV2Controller_findAll"];
+        /** Updates a location's normal weekly budget distributions */
+        put: operations["WeeklyDistributionsV2Controller_update"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/daily_revenue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get revenue entries
+         * @description Get revenue entries for a given date range and location
+         */
+        get: operations["RevenueV1Controller_getV1BudgetEntries"];
+        put?: never;
+        /**
+         * Create/update revenue entries
+         * @description Create or update revenue entries for a given date and location
+         */
+        post: operations["RevenueV1Controller_createV1RevenueEntries"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/revenue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List revenue entries
+         * @description List revenue entries for a given period and set of locations
+         */
+        get: operations["RevenueV2Controller_listRevenueEntries"];
+        /**
+         * Submit revenue entries
+         * @description Submit revenue entries for a given period and one location
+         */
+        put: operations["RevenueV2Controller_submitRevenueEntries"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/revenue/import": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Upload Actual Revenue data */
+        post: operations["RevenueV2Controller_import"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/revenue/export": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Download Revenue data */
+        get: operations["RevenueV2Controller_export"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/revenue/forecast": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get demand forecast */
+        get: operations["RevenueV2Controller_getForecast"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/revenue/accuracy": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get the accuracy of the user`s estimated revenue and the accuracy of the demand forecasting model, compared to their actual revenue. */
+        get: operations["RevenueV2Controller_getForecastAccuracy"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/revenue/forecast/eligibility": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Check if user is eligible for their data to be used in demand forecasting */
+        get: operations["RevenueV2Controller_checkEligibility"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/daily_budgets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * List budget entries
+         * @description List budget entries for a given period, timescale and set of locations
+         */
+        get: operations["BudgetsV1Controller_listBudgetV1Entries"];
+        put?: never;
+        /**
+         * Post a Budget Entry
+         * @description Post a new Budget Entry
+         */
+        post: operations["BudgetsV1Controller_postBudgetV1Entries"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/default_pricing": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DefaultPricingController_defaultPricing"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/email_seen/{id}/{hash}/pixel.gif": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["EmailSeenController_getEmailSeen"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messages": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MessagesController_getMessages"];
+        put?: never;
+        post: operations["MessagesController_sendMessage"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/messages/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["MessagesController_deleteMessage"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/events": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["EventsController_logEvent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/geocode": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["GeocodeController_geocodeAddress"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/holiday_accruals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["HolidayAccrualsController_findByQuery"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/inbound_sms/twilio": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InboundSmsController_handleTwilioInboundSms"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/timezones": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all timezones */
+        get: operations["TimezonesController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/timezones/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Retrieve timezone by id */
+        get: operations["TimezonesController_findOne"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invoices/delete": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InvoicesController_deleteInvoice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invoices/{invoiceId}/payment_links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["InvoicesController_postInvoicePaymentLinks"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["InvoicesController_getInvoices"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/leave_types": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["LeaveTypesController_findAll"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/toil_allowance/{year}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ToilAllowanceController_getMultipleAllowances"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/toil_accruals": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ToilAccrualsController_findAll"];
+        put?: never;
+        post: operations["ToilAccrualsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/toil_accruals/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["ToilAccrualsController_findOne"];
+        put?: never;
+        post?: never;
+        delete: operations["ToilAccrualsController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/webhooks_available": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["WebhooksAvailableController_webhooksAvailable"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/availability": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List availability records */
+        get: operations["AvailabilityController_findAll"];
+        put?: never;
+        /** Create availability record */
+        post: operations["AvailabilityController_createMany"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/documents": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Query all documents */
+        get: operations["DocumentsController_findAll"];
+        put?: never;
+        /** Create a new document */
+        post: operations["DocumentsController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/documents/unsigned": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Show users who must sign a document */
+        get: operations["DocumentsController_showUsersWhoMustSign"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/documents/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a document */
+        get: operations["DocumentsController_find"];
+        put?: never;
+        /** Update a document */
+        post: operations["DocumentsController_update"];
+        /** Delete a document */
+        delete: operations["DocumentsController_delete"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/documents/{documentId}/acknowledgements": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Acknowledge a document */
+        put: operations["DocumentsController_acknowledge"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/documents/{documentId}/signature": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sign a document */
+        post: operations["DocumentsController_sign"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/documents/{id}/download_link": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a download link for a document */
+        get: operations["DocumentsController_getDownloadLink"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/stripe_webhook": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["StripeWebhookController_postStripeWebhook"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/devices/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DevicesController_getDevice"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/devices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DevicesController_findAll"];
+        put?: never;
+        post: operations["DevicesController_registerDevice"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/devices/test": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["DevicesController_testPushNotifications"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/devices/{deviceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["DevicesController_deRegisterDevice"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/ip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MeV1Controller_ip"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MeV1Controller_getNotificationsPreferences"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["MeV1Controller_updateNotificationsPreferences"];
+        trace?: never;
+    };
+    "/v1/me/intercom": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["MeV1Controller_getIntercomData"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/me/features": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get all available feature flags for the current user */
+        get: operations["MeV1Controller_features"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Override feature flags for the current RotaCloud employee user */
+        patch: operations["MeV1Controller_overrideFeatures"];
+        trace?: never;
+    };
+    "/v2/me/setupWizardSteps": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List all setup wizard step records */
+        get: operations["MeV2Controller_getSetupWizardSteps"];
+        /** Update the setup wizard steps */
+        put: operations["MeV2Controller_updateSetupWizardSteps"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/email_feedback_new": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["EmailFeedbackController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/settings": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["SettingsController_getSettings"];
+        put?: never;
+        /**
+         * Updates the current account's settings
+         * @description Updates the current account's settings. Supports partial payload, any missing keys will be left unchanged. On change, may perform various actions depending on what settings were changed, for example logging users out who do not have 2FA enforced, or updating properties about the account in Intercom
+         */
+        post: operations["SettingsController_updateSettings"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/dev/jobs": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Allows a job to be queued for processing for testing purposes */
+        post: operations["DevController_dispatchJob"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/dev/config_dump": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["DevController_configDump"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v1/dev/force_subscription": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Allows elements of a subscription to be forcibly set for testing purposes */
+        put: operations["DevController_forceSubscription"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/seeders/{seederType}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Seeds test data into the current account */
+        post: operations["SeedersV2Controller_seed"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/rotas": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["RotasController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/dayNotes/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get a day note */
+        get: operations["DayNotesController_getDayNotesById"];
+        /** Update a day note */
+        put: operations["DayNotesController_update"];
+        post?: never;
+        /** Delete a day note */
+        delete: operations["DayNotesController_deleteNoteById"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/dayNotes": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List notes for the requested date range and location. */
+        get: operations["DayNotesController_getAllDayNotes"];
+        put?: never;
+        /** Create a new day note */
+        post: operations["DayNotesController_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/v2/shifts": {
         parameters: {
             query?: never;
@@ -168,10 +2082,3610 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/v2/invoices": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List invoices */
+        get: operations["InvoicesController_getInvoices"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/invoices/{invoiceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get invoice */
+        get: operations["InvoicesController_getInvoice"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/paymentSources": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List payment sources */
+        get: operations["PaymentSourcesController_getPaymentSources"];
+        put?: never;
+        /** Create a new payment source */
+        post: operations["PaymentSourcesController_createPaymentSource"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/paymentSources/setupIntent": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Create a new setup intent. Use `clientSecret` if you intend to confirm the intent with Stripe.js. Otherwise use `id` for manual confirmation via Stripe API */
+        post: operations["PaymentSourcesController_createSetupIntent"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/paymentSources/{paymentSourceId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Deletes a payment source */
+        delete: operations["PaymentSourcesController_deletePaymentSource"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/productCatalogue": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists the items available on the RotaCloud product catalogue */
+        get: operations["ProductCatalogueController_getProductCatalogue"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/admin/accounts/{accountId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get account information for admin purposes */
+        get: operations["AdminController_getAccountInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/platform/appUpdates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get platform-specific configuration
+         * @description Returns configuration data for different platforms including minimum supported versions,
+         *           latest versions, and whether a forced update is required.
+         */
+        get: operations["PlatformController_getAppUpdates"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/reports/costs/consecutive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get costs for a given number of consecutive days starting at the provided date (default: 3 days from today) */
+        get: operations["CostsController_getConsecutiveCosts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/reports/costs/day": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get costs for one day, broken down by Location */
+        get: operations["CostsController_getDaysCosts"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/dashboard/leave": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get leave statistics
+         * @description Retrieves active, approved leave records grouped by leave type. Admins see all account leave; managers see leave for their managed employees.
+         */
+        get: operations["LeaveController_getLeaves"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/v2/dashboard/attendance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get attendance statistics
+         * @description Retrieves active, approved attendance records grouped by attendance type. Admins see all account attendance; managers see attendance for their managed employees.
+         */
+        get: operations["AttendanceController_getAttendanceStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        Entitlement: {
+            /**
+             * @description The ID of the entitlement
+             * @example feature-sms
+             */
+            id: string;
+        };
+        PlanStatus: {
+            /**
+             * @description Status name
+             * @example active
+             * @enum {string}
+             */
+            name: "active" | "in_trial";
+        };
+        Plan: {
+            /**
+             * @description The ID of the plan
+             * @example plan-standard
+             */
+            id: string;
+            /** @description The status of the plan in the subscription */
+            status: components["schemas"]["PlanStatus"];
+        };
+        AddonStatus: {
+            /**
+             * @description Status name
+             * @example active
+             * @enum {string}
+             */
+            name: "active" | "in_trial" | "hidden";
+        };
+        Addon: {
+            /**
+             * @description The ID of the addon
+             * @example addon-sms
+             */
+            id: string;
+            /** @description The status of the addon in the subscription */
+            status: components["schemas"]["AddonStatus"];
+        };
+        SubscriptionResponse: {
+            /**
+             * @description The current status of their subscription
+             * @example in_trial
+             * @enum {string}
+             */
+            status: "in_trial" | "active" | "non_renewing" | "paused" | "cancelled";
+            /**
+             * Format: datetime
+             * @description If the account has experienced payment failure(s) and one of their subscriptions has entered dunning (automated payment recovery), this is the date dunning ends and therefore the subscription will be cancelled. Only shows for admins
+             * @example 2024-06-18T09:07:42Z
+             */
+            dunningEnds?: string | null;
+            /** @description What features the account is entitled to use */
+            entitlements: components["schemas"]["Entitlement"][];
+            /** @description Contains all plans the account has. Whether it is their active plan, or they are currently trialing it (eg Pro) alongside their active plan (Standard), or they have hidden it and dont want to be told about it in the future */
+            plans: components["schemas"]["Plan"][];
+            /** @description Includes all addons the account has, including hidden ones. This should not be checked for access to features, entitlements should be used for that purpose, this is only for displaying billing related info */
+            addons: components["schemas"]["Addon"][];
+            /**
+             * @description The tier limit for the subscription, or null if there is no tier limit
+             * @example 5
+             */
+            tierLimit: Record<string, never>;
+        };
+        PricingTier: {
+            /**
+             * @description The starting unit of the tier
+             * @example 1
+             */
+            startingUnit: number;
+            /**
+             * @description The ending unit of the tier
+             * @example 10
+             */
+            endingUnit: Record<string, never> | null;
+            /**
+             * @description The price of the tier
+             * @example 100
+             */
+            price: number;
+        };
+        ItemPrice: {
+            /**
+             * @description ID of the plan
+             * @example plan-standard-gbp-monthly
+             */
+            itemPriceId: string;
+            /**
+             * @description The price of the item in cents
+             * @example 100
+             */
+            price: number;
+            /**
+             * @description The pricing model of the item price
+             * @enum {string}
+             */
+            pricingModel: "flat_fee" | "per_unit" | "tiered" | "volume" | "stairstep" | null;
+            /** @description The tiers of the item */
+            tiers?: components["schemas"]["PricingTier"][];
+            /** @description The current tier of the item */
+            currentTier?: components["schemas"]["PricingTier"];
+            /** @description The per_unit price of the item in cents */
+            perUnitPrice?: number;
+        };
+        PlanExtended: {
+            /**
+             * @description The ID of the plan
+             * @example plan-standard
+             */
+            id: string;
+            /** @description The status of the plan in the subscription */
+            status: components["schemas"]["PlanStatus"];
+            /**
+             * Format: datetime
+             * @description ISO8601 compliant datetime string when the trial ends
+             * @example 2024-06-18T09:07:42Z
+             */
+            trialEnds: Record<string, never> | null;
+            /** @description Pricing information for the plan */
+            pricing: components["schemas"]["ItemPrice"];
+        };
+        AddonExtended: {
+            /**
+             * @description The ID of the addon
+             * @example addon-sms
+             */
+            id: string;
+            /** @description The status of the addon in the subscription */
+            status: components["schemas"]["AddonStatus"];
+            /**
+             * Format: datetime
+             * @description ISO8601 compliant datetime string when the trial ends
+             * @example 2024-06-18T09:07:42Z
+             */
+            trialEnds: Record<string, never> | null;
+            /** @description Pricing information for the addon */
+            pricing: components["schemas"]["ItemPrice"];
+        };
+        ScheduledChanges: {
+            /**
+             * Format: datetime
+             * @description ISO8601 datetime the scheduled changes take effect (end of the current term)
+             * @example 2024-06-18T09:07:42Z
+             */
+            effectiveDate: string;
+            /** @description The plans the subscription will have once the scheduled changes take effect */
+            plans: components["schemas"]["PlanExtended"][];
+            /** @description The addons the subscription will have once the scheduled changes take effect. An addon present on the current subscription but absent here has been removed. */
+            addons: components["schemas"]["AddonExtended"][];
+            /**
+             * @description The tier limit once the scheduled changes take effect, or null if there is no tier limit
+             * @example 30
+             */
+            tierLimit: Record<string, never> | null;
+            /**
+             * @description The total price that will be billed once the scheduled changes take effect
+             * @example 6000
+             */
+            totalPrice: number;
+        };
+        ExtendedSubscriptionResponse: {
+            /**
+             * @description The current status of their subscription
+             * @example in_trial
+             * @enum {string}
+             */
+            status: "in_trial" | "active" | "non_renewing" | "paused" | "cancelled";
+            /**
+             * Format: datetime
+             * @description If the account has experienced payment failure(s) and one of their subscriptions has entered dunning (automated payment recovery), this is the date dunning ends and therefore the subscription will be cancelled. Only shows for admins
+             * @example 2024-06-18T09:07:42Z
+             */
+            dunningEnds?: string | null;
+            /** @description What features the account is entitled to use */
+            entitlements: components["schemas"]["Entitlement"][];
+            /** @description The plans for the subscription. Extended to include things like pricing for that addon, when its trial ends and the quantity. Extended version only available on extended response. */
+            plans: components["schemas"]["PlanExtended"][];
+            /** @description The addons for the subscription. Extended to include things like pricing for that addon, when its trial ends and the quantity. Extended version only available on extended response. */
+            addons: components["schemas"]["AddonExtended"][];
+            /**
+             * @description The tier limit for the subscription, or null if there is no tier limit
+             * @example 5
+             */
+            tierLimit: Record<string, never>;
+            /**
+             * @deprecated
+             * @description The unit of time the subscription is charged in. Only available on extended response. DEPRECATED: Use paymentFrequency instead
+             * @example monthly
+             */
+            billingFrequency: string;
+            /**
+             * @description The unit of time the subscription is charged in. Only available on extended response.
+             * @example monthly
+             * @enum {string}
+             */
+            paymentFrequency: "monthly" | "yearly";
+            /**
+             * @description Billing email
+             * @example joh.doe@rotacloud.com
+             */
+            billingEmail: Record<string, never> | null;
+            /**
+             * @description The country ID of the billing address. Only available on extended response.
+             * @example 1
+             */
+            country: number | null;
+            /**
+             * @description The ID of the primary payment source used for the subscription. Only available on extended response.
+             * @example pm___test__XpbTXGTSRp4R8ZEN
+             */
+            subscriptionPaymentSourceId: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date and time the subscription will be next billed. Only available on extended response. Null if billing hasn't started yet
+             * @example 2024-06-18T09:07:42Z
+             */
+            nextBillingAt: Record<string, never>;
+            /**
+             * Format: datetime
+             * @description The date and time the subscription will end. Only available on extended response.
+             * @example 2024-06-18T09:07:42Z
+             */
+            trialEnds: string | null;
+            /**
+             * Format: boolean
+             * @description Whether the account is allowed to restart a trial or not. Null if not applicable (for example, the account isn't an expired trial). Only available on extended response.
+             */
+            canRestartTrial: string | null;
+            /**
+             * @description The total price for the subscription. This is the total amount that will be billed to the customer including any coupons or discounts. Only available on extended response.
+             * @example 1000
+             */
+            totalPrice: number;
+            /** @description The state the subscription will move to at the end of the current term when a change is scheduled, or null when there are no scheduled changes. Only available on extended response. */
+            scheduledChanges: components["schemas"]["ScheduledChanges"] | null;
+        };
+        UpdatedPlan: {
+            /**
+             * @description The plan ID
+             * @example plan-standard
+             */
+            planId: string;
+            /**
+             * @description Indicator whether a new plan should be in trial. Default false, but will only change a subscribed plan to a trial or not a trial if it is explicitly included. Basically, it only defaults to false for new addons
+             * @default false
+             */
+            trial: boolean;
+        };
+        UpdatedAddon: {
+            /**
+             * @description The addon ID
+             * @example addon-time-and-attendance
+             */
+            addonId: string;
+            /** @description Indicator whether a new addon should be in trial. Default false, but will only change a subscribed addon to a trial or not a trial if it is explicitly included. Basically, it only defaults to false for new addons */
+            trial?: boolean;
+        };
+        OmittedUpdateSubscriptionRequest: {
+            /**
+             * @description The new payment frequency
+             * @example monthly
+             * @enum {string}
+             */
+            paymentFrequency?: "monthly" | "yearly";
+            /** @description Plans the subscription should include. Any existing plans that are omitted will be removed */
+            plans?: components["schemas"]["UpdatedPlan"][];
+            /** @description Addons the subscription should include. Any existing addons that are omitted will be removed */
+            addons?: components["schemas"]["UpdatedAddon"][];
+            /**
+             * @description The payment source ID to use to fund this subscription
+             * @example pm_1234567890
+             */
+            subscriptionPaymentSourceId?: string;
+            /**
+             * @description The billing email to use for this subscription
+             * @example john.doe@rotacloud.com
+             */
+            billingEmail?: string;
+            /**
+             * @description Country ID
+             * @example 1
+             */
+            country?: number;
+        };
+        EstimatesRequest: {
+            /** @description Plans the subscription should include. Any existing plans that are omitted will be removed */
+            plans?: components["schemas"]["UpdatedPlan"][];
+            /** @description Addons the subscription should include. Any existing addons that are omitted will be removed */
+            addons?: components["schemas"]["UpdatedAddon"][];
+            /**
+             * @description The new payment frequency
+             * @example monthly
+             * @enum {string}
+             */
+            paymentFrequency: "monthly" | "yearly";
+        };
+        LineItem: {
+            /** @example li_BTU8sVV4QdGwzQmr */
+            id: string;
+            /**
+             * @description The type of item
+             * @example plan
+             * @enum {string}
+             */
+            type: "plan" | "addon";
+            /**
+             * @description Name of the item to display
+             * @example Pro
+             */
+            description: string;
+            /**
+             * Format: integer
+             * @description The amount in pence of the line item
+             * @example 9000
+             */
+            amount: number;
+            /**
+             * Format: integer
+             * @description The flat amount in pence discounted from the line item
+             * @example 900
+             */
+            discountAmount: number;
+        };
+        Estimate: {
+            /**
+             * Format: integer
+             * @description Amount chargeable excluding tax and credits
+             * @example 1452
+             */
+            subTotal: number;
+            /**
+             * Format: integer
+             * @description Amount taxable in pence
+             * @example 290
+             */
+            vat: number;
+            /**
+             * Format: integer
+             * @description Amount chargeable in pence. Includes tax and credits applied.
+             * @example 0
+             */
+            total: number;
+            /**
+             * Format: integer
+             * @description The total amount in pence in credits that have been applied
+             * @example 1742
+             */
+            creditsApplied: number;
+            /** @description Array of objects containing estimate for every subscription item */
+            lineItems: components["schemas"]["LineItem"][];
+        };
+        EstimatesResponse: {
+            /**
+             * @description Payment frequency
+             * @example monthly
+             * @enum {string}
+             */
+            paymentFrequency: "monthly" | "yearly";
+            /** @deprecated */
+            subTotal: number;
+            /** @deprecated */
+            chargedImmediately: number;
+            /** @deprecated */
+            creditsApplied: number;
+            /**
+             * Format: integer
+             * @description Employee count
+             * @example 22
+             */
+            quantity: number;
+            /** @deprecated */
+            lineItems: string[];
+            /** @deprecated */
+            owed: number;
+            /** @deprecated */
+            totalPrice: number;
+            /** @description Object containing information related to immediate charges that will be made if the user proceeds with the subscription change */
+            immediateEstimates: components["schemas"]["Estimate"];
+            /** @description Object containing information related to recurring charges that will be made if the user proceeds with the subscription change. Note: credits cannot be calculated for next estimate */
+            nextEstimates: components["schemas"]["Estimate"];
+            /**
+             * Format: datetime
+             * @description ISO8601 compliant datetime string when the next billing date is
+             * @example 2024-06-18T09:07:42Z
+             */
+            nextBillingDate: string;
+        };
+        CancelAccountRequest: {
+            /**
+             * @description The reason the admin user has given for cancelling the account. It expects one of few predefined values, though this isn't enforced
+             * @example price
+             * @enum {string}
+             */
+            reason: "features" | "value" | "price" | "not_using" | "incompatible" | "difficulty" | "using_competitor" | "sold" | "temporary_closure" | "closed";
+            /**
+             * @description A plain-english message provided by the cancelling user
+             * @example RotaCloud is too expensive
+             */
+            message?: string;
+            /**
+             * @description Allows an object containing arbitrary enriching data to be provided, such as which is the competitor they are moving to
+             * @example {
+             *       "competitor": "Deputy"
+             *     }
+             */
+            detail?: {
+                [key: string]: unknown;
+            };
+        };
+        CancelAccountDto: Record<string, never>;
+        LogbookCategoriesResponse: {
+            /** @example 1 */
+            id: number;
+            /** @example Category name */
+            name: string;
+            /**
+             * @description Whether the category is deleted
+             * @example 0
+             */
+            deleted: boolean;
+            /**
+             * Format: datetime
+             * @description The date and time the category was created
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            createdAt: Record<string, never> | null;
+            /**
+             * @description The user ID of the user who created the category
+             * @example 123
+             */
+            createdBy: number | null;
+        };
+        LogbookResponse: {
+            /** @example 1 */
+            id: number;
+            /**
+             * @description The title of the logbook entry
+             * @example Random title
+             */
+            name: string;
+            /**
+             * @description Description of the logbook entry
+             * @example Best employee ever
+             */
+            description: string;
+            /**
+             * @description The category ID the logbook entry belongs to
+             * @example 2
+             */
+            categoryId: number;
+            /**
+             * Format: datetime
+             * @description The date selected for the logbook entry
+             * @example 2020-07-02T15:30:00.000Z
+             */
+            date: string;
+            /**
+             * Format: time
+             * @description The optional time the user may specify for the logbook
+             * @example 15:30
+             */
+            time?: Record<string, never>;
+            /**
+             * Format: datetime
+             * @description The date and time the logbook was created
+             * @example 2020-07-02T15:30:00.000Z
+             */
+            createdAt: string;
+            /**
+             * @description The user ID of the user who created the logbook
+             * @example 123
+             */
+            createdBy: number | null;
+            /**
+             * Format: datetime
+             * @description The date and time the logbook was last updated
+             * @example null
+             */
+            updatedAt: Record<string, never>;
+            /**
+             * @description The user ID of the user who last updated the logbook
+             * @example null
+             */
+            updatedBy: number | null;
+            /**
+             * @description The user ID of the user who the logbook was created for
+             * @example 456
+             */
+            userId: number;
+        };
+        PaginationProperties: {
+            /**
+             * @description The cursor to the next page. Null if there is no next page
+             * @example eyJ0aW1lc3RhbXAiOiIxNjEzNjYwNzU4IiwicGFnZUlkIjoiMSJ9
+             */
+            next: string | null;
+            /**
+             * @description The total number of items in the paginated response
+             * @example 6367
+             */
+            count: number;
+        };
+        PaginatedResponse: {
+            /** @description The pagination information */
+            pagination: components["schemas"]["PaginationProperties"];
+        };
+        LogbookCategoriesRequest: {
+            /**
+             * @description The name of the logbook category
+             * @example Comments
+             */
+            name: string;
+        };
+        DateTime: Record<string, never>;
+        CreateLogbookRequest: {
+            /**
+             * @description The title of the logbook entry
+             * @example Comments
+             */
+            name: string;
+            /**
+             * @description Description of the logbook entry
+             * @example sickness on a Friday for the fourth time this month
+             */
+            description: string;
+            /**
+             * @description The category ID of the logbook entry. This is null if category already exists, and you provide the category name instead
+             * @example null
+             */
+            categoryId: number | null;
+            /**
+             * @description The name of the logbook category. This is null if category already exists, and you provide the category ID instead
+             * @example Comments
+             */
+            categoryName: string | null;
+            /**
+             * Format: date
+             * @description The date selected for the logbook entry
+             * @example 2024-04-05
+             */
+            date: string;
+            /**
+             * Format: time
+             * @description The optional time the user may specify for the logbook
+             * @example 15:30
+             */
+            time: string;
+            /**
+             * @description The user ID of the user who the logbook was created for
+             * @example 123
+             */
+            userId: number;
+        };
+        UpdateLogbookRequest: {
+            /**
+             * @description The title of the logbook entry
+             * @example Comments
+             */
+            name: string;
+            /**
+             * @description Description of the logbook entry
+             * @example sickness on a Friday for the fourth time this month
+             */
+            description: string;
+            /**
+             * @description The category ID of the logbook entry. This is null if category already exists, and you provide the category name instead
+             * @example null
+             */
+            categoryId: number | null;
+            /**
+             * @description The name of the logbook category. This is null if category already exists, and you provide the category ID instead
+             * @example Comments
+             */
+            categoryName: string | null;
+            /**
+             * Format: date
+             * @description The date selected for the logbook entry
+             * @example 2024-04-05
+             */
+            date: string;
+            /**
+             * Format: time
+             * @description The optional time the user may specify for the logbook
+             * @example 15:30
+             */
+            time: string;
+        };
+        CurrentWeather: {
+            /**
+             * @description Daily weather condition code
+             * @example PartlyCloudy
+             * @enum {string}
+             */
+            conditionCode: "BlowingDust" | "Clear" | "Cloudy" | "Foggy" | "Haze" | "MostlyClear" | "MostlyCloudy" | "PartlyCloudy" | "Smoky" | "Breezy" | "Windy" | "Drizzle" | "HeavyRain" | "IsolatedThunderstorms" | "Rain" | "SunShowers" | "ScatteredThunderstorms" | "StrongStorms" | "Thunderstorms" | "Frigid" | "Hail" | "Hot" | "Flurries" | "Sleet" | "Snow" | "SunFlurries" | "WintryMix" | "Blizzard" | "BlowingSnow" | "FreezingDrizzle" | "FreezingRain" | "HeavySnow" | "Hurricane" | "TropicalStorm";
+            /**
+             * @description Temperature in degrees Celsius
+             * @example 15
+             */
+            temperature: number;
+            /**
+             * @description Precipitation intensity in millimeters per hour
+             * @example 0.5
+             */
+            precipitationIntensity: number;
+            /**
+             * @description Wind speed in kilometers per hour
+             * @example 12.5
+             */
+            windSpeed: number;
+        };
+        DayPartForecastData: {
+            /**
+             * @description Weather condition code for specific time period
+             * @example PartlyCloudy
+             * @enum {string}
+             */
+            conditionCode: "BlowingDust" | "Clear" | "Cloudy" | "Foggy" | "Haze" | "MostlyClear" | "MostlyCloudy" | "PartlyCloudy" | "Smoky" | "Breezy" | "Windy" | "Drizzle" | "HeavyRain" | "IsolatedThunderstorms" | "Rain" | "SunShowers" | "ScatteredThunderstorms" | "StrongStorms" | "Thunderstorms" | "Frigid" | "Hail" | "Hot" | "Flurries" | "Sleet" | "Snow" | "SunFlurries" | "WintryMix" | "Blizzard" | "BlowingSnow" | "FreezingDrizzle" | "FreezingRain" | "HeavySnow" | "Hurricane" | "TropicalStorm";
+            /**
+             * @description Probability of precipitation (0-1)
+             * @example 0.2
+             */
+            precipitationChance: number;
+            /**
+             * @description Forecast start time in ISO format
+             * @example 2025-04-08T06:00:00Z
+             */
+            forecastStart: string;
+            /**
+             * @description Forecast end time in ISO format
+             * @example 2025-04-08T18:00:00Z
+             */
+            forecastEnd: string;
+            /**
+             * @description Wind speed in kilometers per hour
+             * @example 8.5
+             */
+            windSpeed: number;
+        };
+        DayForecastData: {
+            /**
+             * @description Weather condition code for the day
+             * @example Clear
+             * @enum {string}
+             */
+            conditionCode: "BlowingDust" | "Clear" | "Cloudy" | "Foggy" | "Haze" | "MostlyClear" | "MostlyCloudy" | "PartlyCloudy" | "Smoky" | "Breezy" | "Windy" | "Drizzle" | "HeavyRain" | "IsolatedThunderstorms" | "Rain" | "SunShowers" | "ScatteredThunderstorms" | "StrongStorms" | "Thunderstorms" | "Frigid" | "Hail" | "Hot" | "Flurries" | "Sleet" | "Snow" | "SunFlurries" | "WintryMix" | "Blizzard" | "BlowingSnow" | "FreezingDrizzle" | "FreezingRain" | "HeavySnow" | "Hurricane" | "TropicalStorm";
+            /**
+             * @description Forecast start time in ISO format
+             * @example 2025-04-08T00:00:00Z
+             */
+            forecastStart: string;
+            /**
+             * @description Forecast end time in ISO format
+             * @example 2025-04-08T23:59:59Z
+             */
+            forecastEnd: string;
+            /**
+             * @description Probability of precipitation (0-1)
+             * @example 0.3
+             */
+            precipitationChance: number;
+            /**
+             * @description Minimum temperature for the day in degrees Celsius
+             * @example 10
+             */
+            temperatureMin: number;
+            /**
+             * @description Maximum temperature for the day in degrees Celsius
+             * @example 22
+             */
+            temperatureMax: number;
+            /** @description Daytime weather forecast */
+            daytimeForecast: components["schemas"]["DayPartForecastData"];
+            /** @description Overnight weather forecast */
+            overnightForecast: components["schemas"]["DayPartForecastData"];
+        };
+        DailyForecast: {
+            /** @description Array of daily weather forecasts */
+            days: components["schemas"]["DayForecastData"][];
+        };
+        AttributionData: {
+            /**
+             * @description Service name to attribute
+             * @example Unknown
+             */
+            serviceName: string;
+            /**
+             * @description URL to the logo image for dark background
+             * @example https://example.com/assets/logo_lght.png
+             */
+            logoDarkUrl: string;
+            /**
+             * @description URL to the logo image for light background
+             * @example https://example.com/assets/logo_drk.png
+             */
+            logoLightUrl: string;
+            /**
+             * @description URL to the attribution data for users
+             * @example https://example.com
+             */
+            url: string;
+        };
+        LocationWeatherResponse: {
+            /** @description Current weather conditions */
+            currentWeather: components["schemas"]["CurrentWeather"];
+            /** @description Daily weather forecasts */
+            forecastDaily: components["schemas"]["DailyForecast"];
+            /** @description Attribution data for the weather service. Schema subject to change */
+            attribution: components["schemas"]["AttributionData"][];
+        };
+        SelfServeOnboardingRequest: {
+            /**
+             * @description The title of the user to onboard
+             * @example Mr
+             */
+            title: string;
+            /**
+             * @description The gender of the user to onboard
+             * @example male
+             */
+            gender: string;
+            /**
+             * Format: date
+             * @description The date of birth of the user to onboard
+             * @example 1990-01-01
+             */
+            dob: components["schemas"]["DateTime"];
+            /**
+             * @description The national insurance number of the user to onboard
+             * @example AA123456A
+             */
+            nationalInsuranceNumber?: string;
+            /**
+             * @description The address line 1 of the user to onboard
+             * @example 1 Test Street
+             */
+            address1: string;
+            /**
+             * @description The address line 2 of the user to onboard
+             * @example Test Town
+             */
+            address2?: string;
+            /**
+             * @description The county of the user to onboard
+             * @example Test County
+             */
+            county: string;
+            /**
+             * @description The phone number of the user to onboard
+             * @example 01234567890
+             */
+            phone: string;
+            /**
+             * @description The postcode of the user to onboard
+             * @example AA1 1AA
+             */
+            postcode: string;
+            /**
+             * @description The city of the user to onboard
+             * @example Test City
+             */
+            city: string;
+            /**
+             * @description The name of the users emergency contact
+             * @example Jane Doe
+             */
+            emergencyContactName: string;
+            /**
+             * @description The phone number of the users emergency contact
+             * @example 01234567890
+             */
+            emergencyContactPhone: string;
+            /**
+             * @description The relationship of the user to their emergency contact
+             * @example Mother
+             */
+            emergencyContactRelationship: string;
+        };
+        SyncContactDetailsDto: Record<string, never>;
+        UnifiedSingleUserRequest: {
+            /**
+             * @description The first name of the user.
+             * @example John
+             */
+            firstName: string;
+            /**
+             * @description The last name of the user. This field requires managerial "employees" permission when creating a new user.
+             * @example Doe
+             */
+            lastName: string;
+            /**
+             * @description The roles assigned to the user.
+             * @example [
+             *       1
+             *     ]
+             */
+            roles?: number[];
+            /**
+             * @description For "add" mode. The email address of the user. This field requires managerial "employees" permission and is optional. For "onboard" mode, this field is required.
+             * @example test@rotacloud.com
+             */
+            email?: string;
+            /**
+             * @description The default role of the user
+             * @example 1
+             */
+            defaultRole?: number;
+        };
+        UnifiedUsersRequest: {
+            /** @description Array of users to add or onboard, or send invites. */
+            users: components["schemas"]["UnifiedSingleUserRequest"][];
+            /**
+             * @description For "onboard" mode. The locations for the users being onboarded
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            locations?: string[];
+        };
+        OnboardSingleUserRequest: {
+            /**
+             * @description The first name of the user. This field requires managerial "employees" permission when creating a new user.
+             * @example John
+             */
+            firstName: string;
+            /**
+             * @description The last name of the user. This field requires managerial "employees" permission when creating a new user.
+             * @example Doe
+             */
+            lastName: string;
+            /**
+             * @description The locations that the user is assigned to. This field requires managerial "employees" permission when creating a new user.
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            locations?: string[];
+            /**
+             * @description The email address of the user to onboard
+             * @example test@rotacloud.com
+             */
+            email: string;
+            /**
+             * @description The roles assigned to the user. This field requires managerial "employees" permission when creating a new user.
+             * @example [
+             *       1
+             *     ]
+             */
+            roles?: number[];
+            /**
+             * @description The default role of the user. The stated role must already be assigned to the user before setting it as default.
+             * @example 1
+             */
+            defaultRole?: number;
+        };
+        OnboardUsersRequest: {
+            /**
+             * @description The location of the user to onboard
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            locations?: string[];
+            /** @description The users to onboard */
+            users: components["schemas"]["OnboardSingleUserRequest"][];
+        };
+        EntitySummary: {
+            /**
+             * @description The unique identifier of the entity
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The name property of the associated entity
+             * @example My Group
+             */
+            name: string;
+        };
+        EmployeeDetailsResponse: {
+            /**
+             * @description The unique identifier of the employee
+             * @example 42
+             */
+            id: number;
+            /**
+             * @description The permission level of the employee
+             * @example employee
+             * @enum {string}
+             */
+            level: "admin" | "manager" | "employee";
+            /**
+             * @description The first name of the employee
+             * @example John
+             */
+            firstName: string;
+            /**
+             * @description The last name of the employee
+             * @example Doe
+             */
+            lastName: string;
+            /**
+             * @description The email address of the employee
+             * @example john.doe@example.com
+             */
+            email: string | null;
+            /**
+             * @description Indicates if the employee has a registered account
+             * @example true
+             */
+            hasAccount: boolean;
+            /**
+             * @description Indicates if an invite has been sent to the employee
+             * @example false
+             */
+            inviteSent: boolean;
+            /** @description The group the employee belongs to */
+            group: components["schemas"]["EntitySummary"] | null;
+            /** @description Locations assigned to the employee */
+            locations: components["schemas"]["EntitySummary"][];
+            /** @description Roles assigned to the employee */
+            roles: components["schemas"]["EntitySummary"][];
+            /** @description The default role of the employee */
+            defaultRole: components["schemas"]["EntitySummary"] | null;
+            /**
+             * @description Contracted weekly hours
+             * @example 40
+             */
+            weeklyHours: number | null;
+            /**
+             * @description Indicates if the employee is currently going through onboarding
+             * @example false
+             */
+            onboarding: boolean;
+            /**
+             * @description The type of salary the employee receives
+             * @example hourly
+             * @enum {string}
+             */
+            salaryType: "hourly" | "annual";
+            /**
+             * @description The salary or hourly wage amount
+             * @example 15.5
+             */
+            salary: number;
+            /**
+             * @description Indicates if the employee has confirmed their phone number
+             * @example true
+             */
+            phoneConfirmed: boolean;
+        };
+        IndustryResponseDTO: {
+            /**
+             * @description ID of the industry
+             * @example 1011
+             */
+            id: number;
+            /**
+             * @description group of the industry
+             * @example Entertainment / Leisure
+             */
+            group: string;
+            /**
+             * @description name of the industry
+             * @example Events
+             */
+            name: string;
+        };
+        InvitedByDto: {
+            /**
+             * @description The inviter's first name
+             * @example Alex
+             */
+            first_name: string;
+            /**
+             * @description The inviter's last name
+             * @example Smith
+             */
+            last_name: string;
+        };
+        ValidateInviteResponseDto: {
+            /**
+             * @description The invited user's email address
+             * @example jane.doe@example.com
+             */
+            email: string;
+            /**
+             * @description The invited user's first name
+             * @example Jane
+             */
+            first_name: string;
+            /**
+             * @description The invited user's last name
+             * @example Doe
+             */
+            last_name: string;
+            /**
+             * @description The name of the account they have been invited to
+             * @example Acme Corp
+             */
+            account: string;
+            /**
+             * @description Whether SSO is enabled for the invite account
+             * @example true
+             */
+            sso_enabled: boolean;
+            /**
+             * @description SSO authorization URL when SSO is enabled
+             * @example https://idp.example.com/oauth2/authorize?...
+             */
+            sso_authorization_url?: string;
+            /** @description The inviter details, when available */
+            invited_by?: components["schemas"]["InvitedByDto"];
+        };
+        ConfirmInviteDto: {
+            /**
+             * @description The user ID from the invite link (?id=...)
+             * @example 42
+             */
+            id: number;
+            /**
+             * @description The invite hash from the invite link (?hash=...)
+             * @example abc123
+             */
+            hash: string;
+            /**
+             * @description Optional account ID from the invite link (?account_id=...)
+             * @example 100
+             */
+            accountId?: number;
+        };
+        SsoEmailLoginRequest: {
+            /**
+             * @description Email address to attempt SSO login for
+             * @example alex@example.com
+             */
+            email: string;
+        };
+        SsoInitiateResponse: {
+            /**
+             * @description URL to redirect user to for SSO authentication
+             * @example https://login.microsoftonline.com/tenant-id/oauth2/v2.0/authorize?...
+             */
+            authorizationUrl: string;
+            /**
+             * @description State parameter for CSRF protection
+             * @example random-state-value
+             */
+            state: string;
+        };
+        SsoExchangeRequest: {
+            /**
+             * @description One-time code issued after the SSO callback
+             * @example B1x2Y3z4A5B6C7D8E9F0G1H2I3J4K5L6
+             */
+            code: string;
+        };
+        SsoAdminConfigRequest: Record<string, never>;
+        AppFeedbackDto: {
+            /** @description The freeform user feedback to record */
+            feedback?: string;
+            /** @description The rating the user gave */
+            rating?: number;
+            /**
+             * @description The type of feedback the user gave
+             * @enum {string}
+             */
+            type: "general_feedback" | "feature_request" | "technical_issue";
+        };
+        ShowAppFeedbackDialogueResponse: {
+            /** @description Indicates whether the app feedback dialogue should be shown to the user or not */
+            show_dialogue: boolean;
+        };
+        AnalyticEventDto: {
+            /**
+             * @description The name/key of the event
+             * @example shift_published
+             */
+            event: string;
+            /**
+             * @description The details of the event. Can be a freeform object containing any data a client app sends, using any casing
+             * @example {
+             *       "shift_id": 5838
+             *     }
+             */
+            details: Record<string, never>;
+            /**
+             * @description Mixpanel device ID. Used to associate anonymous user with registered user data. Only needed once
+             * @example 195aa160a9c2f8-02f90d1cd49364-1b525636-123456-195aa160a9c2f8
+             */
+            mpdid?: string;
+        };
+        CreateIntegrationDto: {
+            /**
+             * @description The company ID of the Tevalis account to integrate with
+             * @example 1234
+             */
+            companyId: string;
+            /**
+             * @description The GUID (API key) used of the Tevalis account to integrate with. The example is a fake key as this is sensitive data
+             * @example f0061446-16f0-4d39-ac37-75565fd17600
+             */
+            guid: string;
+        };
+        TevalisIntegrationResponse: {
+            /**
+             * @description The company ID of the Tevalis account
+             * @example company123
+             */
+            companyId: string;
+            /**
+             * @description The mappings of RotaCloud locations to Tevalis sites. This determines which RC locations the revenue from Tevalis sites is imported and mapped into
+             * @example {
+             *       "1": 101,
+             *       "2": 102
+             *     }
+             */
+            mappings: Record<string, never>;
+            /**
+             * @description Time when the integration last synced revenue from Tevalis
+             * @example 2023-01-01T12:00:00.000
+             */
+            lastSync: Record<string, never> | null;
+        };
+        TevalisSiteListResponse: {
+            /**
+             * @description The Tevalis name for the site
+             * @example RotacloudHQ
+             */
+            name: string;
+            /**
+             * @description The Tevalis ID for the site
+             * @example 245763
+             */
+            siteId: number;
+        };
+        UpdateTevalisIntegrationRequest: {
+            /**
+             * @description The mappings of RotaCloud locations to Tevalis sites. This determines which RC locations the revenue from Tevalis sites is imported and mapped into. The key is the RotaCloud location ID, and the value is the Tevalis site ID. Revenue from the Tevalis site will be pulled into the RotaCloud location's revenue
+             * @example {
+             *       "1": 101,
+             *       "2": 102
+             *     }
+             */
+            mappings: {
+                [key: string]: number;
+            };
+        };
+        SquareIntegrationResponse: {
+            /**
+             * @description The mappings of RotaCloud locations to Square sites. This determines which RC locations the revenue from Square sites is imported and mapped into
+             * @example {
+             *       "1": 101,
+             *       "2": 102
+             *     }
+             */
+            mappings: Record<string, never>;
+            /**
+             * @description Time when the integration last synced revenue from Square
+             * @example 2023-01-01T12:00:00.000
+             */
+            lastSync: Record<string, never> | null;
+            /**
+             * @description The sync status of the integration
+             * @example inProgress
+             */
+            syncStatus: string;
+            /**
+             * @description Whether the admin must relink the integration with Square
+             * @example false
+             */
+            relinkingRequired: boolean;
+        };
+        SquareLocationResponse: {
+            /**
+             * @description The Square-assigned ID of the location
+             * @example LPK59PKMYBSZ7
+             */
+            id: string;
+            /**
+             * @description The name of the location
+             * @example Main Street Store
+             */
+            name?: Record<string, never> | null;
+            /**
+             * @description The business name of the location
+             * @example Acme Corp
+             */
+            businessName?: Record<string, never> | null;
+            /**
+             * @description The status of the location
+             * @example ACTIVE
+             */
+            status?: string;
+            /**
+             * @description When the location was created, in RFC 3339 format
+             * @example 2023-01-01T12:00:00Z
+             */
+            createdAt?: string;
+            /**
+             * @description The ID of the merchant that owns the location
+             * @example MBT4XKSMNYXRR
+             */
+            merchantId?: string;
+            /**
+             * @description The currency used by the location
+             * @example GBP
+             */
+            currency?: string;
+            /**
+             * @description The IANA timezone of the location
+             * @example Europe/London
+             */
+            timezone?: Record<string, never> | null;
+            /**
+             * @description The country of the location
+             * @example US
+             */
+            country?: string;
+        };
+        UpdateSquareIntegrationRequest: {
+            /**
+             * @description The mappings of RotaCloud locations to Square sites. This determines which RC locations the revenue from Square sites is imported and mapped into. The key is the RotaCloud location ID, and the value is the Square site ID. Revenue from the Square site will be pulled into the RotaCloud location's revenue
+             * @example {
+             *       "1": "id-example-100",
+             *       "2": "id-example-200"
+             *     }
+             */
+            mappings: {
+                [key: string]: string;
+            };
+        };
+        CreateZapierSubscriptionDto: {
+            /**
+             * @description The URL of the webhook
+             * @example https://example.com/hook
+             */
+            webhook: string;
+            /**
+             * @description The event being subscribed to
+             * @example user.created
+             */
+            event: string;
+        };
+        DeleteZapierSubscriptionDto: {
+            /**
+             * @description The URL of the webhook
+             * @example https://example.com/hook
+             */
+            webhook: string;
+            /**
+             * @description The event being unsubscribed from
+             * @example user.created
+             */
+            event: string;
+        };
+        CreateViasocketSubscriptionDto: {
+            /**
+             * @description The URL of the webhook
+             * @example https://example.com/hook
+             */
+            webhook: string;
+            /**
+             * @description The event being subscribed to
+             * @example user.created
+             */
+            event: string;
+        };
+        DeleteViasocketSubscriptionDto: {
+            /**
+             * @description The URL of the webhook
+             * @example https://example.com/hook
+             */
+            webhook: string;
+            /**
+             * @description The event being unsubscribed from
+             * @example user.created
+             */
+            event: string;
+        };
+        SuccessfulLoginDto: {
+            /**
+             * @description An API key the user can use to the access the API
+             * @example 033MSk7CLNN8XaSxlZ6fRPacmcguG8sfJzdx9YRqnsOfjuSvoa2TvzstUJOurt5W
+             */
+            api_key: string;
+            /** @description List of accounts the user has access to */
+            accounts: unknown[][];
+        };
+        NativeLoginDto: {
+            /**
+             * @description A one-time exchange code for native app login
+             * @example exchange-code-value
+             */
+            code: string;
+        };
+        TwoFactorRequiredDto: {
+            /**
+             * @description Error message indicating why additional authentication is required
+             * @example Authentication code required
+             */
+            error: string;
+            /**
+             * @description A session ID for the two factor session
+             * @example JBSWY3DPEHPK3PXPfsdfjhdJUHHFmOWPWJRMkidhj
+             */
+            two_factor_session: string;
+        };
+        AccountEnforcingTwoFactorDto: {
+            /**
+             * @description The ID of the account enforcing two factor authentication
+             * @example 13920
+             */
+            id: number;
+            /**
+             * @description The name of the account enforcing two factor authentication
+             * @example Rotacloud
+             */
+            name: string;
+        };
+        TwoFactorEnforcedDto: {
+            /** @description Indicates that two factor authentication is required as it is enforced by the account and requires setting up first */
+            two_factor_setup_required: boolean;
+            /** @description The account that requires two factor authentication */
+            two_factor_setup_required_by_account: components["schemas"]["AccountEnforcingTwoFactorDto"];
+        };
+        LoginDto: {
+            /**
+             * @description A 6 digit 2FA code obtained from the user's authenticator app
+             * @example 602756
+             */
+            two_factor_code?: string | null;
+            /**
+             * @description The account ID to authenticate with
+             * @example 123
+             */
+            account?: number | null;
+            /**
+             * @description When true, returns a one-time exchange code for mobile/native app flow
+             * @example true
+             */
+            native?: boolean | null;
+        };
+        GenerateTwoFactorSecretDto: {
+            /**
+             * @description The email of the user to generate the 2FA secret for
+             * @example user@rotacloud.com
+             */
+            email: string;
+        };
+        TwoFactorSecretDto: {
+            /**
+             * @description The secret for the user to enter into their authenticator app
+             * @example EF7FSCNEIJHQJWNU
+             */
+            secret: string;
+            /**
+             * @description A URL to the QR code for the user to scan
+             * @example https://chart.googleapis.com/chart?chs=400x400&chld=M%7C0&cht=qr&chl=otpauth://totp/RotaCloud+%28blah%40rotacloud.com%29%3Fsecret=EF7FSCNEIJHQJWNU
+             */
+            image: string;
+        };
+        SetupTwoFactorAuthDto: {
+            /**
+             * @description The email address of the user
+             * @example user@rotacloud.com
+             */
+            email: string;
+            /**
+             * @description The password for the user
+             * @example Rotacloud123
+             */
+            password: string;
+            /**
+             * @description The secret the user obtained from the 2FA setup process
+             * @example JBSWY3DPEHPK3PXP
+             */
+            secret: string;
+            /**
+             * @description A 6 digit 2FA code obtained from the user's authenticator app
+             * @example 602756
+             */
+            two_factor_code: string;
+        };
+        BudgetPeriod: {
+            /**
+             * Format: datetime
+             * @description The start date of the budget period.
+             * @example 2023-01-01T00:00:00.000Z
+             */
+            from: string;
+            /**
+             * @description The timescale of the budget period, currently only supports "day" and "week".
+             * @example day
+             */
+            timescale: string;
+        };
+        BudgetCap: {
+            /**
+             * @description Time budget in minutes
+             * @example 9000
+             */
+            minutesBudget: number | null;
+            /**
+             * @description Financial budget in pence
+             * @example 450000
+             */
+            financialBudget: number | null;
+        };
+        BudgetForecast: {
+            /**
+             * @description Estimated revenue in pence
+             * @example 500000
+             */
+            estimatedRevenue: number;
+            /**
+             * @description Labour budget as a percentage-fraction to 4 decimal places
+             * @example 0.1972
+             */
+            labourPercentage: number | null;
+        };
+        Budget: {
+            /** @description The budget cap, which includes time and financial budgets. */
+            cap: components["schemas"]["BudgetCap"] | null;
+            /** @description The budget forecast, which includes estimated revenue and labour percentage. */
+            forecast: components["schemas"]["BudgetForecast"] | null;
+            /**
+             * @deprecated
+             * @description Actual revenue in pence. Retained for compatibility; write new actual revenue through /v2/revenue.
+             * @example 400000
+             */
+            actualRevenue?: number | null;
+        };
+        SubmitBudgetEntryRequest: {
+            /**
+             * @description The locations to set the budget entry for. Currently, this only supports a single location, but the type is reserved for future compatibility.
+             * @example [
+             *       56356
+             *     ]
+             */
+            locations: number[];
+            /** @description The period for which the budget entry applies. */
+            period: components["schemas"]["BudgetPeriod"];
+            /** @description The budget details for the entry, including cap and forecast. */
+            budget: components["schemas"]["Budget"];
+        };
+        SubmitBudgetEntriesRequest: {
+            /** @description The budget entries to submit. Will either update or create, and is idempotent. Budget entries are identified by their location and period. Setting all budgetary items of the entry as `null` will delete the entry. */
+            entries: components["schemas"]["SubmitBudgetEntryRequest"][];
+            /**
+             * @description Which budget type to distribute. Defaults to both caps and forecast if not set.
+             * @enum {string}
+             */
+            applyDistribution?: "caps" | "forecast";
+            /**
+             * @description The origin of the estimated revenue data. If not provided, it is manual.
+             * @enum {string}
+             */
+            forecastOrigin?: "manual" | "ai" | "manual-ai" | "ai-manual";
+        };
+        BudgetEntryBudget: {
+            /** @description At least one, minutes budget or financial budget must be present */
+            cap: components["schemas"]["BudgetCap"] | null;
+            /** @description Forecasting details for the budget entry. */
+            forecast: components["schemas"]["BudgetForecast"] | null;
+            /**
+             * @deprecated
+             * @description Actual revenue in pence. Retained for compatibility; /v2/revenue is authoritative for new consumers.
+             * @example 480000
+             */
+            actualRevenue: number | null;
+        };
+        BudgetEntryResponse: {
+            /**
+             * @description An opaque string ID that uniquely references this budget entry, whether it is a static or computed entry.
+             * @example aXRzb3BhcXVlZG9udGxvb2sgLW4K
+             */
+            id: string;
+            /**
+             * @description At the moment a budget entry can only be assigned to a single location, but this is provided in this way for forwards compatibility
+             * @example [
+             *       46423
+             *     ]
+             */
+            locations: number[] | null;
+            /** @description Defines the time period and timescale for the budget entry. */
+            period: components["schemas"]["BudgetPeriod"];
+            /**
+             * @description Whether this is static (entered by a user) or computed (from static entries) as an aggregation (lower timescale > high timescale) or a distribution (high timescale > low timescale)
+             * @example static
+             * @enum {string}
+             */
+            entryType: "aggregation" | "distribution" | "static";
+            /** @description Contains the financial and time-based budget details. */
+            budget: components["schemas"]["BudgetEntryBudget"];
+            /**
+             * @description How was the estimated budget created. Manually or AI generated, or a combination of both with one overriding the other
+             * @example manual
+             * @enum {string}
+             */
+            forecastOrigin: "manual" | "ai" | "manual-ai" | "ai-manual";
+            /**
+             * Format: datetime
+             * @description ISO datetime string
+             * @example 2025-05-11T15:33:38.000Z
+             */
+            createdAt?: string;
+            /**
+             * @description User ID of the creator
+             * @example 35235
+             */
+            createdBy?: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description ISO datetime string
+             * @example 2025-05-11T15:33:38.000Z
+             */
+            updatedAt?: Record<string, never> | null;
+            /**
+             * @description User ID of the last updater. Null for API key modified entries. Will not be present for aggregated/distributed entries
+             * @example 35235
+             */
+            updatedBy?: Record<string, never> | null;
+        };
+        ChangedEntries: {
+            /** @description Changed daily budget entries. */
+            day: components["schemas"]["BudgetEntryResponse"][];
+            /** @description Changed weekly budget entries. */
+            week: components["schemas"]["BudgetEntryResponse"][];
+        };
+        SubmitBudgetEntriesResponse: {
+            /** @description Budget entries that have been changed, either directly, or consequentially as an aggregation or distribution. Split by timescale. */
+            changed: components["schemas"]["ChangedEntries"];
+        };
+        BudgetRange: {
+            /**
+             * Format: datetime
+             * @description The start date of the range to apply the repeated budget pattern to.
+             * @example 2023-01-01T00:00:00.000Z
+             */
+            from: string;
+            /**
+             * Format: datetime
+             * @description The end date of the range to apply the repeated budget pattern to.
+             * @example 2023-12-31T00:00:00.000Z
+             */
+            to: string;
+        };
+        CopyBudgetRequestBody: {
+            /** @description The source budget pattern to copy. A single budget repeats for the whole range; multiple budgets repeat as a pattern. */
+            pattern: components["schemas"]["Budget"][];
+            /** @description The inclusive range over which to copy the budget pattern. */
+            range: components["schemas"]["BudgetRange"];
+            /**
+             * @description The locations to set the copied budget entries for. Currently only one location is supported.
+             * @example [
+             *       56356
+             *     ]
+             */
+            locations: number[];
+            /**
+             * @description The timescale of the copied budget periods.
+             * @enum {string}
+             */
+            timescale: "day" | "week";
+            /**
+             * @description The copy operation to perform.
+             * @enum {string}
+             */
+            copyType: "all" | "cost" | "percentage" | "hours";
+            /**
+             * @description The budget family being copied for operations that differ between labour and caps.
+             * @enum {string}
+             */
+            mode?: "labour" | "caps";
+        };
+        BudgetSettings: {
+            /**
+             * @description The timescale for the budget settings, either "day" or "week".
+             * @enum {string}
+             */
+            timescale: "day" | "week";
+        };
+        ExceededBudgets: {
+            /**
+             * @description The ID of the location where the budget was exceeded.
+             * @example 123
+             */
+            locationId: number;
+            /**
+             * Format: date
+             * @description The date whose budget was exceeded.
+             * @example 2025-10-27
+             */
+            date: string;
+            /**
+             * @description The budget that was exceeded.
+             * @example [
+             *       {
+             *         "type": "labour",
+             *         "budget": 142.85,
+             *         "amountOver": 94813.29
+             *       },
+             *       {
+             *         "type": "financial",
+             *         "budget": 142.85,
+             *         "amountOver": 94813.29
+             *       },
+             *       {
+             *         "type": "minutes",
+             *         "budget": 600,
+             *         "amountOver": 60
+             *       }
+             *     ]
+             */
+            budgets: unknown[][];
+        };
+        WeeklyDistributionsResponse: {
+            /** @example 1 */
+            id: number;
+            /** @example 789 */
+            locationId: number;
+            /**
+             * @description Budgets for each day of the week that will be applied for salary and hours budget distribution
+             * @example [
+             *       50,
+             *       10,
+             *       10,
+             *       10,
+             *       10,
+             *       10,
+             *       0
+             *     ]
+             */
+            caps: number[] | null;
+            /**
+             * @description Forecast for each day of the week that will be applied for Revenue Targets distribution
+             * @example [
+             *       50,
+             *       10,
+             *       10,
+             *       10,
+             *       10,
+             *       5,
+             *       5
+             *     ]
+             */
+            forecast: number[] | null;
+            /**
+             * Format: datetime
+             * @example 2025-06-23T12:00:00.000Z
+             */
+            createdAt: string;
+            /**
+             * Format: datetime
+             * @example 2025-06-23T12:00:00.000Z
+             */
+            updatedAt: string;
+            /**
+             * @description User ID who created this record
+             * @example 123
+             */
+            createdBy: Record<string, never>;
+            /**
+             * @description User ID who last updated this record
+             * @example 456
+             */
+            updatedBy: Record<string, never>;
+        };
+        PostWeeklyDistributionsQuery: {
+            /**
+             * @description location ID
+             * @example 789
+             */
+            locationId: number;
+            /**
+             * @description array of budgets for each day of the week.
+             * @example [
+             *       50,
+             *       10,
+             *       10,
+             *       10,
+             *       10,
+             *       10,
+             *       0
+             *     ]
+             */
+            caps: number[] | null;
+            /**
+             * @description array of forecasts for each day of the week.
+             * @example [
+             *       50,
+             *       10,
+             *       10,
+             *       10,
+             *       10,
+             *       5,
+             *       5
+             *     ]
+             */
+            forecast: number[] | null;
+        };
+        SubmitRevenueV1Request: {
+            /**
+             * @description The date of the revenue entry in YYYY-MM-DD format
+             * @example 2024-01-15
+             */
+            date: string;
+            /**
+             * @description The location ID for this revenue entry
+             * @example 12345
+             */
+            location: number;
+            /**
+             * @description Labour percentage target (0-100)
+             * @example 25.5
+             */
+            labour_percentage?: Record<string, never> | null;
+            /**
+             * @description Estimated/target revenue in currency units
+             * @example 1500.5
+             */
+            revenue_target?: Record<string, never> | null;
+            /**
+             * @description Actual revenue in currency units
+             * @example 1250.75
+             */
+            revenue_actual?: Record<string, never> | null;
+        };
+        RevenuePeriod: {
+            /**
+             * @description The timescale for the revenue period. Currently only supports daily.
+             * @example day
+             * @enum {string}
+             */
+            timescale: "day";
+            /**
+             * Format: date-time
+             * @description ISO datetime string. Start of the period.
+             * @example 2025-05-11T00:00:00.000Z
+             */
+            from: string;
+        };
+        RevenueEntryResponse: {
+            /**
+             * @description Unique identifier for the revenue entry
+             * @example eyJhIjoxLCJsIjoxLCJ0IjoiZGF5IiwiZiI6IjIwMjUtMTEtMjRUMDA6MDA6MDAuMDAwWiJ9
+             */
+            id: string;
+            /** @description Defines the time period and timescale for the revenue entry. */
+            period: components["schemas"]["RevenuePeriod"];
+            /**
+             * @description The location ID this revenue entry belongs to.
+             * @example 46423
+             */
+            location: number;
+            /**
+             * @description Revenue amount in pence/cents.
+             * @example 480000
+             */
+            revenue: number;
+            /**
+             * Format: date-time
+             * @description ISO datetime string when this entry was created.
+             * @example 2025-05-11T15:33:38.000Z
+             */
+            createdAt: string;
+            /**
+             * @description User ID of the creator. Null for API key created entries.
+             * @example 35235
+             */
+            createdBy: Record<string, never> | null;
+            /**
+             * Format: date-time
+             * @description ISO datetime string when this entry was last updated.
+             * @example 2025-05-11T15:33:38.000Z
+             */
+            updatedAt: Record<string, never> | null;
+            /**
+             * @description User ID of the last updater. Null for API key modified entries.
+             * @example 35235
+             */
+            updatedBy: Record<string, never> | null;
+        };
+        SubmitRevenueEntryRequest: {
+            /**
+             * @description The location to set the revenue entry for.
+             * @example 56356
+             */
+            locationId: number;
+            /** @description The period for which the revenue entry applies. */
+            period: components["schemas"]["RevenuePeriod"];
+            /**
+             * @description Actual revenue in pence. Setting to `null` will delete the entry.
+             * @example 400000
+             */
+            revenue: number | null;
+        };
+        SubmitRevenueEntriesRequest: {
+            /** @description The revenue entries to submit. Will either update or create. */
+            entries: components["schemas"]["SubmitRevenueEntryRequest"][];
+        };
+        DemandForecastingResponse: {
+            /**
+             * @description Location ID for which the forecast is provided
+             * @example 123
+             */
+            locationId: number;
+            /**
+             * @description Start date of the forecast period in ISO format
+             * @example 2023-01-01
+             */
+            startDate: string;
+            /**
+             * @description Array of forecasted revenues for the forecast period
+             * @example [
+             *       {
+             *         "date": "2023-01-01",
+             *         "revenue": 123400
+             *       },
+             *       {
+             *         "date": "2023-01-02",
+             *         "revenue": 234567
+             *       }
+             *     ]
+             */
+            forecast: number[];
+        };
+        ForecastAccuracyResponse: {
+            /**
+             * @description Location ID for which the forecast accuracy is provided
+             * @example 123
+             */
+            locationId: number;
+            /**
+             * @description The status of the forecast accuracy comparison between user and AI forecasts
+             * @enum {string}
+             */
+            status: "AI_HIGHER_THAN_USER" | "USER_HIGHER_THAN_AI" | "ACCURACIES_EQUAL" | "NO_USER_DATA" | "NO_AI_DATA";
+            /**
+             * @description The current average of our model accuracy across all accounts and locations
+             * @example 0.81
+             */
+            averageModelAccuracy: number;
+        };
+        ForecastEligibility: {
+            /**
+             * @description Whether the user is eligible to use demand forecasting or not, depending on the criteria: for the last 28 days: 60% of dates have revenue data and no more than today-5 days are missing.
+             * @example true
+             */
+            eligible: boolean;
+        };
+        MessageDraftDto: Record<string, never>;
+        EventBody: Record<string, never>;
+        InboundSmsTwilioDto: Record<string, never>;
+        TimezoneEntity: {
+            /** @example 1 */
+            id: number;
+            /**
+             * @description Time zone identifier
+             * @example Africa/Abidjan
+             */
+            name: string;
+            /**
+             * @description Continent where the timezone exists
+             * @example Africa
+             */
+            continent: string;
+            /**
+             * @description City where the timezone exists
+             * @example Abidjan
+             */
+            city: string;
+            /**
+             * @description Time zone sub-location
+             * @example null
+             */
+            sub: string | null;
+        };
+        DeleteInvoicesDto: Record<string, never>;
+        ToilAllowance: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            user: number;
+            /**
+             * Format: decimal
+             * @description Total number of hours of TOIL records for this user in this TOIL leave
+             * @example 10.01
+             */
+            accrued_hours: number;
+            /**
+             * Format: decimal
+             * @description Number of hours of TOIL that have been used in TOIL leave requests in this year
+             * @example 5.02
+             */
+            used_hours: number;
+            /**
+             * Format: decimal
+             * @description Number of hours of TOIL that remain in TOIL leave requests in this year
+             * @example 4.99
+             */
+            remaining_hours: number;
+            /**
+             * @description Whether the user has any toil accrual records
+             * @example true
+             */
+            has_toil_records: boolean;
+        };
+        CreateToilRecordDto: {
+            /**
+             * Format: decimal
+             * @description Duration in hours. Up to 2 decimal places
+             * @example 4.01
+             */
+            duration_hours: number;
+            /**
+             * Format: datetime
+             * @description Date of the record
+             * @example 2020-01-01
+             */
+            date?: string;
+            /**
+             * @description The leave year this record is a part of
+             * @example 2023
+             */
+            leave_year: number;
+            /**
+             * @description Location ID
+             * @example 1
+             */
+            location_id?: number;
+            /**
+             * @description Comments
+             * @example Very valuable and informative comments
+             */
+            comments?: string;
+            /**
+             * @description User ID
+             * @example 1
+             */
+            user_id: number;
+        };
+        ToilAccrualRecord: {
+            /**
+             * @description ID of the record
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description Timestamp of the record creation
+             * @example 1600000000
+             */
+            created_at: number;
+            /**
+             * @description The user who added this TOIL accrual record
+             * @example 5
+             */
+            created_by: number | null;
+            /**
+             * @description Whether this TOIL Accrual record has been deleted
+             * @example false
+             */
+            deleted: boolean;
+            /**
+             * @description Timestamp of the record deletion if deleted
+             * @example 1600000000
+             */
+            deleted_at: number | null;
+            /**
+             * @description The user who deleted this TOIL accrual record, if deleted
+             * @example 5
+             */
+            deleted_by: number | null;
+            /**
+             * @description The leave year this record is a part of
+             * @example 2023
+             */
+            leave_year: number;
+            /**
+             * @description Comments
+             * @default
+             * @example Very valuable and informative comments
+             */
+            comments: string;
+            /**
+             * @description Location ID
+             * @example 1
+             */
+            location_id: number | null;
+            /**
+             * Format: decimal
+             * @description Duration in hours. Up to 2 decimal places
+             * @example 4.01
+             */
+            duration_hours: number;
+            /**
+             * Format: datetime
+             * @description Date of the record
+             * @example 2020-01-01
+             */
+            date: string;
+            /**
+             * @description User ID
+             * @example 1
+             */
+            user_id: number;
+        };
+        AvailabilityTimesDto: {
+            /**
+             * @description Status of availability
+             * @example available
+             * @enum {string}
+             */
+            status: "available" | "unavailable";
+            /**
+             * Format: time
+             * @description Start time
+             * @example 08:00
+             */
+            startTime: string;
+            /**
+             * Format: time
+             * @description End time
+             * @example 17:00
+             */
+            endTime: string;
+        };
+        AvailabilityDto: {
+            /**
+             * Format: date
+             * @description Date of record
+             * @example 2021-01-01
+             */
+            date: string;
+            /** @description List of available times */
+            available?: components["schemas"]["AvailabilityTimesDto"][];
+            /** @description List of unavailable times */
+            unavailable?: components["schemas"]["AvailabilityTimesDto"][];
+        };
+        AvailabilityResponse: {
+            /**
+             * @description User ID this availability record belongs to
+             * @example 1
+             */
+            user: number;
+            /** @description List of availability records. Each record contains either available or unavailable times for the given date */
+            dates: components["schemas"]["AvailabilityDto"][];
+        };
+        CreateAvailabilityRequestDto: {
+            /**
+             * @description User ID
+             * @example 1
+             */
+            user: number;
+            /** @description List of availability records. Each record contains either available or unavailable times for the given date */
+            dates: components["schemas"]["AvailabilityDto"][];
+        };
+        DocumentAcknowledgementEntity: {
+            /** @example 22 */
+            user: number;
+            /**
+             * Format: datetime
+             * @example 2026-07-31T17:12:05.272+01:00
+             */
+            acknowledged_at: string;
+        };
+        DocumentSignatureEntity: {
+            /** @example Pamela */
+            signature: string;
+            /**
+             * Format: datetime
+             * @example 2026-07-31T17:12:05.273+01:00
+             */
+            signed_at: string;
+            /** @example 22.140.123.123 */
+            ip: string;
+            /**
+             * Format: decimal
+             * @example 123.0023454
+             */
+            longitude: number | null;
+            /**
+             * Format: decimal
+             * @example 10.2321351
+             */
+            latitude: number | null;
+        };
+        DocumentResponseDto: {
+            /** @example 345353 */
+            id: number;
+            /** @example rotacloud-app-documents-staging */
+            bucket: Record<string, never> | null;
+            /** @example files/account_id/uploading_user_id/S1Apu8VIYbF5St56LJFxoFNPIJMq5oNAHj1XClJAsUgqmyRs7xDBCcc8 */
+            key: Record<string, never> | null;
+            /** @example 3 */
+            user: number | null;
+            /** @example 14 */
+            folder_id: Record<string, never> | null;
+            /** @example 2021-04-25 */
+            expires: Record<string, never> | null;
+            /** @example true */
+            public: boolean;
+            /** @example 75013 */
+            created_by: number | null;
+            /** @example 1680175169 */
+            created_at: number;
+            /** @example 0 */
+            deleted: boolean;
+            /** @example 75013 */
+            deleted_by: number;
+            /** @example 1920.6 */
+            size_kb: Record<string, never> | null;
+            /** @example challenges.pdf */
+            name: Record<string, never> | null;
+            /** @example application/pdf */
+            type: Record<string, never> | null;
+            /**
+             * @example [
+             *       123,
+             *       124,
+             *       125
+             *     ]
+             */
+            users: number[];
+            acknowledgements: components["schemas"]["DocumentAcknowledgementEntity"][];
+            signature: components["schemas"]["DocumentSignatureEntity"] | null;
+            /**
+             * @description Whether this document is required to be acknowledged by the users who have access to it. Only applicable for company documents that are shared with specific users
+             * @example true
+             */
+            requires_acknowledgement: boolean;
+            /**
+             * @description Whether this document is required to be signed by the user who has access to it. Only applicable for employee documents that are shared with the employee
+             * @example true
+             */
+            requires_signing: boolean;
+        };
+        UserResponseDto: {
+            /** @example 223 */
+            id: number;
+            /** @example 1155 */
+            created_by: number | null;
+            /** @example 23022002 */
+            created_at: number;
+            /** @example rotas@myemail.com */
+            email: string | null;
+            /** @example true */
+            has_account: boolean;
+            /** @example false */
+            two_factor_enabled: boolean;
+            /** @example false */
+            invite_sent: boolean;
+            /** @example false */
+            deleted: boolean;
+            /** @example 23022002 */
+            deleted_at: number | null;
+            /** @example 11223 */
+            deleted_by: number | null;
+            /** @example admin */
+            level: string;
+            /** @example 23 */
+            group: number | null;
+            /** @example Mr */
+            title: string | null;
+            /** @example f */
+            gender: string | null;
+            /** @example Pamela */
+            firstName: string;
+            /** @example Dawn */
+            middle_name: string | null;
+            /** @example Smith */
+            last_name: string;
+            /** @example Pam */
+            preferredName: string | null;
+            /** @example profilepic */
+            photo: string | null;
+            /** @example 96 York street */
+            address_1: string | null;
+            /** @example Happyvill */
+            address_2: string | null;
+            /** @example York */
+            city: string | null;
+            /** @example Yorkshire */
+            county: string | null;
+            /** @example Y55LU8 */
+            postcode: string | null;
+            /** @example mysecond@email.com */
+            secondary_email: string | null;
+            /** @example 07462946112 */
+            phone: string | null;
+            /** @example true */
+            phone_confirmed: boolean;
+            /** @example false */
+            phone_valid: boolean;
+            /** @example 075839332 */
+            secondary_phone: string | null;
+            /** @example John */
+            emergency_contact_name: string | null;
+            /** @example partner */
+            emergency_contact_relationship: string | null;
+            /** @example 07462946666 */
+            emergency_contact_phone: string | null;
+            /** @example example notes */
+            notes: string | null;
+            /** @example 07/07/1987 */
+            dob: string | null;
+            /** @example 01/02/2021 */
+            start_date: string | null;
+            /** @example 01/03/2023 */
+            fianel_working_date: string | null;
+            /** @example 5700127 */
+            pay_roll_id: string | null;
+            /** @example MF778899D */
+            national_insurance_number: string | null;
+            /** @example 10.5 */
+            salary: number | null;
+            /** @example 23 */
+            salaried_cost_location: number | null;
+            /** @example 35 */
+            weekly_hours: number | null;
+            /** @example 15.5 */
+            overtime_rate: number | null;
+            /** @example 29 */
+            holiday_allowance: number | null;
+            /** @example 2 */
+            default_role: number | null;
+            /**
+             * @example hourly
+             * @enum {string}
+             */
+            salary_type: "hourly" | "annual";
+            /**
+             * @example {
+             *       "1": 10,
+             *       "2": 15.5
+             *     }
+             */
+            leave_rates: Record<string, never> | null;
+            /**
+             * @example hours
+             * @enum {string}
+             */
+            leave_rates_unit: "hours" | "days";
+            /**
+             * @example addition
+             * @enum {string}
+             */
+            leave_rates_type: "addition" | "deduction";
+            /** @example true */
+            accrues_holiday: boolean;
+            /** @example 2 */
+            holiday_accrual_rate: number | null;
+            /**
+             * @example days
+             * @enum {string}
+             */
+            holiday_allowance_unit: "hours" | "days";
+            /** @example contract */
+            employment_type: string | null;
+        };
+        CreateDocumentRequestDto: {
+            /** @example bucket-123 */
+            bucket: string;
+            /** @example 2021-04-25T00:00:00.000Z */
+            expires?: Record<string, never> | null;
+            /** @example temp/eu-west-2:11b124a0-6bcd-49f6-92e1-f053c397e493/1323797/3373909/qxtwhdef2897kdrc8q0d4wp17dfc102luit */
+            key: string;
+            /** @example name */
+            name: string;
+            /** @example true */
+            public?: boolean;
+            /** @example 111 */
+            user?: number;
+            /**
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            users?: number[];
+            /** @example true */
+            requires_acknowledgement?: boolean;
+            /** @example false */
+            shared?: boolean;
+            /** @example true */
+            requires_signing?: boolean;
+        };
+        DocumentEntity: Record<string, never>;
+        SignDocumentDto: {
+            /** @example John */
+            signature: string;
+            /**
+             * Format: decimal
+             * @example 123.6
+             */
+            latitude?: number;
+            /**
+             * Format: decimal
+             * @example 123.6
+             */
+            longitude?: number;
+        };
+        UpdateDocumentRequestDto: {
+            /** @example true */
+            requires_acknowledgement?: boolean;
+            /** @example true */
+            requires_signing?: boolean;
+            /** @example false */
+            shared?: boolean;
+            /**
+             * @example [
+             *       1,
+             *       2,
+             *       3
+             *     ]
+             */
+            users?: number[];
+            /** @example 111 */
+            user?: number;
+            /** @example true */
+            public?: boolean;
+        };
+        DocumentDownloadDto: {
+            /**
+             * Format: url
+             * @example https://documents.rotacloud.com/some/kind/of/document
+             */
+            link: string;
+        };
+        RegisterDeviceDto: {
+            deviceId: string;
+            pushId: string;
+            /** @enum {string} */
+            platform: "ios" | "android";
+        };
+        UpdateNotificationsDto: Record<string, never>;
+        FeatureFlagResponse: {
+            /**
+             * @description The feature flags that are overridden. An object with feature names as keys, and override objects as values
+             * @example {
+             *       "feature-flag-name": {
+             *         "platform_overrides": {
+             *           "web": true
+             *         }
+             *       },
+             *       "TOIL": {
+             *         "platform_overrides": {}
+             *       },
+             *       "MOBILE.LIST_VIEW": {
+             *         "platform_overrides": {
+             *           "mobile": false
+             *         }
+             *       },
+             *       "WEB.ROTA-2": {
+             *         "platform_overrides": {
+             *           "web": null
+             *         }
+             *       }
+             *     }
+             */
+            features: {
+                [key: string]: {
+                    /** @description Per platform breakdown where the feature flag is overridden. This object can only contain "web" and "mobile" keys. The values will be either true, false, or missing (no override for said platform). This object will only show up for RotaCloud team members */
+                    platform_overrides?: Record<string, never>;
+                    /** @description True state of the flag. Use this property to determine whether or not to show something. The value is computed by taking the default value and comparing it to the overrides. For example, if `device-os` header is set to `web` and the override on web is true, but the default state is false, then `enabled` will say `true` */
+                    enabled?: boolean;
+                    /** @description Default state of the flag. This is the state that is reported by LaunchDarkly. This property will only show up for RotaCloud team members */
+                    default?: unknown;
+                };
+            };
+        };
+        OverrideFeatureFlagDto: {
+            /**
+             * @description The feature flags to override. An object with feature names as keys, and override objects as values
+             * @example {
+             *       "feature-flag-name": {
+             *         "platform_overrides": {
+             *           "web": true
+             *         }
+             *       },
+             *       "TOIL": {
+             *         "platform_overrides": {}
+             *       },
+             *       "MOBILE.LIST_VIEW": {
+             *         "platform_overrides": {
+             *           "mobile": false
+             *         }
+             *       },
+             *       "WEB.ROTA-2": {
+             *         "platform_overrides": {
+             *           "web": null
+             *         }
+             *       }
+             *     }
+             */
+            features: {
+                [key: string]: {
+                    /** @description Which platform the feature flag should be overridden for. The key must be either "web" or "mobile" or both. The value must be true, false or null. Null resets the override */
+                    platform_overrides?: Record<string, never>;
+                };
+            };
+        };
+        SetupWizardStepResponse: {
+            /**
+             * @description Unique name of the setup wizard step
+             * @example roles
+             */
+            stepId: string;
+            /**
+             * @description Boolean indicator if the step has been completed
+             * @example true
+             */
+            completed: boolean;
+        };
+        Step: {
+            /**
+             * @description Unique name of the setup wizard step
+             * @example roles
+             */
+            stepId: string;
+            /**
+             * @description Boolean indicator if the step has been completed
+             * @example true
+             */
+            completed: boolean;
+        };
+        SetupWizardStepRequest: {
+            /** @description Array of setup wizard steps */
+            steps: components["schemas"]["Step"][];
+        };
+        UpdateSettingsDtoBase: {
+            metadata_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: false | true;
+            };
+            /** @description The pay codes that are available to this account */
+            pay_codes: components["schemas"];
+            rota_grouping: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "group" | "default_role";
+            };
+            breaks_paid: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            rota_salaried_cost_method: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "daily" | "hourly";
+            };
+            rota_show_employee_photos: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            show_shifts_from_other_locations: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            show_open_shifts_from_other_locations: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employees_can_see_all_locations: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employees_can_only_see_self: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_acknowledgement_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            dashboard_show_unpublished_shifts: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            week_starts: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+            };
+            time_format: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "12_hour" | "24_hour";
+            };
+            currency_symbol: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "£" | "$" | "€";
+            };
+            open_shift_claiming_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            prevent_employees_claiming_open_shifts_on_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            prevent_employees_claiming_open_shifts_on_day_off: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            prevent_employees_claiming_open_shifts_exceeding_max_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employee_shift_note_visibility: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "none" | "self" | "all";
+            };
+            unavailability_requests_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            unavailability_notice_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 3 | 6 | 12 | 24 | 48 | 72 | 168 | 336;
+            };
+            shift_swaps_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_swaps_require_approval: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_swaps_across_locations_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_swaps_notice_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 3 | 6 | 12 | 24 | 48 | 72 | 168 | 336;
+            };
+            shift_swaps_shift_range_days: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 7 | 14 | 30 | 60 | 90 | 120 | 180;
+            };
+            holiday_accrual_rate: {
+                value?: unknown;
+            };
+            paid_leave_types_included_in_accrual: components["schemas"];
+            unpaid_leave_types_included_in_accrual: components["schemas"];
+            leave_requests_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            leave_can_request_over_allowance: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            leave_requests_notice_days: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99;
+            };
+            leave_prorate_allowances: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employees_can_see_everyones_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            public_holiday_affects_allowance: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            leave_types_default_paid_status: components["schemas"];
+            leave_year_start_day: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31;
+            };
+            leave_year_start_month: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+            };
+            employees_can_edit_timesheets: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            mobile_clocking_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            automatically_clock_in_to_consecutive_shifts: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            attendance_record_breaks: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "shift" | "clocked";
+            };
+            attendance_pay_frequency: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "weekly" | "2_weekly" | "4_weekly" | "monthly" | "twice_monthly" | "4_4_5" | "last_of_month";
+            };
+            attendance_pay_frequency_options: {
+                value?: unknown;
+            };
+            early_clock_in_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 5 | 10 | 15 | 20 | 25 | 30 | 45 | 60 | 120 | 180;
+            };
+            clock_in_without_shift_allowed: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "never" | "no_shift" | "always";
+            };
+            flag_in_out_discrepancies_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 1 | 3 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            lateness_added_after_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 1 | 3 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            clock_in_out_reminders_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | 0 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            late_clock_out_notification_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | 0 | 5 | 15 | 30 | 60 | 120;
+            };
+            no_show_notifications_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | 0 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            early_clock_ins_paid_from: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "clock_in" | "shift_start";
+            };
+            late_clock_outs_paid_until: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "clock_out" | "shift_end";
+            };
+            availability_employees_can_edit: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            availability_managers_can_edit: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            reminders_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: false | true;
+            };
+            round_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "0.1" | "0.25" | "0.5";
+            };
+            round_hours_direction: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "up" | "nearest" | "down";
+            };
+            round_currency: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "0.50" | "1.00";
+            };
+            round_currency_direction: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "up" | "nearest" | "down";
+            };
+            round_breaks: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "5" | "10" | "15";
+            };
+            round_breaks_direction: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "up" | "nearest" | "down";
+            };
+            weekly_digest_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            new_rota_builder_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | false | true;
+            };
+            webhook_signing_secret: {
+                value?: unknown;
+            };
+            toil_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: false | true;
+            };
+            employees_can_suggest_leave_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            enforce_two_factor_auth: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description If leave should be included in costs */
+            include_leave_costs: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description If GPS location should be required at clock in/out */
+            gps_location_required: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description Allows admins to enable or disable leave functionality for PeopleHR-integrated accounts. */
+            people_hr_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description Round accrued leave */
+            round_accrued_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "1 hour" | "30 minutes" | null;
+            };
+        };
+        GetSettingsDtoBase: {
+            metadata_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: false | true;
+            };
+            /** @description The pay codes that are available to this account */
+            pay_codes: components["schemas"];
+            rota_grouping: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "group" | "default_role";
+            };
+            breaks_paid: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            rota_salaried_cost_method: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "daily" | "hourly";
+            };
+            rota_show_employee_photos: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            show_shifts_from_other_locations: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            show_open_shifts_from_other_locations: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employees_can_see_all_locations: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employees_can_only_see_self: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_acknowledgement_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            dashboard_show_unpublished_shifts: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            week_starts: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "sun" | "mon" | "tue" | "wed" | "thu" | "fri" | "sat";
+            };
+            time_format: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "12_hour" | "24_hour";
+            };
+            currency_symbol: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "£" | "$" | "€";
+            };
+            open_shift_claiming_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            prevent_employees_claiming_open_shifts_on_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            prevent_employees_claiming_open_shifts_on_day_off: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            prevent_employees_claiming_open_shifts_exceeding_max_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employee_shift_note_visibility: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "none" | "self" | "all";
+            };
+            unavailability_requests_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            unavailability_notice_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 3 | 6 | 12 | 24 | 48 | 72 | 168 | 336;
+            };
+            shift_swaps_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_swaps_require_approval: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_swaps_across_locations_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            shift_swaps_notice_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 3 | 6 | 12 | 24 | 48 | 72 | 168 | 336;
+            };
+            shift_swaps_shift_range_days: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 7 | 14 | 30 | 60 | 90 | 120 | 180;
+            };
+            holiday_accrual_rate: {
+                value?: unknown;
+            };
+            paid_leave_types_included_in_accrual: components["schemas"];
+            unpaid_leave_types_included_in_accrual: components["schemas"];
+            leave_requests_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            leave_can_request_over_allowance: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            leave_requests_notice_days: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31 | 32 | 33 | 34 | 35 | 36 | 37 | 38 | 39 | 40 | 41 | 42 | 43 | 44 | 45 | 46 | 47 | 48 | 49 | 50 | 51 | 52 | 53 | 54 | 55 | 56 | 57 | 58 | 59 | 60 | 61 | 62 | 63 | 64 | 65 | 66 | 67 | 68 | 69 | 70 | 71 | 72 | 73 | 74 | 75 | 76 | 77 | 78 | 79 | 80 | 81 | 82 | 83 | 84 | 85 | 86 | 87 | 88 | 89 | 90 | 91 | 92 | 93 | 94 | 95 | 96 | 97 | 98 | 99;
+            };
+            leave_prorate_allowances: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            employees_can_see_everyones_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            public_holiday_affects_allowance: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            leave_types_default_paid_status: components["schemas"];
+            leave_year_start_day: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20 | 21 | 22 | 23 | 24 | 25 | 26 | 27 | 28 | 29 | 30 | 31;
+            };
+            leave_year_start_month: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+            };
+            employees_can_edit_timesheets: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            mobile_clocking_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            automatically_clock_in_to_consecutive_shifts: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            attendance_record_breaks: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "shift" | "clocked";
+            };
+            attendance_pay_frequency: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "weekly" | "2_weekly" | "4_weekly" | "monthly" | "twice_monthly" | "4_4_5" | "last_of_month";
+            };
+            attendance_pay_frequency_options: {
+                value?: unknown;
+            };
+            early_clock_in_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 5 | 10 | 15 | 20 | 25 | 30 | 45 | 60 | 120 | 180;
+            };
+            clock_in_without_shift_allowed: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "never" | "no_shift" | "always";
+            };
+            flag_in_out_discrepancies_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 1 | 3 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            lateness_added_after_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: 0 | 1 | 3 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            clock_in_out_reminders_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | 0 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            late_clock_out_notification_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | 0 | 5 | 15 | 30 | 60 | 120;
+            };
+            no_show_notifications_minutes: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | 0 | 5 | 10 | 15 | 20 | 25 | 30;
+            };
+            early_clock_ins_paid_from: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "clock_in" | "shift_start";
+            };
+            late_clock_outs_paid_until: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "clock_out" | "shift_end";
+            };
+            availability_employees_can_edit: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            availability_managers_can_edit: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            reminders_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: false | true;
+            };
+            round_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "0.1" | "0.25" | "0.5";
+            };
+            round_hours_direction: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "up" | "nearest" | "down";
+            };
+            round_currency: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "0.50" | "1.00";
+            };
+            round_currency_direction: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "up" | "nearest" | "down";
+            };
+            round_breaks: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | "5" | "10" | "15";
+            };
+            round_breaks_direction: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "up" | "nearest" | "down";
+            };
+            weekly_digest_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            new_rota_builder_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: null | false | true;
+            };
+            webhook_signing_secret: {
+                value?: unknown;
+            };
+            toil_enabled: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: false | true;
+            };
+            employees_can_suggest_leave_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            enforce_two_factor_auth: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description If leave should be included in costs */
+            include_leave_costs: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description If GPS location should be required at clock in/out */
+            gps_location_required: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description Allows admins to enable or disable leave functionality for PeopleHR-integrated accounts. */
+            people_hr_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            /** @description Round accrued leave */
+            round_accrued_leave: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: "1 hour" | "30 minutes" | null;
+            };
+        };
+        JobDto: {
+            /**
+             * @description The type/name of job to be queued
+             * @example weekly-digest
+             */
+            type: string;
+            /**
+             * @description The payload of the job to be queued. If you aren't sure what to put here, ask a developer
+             * @example {
+             *       "accountId": 123
+             *     }
+             */
+            body: Record<string, never>;
+            /**
+             * @description If present, will send to another service's queue instead of the API's
+             * @enum {string}
+             */
+            service?: "payments" | "notifications" | "integrations";
+            /**
+             * Format: datetime
+             * @description If present will delay the job until the specified ISO date time. Only available on API
+             * @example 2021-01-01T12:00:00Z
+             */
+            delay_until?: string;
+        };
+        ForceSubscriptionRequest: {
+            /**
+             * @description The account to force a subscription for
+             * @example 1
+             */
+            accountId: number;
+            /**
+             * @description Entitlements to force enable. Overwrites all entitlements
+             * @example [
+             *       "feature-logbook",
+             *       "feature-time-and-attendance"
+             *     ]
+             */
+            entitlements?: string[];
+            /**
+             * @description The status to force the subscription to
+             * @example active
+             * @enum {string}
+             */
+            status?: "active" | "cancelled" | "non_renewing" | "in_trial" | "paused";
+            /**
+             * Format: datetime
+             * @description The dunning ends date to force the subscription to
+             * @example 2022-01-01T00:00:00.000Z
+             */
+            dunningEndsAt?: string;
+        };
+        SeedTestDataBody: {
+            /**
+             * @example [
+             *       1,
+             *       2
+             *     ]
+             */
+            locations: number[];
+            /**
+             * Format: date
+             * @example 2026-04-17
+             */
+            from: string;
+            /**
+             * Format: date
+             * @example 2026-05-15
+             */
+            to: string;
+        };
+        CreateRotaDto: Record<string, never>;
+        DayNoteRequest: {
+            /**
+             * @description Day note title
+             * @example Important Information
+             */
+            title: Record<string, never> | null;
+            /**
+             * @description Day note message
+             * @example Local charity event this weekend.
+             */
+            message: Record<string, never> | null;
+            /**
+             * @description List of locations.
+             * @example [
+             *       10,
+             *       11
+             *     ]
+             */
+            locations: number[];
+            /**
+             * Format: date
+             * @description Day note's start date.
+             * @example 2023-01-13
+             */
+            startDate: components["schemas"]["DateTime"];
+            /**
+             * Format: date
+             * @description Day note's end date.
+             * @example 2023-01-30
+             */
+            endDate: components["schemas"]["DateTime"];
+            /**
+             * @description Makes note visible to employees or not.
+             * @example false
+             */
+            visibleToEmployees: boolean;
+        };
+        DayNote: {
+            /**
+             * @description ID of the note
+             * @example 1011
+             */
+            id: number;
+            /**
+             * @description The account
+             * @example 12324
+             */
+            accountId: number;
+            /**
+             * Format: datetime
+             * @description The time the note was added
+             * @example 2025-02-24T10:43:07.553
+             */
+            addedAt: components["schemas"]["DateTime"];
+            /**
+             * @description The user who added the note
+             * @example 151313
+             */
+            addedBy?: number | null;
+            /**
+             * Format: datetime
+             * @description Time the note was last updated
+             * @example 2022-11-22
+             */
+            updatedAt?: Record<string, never> | null;
+            /**
+             * @description The user who last updated the note
+             * @example 12324
+             */
+            updatedBy: number | null;
+            /**
+             * @description List of locations IDs that this day not is attached to
+             * @example [
+             *       1,
+             *       2,
+             *       33,
+             *       54
+             *     ]
+             */
+            locations: number[];
+            /**
+             * Format: datetime
+             * @description Start of the date range to get day notes for
+             * @example 2023-01-13
+             */
+            startDate: components["schemas"]["DateTime"];
+            /**
+             * Format: datetime
+             * @description The end of the date rate the note applies to
+             * @example 2023-01-30
+             */
+            endDate: components["schemas"]["DateTime"];
+            /**
+             * @description The title of the note. Can be `null` if message is present.
+             * @example Pizza!
+             */
+            title: Record<string, never> | null;
+            /**
+             * @description The body data of the text. Can be `null` if title is present.
+             * @example Today is pizza day
+             */
+            message: Record<string, never> | null;
+            /**
+             * @description Whether an employees view the note or not
+             * @example false
+             */
+            visibleToEmployees: boolean;
+        };
+        DayNoteResponse: {
+            /**
+             * @description ID of the note
+             * @example 1011
+             */
+            id: number;
+            /**
+             * Format: datetime
+             * @description The date the note was added
+             * @example 2025-02-24T10:43:07.553
+             */
+            addedAt: string;
+            /**
+             * @description The user who added the note
+             * @example 151313
+             */
+            addedBy: number | null;
+            /**
+             * Format: datetime
+             * @description Time the note was last updated
+             * @example 2022-11-22
+             */
+            updatedAt: Record<string, never> | null;
+            /**
+             * @description The user who last updated the note
+             * @example 12324
+             */
+            updatedBy: number | null;
+            /**
+             * @description List of locations IDs that this day note is attached to
+             * @example [
+             *       1,
+             *       2,
+             *       33,
+             *       54
+             *     ]
+             */
+            locations: number[];
+            /**
+             * Format: date
+             * @description Start of the date range to get day notes for
+             * @example 2023-01-13
+             */
+            startDate: string;
+            /**
+             * Format: date
+             * @description The end of the date range the note applies to
+             * @example 2023-01-30
+             */
+            endDate: string;
+            /**
+             * @description The title of the note. Can be `null` if message is present.
+             * @example Pizza!
+             */
+            title: Record<string, never> | null;
+            /**
+             * @description The body data of the text. Can be `null` if title is present.
+             * @example Today is pizza day
+             */
+            message: Record<string, never> | null;
+            /**
+             * @description Whether employees view the note or not
+             * @example false
+             */
+            visibleToEmployees: boolean;
+        };
         ShiftSwapResponse: {
             /**
              * @description The unique identifier of the swap request
@@ -700,15 +6214,6 @@ export interface components {
              */
             adminId: number | null;
         };
-        ShiftClaimMappingResponse: {
-            /**
-             * @description The unique identifier of the shift being requested to be claimed
-             * @example 70091
-             */
-            shiftId: number;
-            /** @description List of shift claim requests associated with this shift */
-            claimRequests: components["schemas"]["ShiftClaimResponse"][];
-        };
         CreateOpenShiftClaim: {
             /**
              * @description The open shift ID to claim
@@ -742,21 +6247,678 @@ export interface components {
              */
             shiftId: number;
         };
-        PaginationProperties: {
+        InvoiceResponse: {
             /**
-             * @description The cursor to the next page. Null if there is no next page
-             * @example eyJ0aW1lc3RhbXAiOiIxNjEzNjYwNzU4IiwicGFnZUlkIjoiMSJ9
+             * @description Uniquely identifies an invoice
+             * @example 34
              */
-            next: string | null;
+            id: string;
             /**
-             * @description The total number of items in the paginated response
-             * @example 6367
+             * @description The status of the invoice
+             * @enum {string}
              */
-            count: number;
+            status: "paid" | "posted" | "payment_due" | "not_paid" | "voided" | "pending";
+            /**
+             * @description The currency code of the invoice
+             * @example GBP
+             */
+            currencyCode: string;
+            /**
+             * @description The total amount of the invoice in subunits (pence, cents etc)
+             * @example 1500
+             */
+            total: Record<string, never> | null;
+            /**
+             * @description The amount due for the invoice
+             * @example 0
+             */
+            amountDue: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date the invoice was issued
+             * @example 2024-04-05T00:00:00.000Z
+             */
+            date: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date the invoice is due
+             * @example 2024-04-05T00:00:00.000Z
+             */
+            dueDate: Record<string, never> | null;
+            /**
+             * @description A boolean indicating whether the invoice has been deleted
+             * @example false
+             */
+            deleted: boolean;
+            /**
+             * Format: datetime
+             * @description The date and time the invoice was last updated
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            updatedAt: Record<string, never> | null;
+            /**
+             * @description The purchase order number associated with the invoice
+             * @example 123
+             */
+            poNumber: Record<string, never> | null;
+            /**
+             * @description A boolean indicating whether the invoice is for a recurring payment
+             * @example true
+             */
+            recurring: Record<string, never> | null;
+            /**
+             * @description The VAT number associated with the invoice
+             * @example null
+             */
+            vatNumber: Record<string, never> | null;
+            /**
+             * @description The type of pricing used for the invoice
+             * @example tax_exclusive
+             */
+            priceType: Record<string, never> | null;
+            /**
+             * @description The net terms of the invoice, in days
+             * @example 0
+             */
+            netTermDays: Record<string, never> | null;
+            /**
+             * @description The amount that has been paid towards the invoice
+             * @example 1500
+             */
+            amountPaid: Record<string, never> | null;
+            /**
+             * @description The amount that has been adjusted on the invoice
+             * @example 0
+             */
+            amountAdjusted: Record<string, never> | null;
+            /**
+             * @description The amount that has been written off the invoice
+             * @example 0
+             */
+            writeOffAmount: Record<string, never> | null;
+            /**
+             * @description The amount of credits applied to the invoice
+             * @example 0
+             */
+            creditsApplied: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date and time the invoice was paid
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            paidAt: Record<string, never> | null;
+            /**
+             * @description The dunning status of the invoice
+             * @example null
+             */
+            dunningStatus: Record<string, never> | null;
+            /**
+             * @description The date and time of the next retry for payment of the invoice
+             * @example null
+             */
+            nextRetryAt: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date and time the invoice was voided
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            voidedAt: Record<string, never> | null;
+            /**
+             * @description The subtotal of the invoice
+             * @example 1500
+             */
+            subTotal: Record<string, never> | null;
+            /**
+             * @description The tax amount on the invoice
+             * @example 0
+             */
+            tax: Record<string, never> | null;
+            /** @description The line items associated with the invoice */
+            lineItems: components["schemas"]["LineItem"][] | null;
         };
-        PaginatedResponse: {
-            /** @description The pagination information */
-            pagination: components["schemas"]["PaginationProperties"];
+        GetInvoiceByIdResponse: {
+            /**
+             * @description Uniquely identifies an invoice
+             * @example 34
+             */
+            id: string;
+            /**
+             * @description The status of the invoice
+             * @enum {string}
+             */
+            status: "paid" | "posted" | "payment_due" | "not_paid" | "voided" | "pending";
+            /**
+             * @description The currency code of the invoice
+             * @example GBP
+             */
+            currencyCode: string;
+            /**
+             * @description The total amount of the invoice in subunits (pence, cents etc)
+             * @example 1500
+             */
+            total: Record<string, never> | null;
+            /**
+             * @description The amount due for the invoice
+             * @example 0
+             */
+            amountDue: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date the invoice was issued
+             * @example 2024-04-05T00:00:00.000Z
+             */
+            date: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date the invoice is due
+             * @example 2024-04-05T00:00:00.000Z
+             */
+            dueDate: Record<string, never> | null;
+            /**
+             * @description A boolean indicating whether the invoice has been deleted
+             * @example false
+             */
+            deleted: boolean;
+            /**
+             * Format: datetime
+             * @description The date and time the invoice was last updated
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            updatedAt: Record<string, never> | null;
+            /**
+             * @description The purchase order number associated with the invoice
+             * @example 123
+             */
+            poNumber: Record<string, never> | null;
+            /**
+             * @description A boolean indicating whether the invoice is for a recurring payment
+             * @example true
+             */
+            recurring: Record<string, never> | null;
+            /**
+             * @description The VAT number associated with the invoice
+             * @example null
+             */
+            vatNumber: Record<string, never> | null;
+            /**
+             * @description The type of pricing used for the invoice
+             * @example tax_exclusive
+             */
+            priceType: Record<string, never> | null;
+            /**
+             * @description The net terms of the invoice, in days
+             * @example 0
+             */
+            netTermDays: Record<string, never> | null;
+            /**
+             * @description The amount that has been paid towards the invoice
+             * @example 1500
+             */
+            amountPaid: Record<string, never> | null;
+            /**
+             * @description The amount that has been adjusted on the invoice
+             * @example 0
+             */
+            amountAdjusted: Record<string, never> | null;
+            /**
+             * @description The amount that has been written off the invoice
+             * @example 0
+             */
+            writeOffAmount: Record<string, never> | null;
+            /**
+             * @description The amount of credits applied to the invoice
+             * @example 0
+             */
+            creditsApplied: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date and time the invoice was paid
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            paidAt: Record<string, never> | null;
+            /**
+             * @description The dunning status of the invoice
+             * @example null
+             */
+            dunningStatus: Record<string, never> | null;
+            /**
+             * @description The date and time of the next retry for payment of the invoice
+             * @example null
+             */
+            nextRetryAt: Record<string, never> | null;
+            /**
+             * Format: datetime
+             * @description The date and time the invoice was voided
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            voidedAt: Record<string, never> | null;
+            /**
+             * @description The subtotal of the invoice
+             * @example 1500
+             */
+            subTotal: Record<string, never> | null;
+            /**
+             * @description The tax amount on the invoice
+             * @example 0
+             */
+            tax: Record<string, never> | null;
+            /** @description The line items associated with the invoice */
+            lineItems: components["schemas"]["LineItem"][] | null;
+            /**
+             * @description The link to download the invoice as a PDF
+             * @example https://cb-local-downloads.s3.amazonaws.com/yourapp/invoice/__test__8asyKSOcTMNf4r.pdf?response-content-disposition=attachment%3Bfilename%3Dyourapp%2Finvoice%2F__test__8asyKSOcTMNf4r.pdf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210210T130447Z&X-Amz-SignedHeaders=host&X-Amz-Expires=599&X-Amz-Credential=AKIAJI4SN7ONHAOGLOGA%2F20210210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dcf3b55c68ba695edded4a3d6305cb3822415601c590ad6293cfb858514078e6
+             */
+            downloadLink: string;
+            /**
+             * @description The timestamp when the download link expires
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            downloadLinkExpiresAt: string;
+        };
+        Card: {
+            /**
+             * @description The first name of the cardholder
+             * @example Luke
+             */
+            firstName?: string;
+            /**
+             * @description The last name of the cardholder
+             * @example Skywalker
+             */
+            lastName?: string;
+            /**
+             * @description The card brand
+             * @example visa
+             * @enum {string}
+             */
+            brand: "visa" | "mastercard" | "americanExpress" | "discover";
+            /**
+             * @description The expiry month of the card
+             * @example 12
+             */
+            expMonth: number;
+            /**
+             * @description The expiry year of the card
+             * @example 2024
+             */
+            expYear: number;
+            /**
+             * @description The last 4 digits of the card number
+             * @example 4242
+             */
+            last4: string;
+            /**
+             * @description The funding type of the card
+             * @enum {string}
+             */
+            fundingType: "credit" | "debit" | "prepaid" | "notKnown" | "notApplicable";
+        };
+        PaymentSourceResponse: {
+            /**
+             * @description Unique identifier for the payment source
+             * @example 1JZrjv2eZvKYlo2C0C7z8c2m
+             */
+            id: string;
+            /**
+             * @description The date and time when the payment source was created
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            createdAt: string;
+            /**
+             * @description The date and time when the payment source was last updated
+             * @example 2024-04-05T14:39:18.000Z
+             */
+            updatedAt: string;
+            /**
+             * @description Current status of the payment source
+             * @enum {string}
+             */
+            status: "valid" | "expiring" | "expired" | "invalid" | "pendingVerification";
+            /**
+             * @description The type of payment source
+             * @example card
+             */
+            type: string;
+            /**
+             * @description Indicates that this resource has been deleted
+             * @example true
+             */
+            deleted: boolean;
+            card?: components["schemas"]["Card"];
+        };
+        SetupIntentResponse: {
+            /**
+             * @description Setup intent ID. Use this for verification when manually interacting with API
+             * @example
+             */
+            id: string;
+            /**
+             * @description Client secret for the setup intent. Use this for client side verification
+             * @example
+             */
+            clientSecret: string;
+        };
+        CreatePaymentSourceDto: {
+            /**
+             * @description The type of payment source
+             * @example card
+             * @enum {string}
+             */
+            type: "card";
+            /**
+             * @description ID of a confirmed payment intent or a confirmed setup intent
+             * @example pi_3Q7FFB2x6R10KRrh0piHlKYY
+             */
+            paymentIntentId: string;
+            /**
+             * @description Whether to replace the primary payment source
+             * @example false
+             */
+            replacePrimary: boolean;
+        };
+        StairStep: {
+            /**
+             * @description The lower limit (inclusive) of a range of units for the tier
+             * @example 1
+             */
+            startingUnit: number;
+            /**
+             * @description The upper limit (inclusive) of a range of units for the tier
+             * @example 10
+             */
+            endingUnit?: number;
+            /**
+             * @description The price at that tier
+             * @example 15
+             */
+            price: number;
+        };
+        ProductCatalogueItemPrice: {
+            /**
+             * @description The plan price point id. Reference used by Chargebee to identify this plan price point
+             * @example Standard GBP Monthly
+             */
+            id: string;
+            /**
+             * @description The currency code (ISO 4217 format) for the item price
+             * @example GBP
+             */
+            currency: string;
+            /**
+             * @description Enum string indicating the pricing model for this item price
+             * @example stairstep
+             * @enum {string}
+             */
+            pricingModel: "stairstep" | "perUnit";
+            /**
+             * @description Present if pricingModel is perUnit. The price per unit quantity of the item
+             * @example 15
+             */
+            unitPrice?: number;
+            /** @description Present if pricingModel is stairstep. An array of objects. Each object represents the price at that tier */
+            stairStep?: components["schemas"]["StairStep"][];
+            /**
+             * @description For plans this is the billing period of the plan in billingPeriodUnits. For add-ons it is the duration, in billingPeriodUnits, for which its price applies
+             * @example 1
+             */
+            billingPeriod: number;
+            /**
+             * @deprecated
+             * @description The unit of time for the billing period. Use paymentPeriodUnit instead.
+             * @example month
+             * @enum {string}
+             */
+            billingPeriodUnit: "month" | "year";
+            /**
+             * @description The unit of time for the billing period
+             * @example monthly
+             * @enum {string}
+             */
+            paymentPeriodUnit: "monthly" | "yearly";
+        };
+        ProductCataloguePlan: {
+            /**
+             * @description A unique id identifying the plan
+             * @example plan-standard
+             */
+            id: string;
+            /**
+             * @description The name of the plan
+             * @example Standard
+             */
+            name: string;
+            /** @description An array of the pricing options available for this plan */
+            itemPrice: components["schemas"]["ProductCatalogueItemPrice"][];
+            /**
+             * @description Whether the plan can be trialled
+             * @example true
+             */
+            canBeTrialled: boolean;
+        };
+        ProductCatalogueAddon: {
+            /**
+             * @description The unique id identifying the add-on
+             * @example addon-sms-per-employee
+             */
+            id: string;
+            /**
+             * @description The name of the add-on
+             * @example SMS(per-employee)
+             */
+            name: string;
+            /** @description An array of the pricing options available for this add-on */
+            itemPrice: components["schemas"]["ProductCatalogueItemPrice"][];
+            /**
+             * @description Whether the addon can be trialled
+             * @example true
+             */
+            canBeTrialled: boolean;
+        };
+        ProductCatalogueItems: {
+            /** @description The list of plans */
+            plans: components["schemas"]["ProductCataloguePlan"][];
+            /** @description The list of add-ons */
+            addons: components["schemas"]["ProductCatalogueAddon"][];
+        };
+        ProductCatalogueResponse: {
+            /** @description The items available on the RotaCloud product catalogue */
+            items: components["schemas"]["ProductCatalogueItems"];
+        };
+        AccountInformationResponse: {
+            /**
+             * @description The feature flags that are overridden. An object with feature names as keys, and override objects as values
+             * @example {
+             *       "feature-flag-name": {
+             *         "platformOverrides": {
+             *           "web": true
+             *         }
+             *       },
+             *       "TOIL": {
+             *         "platformOverrides": {}
+             *       },
+             *       "MOBILE.LIST_VIEW": {
+             *         "platformOverrides": {
+             *           "mobile": false
+             *         }
+             *       },
+             *       "WEB.ROTA-2": {
+             *         "platformOverrides": {
+             *           "web": null
+             *         }
+             *       }
+             *     }
+             */
+            features: {
+                [key: string]: {
+                    /** @description Per platform breakdown where the feature flag is overridden. This object can only contain "web" and "mobile" keys. The values will be either true, false, or missing (no override for said platform). This object will only show up for RotaCloud team members */
+                    platformOverrides?: Record<string, never>;
+                    /** @description True state of the flag. Use this property to determine whether or not to show something. The value is computed by taking the default value and comparing it to the overrides. For example, if `device-os` header is set to `web` and the override on web is true, but the default state is false, then `enabled` will say `true` */
+                    enabled?: boolean;
+                    /** @description Default state of the flag. This is the state that is reported by LaunchDarkly. This property will only show up for RotaCloud team members */
+                    default?: unknown;
+                };
+            };
+        };
+        PlatformConfig: {
+            /** @description Minimum supported client version */
+            minSupportedVersion?: string;
+            /**
+             * @description Indicates whether the user should be forced to update.
+             *                 This is determined by comparing the app-version header with minSupportedVersion.
+             */
+            forceUpdate: boolean;
+            /**
+             * Format: date
+             * @description ISO8601 date by which the user should update to the latest version.
+             *                 Will be null if the user doesn't need to update.
+             */
+            updateBy?: string;
+        };
+        AppUpdatesResponse: {
+            /** @description Configuration for the mobile platform */
+            mobile?: components["schemas"]["PlatformConfig"];
+            /** @description Configuration for the terminal platform */
+            terminal?: components["schemas"]["PlatformConfig"];
+        };
+        BudgetVariance: {
+            /**
+             * @description Whether the Budget on over budget, under budget or on target,
+             * @example on_target
+             * @enum {string}
+             */
+            status: "over" | "under" | "on_target";
+            /**
+             * @description The budget amount in its unit (pence or minutes)
+             * @example 10000
+             */
+            budget?: number;
+        };
+        LabourBudgetVariance: {
+            /**
+             * @description Whether the Budget on over budget, under budget or on target,
+             * @example on_target
+             * @enum {string}
+             */
+            status: "over" | "under" | "on_target";
+            /**
+             * @description The estimated revenue in pence
+             * @example 50000
+             */
+            estimatedRevenue?: number;
+            /**
+             * @description The target labour percentage
+             * @example 0.1
+             */
+            targetLabourPercentage?: number;
+        };
+        CostDateResponseDto: {
+            /** @description Financial budget variance information if the user has set a budget. */
+            financialBudgetVariance?: components["schemas"]["BudgetVariance"];
+            /** @description Time budget variance information if the user has set a budget. */
+            timeBudgetVariance?: components["schemas"]["BudgetVariance"];
+            /** @description Labour budget variance information if the user has set a budget. */
+            labourBudgetVariance?: components["schemas"]["LabourBudgetVariance"];
+            /**
+             * @description The calculated cost for the date.
+             * @example 5333.33
+             */
+            cost: number;
+            /**
+             * @description The calculated hours for the date.
+             * @example 2.67
+             */
+            hours: number;
+            /**
+             * @description The calculated leave cost for the date, if applicable.
+             * @example 123.45
+             */
+            leaveCosts: number;
+            /**
+             * @description The number of hours of leave for the date.
+             * @example 12.5
+             */
+            leaveHours: number;
+            /**
+             * Format: date
+             * @description The date for the costs and hours.
+             * @example 2022-02-02
+             */
+            date: string;
+        };
+        CostsResponseDto: {
+            /** @description An array of cost and hours data for each date in the range. */
+            dates: components["schemas"]["CostDateResponseDto"][];
+        };
+        CostLocationResponseDto: {
+            /** @description Financial budget variance information if the user has set a budget. */
+            financialBudgetVariance?: components["schemas"]["BudgetVariance"];
+            /** @description Time budget variance information if the user has set a budget. */
+            timeBudgetVariance?: components["schemas"]["BudgetVariance"];
+            /** @description Labour budget variance information if the user has set a budget. */
+            labourBudgetVariance?: components["schemas"]["LabourBudgetVariance"];
+            /**
+             * @description The calculated cost for the date.
+             * @example 5333.33
+             */
+            cost: number;
+            /**
+             * @description The calculated hours for the date.
+             * @example 2.67
+             */
+            hours: number;
+            /**
+             * @description The calculated leave cost for the date, if applicable.
+             * @example 123.45
+             */
+            leaveCosts: number;
+            /**
+             * @description The number of hours of leave for the date.
+             * @example 12.5
+             */
+            leaveHours: number;
+            /**
+             * @description The Location ID.
+             * @example 1
+             */
+            id: number;
+            /**
+             * @description The Location name.
+             * @example London
+             */
+            name: string;
+            /**
+             * @description The actual revenue in pence for the location.
+             * @example 50000
+             */
+            actualRevenue?: number;
+            /**
+             * @description The labour percentage (cost/revenue). Uses actual, otherwise estimated
+             * @example 0.32
+             */
+            labourPercentage?: number;
+        };
+        DaysCostsResponseDto: {
+            /** @description An array of cost and hours data for each Location managed. */
+            locations: components["schemas"]["CostLocationResponseDto"][];
+        };
+        LeaveStatsResponse: Record<string, never>;
+        AttendanceStat: {
+            /**
+             * @description Total amount of attendance
+             * @example 10
+             */
+            total: number;
+            /**
+             * @description Value of attendance used
+             * @example 5
+             */
+            value: number;
+        };
+        AttendanceStatsResponse: {
+            late: components["schemas"]["AttendanceStat"];
+            clockedIn: components["schemas"]["AttendanceStat"];
+            onBreak: components["schemas"]["AttendanceStat"];
+            clockedOut: components["schemas"]["AttendanceStat"];
         };
         PaginationQuery: {
             /**
@@ -778,6 +6940,141 @@ export interface components {
     headers: never;
     pathItems: never;
 }
+export type Entitlement = components['schemas']['Entitlement'];
+export type PlanStatus = components['schemas']['PlanStatus'];
+export type Plan = components['schemas']['Plan'];
+export type AddonStatus = components['schemas']['AddonStatus'];
+export type Addon = components['schemas']['Addon'];
+export type SubscriptionResponse = components['schemas']['SubscriptionResponse'];
+export type PricingTier = components['schemas']['PricingTier'];
+export type ItemPrice = components['schemas']['ItemPrice'];
+export type PlanExtended = components['schemas']['PlanExtended'];
+export type AddonExtended = components['schemas']['AddonExtended'];
+export type ScheduledChanges = components['schemas']['ScheduledChanges'];
+export type ExtendedSubscriptionResponse = components['schemas']['ExtendedSubscriptionResponse'];
+export type UpdatedPlan = components['schemas']['UpdatedPlan'];
+export type UpdatedAddon = components['schemas']['UpdatedAddon'];
+export type OmittedUpdateSubscriptionRequest = components['schemas']['OmittedUpdateSubscriptionRequest'];
+export type EstimatesRequest = components['schemas']['EstimatesRequest'];
+export type LineItem = components['schemas']['LineItem'];
+export type Estimate = components['schemas']['Estimate'];
+export type EstimatesResponse = components['schemas']['EstimatesResponse'];
+export type CancelAccountRequest = components['schemas']['CancelAccountRequest'];
+export type CancelAccountDto = components['schemas']['CancelAccountDto'];
+export type LogbookCategoriesResponse = components['schemas']['LogbookCategoriesResponse'];
+export type LogbookResponse = components['schemas']['LogbookResponse'];
+export type PaginationProperties = components['schemas']['PaginationProperties'];
+export type PaginatedResponse = components['schemas']['PaginatedResponse'];
+export type LogbookCategoriesRequest = components['schemas']['LogbookCategoriesRequest'];
+export type DateTime = components['schemas']['DateTime'];
+export type CreateLogbookRequest = components['schemas']['CreateLogbookRequest'];
+export type UpdateLogbookRequest = components['schemas']['UpdateLogbookRequest'];
+export type CurrentWeather = components['schemas']['CurrentWeather'];
+export type DayPartForecastData = components['schemas']['DayPartForecastData'];
+export type DayForecastData = components['schemas']['DayForecastData'];
+export type DailyForecast = components['schemas']['DailyForecast'];
+export type AttributionData = components['schemas']['AttributionData'];
+export type LocationWeatherResponse = components['schemas']['LocationWeatherResponse'];
+export type SelfServeOnboardingRequest = components['schemas']['SelfServeOnboardingRequest'];
+export type SyncContactDetailsDto = components['schemas']['SyncContactDetailsDto'];
+export type UnifiedSingleUserRequest = components['schemas']['UnifiedSingleUserRequest'];
+export type UnifiedUsersRequest = components['schemas']['UnifiedUsersRequest'];
+export type OnboardSingleUserRequest = components['schemas']['OnboardSingleUserRequest'];
+export type OnboardUsersRequest = components['schemas']['OnboardUsersRequest'];
+export type EntitySummary = components['schemas']['EntitySummary'];
+export type EmployeeDetailsResponse = components['schemas']['EmployeeDetailsResponse'];
+export type IndustryResponseDto = components['schemas']['IndustryResponseDTO'];
+export type InvitedByDto = components['schemas']['InvitedByDto'];
+export type ValidateInviteResponseDto = components['schemas']['ValidateInviteResponseDto'];
+export type ConfirmInviteDto = components['schemas']['ConfirmInviteDto'];
+export type SsoEmailLoginRequest = components['schemas']['SsoEmailLoginRequest'];
+export type SsoInitiateResponse = components['schemas']['SsoInitiateResponse'];
+export type SsoExchangeRequest = components['schemas']['SsoExchangeRequest'];
+export type SsoAdminConfigRequest = components['schemas']['SsoAdminConfigRequest'];
+export type AppFeedbackDto = components['schemas']['AppFeedbackDto'];
+export type ShowAppFeedbackDialogueResponse = components['schemas']['ShowAppFeedbackDialogueResponse'];
+export type AnalyticEventDto = components['schemas']['AnalyticEventDto'];
+export type CreateIntegrationDto = components['schemas']['CreateIntegrationDto'];
+export type TevalisIntegrationResponse = components['schemas']['TevalisIntegrationResponse'];
+export type TevalisSiteListResponse = components['schemas']['TevalisSiteListResponse'];
+export type UpdateTevalisIntegrationRequest = components['schemas']['UpdateTevalisIntegrationRequest'];
+export type SquareIntegrationResponse = components['schemas']['SquareIntegrationResponse'];
+export type SquareLocationResponse = components['schemas']['SquareLocationResponse'];
+export type UpdateSquareIntegrationRequest = components['schemas']['UpdateSquareIntegrationRequest'];
+export type CreateZapierSubscriptionDto = components['schemas']['CreateZapierSubscriptionDto'];
+export type DeleteZapierSubscriptionDto = components['schemas']['DeleteZapierSubscriptionDto'];
+export type CreateViasocketSubscriptionDto = components['schemas']['CreateViasocketSubscriptionDto'];
+export type DeleteViasocketSubscriptionDto = components['schemas']['DeleteViasocketSubscriptionDto'];
+export type SuccessfulLoginDto = components['schemas']['SuccessfulLoginDto'];
+export type NativeLoginDto = components['schemas']['NativeLoginDto'];
+export type TwoFactorRequiredDto = components['schemas']['TwoFactorRequiredDto'];
+export type AccountEnforcingTwoFactorDto = components['schemas']['AccountEnforcingTwoFactorDto'];
+export type TwoFactorEnforcedDto = components['schemas']['TwoFactorEnforcedDto'];
+export type LoginDto = components['schemas']['LoginDto'];
+export type GenerateTwoFactorSecretDto = components['schemas']['GenerateTwoFactorSecretDto'];
+export type TwoFactorSecretDto = components['schemas']['TwoFactorSecretDto'];
+export type SetupTwoFactorAuthDto = components['schemas']['SetupTwoFactorAuthDto'];
+export type BudgetPeriod = components['schemas']['BudgetPeriod'];
+export type BudgetCap = components['schemas']['BudgetCap'];
+export type BudgetForecast = components['schemas']['BudgetForecast'];
+export type Budget = components['schemas']['Budget'];
+export type SubmitBudgetEntryRequest = components['schemas']['SubmitBudgetEntryRequest'];
+export type SubmitBudgetEntriesRequest = components['schemas']['SubmitBudgetEntriesRequest'];
+export type BudgetEntryBudget = components['schemas']['BudgetEntryBudget'];
+export type BudgetEntryResponse = components['schemas']['BudgetEntryResponse'];
+export type ChangedEntries = components['schemas']['ChangedEntries'];
+export type SubmitBudgetEntriesResponse = components['schemas']['SubmitBudgetEntriesResponse'];
+export type BudgetRange = components['schemas']['BudgetRange'];
+export type CopyBudgetRequestBody = components['schemas']['CopyBudgetRequestBody'];
+export type BudgetSettings = components['schemas']['BudgetSettings'];
+export type ExceededBudgets = components['schemas']['ExceededBudgets'];
+export type WeeklyDistributionsResponse = components['schemas']['WeeklyDistributionsResponse'];
+export type PostWeeklyDistributionsQuery = components['schemas']['PostWeeklyDistributionsQuery'];
+export type SubmitRevenueV1Request = components['schemas']['SubmitRevenueV1Request'];
+export type RevenuePeriod = components['schemas']['RevenuePeriod'];
+export type RevenueEntryResponse = components['schemas']['RevenueEntryResponse'];
+export type SubmitRevenueEntryRequest = components['schemas']['SubmitRevenueEntryRequest'];
+export type SubmitRevenueEntriesRequest = components['schemas']['SubmitRevenueEntriesRequest'];
+export type DemandForecastingResponse = components['schemas']['DemandForecastingResponse'];
+export type ForecastAccuracyResponse = components['schemas']['ForecastAccuracyResponse'];
+export type ForecastEligibility = components['schemas']['ForecastEligibility'];
+export type MessageDraftDto = components['schemas']['MessageDraftDto'];
+export type EventBody = components['schemas']['EventBody'];
+export type InboundSmsTwilioDto = components['schemas']['InboundSmsTwilioDto'];
+export type TimezoneEntity = components['schemas']['TimezoneEntity'];
+export type DeleteInvoicesDto = components['schemas']['DeleteInvoicesDto'];
+export type ToilAllowance = components['schemas']['ToilAllowance'];
+export type CreateToilRecordDto = components['schemas']['CreateToilRecordDto'];
+export type ToilAccrualRecord = components['schemas']['ToilAccrualRecord'];
+export type AvailabilityTimesDto = components['schemas']['AvailabilityTimesDto'];
+export type AvailabilityDto = components['schemas']['AvailabilityDto'];
+export type AvailabilityResponse = components['schemas']['AvailabilityResponse'];
+export type CreateAvailabilityRequestDto = components['schemas']['CreateAvailabilityRequestDto'];
+export type DocumentAcknowledgementEntity = components['schemas']['DocumentAcknowledgementEntity'];
+export type DocumentSignatureEntity = components['schemas']['DocumentSignatureEntity'];
+export type DocumentResponseDto = components['schemas']['DocumentResponseDto'];
+export type UserResponseDto = components['schemas']['UserResponseDto'];
+export type CreateDocumentRequestDto = components['schemas']['CreateDocumentRequestDto'];
+export type DocumentEntity = components['schemas']['DocumentEntity'];
+export type SignDocumentDto = components['schemas']['SignDocumentDto'];
+export type UpdateDocumentRequestDto = components['schemas']['UpdateDocumentRequestDto'];
+export type DocumentDownloadDto = components['schemas']['DocumentDownloadDto'];
+export type RegisterDeviceDto = components['schemas']['RegisterDeviceDto'];
+export type UpdateNotificationsDto = components['schemas']['UpdateNotificationsDto'];
+export type FeatureFlagResponse = components['schemas']['FeatureFlagResponse'];
+export type OverrideFeatureFlagDto = components['schemas']['OverrideFeatureFlagDto'];
+export type SetupWizardStepResponse = components['schemas']['SetupWizardStepResponse'];
+export type Step = components['schemas']['Step'];
+export type SetupWizardStepRequest = components['schemas']['SetupWizardStepRequest'];
+export type UpdateSettingsDtoBase = components['schemas']['UpdateSettingsDtoBase'];
+export type GetSettingsDtoBase = components['schemas']['GetSettingsDtoBase'];
+export type JobDto = components['schemas']['JobDto'];
+export type ForceSubscriptionRequest = components['schemas']['ForceSubscriptionRequest'];
+export type SeedTestDataBody = components['schemas']['SeedTestDataBody'];
+export type CreateRotaDto = components['schemas']['CreateRotaDto'];
+export type DayNoteRequest = components['schemas']['DayNoteRequest'];
+export type DayNote = components['schemas']['DayNote'];
+export type DayNoteResponse = components['schemas']['DayNoteResponse'];
 export type ShiftSwapResponse = components['schemas']['ShiftSwapResponse'];
 export type ManagerShiftResponse = components['schemas']['ManagerShiftResponse'];
 export type SelfShiftResponse = components['schemas']['SelfShiftResponse'];
@@ -788,16 +7085,4353 @@ export type ShiftEligibilityResponse = components['schemas']['ShiftEligibilityRe
 export type ShiftClashCheckDateResult = components['schemas']['ShiftClashCheckDateResult'];
 export type ShiftClashCheckResponse = components['schemas']['ShiftClashCheckResponse'];
 export type ShiftClaimResponse = components['schemas']['ShiftClaimResponse'];
-export type ShiftClaimMappingResponse = components['schemas']['ShiftClaimMappingResponse'];
 export type CreateOpenShiftClaim = components['schemas']['CreateOpenShiftClaim'];
 export type UpdateToDenyOpenShiftClaim = components['schemas']['UpdateToDenyOpenShiftClaim'];
 export type UpdateToApproveOpenShiftClaim = components['schemas']['UpdateToApproveOpenShiftClaim'];
 export type UpdateShiftClaimResponse = components['schemas']['UpdateShiftClaimResponse'];
-export type PaginationProperties = components['schemas']['PaginationProperties'];
-export type PaginatedResponse = components['schemas']['PaginatedResponse'];
+export type InvoiceResponse = components['schemas']['InvoiceResponse'];
+export type GetInvoiceByIdResponse = components['schemas']['GetInvoiceByIdResponse'];
+export type Card = components['schemas']['Card'];
+export type PaymentSourceResponse = components['schemas']['PaymentSourceResponse'];
+export type SetupIntentResponse = components['schemas']['SetupIntentResponse'];
+export type CreatePaymentSourceDto = components['schemas']['CreatePaymentSourceDto'];
+export type StairStep = components['schemas']['StairStep'];
+export type ProductCatalogueItemPrice = components['schemas']['ProductCatalogueItemPrice'];
+export type ProductCataloguePlan = components['schemas']['ProductCataloguePlan'];
+export type ProductCatalogueAddon = components['schemas']['ProductCatalogueAddon'];
+export type ProductCatalogueItems = components['schemas']['ProductCatalogueItems'];
+export type ProductCatalogueResponse = components['schemas']['ProductCatalogueResponse'];
+export type AccountInformationResponse = components['schemas']['AccountInformationResponse'];
+export type PlatformConfig = components['schemas']['PlatformConfig'];
+export type AppUpdatesResponse = components['schemas']['AppUpdatesResponse'];
+export type BudgetVariance = components['schemas']['BudgetVariance'];
+export type LabourBudgetVariance = components['schemas']['LabourBudgetVariance'];
+export type CostDateResponseDto = components['schemas']['CostDateResponseDto'];
+export type CostsResponseDto = components['schemas']['CostsResponseDto'];
+export type CostLocationResponseDto = components['schemas']['CostLocationResponseDto'];
+export type DaysCostsResponseDto = components['schemas']['DaysCostsResponseDto'];
+export type LeaveStatsResponse = components['schemas']['LeaveStatsResponse'];
+export type AttendanceStat = components['schemas']['AttendanceStat'];
+export type AttendanceStatsResponse = components['schemas']['AttendanceStatsResponse'];
 export type PaginationQuery = components['schemas']['PaginationQuery'];
 export type $defs = Record<string, never>;
 export interface operations {
+    AccountSubscriptionsController_findOne: {
+        parameters: {
+            query?: {
+                /** @description Set to true to get the extended subscription. Defaults to false */
+                extended?: boolean;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubscriptionResponse"] | components["schemas"]["ExtendedSubscriptionResponse"];
+                };
+            };
+        };
+    };
+    AccountSubscriptionsController_updateSubscription: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OmittedUpdateSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription updated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Subscription could not be updated, either due to bad input or the trial could not be started */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountSubscriptionsController_getEstimates: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EstimatesRequest"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["EstimatesResponse"];
+                };
+            };
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountSubscriptionsController_reactivateSubscription: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Subscription reactivated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountSubscriptionsController_cancelSubscription: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelAccountRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription cancelled */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Subscription could not be cancelled as it is not active */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AccountsController_cancelAccount: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelAccountDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_getLogbookCategories: {
+        parameters: {
+            query?: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["LogbookCategoriesResponse"][];
+                    };
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_createLogbookCategory: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogbookCategoriesRequest"];
+            };
+        };
+        responses: {
+            /** @description Category created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LogbookCategoriesResponse"];
+                };
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_getLogbookCategory: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LogbookCategoriesResponse"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The logbook category does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_updateLogbookCategory: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LogbookCategoriesRequest"];
+            };
+        };
+        responses: {
+            /** @description Logbook category name successfully updated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_deleteLogbookCategory: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description The ID of the logbook category to delete */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Logbook category deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Logbook category not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_getAllLogbookEntries: {
+        parameters: {
+            query?: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+                /** @description The category ID to filter logbook entries for */
+                categoryId?: number;
+                /** @description The date to filter from */
+                date?: unknown;
+            };
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description The ID of the user to get logbook entries for */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["LogbookResponse"][];
+                    };
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_getLogbookEntry: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LogbookResponse"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The logbook entry does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_updateLogbook: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateLogbookRequest"];
+            };
+        };
+        responses: {
+            /** @description Logbook updated successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_deleteLogbookEntry: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description The ID of the logbook entry to delete */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Logbook entry deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Logbook entry not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LogbookController_createLogbook: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateLogbookRequest"];
+            };
+        };
+        responses: {
+            /** @description Logbook entry created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LogbookResponse"];
+                };
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LocationsV2Controller_getWeather: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                locationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The weather for the location */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LocationWeatherResponse"];
+                };
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_getInviteDetails: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                userId: number;
+                hash: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The invite details have been successfully retrieved */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_resendInvite: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The invite has been successfully resent */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_selfOnboard: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                userId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SelfServeOnboardingRequest"];
+            };
+        };
+        responses: {
+            /** @description The user profile has been successfully updated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_syncContactDetails: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SyncContactDetailsDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_addOrOnboardUsers: {
+        parameters: {
+            query: {
+                /** @description The operation mode: 'add' for standard creation, 'onboard' for onboarding, 'sendInvite' for sending an invite for creation. */
+                mode: "add" | "onboard" | "sendInvite";
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UnifiedUsersRequest"];
+            };
+        };
+        responses: {
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_onboard: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OnboardUsersRequest"];
+            };
+        };
+        responses: {
+            /** @description The users have been successfully onboarded */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    UsersController_listEmployees: {
+        parameters: {
+            query?: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["EmployeeDetailsResponse"][];
+                    };
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    IndustryController_getItems: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /**
+             * @example {
+             *       "data": [
+             *         {
+             *           "id": 1,
+             *           "name": "Events",
+             *           "group": "Entertainment / Leisure"
+             *         }
+             *       ]
+             *     }
+             */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "data": [
+                     *         {
+                     *           "id": 1,
+                     *           "name": "Events",
+                     *           "group": "Entertainment / Leisure"
+                     *         }
+                     *       ]
+                     *     }
+                     */
+                    "application/json": components["schemas"]["IndustryResponseDTO"][];
+                };
+            };
+        };
+    };
+    InvitesController_validate: {
+        parameters: {
+            query: {
+                /** @description The user ID from the invite link (?id=...) */
+                id: number;
+                /** @description The invite hash from the invite link (?hash=...) */
+                hash: string;
+                /** @description Optional account ID from the invite link (?account_id=...) */
+                accountId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Token is valid */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ValidateInviteResponseDto"];
+                };
+            };
+            /** @description Invalid or already-used invite token */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InvitesController_confirm: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ConfirmInviteDto"];
+            };
+        };
+        responses: {
+            /** @description Invite confirmed successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid or already-used invite token */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Unauthenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CountriesController_findAll: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_handleCallback: {
+        parameters: {
+            query: {
+                code: string;
+                state: string;
+                error: string;
+                error_description: string;
+                redirect: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_isSsoEnabled: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                accountId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_initiateLoginByEmail: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SsoEmailLoginRequest"];
+            };
+        };
+        responses: {
+            /** @description Authorization URL generated for the email address */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SsoInitiateResponse"];
+                };
+            };
+            /** @description No SSO configuration available for this email */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_initiateLogin: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description Account ID to authenticate for */
+                accountId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Authorization URL generated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SsoInitiateResponse"];
+                };
+            };
+            /** @description SSO not enabled for this account */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_exchange: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SsoExchangeRequest"];
+            };
+        };
+        responses: {
+            /** @description Exchange successful */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Code expired or invalid */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_saveAdminConfig: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SsoAdminConfigRequest"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_enableSso: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SsoController_disableSso: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RootController_checkHealth: {
+        parameters: {
+            query?: {
+                /** @description Returns information about additional systems if true */
+                extended?: boolean;
+                /** @description Force an error */
+                force?: "error" | "400" | "403" | "404" | "422" | "500" | "502" | "503" | "504";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RootController_checkHealth: {
+        parameters: {
+            query?: {
+                /** @description Returns information about additional systems if true */
+                extended?: boolean;
+                /** @description Force an error */
+                force?: "error" | "400" | "403" | "404" | "422" | "500" | "502" | "503" | "504";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WebhooksController_handleChargebeeWebhook: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AppFeedbackController_postAppFeedback: {
+        parameters: {
+            query?: never;
+            header: {
+                Account?: string;
+                "app-version": string;
+                "device-os": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AppFeedbackDto"];
+            };
+        };
+        responses: {
+            /** @description App feedback was recorded successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DialoguesController_shouldShowAppFeedbackDialogue: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Contains body for whether the app feedback dialogue should be shown to the user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ShowAppFeedbackDialogueResponse"];
+                };
+            };
+        };
+    };
+    AnalyticEventsController_handleEvent: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AnalyticEventDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TevalisController_getIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tevalis integration does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TevalisIntegrationResponse"];
+                };
+            };
+        };
+    };
+    TevalisController_updateIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateTevalisIntegrationRequest"];
+            };
+        };
+        responses: {
+            /** @description Integration updated successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tevalis integration is not set up */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TevalisController_addIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateIntegrationDto"];
+            };
+        };
+        responses: {
+            /** @description Integration created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Request input invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TevalisController_removeIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Tevalis Integration disconnected */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tevalis integration does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TevalisController_getSites: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["TevalisSiteListResponse"][];
+                    };
+                };
+            };
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Tevalis sites not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SquareController_getIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Square integration does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SquareIntegrationResponse"];
+                };
+            };
+        };
+    };
+    SquareController_updateIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSquareIntegrationRequest"];
+            };
+        };
+        responses: {
+            /** @description Square integration updated successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Square integration is not set up */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SquareController_deleteIntegration: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Square integration disconnected */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Square integration not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SquareController_getLocations: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Square integration does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            default: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SquareLocationResponse"][];
+                };
+            };
+        };
+    };
+    SquareController_handleIntegrationLoginUrl: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SquareController_handleIntegrationAuth: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description User is not an admin */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ZapierController_postZapierSubscriptions: {
+        parameters: {
+            query?: never;
+            header: {
+                Account?: string;
+                "App-Version": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateZapierSubscriptionDto"];
+            };
+        };
+        responses: {
+            /** @description Subscription created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid API key */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ZapierController_deleteZapierSubscriptions: {
+        parameters: {
+            query?: never;
+            header: {
+                Account?: string;
+                "App-Version": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteZapierSubscriptionDto"];
+            };
+        };
+        responses: {
+            /** @description Subscription deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid API key */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ViasocketController_postViasocketSubscriptions: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateViasocketSubscriptionDto"];
+            };
+        };
+        responses: {
+            /** @description Subscription created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid API key */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ViasocketController_deleteViasocketSubscriptions: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteViasocketSubscriptionDto"];
+            };
+        };
+        responses: {
+            /** @description Subscription deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid API key */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AuthController_login: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+                /** @description Accepts credentials using basic auth */
+                Authorization?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["LoginDto"];
+            };
+        };
+        responses: {
+            /** @description Body that indicates whether authentication was successful, or whether 2FA is required */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SuccessfulLoginDto"] | components["schemas"]["NativeLoginDto"] | components["schemas"]["TwoFactorRequiredDto"] | components["schemas"]["TwoFactorEnforcedDto"];
+                };
+            };
+        };
+    };
+    TwoFactorSecretsController_generateTwoFactorSecret: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateTwoFactorSecretDto"];
+            };
+        };
+        responses: {
+            /** @description Generated two factor secret */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TwoFactorSecretDto"];
+                };
+            };
+        };
+    };
+    TwoFactorSetupsController_setupTwoFactorAuth: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetupTwoFactorAuthDto"];
+            };
+        };
+        responses: {
+            /** @description Two factor authentication set up successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_listBudgetEntries: {
+        parameters: {
+            query: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+                /** @description The start date of the period to retrieve budgets for (ISO 8601 datetime string). Required. */
+                from: string;
+                /** @description The end date of the period to retrieve budgets for (ISO 8601 datetime string). Required. */
+                to: string;
+                /** @description Allows filtering by a specific timescale (e.g., weekly, daily). Optional, but can improve performance by allowing parallel requests for different timescales. */
+                timescale?: "week" | "day";
+                /** @description Filters by specific location IDs. */
+                locations: number[];
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["BudgetEntryResponse"][];
+                    };
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_submitBudgetEntries: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitBudgetEntriesRequest"];
+            };
+        };
+        responses: {
+            /** @description Budget entries that have been changed, either directly, or consequentially as an aggregation or distribution */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmitBudgetEntriesResponse"];
+                };
+            };
+        };
+    };
+    BudgetsV2Controller_deleteBudgetEntries: {
+        parameters: {
+            query: {
+                /** @description The start date of the period to delete budgets for (ISO 8601 datetime string). Required. */
+                from: string;
+                /** @description The end date of the period to delete budgets for (ISO 8601 datetime string). Required. */
+                to: string;
+                /**
+                 * @deprecated
+                 * @description Deprecated, all deletions will delete all time periods within the range.
+                 */
+                timescale?: "week" | "day";
+                /** @description Filters by specific location IDs. Optional, but commonly used. */
+                locations: number[];
+                /** @description Optional filter for the budget table to delete. */
+                clear?: "cap" | "forecast";
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_copyBudgetEntries: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CopyBudgetRequestBody"];
+            };
+        };
+        responses: {
+            /** @description Budget entries that have been changed, either directly, or consequentially as an aggregation or distribution */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SubmitBudgetEntriesResponse"];
+                };
+            };
+        };
+    };
+    BudgetsV2Controller_import: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description Upload a CSV file. Expected format: 'date,locationId,estimatedRevenue,actualRevenue,labourPercentage,budgetHours,budgetCosts
+                     *     2021-01-01,2,300,340.76,43,50,30'
+                     */
+                    file?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_importV2: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description Upload a CSV file. Expected format: 'date,locationId,estimatedRevenue,labourPercentage,budgetHours,budgetCosts
+                     *     2021-01-01,2,300,43,50,30'
+                     */
+                    file?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_export: {
+        parameters: {
+            query: {
+                /** @description The location ID */
+                locationId: number;
+                /** @description The start date. No more than 378 days before the end date */
+                startDate: unknown;
+                /** @description The end date. No more than 378 days after the start date */
+                endDate: unknown;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Downloaded csv */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_exportV2: {
+        parameters: {
+            query: {
+                /** @description The location ID */
+                locationId: number;
+                /** @description The start date. No more than 378 days before the end date */
+                startDate: unknown;
+                /** @description The end date. No more than 378 days after the start date */
+                endDate: unknown;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Downloaded csv */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_getBudgetSettings: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the budget settings for the account */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BudgetSettings"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_updateBudgetSettings: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BudgetSettings"];
+            };
+        };
+        responses: {
+            /** @description Returns the updated budget settings for the account */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BudgetSettings"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV2Controller_notifyAdminsAboutExceededBudget: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ExceededBudgets"];
+            };
+        };
+        responses: {
+            /** @description Notifications sent. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WeeklyDistributionsV2Controller_findAll: {
+        parameters: {
+            query: {
+                /** @description Filter by location ID */
+                locationId: number;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeeklyDistributionsResponse"][];
+                };
+            };
+        };
+    };
+    WeeklyDistributionsV2Controller_update: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PostWeeklyDistributionsQuery"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["WeeklyDistributionsResponse"];
+                };
+            };
+        };
+    };
+    RevenueV1Controller_getV1BudgetEntries: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV1Controller_createV1RevenueEntries: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Array of revenue entries to create or update */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitRevenueV1Request"][];
+            };
+        };
+        responses: {
+            /** @description Revenue entries created/updated successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Validation error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_listRevenueEntries: {
+        parameters: {
+            query: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+                /** @description The start date of the period to retrieve revenue entries for (ISO 8601 datetime string). Required. */
+                from: string;
+                /** @description The end date of the period to retrieve revenue entries for (ISO 8601 datetime string). Inclusive. Required. */
+                to: string;
+                /** @description Filters by specific location ID. Optional. */
+                locations?: number[];
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["RevenueEntryResponse"][];
+                    };
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_submitRevenueEntries: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SubmitRevenueEntriesRequest"];
+            };
+        };
+        responses: {
+            /** @description Revenue entries submitted successfully */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_import: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "multipart/form-data": {
+                    /**
+                     * Format: binary
+                     * @description Upload a CSV file. Expected format: 'date,locationId,actualRevenue,
+                     *     2021-01-01,2,300,'
+                     */
+                    file?: string;
+                };
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_export: {
+        parameters: {
+            query: {
+                /** @description The location ID */
+                locationId: number;
+                /** @description The start date. No more than 378 days before the end date */
+                startDate: unknown;
+                /** @description The end date. No more than 378 days after the start date */
+                endDate: unknown;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Downloaded csv */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": string;
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_getForecast: {
+        parameters: {
+            query: {
+                /** @description Location ID for which the forecast is provided */
+                locationId: number;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DemandForecastingResponse"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_getForecastAccuracy: {
+        parameters: {
+            query: {
+                /** @description Location ID for which to get the accuracy of the demand forecast and user`s estimated revenue. */
+                locationId: number;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ForecastAccuracyResponse"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RevenueV2Controller_checkEligibility: {
+        parameters: {
+            query: {
+                /** @description Location ID for which the forecast is provided */
+                locationId: number;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Eligibility response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ForecastEligibility"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV1Controller_listBudgetV1Entries: {
+        parameters: {
+            query: {
+                /** @description The start date of the period to retrieve budgets for (ISO 8601 datetime string). Required. */
+                start: string;
+                /** @description The end date of the period to retrieve budgets for (ISO 8601 datetime string). Required. */
+                end: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    BudgetsV1Controller_postBudgetV1Entries: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": string[];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DefaultPricingController_defaultPricing: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    EmailSeenController_getEmailSeen: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: string;
+                hash: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MessagesController_getMessages: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MessagesController_sendMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["MessageDraftDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MessagesController_deleteMessage: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    EventsController_logEvent: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["EventBody"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GeocodeController_geocodeAddress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    HolidayAccrualsController_findByQuery: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InboundSmsController_handleTwilioInboundSms: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-twilio-signature": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InboundSmsTwilioDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    TimezonesController_findAll: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TimezoneEntity"][];
+                };
+            };
+        };
+    };
+    TimezonesController_findOne: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TimezoneEntity"];
+                };
+            };
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InvoicesController_deleteInvoice: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DeleteInvoicesDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InvoicesController_postInvoicePaymentLinks: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                invoiceId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InvoicesController_getInvoices: {
+        parameters: {
+            query: {
+                accountIds: string[];
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LeaveTypesController_findAll: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ToilAllowanceController_getMultipleAllowances: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                /** @description Exclude `link` header from response */
+                excludeLinkHeader?: boolean;
+                /** @description User IDs */
+                users?: number[];
+            };
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description Leave year */
+                year: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns TOIL records for a year for a specified users. If the users have no TOIL records, then only 0s will be returned */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ToilAllowance"][];
+                };
+            };
+        };
+    };
+    ToilAccrualsController_findAll: {
+        parameters: {
+            query?: {
+                /** @description Limit of results to be returned */
+                limit?: number;
+                /** @description Page of results */
+                offset?: number;
+                /** @description Exclude `link` header from response */
+                excludeLinkHeader?: boolean;
+                /** @description Leave year to filter by */
+                year?: number;
+                include_deleted?: boolean;
+                /** @description User IDs to filter by */
+                users?: number[];
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ToilAccrualRecord"][];
+                };
+            };
+        };
+    };
+    ToilAccrualsController_create: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateToilRecordDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ToilAccrualRecord"];
+                };
+            };
+            /** @description Invalid request body */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ToilAccrualsController_findOne: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the record */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ToilAccrualRecord"];
+                };
+            };
+            /** @description Accrual record not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ToilAccrualsController_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the record */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Accrual record not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    WebhooksAvailableController_webhooksAvailable: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AvailabilityController_findAll: {
+        parameters: {
+            query: {
+                /** @description Optional list of user IDs */
+                users?: number[];
+                /** @description End date. Cannot exceed 31 days */
+                end: string;
+                /** @description Start date. Cannot exceed end date */
+                start: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AvailabilityResponse"][];
+                };
+            };
+        };
+    };
+    AvailabilityController_createMany: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateAvailabilityRequestDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DocumentsController_findAll: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                /** @description Exclude `link` header from response */
+                excludeLinkHeader?: boolean;
+                /** @description If set to true, this fields overrides any value set on `users` array, meaning it will only return non-personal documents */
+                company_only?: boolean;
+                /** @description User IDs to filter by */
+                users?: number[];
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentResponseDto"];
+                };
+            };
+        };
+    };
+    DocumentsController_create: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        /** @description New document */
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateDocumentRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentEntity"];
+                };
+            };
+        };
+    };
+    DocumentsController_showUsersWhoMustSign: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UserResponseDto"][];
+                };
+            };
+        };
+    };
+    DocumentsController_find: {
+        parameters: {
+            query: {
+                expand: Record<string, never>;
+            };
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the document */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentResponseDto"];
+                };
+            };
+        };
+    };
+    DocumentsController_update: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the document */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateDocumentRequestDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentEntity"];
+                };
+            };
+        };
+    };
+    DocumentsController_delete: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the document */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DocumentsController_acknowledge: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the document */
+                documentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DocumentsController_sign: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the document */
+                documentId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SignDocumentDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DocumentsController_getDownloadLink: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                /** @description ID of the document */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DocumentDownloadDto"];
+                };
+            };
+        };
+    };
+    StripeWebhookController_postStripeWebhook: {
+        parameters: {
+            query?: never;
+            header: {
+                "Stripe-Signature": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevicesController_getDevice: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevicesController_findAll: {
+        parameters: {
+            query?: {
+                limit?: number;
+                offset?: number;
+                /** @description Exclude `link` header from response */
+                excludeLinkHeader?: boolean;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevicesController_registerDevice: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RegisterDeviceDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevicesController_testPushNotifications: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevicesController_deRegisterDevice: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                deviceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV1Controller_ip: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns the IP address of the requester. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV1Controller_getNotificationsPreferences: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV1Controller_updateNotificationsPreferences: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateNotificationsDto"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV1Controller_getIntercomData: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV1Controller_features: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+                "device-os"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Object containing all available feature flags for the current user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FeatureFlagResponse"];
+                };
+            };
+        };
+    };
+    MeV1Controller_overrideFeatures: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+                "device-os"?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OverrideFeatureFlagDto"];
+            };
+        };
+        responses: {
+            /** @description Object containing all available feature flags for the current user */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Forbidden - Not a team member */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV2Controller_getSetupWizardSteps: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["SetupWizardStepResponse"][];
+                    };
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    MeV2Controller_updateSetupWizardSteps: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetupWizardStepRequest"];
+            };
+        };
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    EmailFeedbackController_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SettingsController_getSettings: {
+        parameters: {
+            query: {
+                only_values: boolean;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSettingsDtoBase"];
+                };
+            };
+        };
+    };
+    SettingsController_updateSettings: {
+        parameters: {
+            query: {
+                only_values: boolean;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateSettingsDtoBase"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSettingsDtoBase"];
+                };
+            };
+        };
+    };
+    DevController_dispatchJob: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["JobDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevController_configDump: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DevController_forceSubscription: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ForceSubscriptionRequest"];
+            };
+        };
+        responses: {
+            /** @description Subscription forcibly updated */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    SeedersV2Controller_seed: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                seederType: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SeedTestDataBody"];
+            };
+        };
+        responses: {
+            /** @description Test data seeded */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    RotasController_create: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateRotaDto"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DayNotesController_getDayNotesById: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DayNote"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user does not have permission to view the day note */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The day note does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DayNotesController_update: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DayNoteRequest"];
+            };
+        };
+        responses: {
+            /** @description The day note was updated successfully. */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The request body is invalid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user does not have permission to update the day note. */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The day note does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DayNotesController_deleteNoteById: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The day note was deleted successfully */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user does not have permission to delete the day note */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The day note does not exist */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DayNotesController_getAllDayNotes: {
+        parameters: {
+            query: {
+                /** @description ID of the location to get day notes for */
+                location?: number;
+                /** @description End of the date range to get day notes for */
+                end: string;
+                /** @description Start of the date range to get day notes for */
+                start: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /**
+             * @example {
+             *       "data": [
+             *         {
+             *           "id": 1011,
+             *           "addedAt": "2025-02-24T10:43:07.553",
+             *           "addedBy": 151313,
+             *           "updatedAt": "2022-11-22",
+             *           "updatedBy": 12324,
+             *           "locations": [
+             *             1,
+             *             2,
+             *             33,
+             *             54
+             *           ],
+             *           "startDate": "2023-01-13",
+             *           "endDate": "2023-01-30",
+             *           "title": "Pizza!",
+             *           "message": "Today is pizza day",
+             *           "visibleToEmployees": false
+             *         }
+             *       ],
+             *       "pagnation": {
+             *         "count": 1,
+             *         "next": null
+             *       }
+             *     }
+             */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "data": [
+                     *         {
+                     *           "id": 1011,
+                     *           "addedAt": "2025-02-24T10:43:07.553",
+                     *           "addedBy": 151313,
+                     *           "updatedAt": "2022-11-22",
+                     *           "updatedBy": 12324,
+                     *           "locations": [
+                     *             1,
+                     *             2,
+                     *             33,
+                     *             54
+                     *           ],
+                     *           "startDate": "2023-01-13",
+                     *           "endDate": "2023-01-30",
+                     *           "title": "Pizza!",
+                     *           "message": "Today is pizza day",
+                     *           "visibleToEmployees": false
+                     *         }
+                     *       ],
+                     *       "pagnation": {
+                     *         "count": 1,
+                     *         "next": null
+                     *       }
+                     *     }
+                     */
+                    "application/json": components["schemas"]["DayNoteResponse"][];
+                };
+            };
+            /** @description The request query is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    DayNotesController_create: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DayNoteRequest"];
+            };
+        };
+        responses: {
+            /** @description Day note created successfully */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DayNote"];
+                };
+            };
+            /** @description The request body is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user does not have permission to create day notes */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
     ShiftsV2Controller_getShifts: {
         parameters: {
             query?: {
@@ -848,7 +11482,7 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["PaginatedResponse"] & {
-                        data?: (components["schemas"]["ManagerShiftResponse"] | components["schemas"]["SelfShiftResponse"] | components["schemas"]["RegularEmployeeShiftResponse"])[];
+                        data?: components["schemas"]["RegularEmployeeShiftResponse"][];
                     };
                 };
             };
@@ -985,7 +11619,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["ShiftClaimMappingResponse"][];
+                    "application/json": components["schemas"]["ShiftClaimResponse"][];
                 };
             };
             /** @description The user is not authenticated */
@@ -1251,6 +11885,521 @@ export interface operations {
             };
             /** @description The requested resource was not found */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InvoicesController_getInvoices: {
+        parameters: {
+            query?: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+                status?: "paid" | "posted" | "payment_due" | "not_paid" | "voided" | "pending";
+                /** @description The date to filter from */
+                dateFrom?: string;
+                /** @description The date to filter to */
+                dateTo?: string;
+                /** @description The minimum total amount of the invoice */
+                minTotal?: number;
+                /** @description The maximum total amount of the invoice */
+                maxTotal?: number;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["InvoiceResponse"][];
+                    };
+                };
+            };
+            /** @description The request query is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    InvoicesController_getInvoice: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                invoiceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Invoice details */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetInvoiceByIdResponse"];
+                };
+            };
+            /** @description The request query is invalid */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PaymentSourcesController_getPaymentSources: {
+        parameters: {
+            query?: {
+                /** @description The max number of items to return */
+                limit?: number;
+                /** @description The cursor after which the next page should be fetched. Comes from the previous page's response */
+                cursor?: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedResponse"] & {
+                        data?: components["schemas"]["PaymentSourceResponse"][];
+                    };
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PaymentSourcesController_createPaymentSource: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePaymentSourceDto"];
+            };
+        };
+        responses: {
+            /** @description Payment source created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Invalid input */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User does not have permission to create a payment source */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Internal server error */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Service unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Gateway request timed out */
+            504: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PaymentSourcesController_createSetupIntent: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SetupIntentResponse"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PaymentSourcesController_deletePaymentSource: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                paymentSourceId: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Payment method deleted */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description User does not have permission to delete this payment source */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Payment source not found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    ProductCatalogueController_getProductCatalogue: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Returns all the plans and addons available, on a key of items */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductCatalogueResponse"];
+                };
+            };
+        };
+    };
+    AdminController_getAccountInfo: {
+        parameters: {
+            query?: never;
+            header?: {
+                Account?: string;
+            };
+            path: {
+                accountId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AccountInformationResponse"];
+                };
+            };
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    PlatformController_getAppUpdates: {
+        parameters: {
+            query: {
+                /** @description the type of client application you want the version for */
+                appType: "mobile" | "terminal";
+                /** @description Current version of the client application */
+                appVersion: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /**
+             * @description App updates response
+             * @example {
+             *       "mobile": {
+             *         "minSupportedVersion": "1.2.3",
+             *         "forceUpdate": true,
+             *         "updateBy": "2025-12-01"
+             *       }
+             *     }
+             */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    /**
+                     * @example {
+                     *       "mobile": {
+                     *         "minSupportedVersion": "1.2.3",
+                     *         "forceUpdate": true,
+                     *         "updateBy": "2025-12-01"
+                     *       }
+                     *     }
+                     */
+                    "application/json": components["schemas"]["AppUpdatesResponse"];
+                };
+            };
+        };
+    };
+    CostsController_getConsecutiveCosts: {
+        parameters: {
+            query: {
+                /** @description The date from which to return data from. */
+                date: string;
+                /** @description Number of consecutive days to retrieve. Defaults to 3. */
+                days?: number;
+                /** @description Optional location ID. If provided, costs will be filtered to this location only. */
+                location?: number;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The calculated costs and hours for the given date range. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CostsResponseDto"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    CostsController_getDaysCosts: {
+        parameters: {
+            query: {
+                /** @description The date from which to return data from. */
+                date: string;
+            };
+            header?: {
+                Account?: string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The calculated costs and hours for the day */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DaysCostsResponseDto"];
+                };
+            };
+            /** @description The user is not authenticated */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description The user is not allowed to access this resource */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    LeaveController_getLeaves: {
+        parameters: {
+            query?: {
+                /** @description The ID of the location to filter stats by. */
+                locationId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Leave statistics retrieved successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["LeaveStatsResponse"];
+                };
+            };
+            /** @description Only managers and admins can access leave stats. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    AttendanceController_getAttendanceStats: {
+        parameters: {
+            query?: {
+                /** @description Filter stats by a specific location ID */
+                locationId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Attendance statistics retrieved successfully. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AttendanceStatsResponse"];
+                };
+            };
+            /** @description Only managers and admins can access attendance stats. */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

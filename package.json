@@ -20,8 +20,8 @@
     "lint": "eslint src --ext .ts",
     "test": "vitest",
     "prepublishOnly": "npm run build",
-    "generate:api-types": "openapi-typescript openapi.json -o src/generated/api-types.ts --root-types --root-types-no-schema-prefix",
-    "check:api-types": "openapi-typescript openapi.json -o src/generated/api-types.ts --root-types --root-types-no-schema-prefix --check"
+    "generate:api-types": "openapi-typescript https://api.rotacloud-staging.com/docs-json -o src/generated/api-types.ts --root-types --root-types-no-schema-prefix",
+    "check:api-types": "openapi-typescript https://api.rotacloud-staging.com/docs-json -o src/generated/api-types.ts --root-types --root-types-no-schema-prefix --check"
   },
   "repository": {
     "type": "git",
