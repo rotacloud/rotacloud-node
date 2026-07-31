@@ -16,6 +16,13 @@ export interface ShiftSwapRequestV2 {
   swappedShiftId: number | null;
 }
 
+/** A manager-facing swap request embedded in a V2 shift response. */
+export interface ManagerShiftSwapRequestV2 extends ShiftSwapRequestV2 {
+  isDeleted: boolean;
+  deletedAt: string | null;
+  deletedBy: number | null;
+}
+
 /** A drop request embedded in a V2 shift response. */
 export interface ShiftDropRequestV2 {
   id: number;
@@ -27,6 +34,13 @@ export interface ShiftDropRequestV2 {
   userMessage: string;
   adminMessage: string;
   shiftId: number;
+}
+
+/** A manager-facing drop request embedded in a V2 shift response. */
+export interface ManagerShiftDropRequestV2 extends ShiftDropRequestV2 {
+  isDeleted: boolean;
+  deletedAt: string | null;
+  deletedBy: number | null;
 }
 
 /**
@@ -46,8 +60,8 @@ export interface ShiftV2 {
   endTime: string;
   minutesBreak: number;
   createdAt: string;
-  dropRequests: ShiftDropRequestV2[];
-  swapRequests: ShiftSwapRequestV2[];
+  dropRequests: (ShiftDropRequestV2 | ManagerShiftDropRequestV2)[];
+  swapRequests: (ShiftSwapRequestV2 | ManagerShiftSwapRequestV2)[];
   notes?: string;
   claimOpenShiftApprovalRequired: boolean;
   createdBy?: number | null;
