@@ -28,6 +28,7 @@ import {
   DayNoteV2,
   DayNoteV2QueryParameters,
   PartialUserV2,
+  ShiftV2,
 } from './interfaces/index.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
@@ -47,6 +48,7 @@ import {
   RolesQueryParams,
   SettingsQueryParams,
   ShiftsQueryParams,
+  ShiftsV2QueryParams,
   TerminalsQueryParams,
   ToilAccrualsQueryParams,
   ToilAllowanceQueryParams,
@@ -122,6 +124,7 @@ export interface EndpointEntityMap extends Record<EndpointVersion, Record<string
   };
   /** Type mappings for v2 endpoints */
   v2: {
+    shifts: Endpoint<ShiftV2, ShiftsV2QueryParams>;
     logbook: Endpoint<LogbookEntry, LogbookQueryParameters, 'name' | 'description' | 'date' | 'userId'>;
     invoices: Endpoint<Invoice, InvoiceQueryParameters>;
     dayNotes: Endpoint<

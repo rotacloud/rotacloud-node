@@ -311,6 +311,13 @@ export const SERVICES = {
     endpoint: 'shifts',
     endpointVersion: 'v1',
     operations: ['create', 'get', 'list', 'listAll', 'update', 'updateBatch', 'delete', 'deleteBatch'],
+    subService: {
+      v2: {
+        endpoint: 'shifts',
+        endpointVersion: 'v2',
+        operations: ['list', 'listAll'],
+      },
+    },
     customOperations: {
       acknowledge: ({ request }, shiftIds: number[]): RequestConfig<{ shifts: number[] }, void> => ({
         ...request,

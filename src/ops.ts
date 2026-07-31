@@ -51,7 +51,7 @@ export type OpFunction<Return = any, Param = undefined, Opts = RequestOptions<un
   | AsyncIterable<infer U>
   | Promise<Iterable<infer U>>
   ? // List based op parameter names
-    Param extends undefined
+    [Param] extends [undefined]
     ? {
         (query?: Param): Return;
         <F extends keyof U>(
@@ -64,7 +64,7 @@ export type OpFunction<Return = any, Param = undefined, Opts = RequestOptions<un
             : Promise<Iterable<Pick<U, F>>>;
         (query: Param, options?: Opts): Return;
       }
-    : Partial<Param> extends Param
+    : [Partial<Param>] extends [Param]
       ? {
           (query?: Param): Return;
           <F extends keyof U>(
@@ -183,8 +183,15 @@ interface PagedResponse<T> {
      */
     next: string | null;
     /** Total count of entities matching the list query */
-    count: number;
+    count: number | null;
   };
+}
+
+const V2_MAX_PAGE_SIZE = 500;
+
+/** Returns a valid V2 page size without exceeding the overall remaining result limit. */
+function v2PageSize(remaining: number): number {
+  return Math.min(V2_MAX_PAGE_SIZE, remaining);
 }
 
 /** For validating the query parameter supplied to list ops
@@ -468,34 +475,46 @@ export async function* listV2Op<T, Query>(
 ): AsyncGenerator<T> {
   validateQueryParameter(query);
 
+  const maxEntities = opts?.maxResults ?? Infinity;
+  if (maxEntities <= 0) return;
+
   const queriedRequest = {
     ...ctx.request,
     url: `${ctx.service.endpointVersion}/${ctx.service.endpoint}`,
     params: {
       ...ctx.request.params,
       ...query,
-      limit: opts?.maxResults,
+      limit: v2PageSize(maxEntities),
     },
   };
   const res = await ctx.client.request<PagedResponse<T>>(queriedRequest);
   const { data: entities, pagination } = res.data;
-  const maxEntities = opts?.maxResults ?? Infinity;
-  let pagedEntityCount = entities.length;
+  let pagedEntityCount = 0;
 
   assert(Array.isArray(entities), 'list can only be performed on endpoints returning an array');
-  yield* entities.slice(0, maxEntities);
-  if (pagedEntityCount >= maxEntities) return;
+  for (const entity of entities) {
+    yield entity;
+    pagedEntityCount += 1;
+    if (pagedEntityCount >= maxEntities) return;
+  }
 
   let nextPage: string | undefined = pagination.next ?? undefined;
+  const visitedCursors = new Set<string>();
   while (nextPage !== undefined) {
+    if (visitedCursors.has(nextPage)) {
+      throw new Error('V2 pagination returned a repeated cursor');
+    }
+    visitedCursors.add(nextPage);
+
     const pagedRes = await ctx.client.request<PagedResponse<T>>({
       ...queriedRequest,
       params: {
         ...queriedRequest.params,
-        limit: pagedEntityCount,
+        limit: v2PageSize(maxEntities - pagedEntityCount),
         cursor: nextPage,
       },
     });
+    assert(Array.isArray(pagedRes.data.data), 'list can only be performed on endpoints returning an array');
     nextPage = pagedRes.data.pagination.next ?? undefined;
     for (const entity of pagedRes.data.data) {
       yield entity;

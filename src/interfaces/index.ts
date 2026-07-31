@@ -29,6 +29,7 @@ export * from './role.interface.js';
 export * from './sdk-config.interface.js';
 export * from './settings.interface.js';
 export * from './shift.interface.js';
+export * from './shift-v2.interface.js';
 export * from './terminal.interface.js';
 export * from './time-zone.interface.js';
 export * from './toil-accrual.interface.js';
