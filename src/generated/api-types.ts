@@ -542,14 +542,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/node_healthy": {
+    "/healthy": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["RootController_checkHealth"];
+        get: operations["getHealth"];
         put?: never;
         post?: never;
         delete?: never;
@@ -558,14 +558,14 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/healthy": {
+    "/node_healthy": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["RootController_checkHealth"];
+        get: operations["getNodeHealth"];
         put?: never;
         post?: never;
         delete?: never;
@@ -1386,7 +1386,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["InvoicesController_getInvoices"];
+        get: operations["getV1Invoices"];
         put?: never;
         post?: never;
         delete?: never;
@@ -2090,7 +2090,7 @@ export interface paths {
             cookie?: never;
         };
         /** List invoices */
-        get: operations["InvoicesController_getInvoices"];
+        get: operations["getV2Invoices"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4371,7 +4371,7 @@ export interface components {
             user: number;
             /**
              * Format: datetime
-             * @example 2026-07-31T17:12:05.272+01:00
+             * @example 2026-08-02T09:29:01.068+01:00
              */
             acknowledged_at: string;
         };
@@ -4380,7 +4380,7 @@ export interface components {
             signature: string;
             /**
              * Format: datetime
-             * @example 2026-07-31T17:12:05.273+01:00
+             * @example 2026-08-02T09:29:01.070+01:00
              */
             signed_at: string;
             /** @example 22.140.123.123 */
@@ -8346,7 +8346,7 @@ export interface operations {
             };
         };
     };
-    RootController_checkHealth: {
+    getHealth: {
         parameters: {
             query?: {
                 /** @description Returns information about additional systems if true */
@@ -8368,7 +8368,7 @@ export interface operations {
             };
         };
     };
-    RootController_checkHealth: {
+    getNodeHealth: {
         parameters: {
             query?: {
                 /** @description Returns information about additional systems if true */
@@ -10139,7 +10139,7 @@ export interface operations {
             };
         };
     };
-    InvoicesController_getInvoices: {
+    getV1Invoices: {
         parameters: {
             query: {
                 accountIds: string[];
@@ -11892,7 +11892,7 @@ export interface operations {
             };
         };
     };
-    InvoicesController_getInvoices: {
+    getV2Invoices: {
         parameters: {
             query?: {
                 /** @description The max number of items to return */
