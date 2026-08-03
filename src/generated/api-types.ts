@@ -4371,7 +4371,7 @@ export interface components {
             user: number;
             /**
              * Format: datetime
-             * @example 2026-08-02T09:29:01.068+01:00
+             * @example 2026-08-03T15:20:28.121+00:00
              */
             acknowledged_at: string;
         };
@@ -4380,7 +4380,7 @@ export interface components {
             signature: string;
             /**
              * Format: datetime
-             * @example 2026-08-02T09:29:01.070+01:00
+             * @example 2026-08-03T15:20:28.127+00:00
              */
             signed_at: string;
             /** @example 22.140.123.123 */
@@ -4833,6 +4833,11 @@ export interface components {
                 /** @enum {unknown} */
                 values?: true | false;
             };
+            open_shift_approval_required_by_default: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
             employee_shift_note_visibility: {
                 value?: unknown;
                 /** @enum {unknown} */
@@ -5179,6 +5184,11 @@ export interface components {
                 values?: true | false;
             };
             prevent_employees_claiming_open_shifts_exceeding_max_hours: {
+                value?: unknown;
+                /** @enum {unknown} */
+                values?: true | false;
+            };
+            open_shift_approval_required_by_default: {
                 value?: unknown;
                 /** @enum {unknown} */
                 values?: true | false;
@@ -6506,7 +6516,7 @@ export interface components {
             lineItems: components["schemas"]["LineItem"][] | null;
             /**
              * @description The link to download the invoice as a PDF
-             * @example https://cb-local-downloads.s3.amazonaws.com/yourapp/invoice/__test__8asyKSOcTMNf4r.pdf?response-content-disposition=attachment%3Bfilename%3Dyourapp%2Finvoice%2F__test__8asyKSOcTMNf4r.pdf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210210T130447Z&X-Amz-SignedHeaders=host&X-Amz-Expires=599&X-Amz-Credential=AKIAJI4SN7ONHAOGLOGA%2F20210210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dcf3b55c68ba695edded4a3d6305cb3822415601c590ad6293cfb858514078e6
+             * @example https://cb-local-downloads.s3.amazonaws.com/yourapp/invoice/__test__8asyKSOcTMNf4r.pdf?response-content-disposition=attachment%3Bfilename%3Dyourapp%2Finvoice%2F__test__8asyKSOcTMNf4r.pdf&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20210210T130447Z&X-Amz-SignedHeaders=host&X-Amz-Expires=599&X-Amz-Credential=EXAMPLEACCESSKEY%2F20210210%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Signature=dcf3b55c68ba695edded4a3d6305cb3822415601c590ad6293cfb858514078e6
              */
             downloadLink: string;
             /**
