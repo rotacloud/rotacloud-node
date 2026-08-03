@@ -2,20 +2,13 @@ import type { operations } from '../../generated/api-types.js';
 
 type GeneratedShiftsV2Query = NonNullable<operations['ShiftsV2Controller_getShifts']['parameters']['query']>;
 
-type ShiftsV2Filters = Omit<
-  GeneratedShiftsV2Query,
-  'start' | 'end' | 'createdAtStart' | 'createdAtEnd' | 'cursor' | 'limit'
->;
+type ShiftDateRange = Required<Pick<GeneratedShiftsV2Query, 'start' | 'end'>>;
 
-type ShiftDateRange = {
-  start: string;
-  end: string;
-};
+type CreationDateRange = Required<Pick<GeneratedShiftsV2Query, 'createdAtStart' | 'createdAtEnd'>>;
 
-type CreationDateRange = {
-  createdAtStart: string;
-  createdAtEnd: string;
-};
+type OmittedShiftsV2Query = Pick<GeneratedShiftsV2Query, 'cursor' | 'limit'> & ShiftDateRange & CreationDateRange;
+
+type ShiftsV2Filters = Omit<GeneratedShiftsV2Query, keyof OmittedShiftsV2Query>;
 
 /**
  * Filters supported by the V2 shifts list endpoint.
