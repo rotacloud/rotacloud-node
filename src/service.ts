@@ -8,12 +8,12 @@ import {
   LeaveType,
   ShiftHistoryRecord,
   Terminal,
-  ToilAllowance,
   User,
   UserBreak,
   UserClockedIn,
   UserClockedOut,
 } from './interfaces/index.js';
+import type { ToilAllowance } from './generated/api-types.js';
 import { LaunchTerminal } from './interfaces/launch-terminal.interface.js';
 import {
   OpDef,

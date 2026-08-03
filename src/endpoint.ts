@@ -20,7 +20,6 @@ import {
   Pin,
   Terminal,
   ToilAccrual,
-  ToilAllowance,
   UserClockedIn,
   User,
   Settings,
@@ -30,6 +29,7 @@ import {
   PartialUserV2,
   ShiftV2,
 } from './interfaces/index.js';
+import type { ToilAllowance } from './generated/api-types.js';
 import { LogbookEntry, LogbookQueryParameters } from './interfaces/logbook.interface.js';
 import { Message } from './interfaces/message.interface.js';
 import {

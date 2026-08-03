@@ -33,7 +33,6 @@ export * from './shift-v2.interface.js';
 export * from './terminal.interface.js';
 export * from './time-zone.interface.js';
 export * from './toil-accrual.interface.js';
-export * from './toil-allowance.interface.js';
 export * from './user.interface.js';
 export * from './user-v2.interface.js';
 export * from './users-clocked-in.interface.js';

@@ -1,20 +1,10 @@
-export interface Entitlement {
-  id: string;
-}
+import type { Addon, Entitlement, Plan, ProductCatalogueItemPrice, UpdatedAddon } from '../generated/api-types.js';
 
-export interface Plan {
-  id: string;
-  status: { name: 'active' | 'in_trial' };
-}
 export interface PlanExtended extends Plan {
   trialEnds: string;
   pricing: PlanPricing;
 }
 
-export interface Addon {
-  id: string;
-  status: { name: 'active' | 'in_trial' | 'hidden' };
-}
 export interface AddonExtended extends Addon {
   trialEnds: string;
   pricing: PlanPricing;
@@ -68,17 +58,6 @@ export interface SubscriptionUpdateReq {
   country?: number;
 }
 
-export interface ProductCatalogueItemPrice {
-  id: string;
-  currency: string;
-  pricingModel: 'stairstep' | 'perUnit';
-  unitPrice?: number;
-  stairStep?: ProductCatalogueItemStairStep[];
-  billingPeriod: number;
-  billingPeriodUnit: 'month' | 'year';
-  paymentPeriodUnit: 'monthly' | 'yearly';
-}
-
 export interface ProductCatalogueItemStairStep {
   startingUnit: number;
   endingUnit?: number;
@@ -124,11 +103,6 @@ export interface EstimateLineItem {
 
 export interface UpdatedPlan {
   planId: string;
-  trial?: boolean;
-}
-
-export interface UpdatedAddon {
-  addonId: string;
   trial?: boolean;
 }
 

@@ -30,9 +30,3 @@ export interface Country {
   charge_vat: boolean;
   require_vat_number: boolean;
 }
-
-export interface StairStep {
-  price: number;
-  endingUnit?: number;
-  startingUnit: number;
-}
