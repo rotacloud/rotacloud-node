@@ -5,6 +5,7 @@ import {
   ManagerShiftDropRequestV2,
   ManagerShiftSwapRequestV2,
   SDKConfig,
+  Shift,
   ShiftDropRequestV2,
   ShiftSwapRequestV2,
   ShiftV2,
@@ -263,6 +264,75 @@ describe('SDK client builder', () => {
           createdBy: [7],
           hasNotes: true,
         }),
+      }),
+    );
+  });
+
+  test('adds a typed V2 get-shift-by-ID operation without changing V1 get', async () => {
+    const client = createSdkClient({ shift: SERVICES.shift })(sdkConfig);
+    const v1Shift = {
+      id: 42,
+      deleted: false,
+      deleted_at: null,
+      deleted_by: null,
+      published: true,
+      open: false,
+      start_time: 1_753_651_200,
+      end_time: 1_753_680_000,
+      minutes_break: 30,
+      user: 7,
+      location: 3,
+      role: 4,
+      notes: null,
+      created_at: 1_753_560_000,
+      created_by: 7,
+      updated_at: null,
+      updated_by: null,
+      claimed: false,
+      claimed_at: null,
+      acknowledged: false,
+      acknowledged_at: null,
+      swap_requests: [],
+      unavailability_requests: [],
+    } satisfies Shift;
+    const v2Shift = {
+      id: 42,
+      published: true,
+      open: false,
+      userId: 7,
+      locationId: 3,
+      roleId: 4,
+      startTime: '2026-07-20T09:00:00.000Z',
+      endTime: '2026-07-20T17:00:00.000Z',
+      minutesBreak: 30,
+      createdAt: '2026-07-20T08:00:00.000Z',
+      dropRequests: [],
+      swapRequests: [],
+      claimOpenShiftApprovalRequired: false,
+    } satisfies ShiftV2;
+    vi.spyOn(mockAxiosClient, 'request')
+      .mockResolvedValueOnce({ data: v1Shift })
+      .mockResolvedValueOnce({ data: v2Shift });
+
+    expect(client.shift.v2.get).toEqual(expect.any(Function));
+
+    const v1Result: Shift = await client.shift.get(42);
+    const v2Result: ShiftV2 = await client.shift.v2.get(42);
+
+    expect(v1Result).toBe(v1Shift);
+    expect(v2Result).toBe(v2Shift);
+    expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        method: 'GET',
+        url: 'v1/shifts/42',
+      }),
+    );
+    expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        method: 'GET',
+        url: 'v2/shifts/42',
       }),
     );
   });
