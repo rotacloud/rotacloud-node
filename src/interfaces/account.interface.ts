@@ -38,4 +38,5 @@ export interface Account {
   vat_number: string | null;
   suspended: boolean;
   suspended_message: string | null;
+  partner: string | null;
 }

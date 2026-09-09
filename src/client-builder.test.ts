@@ -4,6 +4,7 @@ import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
 import {
   ManagerShiftDropRequestV2,
   ManagerShiftSwapRequestV2,
+  Account,
   SDKConfig,
   ShiftDropRequestV2,
   ShiftSwapRequestV2,
@@ -35,6 +36,14 @@ const sdkConfig: SDKConfig = {
 };
 
 describe('SDK client builder', () => {
+  test('models nullable account partners', () => {
+    const partnerAccount = { partner: 'moorepay' } satisfies Pick<Account, 'partner'>;
+    const standardAccount = { partner: null } satisfies Pick<Account, 'partner'>;
+
+    expect(partnerAccount.partner).toBe('moorepay');
+    expect(standardAccount.partner).toBeNull();
+  });
+
   test('models separate employee and manager V2 shift request responses', () => {
     const employeeSwapRequest = {
       id: 1,
