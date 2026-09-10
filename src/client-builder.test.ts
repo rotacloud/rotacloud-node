@@ -5,6 +5,7 @@ import {
   ManagerShiftDropRequestV2,
   ManagerShiftSwapRequestV2,
   Account,
+  AccountPartner,
   SDKConfig,
   ShiftDropRequestV2,
   ShiftSwapRequestV2,
@@ -37,7 +38,8 @@ const sdkConfig: SDKConfig = {
 
 describe('SDK client builder', () => {
   test('models nullable account partners', () => {
-    const partnerAccount = { partner: 'moorepay' } satisfies Pick<Account, 'partner'>;
+    const moorepay: AccountPartner = 'moorepay';
+    const partnerAccount = { partner: moorepay } satisfies Pick<Account, 'partner'>;
     const standardAccount = { partner: null } satisfies Pick<Account, 'partner'>;
 
     expect(partnerAccount.partner).toBe('moorepay');

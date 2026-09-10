@@ -1,5 +1,7 @@
 import { AccountServices } from './index.js';
 
+export type AccountPartner = 'moorepay';
+
 export interface Account {
   id: number;
   name: string;
@@ -38,5 +40,5 @@ export interface Account {
   vat_number: string | null;
   suspended: boolean;
   suspended_message: string | null;
-  partner: string | null;
+  partner: AccountPartner | null;
 }
