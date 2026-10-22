@@ -4,3 +4,4 @@ coverage
 .env
 .DS_Store
 src/local.ts
+.build
