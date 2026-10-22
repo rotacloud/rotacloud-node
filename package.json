@@ -15,7 +15,7 @@
   },
   "files": [
     "dist",
-    "*.md"
+    "README.md"
   ],
   "scripts": {
     "version:bump": "npm --no-git-tag-version version patch",

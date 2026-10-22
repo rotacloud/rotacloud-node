@@ -73,6 +73,16 @@ try {
     );
   }
   run('tar', ['-xzf', archive, '-C', temporary]);
+  const readme = readFileSync(join(temporary, 'package/README.md'), 'utf8');
+  for (const internalTerm of [
+    '@rotacloud/types',
+    'API Extractor',
+    'GITHUB_PACKAGES_TOKEN',
+    'check:types',
+    'check:package',
+  ]) {
+    assert(!readme.includes(internalTerm), `Internal build instructions in public README: ${internalTerm}`);
+  }
   const manifest = readJson(join(temporary, 'package/package.json'));
   // Development metadata may name the private package, but consumer dependencies must not require it.
   for (const dependency of ['@rotacloud/types', '@microsoft/api-extractor']) {
