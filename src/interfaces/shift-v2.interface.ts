@@ -1,4 +1,4 @@
-import type { GetV2ShiftsResponse } from '@rotacloud/types';
+import type { ListShiftsResponse } from '@rotacloud/types';
 import type { RequestStatus } from './swap-request.interface.js';
 
 /** A swap request embedded in a V2 shift response. */
@@ -45,4 +45,4 @@ export interface ManagerShiftDropRequestV2 extends ShiftDropRequestV2 {
 }
 
 /** A shift returned by the V2 list endpoint, including its permission-dependent response shapes. */
-export type ShiftV2 = GetV2ShiftsResponse['data'][number];
+export type ShiftV2 = ListShiftsResponse['data'][number];
