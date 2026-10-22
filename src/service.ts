@@ -315,7 +315,7 @@ export const SERVICES = {
       v2: {
         endpoint: 'shifts',
         endpointVersion: 'v2',
-        operations: ['list', 'listAll'],
+        operations: ['get', 'list', 'listAll'],
       },
     },
     customOperations: {
