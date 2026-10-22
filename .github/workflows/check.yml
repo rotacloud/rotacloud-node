@@ -6,25 +6,38 @@ on:
         type: string
         description: 'The version of Node to run the checks with'
         default: '24'
+    secrets:
+      GITHUB_PACKAGES_TOKEN:
+        description: 'Optional token with read access to the private types package'
+        required: false
   pull_request:
     branches: [develop]
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
   checks:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: ['20', '${{ inputs.NODE_VERSION || 24 }}']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ inputs.NODE_VERSION }}
+      - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ inputs.NODE_VERSION }}
+          node-version: ${{ matrix.node-version }}
           cache: 'npm'
           registry-url: https://registry.npmjs.org/
 
       - name: npm install
         run: npm ci
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN || github.token }}
 
       - name: Formatting
         run: npx prettier . --check
@@ -33,10 +46,13 @@ jobs:
         run: npm run lint
 
       - name: Test
-        run: npm run test
+        run: npm run test -- --run
 
       - name: Build
         run: npm run build
 
-      - name: Publishable
-        run: npm publish --dry-run
+      - name: Check bundled types
+        run: npm run check:types
+
+      - name: Check public package
+        run: npm run check:package

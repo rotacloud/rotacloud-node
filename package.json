@@ -6,19 +6,26 @@
   "engines": {
     "node": ">=20"
   },
-  "exports": "./dist/main.js",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.js",
+      "default": "./dist/main.js"
+    }
+  },
   "files": [
-    "src",
     "dist",
     "*.md"
   ],
   "scripts": {
     "version:bump": "npm --no-git-tag-version version patch",
-    "watch": "rm -rf dist/* && tsc -p tsconfig.json --watch",
-    "build": "rm -rf dist/* && tsc -p tsconfig.json",
+    "watch": "node scripts/build.mjs --watch",
+    "build": "node scripts/build.mjs",
     "lint": "eslint src --ext .ts",
     "test": "vitest",
-    "prepublishOnly": "npm run build"
+    "check:types": "node scripts/check-types.mjs",
+    "check:package": "node scripts/check-package.mjs",
+    "prepack": "npm run build && npm run check:types && npm run check:package"
   },
   "repository": {
     "type": "git",
@@ -31,6 +38,8 @@
   },
   "homepage": "https://github.com/rotacloud/rotacloud-node#readme",
   "devDependencies": {
+    "@microsoft/api-extractor": "7.59.4",
+    "@rotacloud/types": "0.1.2",
     "@types/node": "^18.19.64",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.3.0",
@@ -47,5 +56,6 @@
   "dependencies": {
     "axios": "^1.13.0",
     "axios-retry": "^4.5.0"
-  }
+  },
+  "types": "./dist/main.d.ts"
 }

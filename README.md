@@ -12,34 +12,57 @@ pushing your changes to the remote branch.
 
 ## Local development
 
-When making changes to the SDK and testing them locally with the web app (`rotacloud-app`), follow these steps, provided you have already followed the above ones:
+Use Node.js 20.9 or later to build the SDK. SDK consumers need Node.js 20 or later.
 
-### Initial setup
+### Setup
 
-1.**Build the SDK:**
+The build uses private `@rotacloud/types` from GitHub Packages. Export a token with `read:packages` access as `GITHUB_PACKAGES_TOKEN`, then install dependencies:
 
-`npm run build -- --watch`
-
-2.**Link in the web app:**
-/ cd rotacloud-app
-
-`npm link rotacloud`
-
-3.**Verify the link is correct:**
-
-`npm ls rotacloud`
-
-Expected output:
-
-```
-└── rotacloud@x.x.x -> ./../rotacloud-node
+```sh
+npm ci
 ```
 
-The version displayed is the bumped version you are linking the app to.
+Keep the token outside the repository. SDK consumers do not need it.
 
-Once you are sure you have the web app linked to the correct version of the package, you can start up the app and test your changes:
+In CI, grant this repository Actions read access to the private package, or set the `GITHUB_PACKAGES_TOKEN` secret. Reusable workflow callers can pass that secret.
 
-`npm run start`
+### Build and check
+
+```sh
+npm run build
+npm run check:types
+npm run check:package
+```
+
+The build uses API Extractor to bundle the required types into `dist/main.d.ts`.
+
+- `check:types` checks that required types are included and unrelated types are excluded.
+- `check:package` checks the npm archive and installs it without private registry access.
+
+`npm pack` and `npm publish` run the build and checks automatically. The package excludes source files, tests, and build configuration.
+
+### Watch and link
+
+Start watch mode in the SDK repository:
+
+```sh
+npm run watch
+```
+
+You can also use `npm run build -- --watch`.
+
+Link the SDK from the web app repository:
+
+```sh
+cd ../rotacloud-app
+npm link ../rotacloud-node
+npm ls rotacloud
+npm run start
+```
+
+### Types
+
+Legacy PHP API interfaces are defined in the SDK. Node endpoints shold be gradually migrated to use types from the @rotacloud/types package.
 
 ## Configuration
 
