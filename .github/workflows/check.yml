@@ -6,10 +6,6 @@ on:
         type: string
         description: 'The version of Node to run the checks with'
         default: '24'
-    secrets:
-      GITHUB_PACKAGES_TOKEN:
-        description: 'Optional token with read access to the private types package'
-        required: false
   pull_request:
     branches: [develop]
 
@@ -37,7 +33,7 @@ jobs:
       - name: npm install
         run: npm ci
         env:
-          GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_PACKAGES_TOKEN || github.token }}
+          GITHUB_PACKAGES_TOKEN: ${{ github.token }}
 
       - name: Formatting
         run: npx prettier . --check

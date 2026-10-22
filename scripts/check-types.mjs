@@ -1,7 +1,9 @@
 /**
- * Check selective declaration bundling with a synthetic private package and the pinned real package.
- * Required types must remain usable without the private package. Unrelated types must stay outside the bundle.
- * Both fixtures use the same declaration bundler as the SDK build and run outside the repository.
+ * Test type bundling with a fake private package and the exact version of the real package.
+ * Check that required types work without the private package and unused types are excluded.
+ * Create small test projects in the system temporary folder and run the SDK bundling helper there.
+ * Keep them outside the repository so they cannot use its installed packages by accident.
+ * Delete the test projects when the checks finish.
  */
 import { strict as assert } from 'node:assert';
 import { execFileSync } from 'node:child_process';

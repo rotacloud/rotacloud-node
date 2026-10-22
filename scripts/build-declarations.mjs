@@ -1,6 +1,6 @@
 /**
- * Share declaration bundling between the SDK build and the isolated type fixtures.
- * API Extractor includes required private-package types instead of leaving private imports in the output.
+ * Bundle the types needed by the SDK so consumers do not need the private types package.
+ * The build and tests use this helper.
  */
 import { mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';

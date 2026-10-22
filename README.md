@@ -24,7 +24,7 @@ npm ci
 
 Keep the token outside the repository. SDK consumers do not need it.
 
-In CI, grant this repository Actions read access to the private package, or set the `GITHUB_PACKAGES_TOKEN` secret. Reusable workflow callers can pass that secret.
+CI uses the built-in `GITHUB_TOKEN`. This repository has Actions read access to the private @rotacloud/types package.
 
 ### Build and check
 

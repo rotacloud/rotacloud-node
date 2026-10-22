@@ -1,7 +1,7 @@
 /**
- * Check the built npm archive and install it as an external consumer without private registry access.
- * Run after the SDK build. Check exports, archive contents, dependency boundaries, TypeScript imports, and ESM loading.
- * Temporary files and the isolated npm cache are removed when the check finishes.
+ * Check the built npm package and install it in a temporary project without private registry access.
+ * Check that it contains the expected files and exports, and that its types and JavaScript work.
+ * Run after the SDK build. Delete temporary files when the checks finish.
  */
 import { strict as assert } from 'node:assert';
 import { execFileSync } from 'node:child_process';

@@ -1,7 +1,8 @@
 /**
- * Compile SDK JavaScript and intermediate declarations, then bundle the public declarations.
+ * Compile SDK JavaScript and temporary .d.ts files that describe the source types.
+ * Combine the required declarations into dist/main.d.ts. Do not publish the temporary files.
  * Run with --watch to rebuild after changes.
- * Failed builds remove release output so a later pack cannot publish stale files.
+ * If a build fails, delete dist/ so a later packaging step cannot include files from an older build.
  */
 import { rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
