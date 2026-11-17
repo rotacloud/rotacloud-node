@@ -75,3 +75,28 @@ export interface ShiftV2 {
   deletedAt?: string | null;
   deletedBy?: number | null;
 }
+
+/** The actor of a V2 shift history entry. */
+export interface ShiftHistoryUserV2 {
+  userId: number;
+  photo: string | null;
+  firstName: string;
+  lastName: string;
+}
+
+/** One display label and its formatted value in a V2 shift history entry. */
+export interface ShiftHistoryChangeV2 {
+  key: string;
+  value: string;
+}
+
+/** One entry from GET v2/shifts/{shiftId}/history. */
+export interface ShiftHistoryV2 {
+  /** Event time as an ISO 8601 UTC string. */
+  time: string;
+  /** The actor, or null when the actor is unknown. */
+  user: ShiftHistoryUserV2 | null;
+  text: string;
+  /** The changes, or null when the entry has no change list. */
+  changes: ShiftHistoryChangeV2[] | null;
+}

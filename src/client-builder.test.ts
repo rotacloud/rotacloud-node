@@ -1,4 +1,4 @@
-import { test, expect, describe, vi } from 'vitest';
+import { test, expect, expectTypeOf, describe, vi } from 'vitest';
 import { Axios } from 'axios';
 import { createSdkClient, DEFAULT_CONFIG } from './client-builder.js';
 import {
@@ -9,6 +9,7 @@ import {
   SDKConfig,
   Shift,
   ShiftDropRequestV2,
+  ShiftHistoryV2,
   ShiftSwapRequestV2,
   ShiftV2,
 } from './interfaces/index.js';
@@ -245,6 +246,7 @@ describe('SDK client builder', () => {
       v2: {
         list: expect.any(Function),
         listAll: expect.any(Function),
+        history: expect.any(Function),
       },
     });
 
@@ -344,6 +346,45 @@ describe('SDK client builder', () => {
       expect.objectContaining({
         method: 'GET',
         url: 'v2/shifts/42',
+      }),
+    );
+  });
+
+  test('adds a typed V2 shift history operation without changing V1 history', async () => {
+    const client = createSdkClient({ shift: SERVICES.shift })(sdkConfig);
+    const v2History = [
+      {
+        time: '2026-09-17T12:30:00.000Z',
+        user: { userId: 7, photo: null, firstName: 'Alex', lastName: 'Smith' },
+        text: 'Updated by Alex Smith',
+        changes: [{ key: 'Role', value: 'Supervisor' }],
+      },
+      {
+        time: '2026-09-17T09:00:00.000Z',
+        user: null,
+        text: 'Created',
+        changes: null,
+      },
+    ] satisfies ShiftHistoryV2[];
+    vi.spyOn(mockAxiosClient, 'request').mockResolvedValueOnce({ data: [] }).mockResolvedValueOnce({ data: v2History });
+
+    await client.shift.history(42);
+    const v2Result = await client.shift.v2.history(42);
+
+    expectTypeOf(v2Result).toEqualTypeOf<ShiftHistoryV2[]>();
+    expect(v2Result).toEqual(v2History);
+    expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        method: 'GET',
+        url: 'v1/shifts/42/history',
+      }),
+    );
+    expect(mockAxiosClient.request).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        method: 'GET',
+        url: 'v2/shifts/42/history',
       }),
     );
   });
