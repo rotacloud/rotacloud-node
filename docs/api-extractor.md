@@ -10,7 +10,7 @@ Developers who build the SDK from source still need access to its private build 
 
 API Extractor does not decide which endpoints are public.
 Any internal type referenced by an SDK export can appear in the output.
-Run `npm run check:types` and `npm run check:package` to check the declarations and package contents.
+After the build, run `npm run check:types` to check that the declarations have no reference to `@rotacloud/types`.
 
 ## Configuration
 
