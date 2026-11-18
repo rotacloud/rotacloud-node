@@ -20,7 +20,7 @@
   "scripts": {
     "version:bump": "npm --no-git-tag-version version patch",
     "watch": "node scripts/build.mjs --watch",
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build.mjs --clean && tsc -p tsconfig.build.json && node scripts/build.mjs",
     "lint": "eslint src --ext .ts",
     "test": "vitest",
     "check:types": "node scripts/check-types.mjs",
