@@ -20,12 +20,11 @@
   "scripts": {
     "version:bump": "npm --no-git-tag-version version patch",
     "watch": "node scripts/build.mjs --watch",
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build.mjs --clean && tsc -p tsconfig.build.json && node scripts/build.mjs",
     "lint": "eslint src --ext .ts",
     "test": "vitest",
-    "check:types": "node scripts/check-types.mjs",
-    "check:package": "node scripts/check-package.mjs",
-    "prepack": "npm run build && npm run check:types && npm run check:package"
+    "check:types": "node scripts/check-declarations.mjs",
+    "prepack": "npm run build && npm run check:types"
   },
   "repository": {
     "type": "git",

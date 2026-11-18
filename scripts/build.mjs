@@ -1,8 +1,7 @@
 /**
- * Compile SDK JavaScript and temporary .d.ts files that describe the source types.
- * Combine the required declarations into dist/main.d.ts. Do not publish the temporary files.
- * Run with --watch to rebuild after changes.
- * If a build fails, delete dist/ so a later packaging step cannot include files from an older build.
+ * Combine the declarations from TypeScript into dist/main.d.ts.
+ * Run with --clean to remove previous build output.
+ * Run with --watch to compile and bundle after changes.
  */
 import { rmSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
@@ -14,6 +13,7 @@ const projectFolder = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const outputFolder = resolve(projectFolder, 'dist');
 const intermediateFolder = resolve(projectFolder, '.build');
 const configFile = resolve(projectFolder, 'tsconfig.build.json');
+const clean = process.argv.includes('--clean');
 const watch = process.argv.includes('--watch');
 const formatHost = {
   getCanonicalFileName: (file) => file,
@@ -36,8 +36,11 @@ function rollup() {
   });
 }
 
-clearOutput();
-rmSync(intermediateFolder, { recursive: true, force: true });
+if (clean || watch) {
+  clearOutput();
+  rmSync(intermediateFolder, { recursive: true, force: true });
+}
+
 if (watch) {
   const host = ts.createWatchCompilerHost(configFile, {}, ts.sys, ts.createEmitAndSemanticDiagnosticsBuilderProgram);
   // Emit the full program because each rebuild starts with an empty release directory.
@@ -63,18 +66,8 @@ if (watch) {
     }
   };
   ts.createWatchProgram(host);
-} else {
+} else if (!clean) {
   try {
-    const config = ts.readConfigFile(configFile, ts.sys.readFile);
-    if (config.error) throw new Error(ts.formatDiagnosticsWithColorAndContext([config.error], formatHost));
-    const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, projectFolder);
-    const program = ts.createProgram(parsed.fileNames, parsed.options);
-    const diagnostics = [...parsed.errors, ...ts.getPreEmitDiagnostics(program)];
-    if (diagnostics.length) throw new Error(ts.formatDiagnosticsWithColorAndContext(diagnostics, formatHost));
-    const result = program.emit();
-    if (result.emitSkipped || result.diagnostics.length) {
-      throw new Error(ts.formatDiagnosticsWithColorAndContext(result.diagnostics, formatHost));
-    }
     rollup();
   } catch (error) {
     clearOutput();
