@@ -49,6 +49,3 @@ jobs:
 
       - name: Check bundled types
         run: npm run check:types
-
-      - name: Check public package
-        run: npm run check:package

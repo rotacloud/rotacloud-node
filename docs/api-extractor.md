@@ -1,6 +1,7 @@
 # API Extractor
 
-In order to not advertise all our private endpoint structures by exposing? API Extractor bundles only the types that the SDK's public exports need from `@rotacloud/types`.
+We bundle types so we can publish the SDK without exposing the full set of private endpoint types in `@rotacloud/types`.
+API Extractor bundles the types that the SDK's public exports need from `@rotacloud/types`, including any types they depend on.
 API Extractor combines the SDK's TypeScript declarations into `dist/main.d.ts` during the build.
 
 SDK consumers receive the combined declaration file when they install the SDK.
