@@ -31,7 +31,7 @@ npm run check:types
 npm run check:package
 ```
 
-The build uses API Extractor to bundle the required types into `dist/main.d.ts`.
+The build uses [API Extractor](./api-extractor.md) to bundle the required types into `dist/main.d.ts`.
 
 - `check:types` checks that required types are included and unrelated types are excluded.
 - `check:package` checks the npm archive and installs it without private registry access.
