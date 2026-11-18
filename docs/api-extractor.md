@@ -1,15 +1,12 @@
 # API Extractor
 
+API Extractor bundles the types that the SDK's public exports need from `@rotacloud/types`, including any types they depend on.
 API Extractor combines the SDK's TypeScript declarations into `dist/main.d.ts` during the build.
-It includes types referenced by the SDK's public exports, including their dependencies from the private `@rotacloud/types` package.
-It does not copy every type from that package.
 
 SDK consumers receive the combined declaration file when they install the SDK.
-They do not need access to the private types package. These declarations contain no runtime code.
+SDK consumers can use these types without installing `@rotacloud/types`.
 Developers who build the SDK from source still need access to its private build dependency.
 
-API Extractor does not decide which endpoints are public.
-Any internal type referenced by an SDK export can appear in the output.
 After the build, run `npm run check:types` to check that the declarations have no reference to `@rotacloud/types`.
 
 ## Configuration
