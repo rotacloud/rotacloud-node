@@ -32,7 +32,7 @@ npm run check:types
 
 The build uses [API Extractor](./api-extractor.md) to bundle the required types into `dist/main.d.ts`.
 
-- `check:types` checks that `dist/main.d.ts` exists and has no reference to `@rotacloud/types`.
+- `check:types` checks that `dist/main.d.ts` exists and has no reference to `@rotacloud/types`. It also compiles a small consumer with declaration output enabled, to catch type errors and declaration-generation errors.
 
 `npm pack` and `npm publish` run the build and checks automatically. The package excludes source files, tests, and build configuration.
 

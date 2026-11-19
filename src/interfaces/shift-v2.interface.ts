@@ -1,4 +1,4 @@
-import type { RequestStatus } from './swap-request.interface.js';
+import type { RequestStatus } from './request-status.interface.js';
 
 /** A swap request embedded in a V2 shift response. */
 export interface ShiftSwapRequestV2 {

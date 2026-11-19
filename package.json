@@ -23,7 +23,7 @@
     "build": "node scripts/build.mjs --clean && tsc -p tsconfig.build.json && node scripts/build.mjs",
     "lint": "eslint src --ext .ts",
     "test": "vitest",
-    "check:types": "node scripts/check-declarations.mjs",
+    "check:types": "node scripts/check-types.mjs",
     "prepack": "npm run build && npm run check:types"
   },
   "repository": {
