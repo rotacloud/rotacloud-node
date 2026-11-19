@@ -1,4 +1,4 @@
-export type RequestStatus = 'expired' | 'shift_changed' | 'approved' | 'denied' | 'requested';
+import type { RequestStatus } from './request-status.interface.js';
 
 export interface ShiftDropRequest {
   id: number;
