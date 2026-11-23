@@ -1,3 +1,4 @@
+import type { GetShiftHistoryResponse } from '@rotacloud/types';
 import type { RequestStatus } from './request-status.interface.js';
 
 /** A swap request embedded in a V2 shift response. */
@@ -75,3 +76,6 @@ export interface ShiftV2 {
   deletedAt?: string | null;
   deletedBy?: number | null;
 }
+
+/** One entry from GET v2/shifts/{shiftId}/history. */
+export type ShiftHistoryV2 = GetShiftHistoryResponse[number];
