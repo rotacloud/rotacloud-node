@@ -7,6 +7,7 @@ import {
   Leave,
   LeaveType,
   ShiftHistoryRecord,
+  ShiftHistoryV2,
   Terminal,
   ToilAllowance,
   User,
@@ -316,6 +317,14 @@ export const SERVICES = {
         endpoint: 'shifts',
         endpointVersion: 'v2',
         operations: ['get', 'list', 'listAll'],
+        customOperations: {
+          /** Gets the history of one shift. Only user and view-as auth can call it. Other auth types get an error. */
+          history: ({ request, service }, shiftId: number): RequestConfig<void, ShiftHistoryV2[]> => ({
+            ...request,
+            method: 'GET',
+            url: `${service.endpointVersion}/${service.endpoint}/${shiftId}/history`,
+          }),
+        },
       },
     },
     customOperations: {
